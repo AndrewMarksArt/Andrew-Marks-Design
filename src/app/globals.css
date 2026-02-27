@@ -1,0 +1,294 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap');
+
+:root {
+  --background: #EDEDED;
+  --foreground: #000;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--background);
+
+  /* Robust grid lines that won't seam from odd viewport widths */
+  background-size: 56.57px 56.57px;
+  /* roughly 40px diagonal distance */
+  background-image: linear-gradient(-45deg,
+      #EDEDED 25%,
+      #E7E7E7 25%,
+      #E7E7E7 50%,
+      #EDEDED 50%,
+      #EDEDED 75%,
+      #E7E7E7 75%,
+      #E7E7E7 100%);
+
+  font-family: 'Geist Mono', monospace;
+  /* Custom [ + ] cursor using an inline SVG. Thinner stroke, wider spacing. */
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><path d='M 10 6 L 6 6 L 6 26 L 10 26' fill='none' stroke='%23CD3F01' stroke-width='1.5'/><path d='M 22 6 L 26 6 L 26 26 L 22 26' fill='none' stroke='%23CD3F01' stroke-width='1.5'/><path d='M 16 11 L 16 21 M 11 16 L 21 16' fill='none' stroke='%23CD3F01' stroke-width='1.5'/></svg>") 16 16, crosshair;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. Scaler - ensures the entire UI fits on smaller laptops                  */
+/* -------------------------------------------------------------------------- */
+#scaler {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Dynamic JS scale applied here depending on window height */
+  transform: scale(1);
+  transform-origin: center center;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. The Core Card Structure                                                 */
+/* -------------------------------------------------------------------------- */
+.card {
+  position: relative;
+  /* Max 450px, otherwise span the window with 20px padding on each side */
+  width: calc(100vw - 40px);
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.block {
+  background: #fff;
+  position: relative;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. Infinite Grid Lines                                                     */
+/* -------------------------------------------------------------------------- */
+/* Horizontal lines are fixed size 200vw, centered. 
+   This prevents flexbox scroll bugs from absolute bounds blowing up */
+.hline {
+  position: absolute;
+  width: 200vw;
+  height: 1px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #999;
+  z-index: 5;
+}
+
+/* Vertical lines are fixed size 200vh, centered vertically */
+.vline {
+  position: absolute;
+  width: 1px;
+  height: 200vh;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #999;
+  z-index: 5;
+}
+
+.v-left {
+  left: 0;
+}
+
+.v-right {
+  right: 0;
+}
+
+/* A boundary is just a horionztal cut across the card containing an hline & crosses */
+.boundary {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  z-index: 10;
+}
+
+.b-top {
+  top: 0;
+}
+
+.b-bottom {
+  bottom: 0;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 5. Precise Pixel-Perfect Crosshairs                                        */
+/* -------------------------------------------------------------------------- */
+.cross {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  /* The very center of this element is now placed EXACTLY at the corner coordinates */
+  top: 0;
+  transform: translate(-50%, -50%);
+  z-index: 15;
+}
+
+/* Wait, the crosses should be drawn with sub-elements: */
+.cross::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 4px;
+  /* adjusted for 2px width */
+  width: 2px;
+  background-color: #000;
+}
+
+.cross::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 4px;
+  /* adjusted for 2px width */
+  height: 2px;
+  background-color: #000;
+}
+
+.cross-left {
+  left: 0;
+}
+
+.cross-right {
+  left: 100%;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 6. Block Content: Header                                                   */
+/* -------------------------------------------------------------------------- */
+.header-block {
+  /* Increased side padding to 24px */
+  padding: 12px 24px;
+}
+
+.header-text {
+  font-size: 11px;
+  /* Shrunk slightly to prevent wrapping */
+  letter-spacing: -0.02em;
+  color: #000;
+  line-height: 1;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 7. Block Content: Canvas                                                   */
+/* -------------------------------------------------------------------------- */
+.canvas-block {
+  width: 100%;
+  /* Original char 404x404. Dropped 2px to remove white edge gap. */
+  aspect-ratio: 404 / 402;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+  /* Stops character dipping over the lines */
+}
+
+canvas#c {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  image-rendering: auto;
+  display: block;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 8. Block Content: Footer                                                   */
+/* -------------------------------------------------------------------------- */
+.footer-block {
+  /* Increased bottom padding to 32px, and side padding to 40px for breathing room */
+  padding: 20px 40px 32px 40px;
+}
+
+.headline {
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  color: #CD3F01;
+  margin-bottom: 12px;
+}
+
+.subhead {
+  padding-left: 24px;
+  /* Decreased from 16px to 12px */
+  font-size: 12px;
+  letter-spacing: -0.02em;
+  color: #333E32;
+}
+
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.dots {
+  flex-grow: 1;
+  border-bottom: 2px dotted #aaa;
+  margin: 0 8px;
+}
+
+.val {
+  color: #000;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 9. Animations                                                              */
+/* -------------------------------------------------------------------------- */
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+  display: inline-block;
+  /* Match color to the headline text since it might not inherit perfectly if we change things later */
+  color: #CD3F01;
+  /* Make sure brackets render mono and are slightly padded visually from the text */
+  margin-left: 5px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 10. Responsive Breakpoints                                                 */
+/* -------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+  .header-block {
+    padding: 10px 15px;
+  }
+
+  .header-text {
+    font-size: 8.5px;
+  }
+
+  .footer-block {
+    padding: 15px 20px 24px 20px;
+  }
+
+  .headline {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .subhead {
+    padding-left: 12px;
+    font-size: 10px;
+  }
+}
