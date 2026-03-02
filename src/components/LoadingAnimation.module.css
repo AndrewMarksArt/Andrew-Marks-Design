@@ -1,0 +1,215 @@
+.loadingContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Ensure it has the same background grid as the body during loading */
+  background-color: transparent;
+}
+
+/* Phase 1: Target Acquired */
+.targetGroup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s ease-out;
+}
+
+.targetText {
+  position: absolute;
+  top: -80px;
+  /* Moved slightly further up to accommodate larger text */
+  color: #CD3F01;
+  font-size: 20px;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+  text-align: center;
+  width: 280px;
+  transition: opacity 0.3s ease-out;
+}
+
+.searchingBlink {
+  font-weight: 500;
+  animation: slowBlink 1.25s step-end infinite;
+}
+
+@keyframes slowBlink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes targetBlink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+.textFadeOut {
+  opacity: 0 !important;
+}
+
+.bracketsWrapper {
+  position: absolute;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+.bracketsExpanded {
+  transform: scale(8);
+  opacity: 0;
+}
+
+.brackets {
+  width: 120px;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bracketLeft,
+.bracketRight {
+  width: 20px;
+  height: 100%;
+  border: 1px solid #000;
+}
+
+.bracketLeft {
+  border-right: none;
+}
+
+.bracketRight {
+  border-left: none;
+}
+
+.centerCross {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  /* Offset to center perfectly */
+  margin-left: -10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s cubic-bezier(0.87, 0, 0.13, 1);
+  transform: rotate(45deg);
+  /* Start as X */
+}
+
+.centerCrossRotated {
+  transform: rotate(0deg);
+  /* Become + */
+}
+
+.crossLineHorizontal,
+.crossLineVertical {
+  position: absolute;
+  background-color: #000;
+}
+
+.crossLineHorizontal {
+  width: 100%;
+  height: 1px;
+}
+
+.crossLineVertical {
+  width: 1px;
+  height: 100%;
+}
+
+/* Expanding Lines from Center */
+.expandingLines {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform: translate(-50%, -50%);
+  transition: all 0.5s cubic-bezier(0.87, 0, 0.13, 1);
+  /* Use boundary colors to match the layout lines */
+}
+
+.expandingLinesActive {
+  width: 100vw;
+  height: 100vh;
+}
+
+.expandingHLine {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background-color: #999;
+  transform: translate(-50%, -50%);
+  transition: width 0.5s cubic-bezier(0.87, 0, 0.13, 1);
+}
+
+.expandingHLineActive {
+  width: 200vw;
+}
+
+.expandingVLine {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 0;
+  width: 1px;
+  background-color: #999;
+  transform: translate(-50%, -50%);
+  transition: height 0.5s cubic-bezier(0.87, 0, 0.13, 1);
+}
+
+.expandingVLineActive {
+  height: 200vh;
+}
+
+/* Migration phase */
+.migrator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.crossWrapper {
+  position: absolute;
+  transition: transform 0.4s ease;
+  /* Smooth out snaps */
+}
+
+/* When migrating to top left, the JS will set the top/left directly via style */
+
+/* Hide phase */
+.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s;
+}

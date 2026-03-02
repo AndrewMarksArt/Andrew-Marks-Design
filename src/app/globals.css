@@ -61,234 +61,422 @@ body {
   flex-direction: column;
   flex-shrink: 0;
   z-index: 10;
-}
 
-.block {
-  background: #fff;
-  position: relative;
-}
+  .block {
+    /* Default background restored */
+    background: #fff;
+    position: relative;
+  }
 
-/* -------------------------------------------------------------------------- */
-/* 4. Infinite Grid Lines                                                     */
-/* -------------------------------------------------------------------------- */
-/* Horizontal lines are fixed size 200vw, centered. 
+  /* -------------------------------------------------------------------------- */
+  /* 4. Infinite Grid Lines                                                     */
+  /* -------------------------------------------------------------------------- */
+  /* Horizontal lines are fixed size 200vw, centered. 
    This prevents flexbox scroll bugs from absolute bounds blowing up */
-.hline {
-  position: absolute;
-  width: 200vw;
-  height: 1px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #999;
-  z-index: 5;
-}
-
-/* Vertical lines are fixed size 200vh, centered vertically */
-.vline {
-  position: absolute;
-  width: 1px;
-  height: 200vh;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: #999;
-  z-index: 5;
-}
-
-.v-left {
-  left: 0;
-}
-
-.v-right {
-  right: 0;
-}
-
-/* A boundary is just a horionztal cut across the card containing an hline & crosses */
-.boundary {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 0;
-  z-index: 10;
-}
-
-.b-top {
-  top: 0;
-}
-
-.b-bottom {
-  bottom: 0;
-}
-
-/* -------------------------------------------------------------------------- */
-/* 5. Precise Pixel-Perfect Crosshairs                                        */
-/* -------------------------------------------------------------------------- */
-.cross {
-  position: absolute;
-  width: 11px;
-  height: 11px;
-  /* The very center of this element is now placed EXACTLY at the corner coordinates */
-  top: 0;
-  transform: translate(-50%, -50%);
-  z-index: 15;
-}
-
-/* Wait, the crosses should be drawn with sub-elements: */
-.cross::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 4px;
-  /* adjusted for 2px width */
-  width: 2px;
-  background-color: #000;
-}
-
-.cross::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 4px;
-  /* adjusted for 2px width */
-  height: 2px;
-  background-color: #000;
-}
-
-.cross-left {
-  left: 0;
-}
-
-.cross-right {
-  left: 100%;
-}
-
-/* -------------------------------------------------------------------------- */
-/* 6. Block Content: Header                                                   */
-/* -------------------------------------------------------------------------- */
-.header-block {
-  /* Increased side padding to 24px */
-  padding: 12px 24px;
-}
-
-.header-text {
-  font-size: 11px;
-  /* Shrunk slightly to prevent wrapping */
-  letter-spacing: -0.02em;
-  color: #000;
-  line-height: 1;
-}
-
-/* -------------------------------------------------------------------------- */
-/* 7. Block Content: Canvas                                                   */
-/* -------------------------------------------------------------------------- */
-.canvas-block {
-  width: 100%;
-  /* Original char 404x404. Dropped 2px to remove white edge gap. */
-  aspect-ratio: 404 / 402;
-  height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  overflow: hidden;
-  /* Stops character dipping over the lines */
-}
-
-canvas#c {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1 / 1;
-  image-rendering: auto;
-  display: block;
-}
-
-/* -------------------------------------------------------------------------- */
-/* 8. Block Content: Footer                                                   */
-/* -------------------------------------------------------------------------- */
-.footer-block {
-  /* Increased bottom padding to 32px, and side padding to 40px for breathing room */
-  padding: 20px 40px 32px 40px;
-}
-
-.headline {
-  font-size: 20px;
-  letter-spacing: -0.02em;
-  color: #CD3F01;
-  margin-bottom: 12px;
-}
-
-.subhead {
-  padding-left: 24px;
-  /* Decreased from 16px to 12px */
-  font-size: 12px;
-  letter-spacing: -0.02em;
-  color: #333E32;
-}
-
-.status-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 4px;
-}
-
-.dots {
-  flex-grow: 1;
-  border-bottom: 2px dotted #aaa;
-  margin: 0 8px;
-}
-
-.val {
-  color: #000;
-}
-
-/* -------------------------------------------------------------------------- */
-/* 9. Animations                                                              */
-/* -------------------------------------------------------------------------- */
-@keyframes blink {
-
-  0%,
-  100% {
-    opacity: 1;
+  .hline {
+    position: absolute;
+    width: 200vw;
+    height: 1px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #999;
+    z-index: 5;
   }
 
-  50% {
-    opacity: 0;
+  /* Vertical lines are fixed size 200vh, centered vertically */
+  .vline {
+    position: absolute;
+    width: 1px;
+    height: 200vh;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #999;
+    z-index: 5;
   }
-}
 
-.cursor-blink {
-  animation: blink 1s step-end infinite;
-  display: inline-block;
-  /* Match color to the headline text since it might not inherit perfectly if we change things later */
-  color: #CD3F01;
-  /* Make sure brackets render mono and are slightly padded visually from the text */
-  margin-left: 5px;
-}
+  .v-left {
+    left: 0;
+  }
 
-/* -------------------------------------------------------------------------- */
-/* 10. Responsive Breakpoints                                                 */
-/* -------------------------------------------------------------------------- */
-@media (max-width: 480px) {
+  .v-right {
+    right: 0;
+  }
+
+  /* A boundary is just a horionztal cut across the card containing an hline & crosses */
+  .boundary {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 0;
+    z-index: 10;
+  }
+
+  .b-top {
+    top: 0;
+  }
+
+  .b-bottom {
+    bottom: 0;
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /* 5. Precise Pixel-Perfect Crosshairs                                        */
+  /* -------------------------------------------------------------------------- */
+  .cross {
+    position: absolute;
+    width: 11px;
+    height: 11px;
+    /* The very center of this element is now placed EXACTLY at the corner coordinates */
+    top: 0;
+    transform: translate(-50%, -50%);
+    z-index: 15;
+  }
+
+  /* Wait, the crosses should be drawn with sub-elements: */
+  .cross::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 4px;
+    /* adjusted for 2px width */
+    width: 2px;
+    background-color: #000;
+  }
+
+  .cross::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 4px;
+    /* adjusted for 2px width */
+    height: 2px;
+    background-color: #000;
+  }
+
+  .cross-left {
+    left: 0;
+  }
+
+  .cross-right {
+    left: 100%;
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /* 6. Block Content: Header                                                   */
+  /* -------------------------------------------------------------------------- */
   .header-block {
-    padding: 10px 15px;
+    /* Increased side padding to 24px */
+    padding: 12px 24px;
   }
 
   .header-text {
-    font-size: 8.5px;
+    font-size: 11px;
+    /* Shrunk slightly to prevent wrapping */
+    letter-spacing: -0.02em;
+    color: #000;
+    line-height: 1;
   }
 
+  /* -------------------------------------------------------------------------- */
+  /* 7. Block Content: Canvas                                                   */
+  /* -------------------------------------------------------------------------- */
+  .canvas-block {
+    width: 100%;
+    /* Original char 404x404. Dropped 2px to remove white edge gap. */
+    aspect-ratio: 404 / 402;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow: hidden;
+    /* Stops character dipping over the lines */
+  }
+
+  canvas#c {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    image-rendering: auto;
+    display: block;
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /* 8. Block Content: Footer                                                   */
+  /* -------------------------------------------------------------------------- */
   .footer-block {
-    padding: 15px 20px 24px 20px;
+    /* Increased bottom padding to 32px, and side padding to 40px for breathing room */
+    padding: 20px 40px 32px 40px;
   }
 
   .headline {
-    font-size: 16px;
-    margin-bottom: 8px;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    color: #CD3F01;
+    margin-bottom: 12px;
   }
 
   .subhead {
-    padding-left: 12px;
-    font-size: 10px;
+    padding-left: 24px;
+    /* Decreased from 16px to 12px */
+    font-size: 12px;
+    letter-spacing: -0.02em;
+    color: #333E32;
+  }
+
+  .status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+  }
+
+  .dots {
+    flex-grow: 1;
+    border-bottom: 2px dotted #aaa;
+    margin: 0 8px;
+  }
+
+  .val {
+    color: #000;
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /* 9. Animations                                                              */
+  /* -------------------------------------------------------------------------- */
+  @keyframes blink {
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .cursor-blink {
+    animation: blink 1s step-end infinite;
+    display: inline-block;
+    /* Match color to the headline text since it might not inherit perfectly if we change things later */
+    color: #CD3F01;
+    /* Make sure brackets render mono and are slightly padded visually from the text */
+    margin-left: 5px;
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /* 10. Responsive Breakpoints                                                 */
+  /* -------------------------------------------------------------------------- */
+  @media (max-width: 480px) {
+    .header-block {
+      padding: 10px 15px;
+    }
+
+    .header-text {
+      font-size: 8.5px;
+    }
+
+    .footer-block {
+      padding: 15px 20px 24px 20px;
+    }
+
+    .headline {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .subhead {
+      padding-left: 12px;
+      font-size: 10px;
+    }
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 11. Loading Sequence States                                                */
+/* -------------------------------------------------------------------------- */
+
+/* Hide card contents initially */
+.card.loading-active .canvas-block,
+.card.loading-active .header-text,
+.card.loading-active .headline,
+.card.loading-active .subhead,
+.card.loading-active .status-row {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.card.loading-active canvas {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Hide card backgrounds initially */
+.card.loading-active .block {
+  background: transparent;
+}
+
+/* Base states for lines - hidden until active */
+.card.loading-active .vline,
+.card.loading-active .hline,
+.card.loading-active .cross {
+  opacity: 0;
+}
+
+/* The structural lines are invisible until we reach phase 5 */
+
+/* Phase 6: The top boundary line and left vertical line appear */
+.card.phase-6 .v-left,
+.card.phase-6 .header-block .b-top .hline {
+  opacity: 1;
+}
+
+/* Phase 7: Top/Left lines remain */
+.card.phase-7 .v-left,
+.card.phase-7 .header-block .b-top .hline {
+  opacity: 1;
+}
+
+/* Phase 8: Right vertical line and bottom boundary expand out, plus BACKGROUND reveal */
+.card.phase-8 .v-left,
+.card.phase-8 .header-block .b-top .hline {
+  opacity: 1;
+}
+
+.card.phase-8 .v-right {
+  opacity: 1;
+  animation: expandVLine 0.5s ease forwards;
+}
+
+.card.phase-8 .footer-block .b-bottom .hline {
+  opacity: 1;
+  animation: expandHLine 0.5s ease forwards;
+}
+
+/* Base blocks turn white */
+.card.phase-8 .block {
+  background: #fff;
+  transition: background-color 0.5s ease;
+}
+
+.card.phase-8 .canvas-block {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Phase 9: Inner boundaries appear and portrait sweep begins */
+.card.phase-9 .block {
+  background: #fff;
+}
+
+.card.phase-9 .v-left,
+.card.phase-9 .v-right,
+.card.phase-9 .header-block .b-top .hline,
+.card.phase-9 .footer-block .b-bottom .hline {
+  opacity: 1;
+}
+
+.card.phase-9 .canvas-block {
+  opacity: 1;
+  visibility: visible;
+}
+
+.card.phase-9 canvas {
+  opacity: 1;
+  visibility: visible;
+  animation: revealPortrait 0.8s cubic-bezier(0.87, 0, 0.13, 1) forwards;
+}
+
+.card.phase-9 .header-block .b-bottom .hline,
+.card.phase-9 .footer-block .b-top .hline {
+  opacity: 1;
+  animation: expandHLine 0.5s ease forwards;
+}
+
+.card.phase-9 .cross {
+  animation: fadeIn 0.3s 0.3s forwards;
+}
+
+/* Phase 10: Fully Loaded - Text Appears */
+/* Everything from previous phases stays solid */
+.card.phase-10 .block {
+  background: #fff;
+}
+
+.card.phase-10 .v-left,
+.card.phase-10 .v-right,
+.card.phase-10 .hline,
+.card.phase-10 .cross {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+.card.phase-10 .canvas-block {
+  opacity: 1;
+  visibility: visible;
+}
+
+.card.phase-10 canvas {
+  opacity: 1;
+  visibility: visible;
+}
+
+.card.phase-10 .header-text,
+.card.phase-10 .headline,
+.card.phase-10 .subhead,
+.card.phase-10 .status-row {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s ease;
+}
+
+@keyframes revealPortrait {
+  from {
+    clip-path: inset(0% 0% 100% 0%);
+    /* Wipe from top down */
+  }
+
+  to {
+    clip-path: inset(0% 0% 0% 0%);
+  }
+}
+
+@keyframes expandVLine {
+  from {
+    top: 0;
+    bottom: 100%;
+    height: 0;
+    transform: translateY(0);
+  }
+
+  to {
+    top: 50%;
+    bottom: auto;
+    height: 200vh;
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes expandHLine {
+  from {
+    left: 0;
+    right: 100%;
+    width: 0;
+    transform: translateX(0);
+  }
+
+  to {
+    left: 50%;
+    right: auto;
+    width: 200vw;
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
   }
 }

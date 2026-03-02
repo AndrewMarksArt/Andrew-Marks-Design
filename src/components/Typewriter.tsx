@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 
-export default function Typewriter() {
+export default function Typewriter({ start = true }: { start?: boolean }) {
     const [text, setText] = useState("");
 
     useEffect(() => {
+        if (!start) return;
+
         const fullText = "// INITIALIZING...";
         let twIdx = 0;
         let twIsDeleting = false;
@@ -54,7 +56,7 @@ export default function Typewriter() {
         return () => {
             if (animationFrameId) cancelAnimationFrame(animationFrameId);
         };
-    }, []);
+    }, [start]);
 
     return (
         <>
