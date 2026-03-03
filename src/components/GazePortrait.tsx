@@ -85,5 +85,12 @@ export default function GazePortrait() {
         };
     }, []);
 
-    return <canvas id="c" ref={canvasRef}></canvas>;
+    return (
+        <canvas
+            id="c"
+            ref={canvasRef}
+            role="img"
+            aria-label="Interactive portrait of Andrew Marks whose eyes follow your cursor"
+        />
+    );
 }

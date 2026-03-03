@@ -60,8 +60,8 @@ export default function Typewriter({ start = true }: { start?: boolean }) {
 
     return (
         <>
-            <span id="typewriter">{text}</span>
-            <span className="cursor-blink">_</span>
+            <span id="typewriter" aria-live="polite" aria-atomic="true">{text}</span>
+            <span className="cursor-blink" aria-hidden="true">_</span>
         </>
     );
 }

@@ -114,7 +114,7 @@ export default function Home() {
               <div className="cross cross-right"></div>
             </div>
 
-            <div className="header-text">
+            <div className="header-text" role="heading" aria-level={1}>
               UID: AM-9310-TSR // TOP_SECRET // LOC: 36.5298° N, 87.3595° W
             </div>
 
