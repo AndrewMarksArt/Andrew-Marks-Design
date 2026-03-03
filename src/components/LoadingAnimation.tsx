@@ -75,7 +75,12 @@ export default function LoadingAnimation({ loadingState, targetRect }: LoadingAn
           style={{ transform: `translateX(${panOffset}px)` }}
         >
           {/* The rotating cross */}
-          <div className={clsx(styles.centerCross, loadingState >= 2 && styles.centerCrossRotated)}>
+          <div className={clsx(
+            styles.centerCross,
+            loadingState >= 2 && styles.centerCrossRotated,
+            loadingState === 1 && styles.crossBlinkRed,
+            loadingState >= 4 && styles.centerCrossFadeOut
+          )}>
             <div className={styles.crossLineHorizontal} />
             <div className={styles.crossLineVertical} />
           </div>

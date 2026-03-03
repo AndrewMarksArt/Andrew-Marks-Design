@@ -127,6 +127,33 @@
   /* Become + */
 }
 
+.crossBlinkRed {
+  animation: fastBlink 0.3s step-end infinite;
+}
+
+.crossBlinkRed .crossLineHorizontal,
+.crossBlinkRed .crossLineVertical {
+  background-color: #CD3F01;
+}
+
+@keyframes fastBlink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+.centerCrossFadeOut {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+  /* Fade out as lines expand (state 4) */
+}
+
 .crossLineHorizontal,
 .crossLineVertical {
   position: absolute;
