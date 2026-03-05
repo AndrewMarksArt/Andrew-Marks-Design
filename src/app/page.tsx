@@ -6,15 +6,14 @@ import Typewriter from "../components/Typewriter";
 import LoadingAnimation from "../components/LoadingAnimation";
 
 export default function Home() {
-  const [loadingState, setLoadingState] = useState<number>(0);
+  const [loadingState, setLoadingState] = useState<number>(1);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
   const cardRef = useRef<HTMLElement>(null);
 
   // Sequence orchestrator
   useEffect(() => {
     const sequence = [
-      { state: 1, delay: 2000 }, // Searching (panning back and forth)... then locks to Target Acquired
-      { state: 2, delay: 1000 }, // Target Acquired holds for a second, then starts rotating
+      { state: 2, delay: 1200 }, // Wait for target brackets to blink, then start rotating
       { state: 3, delay: 400 },  // Brackets expand
       { state: 4, delay: 500 },  // Lines expand from center
       { state: 5, delay: 600 },  // Prepare migration target and start migration

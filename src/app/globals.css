@@ -350,9 +350,15 @@ body {
   animation: expandVLine 0.5s ease forwards;
 }
 
-.card.phase-8 .footer-block .b-bottom .hline {
+.card.phase-8 .footer-block .b-bottom .hline,
+.card.phase-8 .header-block .b-bottom .hline,
+.card.phase-8 .footer-block .b-top .hline {
   opacity: 1;
   animation: expandHLine 0.5s ease forwards;
+}
+
+.card.phase-8 .cross {
+  animation: fadeIn 0.3s 0.3s forwards;
 }
 
 /* Base blocks turn white */
@@ -373,8 +379,8 @@ body {
 
 .card.phase-9 .v-left,
 .card.phase-9 .v-right,
-.card.phase-9 .header-block .b-top .hline,
-.card.phase-9 .footer-block .b-bottom .hline {
+.card.phase-9 .hline,
+.card.phase-9 .cross {
   opacity: 1;
 }
 
@@ -389,15 +395,7 @@ body {
   animation: revealPortrait 0.8s cubic-bezier(0.87, 0, 0.13, 1) forwards;
 }
 
-.card.phase-9 .header-block .b-bottom .hline,
-.card.phase-9 .footer-block .b-top .hline {
-  opacity: 1;
-  animation: expandHLine 0.5s ease forwards;
-}
 
-.card.phase-9 .cross {
-  animation: fadeIn 0.3s 0.3s forwards;
-}
 
 /* Phase 10: Fully Loaded - Text Appears */
 /* Everything from previous phases stays solid */

@@ -13,38 +13,7 @@ interface LoadingAnimationProps {
 
 export default function LoadingAnimation({ loadingState, targetRect }: LoadingAnimationProps) {
   const [migratorStyle, setMigratorStyle] = useState({ top: "50%", left: "50%" });
-  const [panOffset, setPanOffset] = useState(0);
 
-  useEffect(() => {
-    let animationFrameId: number;
-    let startTime: number;
-
-    const updatePan = () => {
-      if (!startTime) startTime = Date.now();
-      const elapsed = Date.now() - startTime;
-
-      // Calculate a looping 2-second sine wave between -40 and +40
-      const phase = (elapsed / 2000) * 2 * Math.PI;
-      const currentOffset = Math.sin(phase) * -40; // Starts by moving left
-
-      if (loadingState === 0) {
-        setPanOffset(currentOffset);
-        animationFrameId = requestAnimationFrame(updatePan);
-      } else {
-        setPanOffset(0); // Snap back to center when state changes
-      }
-    };
-
-    if (loadingState === 0) {
-      animationFrameId = requestAnimationFrame(updatePan);
-    } else {
-      setPanOffset(0);
-    }
-
-    return () => {
-      if (animationFrameId) cancelAnimationFrame(animationFrameId);
-    };
-  }, [loadingState]);
 
   useEffect(() => {
     if (loadingState >= 5 && targetRect) {
@@ -69,11 +38,8 @@ export default function LoadingAnimation({ loadingState, targetRect }: LoadingAn
         <div className={clsx(styles.expandingHLine, loadingState >= 4 && styles.expandingHLineActive)} />
         <div className={clsx(styles.expandingVLine, loadingState >= 4 && styles.expandingVLineActive)} />
 
-        {/* The panning wrapper for the cross */}
-        <div
-          className={styles.crossWrapper}
-          style={{ transform: `translateX(${panOffset}px)` }}
-        >
+        {/* The wrapper for the cross */}
+        <div className={styles.crossWrapper}>
           {/* The rotating cross */}
           <div className={clsx(
             styles.centerCross,
@@ -87,19 +53,15 @@ export default function LoadingAnimation({ loadingState, targetRect }: LoadingAn
         </div>
       </div>
 
-      {/* Phase 1-3: Target Acquired (Stays centered, fades out) */}
+      {/* Phase 1-3: Target Group (Stays centered, fades out) */}
       <div className={clsx(styles.targetGroup, loadingState >= 3 && styles.hidden)}>
-        <div className={clsx(
-          styles.targetText,
-          loadingState >= 2 && styles.textFadeOut,
-          loadingState === 0 && styles.searchingBlink
-        )}>
-          {loadingState === 0 ? "SEARCHING..." : "TARGET ACQUIRED"}
-        </div>
-        {/* The panning wrapper for the brackets */}
+        {/* The wrapper for the brackets */}
         <div
-          className={clsx(styles.bracketsWrapper, loadingState >= 3 && styles.bracketsExpanded)}
-          style={{ transform: `translateX(${panOffset}px)` }}
+          className={clsx(
+            styles.bracketsWrapper,
+            loadingState === 1 && styles.targetBlink,
+            loadingState >= 3 && styles.bracketsExpanded
+          )}
         >
           <div className={styles.brackets}>
             <div className={styles.bracketLeft} />

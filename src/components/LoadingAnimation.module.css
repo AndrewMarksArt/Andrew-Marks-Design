@@ -36,7 +36,7 @@
   font-weight: 700;
   text-align: center;
   width: 280px;
-  transition: opacity 0.3s ease-out;
+  transition: opacity 0.3s ease-out, transform 0.4s ease;
 }
 
 .searchingBlink {
@@ -54,6 +54,26 @@
   50% {
     opacity: 0;
   }
+}
+
+.cursorBlink {
+  animation: cursorBlinkAnim 0.8s step-end infinite;
+}
+
+@keyframes cursorBlinkAnim {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+.targetBlink {
+  animation: targetBlink 0.5s step-end infinite;
 }
 
 @keyframes targetBlink {
@@ -74,6 +94,12 @@
 
 .bracketsWrapper {
   position: absolute;
+  /* Remove transform easing during active Phase 0 pan to tightly sync with React */
+  transition: opacity 0.3s ease;
+}
+
+.bracketsWrapperSnapping {
+  /* Restore transform easing when TARGET ACQUIRED triggers to smooth the center snap */
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
 }
 
@@ -228,8 +254,13 @@
 
 .crossWrapper {
   position: absolute;
+  /* Remove transition while actively panning in Phase 0 */
+  transition: none;
+}
+
+.crossWrapperSnapping {
+  /* Restore the smooth ease transition as soon as Phase 1 (TARGET ACQUIRED) starts */
   transition: transform 0.4s ease;
-  /* Smooth out snaps */
 }
 
 /* When migrating to top left, the JS will set the top/left directly via style */
