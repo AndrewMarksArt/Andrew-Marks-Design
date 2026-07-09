@@ -1,0 +1,183 @@
+/* ==========================================================================
+   Case Studies — 3 rows (spec §5 "Case-study row", frame 6727:4226 at
+   page (127, 1098), 1477 wide, rows on 96px gaps; ledger ruling #4 applied:
+   1px black image border on ALL rows, desc rgba(0,0,0,0.9) max-width 726px,
+   rail padding uniform 32px). Section spans design y 1062 → 3913.
+   ========================================================================== */
+
+.caseStudies {
+  position: relative;
+  /* Row 3 bottom (y=3839) → section end at the divider band top (y=3913) */
+  padding-bottom: 74px;
+}
+
+/* --- Interior column rules (2px, --rule recipe) --------------------------
+   Same geometry as CaseStudyStatus so the lines run continuously through
+   both sections. They overshoot 16px below the section so they terminate
+   exactly at the following divider's center rule (verticals end at design
+   y=3929 = the divider rule; Vectors 15/16 h=3063, Vector 17 h=3027). */
+.vrule {
+  position: absolute;
+  top: 0;
+  bottom: -16px;
+  width: 2px;
+  background: var(--rule);
+  pointer-events: none;
+}
+
+.vruleLeft {
+  left: -1px;
+}
+
+.vruleRight {
+  right: -1px;
+}
+
+.vruleMid {
+  left: calc(24.324% - 1px); /* design x=484 of the 1480 content column */
+}
+
+/* --- Separators (design y=1062 / 1991 / 2952) -----------------------------
+   2px --rule, overhanging the content column to the plate edges (1608px
+   equivalent), plus marks pinning the interior-rule intersections. */
+.separator {
+  position: relative;
+  height: 2px;
+  margin-inline: calc(-1 * var(--content-inset));
+  background: var(--rule);
+}
+
+.separatorTop {
+  margin-bottom: 36px; /* separator (1062) → case-studies frame top (1098) */
+}
+
+.separatorMid {
+  margin-block: 47px; /* 96px row gap, separator centered (normalized) */
+}
+
+.sepMark {
+  position: absolute;
+  top: -15px;
+}
+
+.sepMarkLeft {
+  left: calc(var(--content-inset) - 16px);
+}
+
+.sepMarkRight {
+  right: calc(var(--content-inset) - 16px);
+}
+
+/* --- Row: numeral rail + card --------------------------------------------
+   Design row interior 1448px (16px side pads): rail 352 + gap 20 + card 1073. */
+.row {
+  display: flex;
+  gap: 20px;
+  padding-inline: 16px;
+}
+
+.rail {
+  flex: 0 0 24.31%; /* 352px of the 1448px row interior at design width */
+  min-width: 0;
+  padding-inline: 32px; /* uniform 32px numeral inset (ruling #4) */
+}
+
+/* Giant outlined numeral: NHG 75 Bold 200px, transparent fill, 2px sage
+   stroke; cap-trimmed to 143.05px, cap top aligned with the row top
+   (MEASURED from the 1:1 render — numeral cap sits at row top, not bottom). */
+.numeral {
+  display: block;
+  font-family: var(--font-nhg);
+  font-size: clamp(96px, 11.574vw, 200px);
+  font-weight: 700;
+  line-height: 1.25;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--numeral-sage);
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.card {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  max-width: 1073px;
+}
+
+/* Case title: Geist Medium 32, lh 125%, -0.5% tracking, cap-trimmed
+   (32px title measures 23.34px — spec §4). */
+.title {
+  margin: 0;
+  max-width: 726px;
+  font-family: var(--font-geist), sans-serif;
+  font-size: clamp(20px, 1.852vw, 32px);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  color: var(--black);
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* Fallback cap trim where text-box-trim is unsupported: pull the line-box
+   leading back in with negative margins (approximate cap/alphabetic trim). */
+@supports not (text-box-trim: trim-both) {
+  .numeral {
+    margin-block: -0.28em -0.26em;
+  }
+
+  .title {
+    margin-block: -0.28em -0.26em;
+  }
+}
+
+/* Screenshot: 1073x750 frame at design width (1440x1080 source, cover-
+   cropped), 1px solid black border on ALL rows (ruling #4). */
+.screenshot {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1073 / 750;
+  object-fit: cover;
+  border: 1px solid var(--black);
+}
+
+/* Description: Geist 20, lh 145%, +2% tracking, rgba(0,0,0,0.9), bold spans
+   same size as body (ruling #4). */
+.desc {
+  margin: 0;
+  max-width: 726px;
+  font-family: var(--font-geist), sans-serif;
+  font-size: clamp(16px, 1.157vw, 20px);
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+  color: var(--text-body-90);
+}
+
+.desc strong {
+  font-weight: 700;
+}
+
+/* --- Responsive -----------------------------------------------------------
+   <1024: interior rules + plus marks hide; numeral moves above the card
+   (clamp keeps it 96-200px); separators stay; screenshots scale with the
+   column. */
+@media (max-width: 1023px) {
+  .vrule,
+  .sepMark {
+    display: none;
+  }
+
+  .row {
+    flex-direction: column;
+    gap: 16px;
+    padding-inline: 0;
+  }
+
+  .rail {
+    flex: none;
+    padding-inline: 0;
+  }
+}

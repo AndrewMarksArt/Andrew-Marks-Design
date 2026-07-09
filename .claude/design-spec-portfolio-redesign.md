@@ -42,10 +42,10 @@ Near-duplicates are grouped adjacently but every measured value is kept — do N
 | rgba(0,0,0,0.33) | Dot-grid default dot (black at fill-opacity 0.33) | Ellipse 1, links-grid |
 | rgba(0,0,0,0.025) | Gutter hatch lines: stroke-opacity 0.05 × group opacity 0.5 | Lines 81-115, Groups 14/36/37/38 |
 
-### Proposed tokens — PROPOSAL pending Andrew's call
-- `ink` #231A09 · `ink-deep` #271E0C (near-dupes #241B09/#281E0A fold into these two — needs ruling)
+### Tokens — RATIFIED 2026-07-09 (Andrew's rulings + agreed recommendations, see ledger)
+- `ink` #231A09 (absorbs #241B09/#281E0A — 1-2 value diffs, authoring noise) · `ink-deep` #271E0C
 - `black` #000000 (kept separate from ink family)
-- `accent` #EC4E09 · `accent-active` #ED5613 (likely one token — needs ruling) · `accent-deep` #A43B0D (hero plus field; appears deliberate) · `accent-soft` #FBC0A6
+- `accent` #EC4E09 (absorbs #ED5613) · `accent-deep` #A43B0D (hero plus field; deliberate) · `accent-soft` #FBC0A6
 - `teal` #45857B · `green-gray` #333E32 · `numeral-sage` #728370 · `meta-gray` #5E5757
 - `plate-white` #FFFFFF · `plate-resume` rgba(237,237,237,0.425) · `footer-bg` #231A09
 - `gutter-hatch` rgba(0,0,0,0.025) on the page backdrop · `rule` rgba(0,0,0,0.375) · `rule-soft` rgba(0,0,0,0.25) · `dot-idle` rgba(0,0,0,0.33) · `on-dark` rgba(255,255,255,0.9)
@@ -214,16 +214,18 @@ The file contains ZERO hover/pressed/focus/interaction states for ANY element. E
 
 ## 7. Ledger — contradictions & open questions
 
-1. **Display font unidentified.** Hero words + footer wordmarks are outlined vectors — no font metadata. Use the saved SVGs; do NOT guess the family. Name it only if Andrew confirms.
-2. **Near-black ink variance** — #231A09 / #271E0C / #241B09 / #281E0A / #000000. Recommend tokenizing to ink-brown + pure-black; canonical choice needs Andrew.
-3. **Orange variance** — #EC4E09 (chevrons, hatches, INITIALIZING) vs #ED5613 (dot-grid active) vs #A43B0D (hero plus field). First two likely one token; #A43B0D appears deliberate.
-4. **Case-study row inconsistencies** — image border 1px black on row 1 only; description rgba(0,0,0,0.9) rows 1-2 vs #000 row 3; description width 713.47 vs 725.6; rail padding pl-32 vs px-32; 21px bold spans vs 20px body (measured consistently — may be an authoring quirk; flag before canonizing). Rows 2-3 agree with each other AGAINST row 1. Needs a canonical ruling.
-5. **No interaction states anywhere** — all five links, the resume button, and case-study rows need interaction design (repo `interactions` skill exists as fallback).
-6. **Gutter treatment unconfirmed** — root frame is transparent; the 60px gutters have no designed fill (hatch renders over Figma canvas gray there). Recommendation: white to match the plate; needs Andrew's confirmation.
-7. **Left-edge alignment drift** — 123 / 124 / 125 / 125.5 / 127 / 140px (see §4). Hand-placed; pick one alignment grid when building.
-8. **Z-order quirks** — vertical rules end at y=5933 (not 6062) and render ABOVE the footer band, overlapping its top 276px; white plate stops at y=6046 vs page 6062 (footer covers the difference). Cosmetically irrelevant; noted for exact replication.
-9. **NHG Display Pro licensing** — commercial font; webfont availability for the build unconfirmed.
-10. **No responsive frames** — no mobile/tablet frames exist anywhere in the file (only this 1728px frame, 1631x1024 exploration boards, an older draft). Below-1728 behavior is entirely the builder's decision.
+**Rulings from Andrew, 2026-07-09:** display font = Strelka (Adobe Fonts), flattened/manipulated in the design → use the exported SVGs for hero words + footer wordmarks (exact fidelity), with real text equivalents kept in the DOM for SEO/a11y. NHG Display Pro license: Andrew has it (Adobe Fonts) — needs a kit/embed for the build. Interactions: designs exist but are deferred — build static layout first, do NOT invent hover states. Responsiveness: designed by the builder (Claude) — no Figma mobile frames coming for v1. Inconsistencies: fix them; builder recommends, records choices here.
+
+1. ~~Display font unidentified~~ **RESOLVED**: Strelka (Adobe Fonts), flattened/manipulated per art direction. Build from saved SVGs; do not substitute live Strelka for the manipulated lockups.
+2. ~~Ink variance~~ **RESOLVED**: tokenize to `ink` #231A09 (absorbs #241B09, #281E0A) + `ink-deep` #271E0C + `black` #000000.
+3. ~~Orange variance~~ **RESOLVED**: `accent` #EC4E09 (absorbs #ED5613); `accent-deep` #A43B0D stays separate (hero plus field).
+4. ~~Case-study row inconsistencies~~ **RESOLVED** (builder recommendation, approved "fix + recommend"): 1px solid #000 image border on ALL three rows (matches the 1px-rule drafting language and keeps light screenshots from bleeding into the white plate); description color rgba(0,0,0,0.9), max-width 726px, rail padding uniform 32px both sides; bold spans same 20px size as body (the 21px measurement treated as authoring quirk).
+5. **Interaction states deferred** — Andrew has interaction designs; basic layout ships static. Do not invent hover states beyond cursor:pointer + focus-visible outlines (a11y floor).
+6. ~~Gutter treatment~~ **RESOLVED** (recommendation): gutters render the hatch over the page base color; plate is white. Page base = #EDEDED-equivalent achieved via white + hatch gradient (visually identical to the Figma render).
+7. ~~Left-edge alignment drift~~ **RESOLVED** (recommendation): single alignment grid — content column inset 64px from the x=60/1668 rules (content spans x=124..1604 at 1728). The 123/125/125.5/127/140 drift values are normalized to this grid.
+8. **Z-order quirks** — vertical rules end at y=5933 (not 6062) and render ABOVE the footer band, overlapping its top 276px; white plate stops at y=6046 vs page 6062 (footer covers the difference). Cosmetically irrelevant; build rules ending at the footer top.
+9. ~~NHG licensing~~ **RESOLVED**: Andrew holds the license via Adobe Fonts. BUILD TODO: Andrew creates an Adobe Fonts web project (kit) containing Neue Haas Grotesk Display Pro (55 Roman, 65 Medium, 75 Bold) and provides the kit ID/embed URL. Until then the build uses a fallback stack behind `--font-nhg`.
+10. **Responsive design is builder-designed** (Andrew delegated): fluid ≤1728 with breakpoints — see BUILD-PLAN in .claude/ for the concrete strategy.
 11. **Frame 56 (6727:4200) is a leftover WIREFRAME** — hidden=true, all-#D9D9D9 skeleton (heading bars, 728x626 carousel slot, caption bars, white→#D9D9D9 side-fade peek panels). Do NOT build unless Andrew says otherwise; at most it hints a center-stage carousel was once planned.
 12. ~~Case Study Status block position unmeasured~~ **RESOLVED**: 6727:4215 "Case Study Section" is a root-frame child at page (125, 902), 1478x160 (MEASURED from root metadata dump).
 13. **Numeral stroke alignment unconfirmed** — 2px #728370 was pixel-sampled (get_design_context returned only text-[transparent]); center-stroke most consistent with measurements.

@@ -1,480 +1,181 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap');
+/* ==========================================================================
+   Portfolio Redesign — global tokens, base, page shell
+   Source of truth: .claude/design-spec-portfolio-redesign.md
+   ========================================================================== */
 
 :root {
-  --background: #EDEDED;
-  --foreground: #000;
+  /* Color tokens (ratified 2026-07-09) */
+  --ink: #231A09;
+  --ink-deep: #271E0C;
+  --black: #000000;
+  --accent: #EC4E09;
+  --accent-deep: #A43B0D;
+  --accent-soft: #FBC0A6;
+  --teal: #45857B;
+  --green-gray: #333E32;
+  --numeral-sage: #728370;
+  --meta-gray: #5E5757;
+  --plate: #FFFFFF;
+  --plate-resume: rgba(237, 237, 237, 0.425);
+  --on-dark: rgba(255, 255, 255, 0.9);
+  --rule: rgba(0, 0, 0, 0.375);
+  --rule-soft: rgba(0, 0, 0, 0.25);
+  --dot-idle: rgba(0, 0, 0, 0.33);
+  --hatch: rgba(0, 0, 0, 0.05);
+  --gutter-base: #EDEDED;
+  --text-body-90: rgba(0, 0, 0, 0.9);
+  --text-body-80: rgba(0, 0, 0, 0.8);
+
+  /* Fonts — --font-geist / --font-geist-mono injected by next/font in layout.tsx.
+     NHG Display Pro arrives via Adobe Fonts kit (TODO: kit ID from Andrew);
+     until then it falls back to Geist. */
+  --font-nhg: "neue-haas-grotesk-display", var(--font-geist), sans-serif;
+
+  /* Layout */
+  --page-max: 1728px;
+  --gutter: 60px;
+  --content-inset: 64px;
+}
+
+@media (max-width: 1439px) {
+  :root {
+    --gutter: 40px;
+    --content-inset: 48px;
+  }
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --gutter: 24px;
+    --content-inset: 24px;
+  }
+}
+
+@media (max-width: 639px) {
+  :root {
+    --gutter: 12px;
+    --content-inset: 12px;
+  }
 }
 
 * {
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
   padding: 0;
-  width: 100vw;
-  height: 100dvh;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--background);
-
-  /* Robust grid lines that won't seam from odd viewport widths */
-  background-size: 56.57px 56.57px;
-  /* roughly 40px diagonal distance */
-  background-image: linear-gradient(-45deg,
-      #EDEDED 25%,
-      #E7E7E7 25%,
-      #E7E7E7 50%,
-      #EDEDED 50%,
-      #EDEDED 75%,
-      #E7E7E7 75%,
-      #E7E7E7 100%);
-
-  font-family: 'Geist Mono', monospace;
-  /* Custom [ + ] cursor using an inline SVG. Thinner stroke, wider spacing. */
-  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><path d='M 10 6 L 6 6 L 6 26 L 10 26' fill='none' stroke='%23CD3F01' stroke-width='1.5'/><path d='M 22 6 L 26 6 L 26 26 L 22 26' fill='none' stroke='%23CD3F01' stroke-width='1.5'/><path d='M 16 11 L 16 21 M 11 16 L 21 16' fill='none' stroke='%23CD3F01' stroke-width='1.5'/></svg>") 16 16, crosshair;
 }
 
-/* -------------------------------------------------------------------------- */
-/* 2. Scaler - ensures the entire UI fits on smaller laptops                  */
-/* -------------------------------------------------------------------------- */
-#scaler {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* Dynamic JS scale applied here depending on window height */
-  transform: scale(1);
-  transform-origin: center center;
+body {
+  /* Gutter texture: #EDEDED base with the measured diagonal hatch.
+     Measured: 50.79deg descending L-to-R, 31.35px band, 61.81px period,
+     lines at rgba(0,0,0,0.025) over the base. */
+  background-color: var(--gutter-base);
+  background-image: repeating-linear-gradient(
+    50.79deg,
+    rgba(0, 0, 0, 0.025) 0 31.35px,
+    transparent 31.35px 61.81px
+  );
+  color: var(--ink);
+  font-family: var(--font-geist), sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* -------------------------------------------------------------------------- */
-/* 3. The Core Card Structure                                                 */
-/* -------------------------------------------------------------------------- */
-.card {
+/* ==========================================================================
+   Page shell: centered 1728 page, white plate between the two vertical
+   rules, footer band outside the plate wrapper (flush bottom).
+   ========================================================================== */
+
+.page {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.plateMain {
   position: relative;
-  /* Max 450px, otherwise span the window with 20px padding on each side */
-  width: calc(100vw - 40px);
-  max-width: 450px;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  z-index: 10;
-
-  .block {
-    /* Default background restored */
-    background: #fff;
-    position: relative;
-  }
-
-  /* -------------------------------------------------------------------------- */
-  /* 4. Infinite Grid Lines                                                     */
-  /* -------------------------------------------------------------------------- */
-  /* Horizontal lines are fixed size 200vw, centered. 
-   This prevents flexbox scroll bugs from absolute bounds blowing up */
-  .hline {
-    position: absolute;
-    width: 200vw;
-    height: 1px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #999;
-    z-index: 5;
-  }
-
-  /* Vertical lines are fixed size 200vh, centered vertically */
-  .vline {
-    position: absolute;
-    width: 1px;
-    height: 200vh;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: #999;
-    z-index: 5;
-  }
-
-  .v-left {
-    left: 0;
-  }
-
-  .v-right {
-    right: 0;
-  }
-
-  /* A boundary is just a horionztal cut across the card containing an hline & crosses */
-  .boundary {
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 0;
-    z-index: 10;
-  }
-
-  .b-top {
-    top: 0;
-  }
-
-  .b-bottom {
-    bottom: 0;
-  }
-
-  /* -------------------------------------------------------------------------- */
-  /* 5. Precise Pixel-Perfect Crosshairs                                        */
-  /* -------------------------------------------------------------------------- */
-  .cross {
-    position: absolute;
-    width: 11px;
-    height: 11px;
-    /* The very center of this element is now placed EXACTLY at the corner coordinates */
-    top: 0;
-    transform: translate(-50%, -50%);
-    z-index: 15;
-  }
-
-  /* Wait, the crosses should be drawn with sub-elements: */
-  .cross::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 4px;
-    /* adjusted for 2px width */
-    width: 2px;
-    background-color: #000;
-  }
-
-  .cross::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 4px;
-    /* adjusted for 2px width */
-    height: 2px;
-    background-color: #000;
-  }
-
-  .cross-left {
-    left: 0;
-  }
-
-  .cross-right {
-    left: 100%;
-  }
-
-  /* -------------------------------------------------------------------------- */
-  /* 6. Block Content: Header                                                   */
-  /* -------------------------------------------------------------------------- */
-  .header-block {
-    /* Increased side padding to 24px */
-    padding: 12px 24px;
-  }
-
-  .header-text {
-    font-size: 11px;
-    /* Shrunk slightly to prevent wrapping */
-    letter-spacing: -0.02em;
-    color: #000;
-    line-height: 1;
-  }
-
-  /* -------------------------------------------------------------------------- */
-  /* 7. Block Content: Canvas                                                   */
-  /* -------------------------------------------------------------------------- */
-  .canvas-block {
-    width: 100%;
-    /* Original char 404x404. Dropped 2px to remove white edge gap. */
-    aspect-ratio: 404 / 402;
-    height: auto;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    overflow: hidden;
-    /* Stops character dipping over the lines */
-  }
-
-  canvas#c {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1 / 1;
-    image-rendering: auto;
-    display: block;
-  }
-
-  /* -------------------------------------------------------------------------- */
-  /* 8. Block Content: Footer                                                   */
-  /* -------------------------------------------------------------------------- */
-  .footer-block {
-    /* Increased bottom padding to 32px, and side padding to 40px for breathing room */
-    padding: 20px 40px 32px 40px;
-  }
-
-  .headline {
-    font-size: 20px;
-    letter-spacing: -0.02em;
-    color: #CD3F01;
-    margin-bottom: 12px;
-  }
-
-  .subhead {
-    padding-left: 24px;
-    /* Decreased from 16px to 12px */
-    font-size: 12px;
-    letter-spacing: -0.02em;
-    color: #333E32;
-  }
-
-  .status-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 4px;
-  }
-
-  .dots {
-    flex-grow: 1;
-    border-bottom: 2px dotted #aaa;
-    margin: 0 8px;
-  }
-
-  .val {
-    color: #000;
-  }
-
-  /* -------------------------------------------------------------------------- */
-  /* 9. Animations                                                              */
-  /* -------------------------------------------------------------------------- */
-  @keyframes blink {
-
-    0%,
-    100% {
-      opacity: 1;
-    }
-
-    50% {
-      opacity: 0;
-    }
-  }
-
-  .cursor-blink {
-    animation: blink 1s step-end infinite;
-    display: inline-block;
-    /* Match color to the headline text since it might not inherit perfectly if we change things later */
-    color: #CD3F01;
-    /* Make sure brackets render mono and are slightly padded visually from the text */
-    margin-left: 5px;
-  }
-
-  /* -------------------------------------------------------------------------- */
-  /* 10. Responsive Breakpoints                                                 */
-  /* -------------------------------------------------------------------------- */
-  @media (max-width: 480px) {
-    .header-block {
-      padding: 10px 15px;
-    }
-
-    .header-text {
-      font-size: 8.5px;
-    }
-
-    .footer-block {
-      padding: 15px 20px 24px 20px;
-    }
-
-    .headline {
-      font-size: 16px;
-      margin-bottom: 8px;
-    }
-
-    .subhead {
-      padding-left: 12px;
-      font-size: 10px;
-    }
-  }
+  background: var(--plate);
 }
 
-/* -------------------------------------------------------------------------- */
-/* 11. Loading Sequence States                                                */
-/* -------------------------------------------------------------------------- */
-
-/* Hide card contents initially */
-.card.loading-active .canvas-block,
-.card.loading-active .header-text,
-.card.loading-active .headline,
-.card.loading-active .subhead,
-.card.loading-active .status-row {
-  opacity: 0;
-  visibility: hidden;
+/* Vertical page rules straddling the plate edges (x=60/1668 at 1728) */
+.plateMain::before,
+.plateMain::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--rule);
+  z-index: 3;
+  pointer-events: none;
 }
 
-.card.loading-active canvas {
-  opacity: 0;
-  visibility: hidden;
+.plateMain::before {
+  left: -1px;
 }
 
-/* Hide card backgrounds initially */
-.card.loading-active .block {
-  background: transparent;
+.plateMain::after {
+  right: -1px;
 }
 
-/* Base states for lines - hidden until active */
-.card.loading-active .vline,
-.card.loading-active .hline,
-.card.loading-active .cross {
-  opacity: 0;
+/* Content alignment grid: single 64px inset from the rules (ratified) */
+.content {
+  padding-inline: var(--content-inset);
 }
 
-/* The structural lines are invisible until we reach phase 5 */
-
-/* Phase 6: The top boundary line and left vertical line appear */
-.card.phase-6 .v-left,
-.card.phase-6 .header-block .b-top .hline {
-  opacity: 1;
+/* Full-bleed rows (rules/divider/links band extend across the gutters) */
+.fullBleed {
+  margin-inline: calc(-1 * var(--gutter));
 }
 
-/* Phase 7: Top/Left lines remain */
-.card.phase-7 .v-left,
-.card.phase-7 .header-block .b-top .hline {
-  opacity: 1;
+/* Full-width horizontal rule (Vector 5/12/11 recipe) */
+.hrule {
+  height: 2px;
+  background: var(--rule);
+  border: 0;
+  margin: 0;
 }
 
-/* Phase 8: Right vertical line and bottom boundary expand out, plus BACKGROUND reveal */
-.card.phase-8 .v-left,
-.card.phase-8 .header-block .b-top .hline {
-  opacity: 1;
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
-.card.phase-8 .v-right {
-  opacity: 1;
-  animation: expandVLine 0.5s ease forwards;
+a {
+  color: inherit;
 }
 
-.card.phase-8 .footer-block .b-bottom .hline,
-.card.phase-8 .header-block .b-bottom .hline,
-.card.phase-8 .footer-block .b-top .hline {
-  opacity: 1;
-  animation: expandHLine 0.5s ease forwards;
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
-.card.phase-8 .cross {
-  animation: fadeIn 0.3s 0.3s forwards;
+img,
+svg {
+  display: block;
+  max-width: 100%;
 }
 
-/* Base blocks turn white */
-.card.phase-8 .block {
-  background: #fff;
-  transition: background-color 0.5s ease;
-}
-
-.card.phase-8 .canvas-block {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Phase 9: Inner boundaries appear and portrait sweep begins */
-.card.phase-9 .block {
-  background: #fff;
-}
-
-.card.phase-9 .v-left,
-.card.phase-9 .v-right,
-.card.phase-9 .hline,
-.card.phase-9 .cross {
-  opacity: 1;
-}
-
-.card.phase-9 .canvas-block {
-  opacity: 1;
-  visibility: visible;
-}
-
-.card.phase-9 canvas {
-  opacity: 1;
-  visibility: visible;
-  animation: revealPortrait 0.8s cubic-bezier(0.87, 0, 0.13, 1) forwards;
-}
-
-
-
-/* Phase 10: Fully Loaded - Text Appears */
-/* Everything from previous phases stays solid */
-.card.phase-10 .block {
-  background: #fff;
-}
-
-.card.phase-10 .v-left,
-.card.phase-10 .v-right,
-.card.phase-10 .hline,
-.card.phase-10 .cross {
-  opacity: 1;
-  transition: opacity 0.3s;
-}
-
-.card.phase-10 .canvas-block {
-  opacity: 1;
-  visibility: visible;
-}
-
-.card.phase-10 canvas {
-  opacity: 1;
-  visibility: visible;
-}
-
-.card.phase-10 .header-text,
-.card.phase-10 .headline,
-.card.phase-10 .subhead,
-.card.phase-10 .status-row {
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 0.5s ease;
-}
-
-@keyframes revealPortrait {
-  from {
-    clip-path: inset(0% 0% 100% 0%);
-    /* Wipe from top down */
-  }
-
-  to {
-    clip-path: inset(0% 0% 0% 0%);
-  }
-}
-
-@keyframes expandVLine {
-  from {
-    top: 0;
-    bottom: 100%;
-    height: 0;
-    transform: translateY(0);
-  }
-
-  to {
-    top: 50%;
-    bottom: auto;
-    height: 200vh;
-    transform: translateY(-50%);
-  }
-}
-
-@keyframes expandHLine {
-  from {
-    left: 0;
-    right: 100%;
-    width: 0;
-    transform: translateX(0);
-  }
-
-  to {
-    left: 50%;
-    right: auto;
-    width: 200vw;
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes fadeIn {
-  to {
-    opacity: 1;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

@@ -1,0 +1,339 @@
+/* ==========================================================================
+   ResumeSection — divider, resume plate + corner brackets, header, 4 rows.
+   All values measured (.claude/design-spec-portfolio-redesign.md §3-§5 +
+   pixel-verified against design/full-page/home-desktop.png y 3890-5030).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Divider (cases → resume): full-bleed 32px band, 2px --rule at center,
+   32px plus marks centered on the plate-edge rules (x=60/1668 at 1728).
+   Design: case frame bottom 3839 → divider top 3913 = 74px.
+   -------------------------------------------------------------------------- */
+
+.divider {
+  position: relative;
+  height: 32px;
+  /* CaseStudies owns the 74px gap above (its padding-bottom) — no margin here */
+  margin-top: 0;
+  /* clips the plus marks at tiny gutters (<16px) instead of h-scrolling */
+  overflow: hidden;
+}
+
+.divider::before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--rule);
+}
+
+.dividerMark {
+  position: absolute;
+  top: 0;
+  /* above the .plateMain::before/::after vertical rules (z-index 3) */
+  z-index: 4;
+}
+
+.dividerMarkLeft {
+  left: calc(var(--gutter) - 16px);
+}
+
+.dividerMarkRight {
+  right: calc(var(--gutter) - 16px);
+}
+
+/* --------------------------------------------------------------------------
+   Resume plate: rgba(237,237,237,.425), spans the full content column
+   (1480px at design width). Divider bottom 3945 → plate top 3978 = 33px.
+   Plate padding = 16px plate inset + 16px section px-16 = 32px inline;
+   18px top (plate 3978 → section 3996), 22px bottom (4999 → 5021).
+   -------------------------------------------------------------------------- */
+
+.plate {
+  --plate-pad-x: 32px;
+  position: relative;
+  margin-top: 33px;
+  background: var(--plate-resume);
+  padding: 18px var(--plate-pad-x) 22px;
+}
+
+/* Corner brackets: 32x32 windows overhanging each plate corner by 4px,
+   each showing the inward-pointing quadrant of a 64px plus mark
+   (8px arms — measured: L-bars 8px thick, 32px long). */
+
+.corner {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.corner svg {
+  position: absolute;
+  /* globals sets svg { max-width: 100% }, which would clamp the 64px plus
+     to the 32px window and leave only a sliver — the bracket needs overflow */
+  max-width: none;
+}
+
+.cornerTopLeft {
+  top: -4px;
+  left: -4px;
+}
+
+.cornerTopLeft svg {
+  top: -28px;
+  left: -28px;
+}
+
+.cornerTopRight {
+  top: -4px;
+  right: -4px;
+}
+
+.cornerTopRight svg {
+  top: -28px;
+  right: -28px;
+}
+
+.cornerBottomLeft {
+  bottom: -4px;
+  left: -4px;
+}
+
+.cornerBottomLeft svg {
+  bottom: -28px;
+  left: -28px;
+}
+
+.cornerBottomRight {
+  bottom: -4px;
+  right: -4px;
+}
+
+.cornerBottomRight svg {
+  bottom: -28px;
+  right: -28px;
+}
+
+/* --------------------------------------------------------------------------
+   Header row (Frame 64): h=44, label + triple chevron left (items-end),
+   See Full Resume button right. Button wraps below the label when tight.
+   -------------------------------------------------------------------------- */
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px 24px;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  min-width: 0;
+}
+
+/* Resume section label: Geist Mono Light 28px, lh 1, -2%, --ink */
+.label {
+  margin: 0;
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 300;
+  font-size: clamp(20px, 1.6204vw, 28px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* Triple chevron sits 4px above the header bottom (pb-4 in file) */
+.chevrons {
+  flex: none;
+  margin-bottom: 4px;
+}
+
+/* See Full Resume →: 203x44 (auto: 20px/1.2 + 8px py + 2px border),
+   px-16, bg --accent-soft, 2px solid --black, radius 0 */
+.button {
+  /* inline-block (not flex) so the literal space before the arrow renders;
+     height = 20px * 1.2 + 2*8px padding + 2*2px border = 44px */
+  display: inline-block;
+  padding: 8px 16px;
+  background: var(--accent-soft);
+  border: 2px solid var(--black);
+  border-radius: 0;
+  font-family: var(--font-geist), sans-serif;
+  font-weight: 400;
+  font-size: clamp(16px, 1.1574vw, 20px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--black);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   Separators: 2px --rule-soft (DISTINCT recipe from --rule, keep), spanning
+   the full plate width (negative inline margins = overhang past the section
+   frame). Header sep: 19px below header / 33px above row 1; row seps
+   centered in the 54px row gaps (26/26).
+   -------------------------------------------------------------------------- */
+
+.sep {
+  height: 2px;
+  border: 0;
+  margin: 26px calc(-1 * var(--plate-pad-x));
+  background: var(--rule-soft);
+}
+
+.sepHeader {
+  margin-top: 19px;
+  margin-bottom: 33px;
+}
+
+/* --------------------------------------------------------------------------
+   Resume rows: title left (hug), right column 729/1412 = 51.63% with 16px
+   inline padding. Role (36px) + date (24px) as one paragraph, 36px gap,
+   3-line body (24px).
+   -------------------------------------------------------------------------- */
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+/* NHG 65 Medium 48px, lh 1.25, +2%, --black */
+.title {
+  margin: 0;
+  flex: 0 1 auto;
+  min-width: 0;
+  font-family: var(--font-nhg);
+  font-weight: 500;
+  font-size: clamp(28px, 2.7778vw, 48px);
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  color: var(--black);
+}
+
+.rowBody {
+  flex: 0 0 51.63%;
+  min-width: 0;
+  padding-inline: 16px;
+}
+
+/* Role line: NHG 65 Medium 36px, lh 1.45, -0.5% */
+.role {
+  margin: 0 0 36px;
+  font-family: var(--font-nhg);
+  font-weight: 500;
+  font-size: clamp(22px, 2.0833vw, 36px);
+  line-height: 1.45;
+  letter-spacing: -0.005em;
+  color: var(--black);
+}
+
+/* Date / institution line: NHG 65 Medium 24px (inherits lh/tracking) */
+.meta {
+  font-size: clamp(16px, 1.3889vw, 24px);
+}
+
+/* Body: NHG 55 Roman 24px, lh 1.45, -0.5% */
+.desc {
+  margin: 0;
+  font-family: var(--font-nhg);
+  font-weight: 400;
+  font-size: clamp(16px, 1.3889vw, 24px);
+  line-height: 1.45;
+  letter-spacing: -0.005em;
+  color: var(--black);
+}
+
+/* Cap trim: measured layout assumes trimmed boxes (title/role cap tops sit
+   on the row top; row bottom = body's last baseline). */
+.title,
+.role,
+.desc {
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* Fallback: without trim the role's descent + the body's above-cap leading
+   inflate the 36px gap to ~52px — tighten it back. Cross-column top
+   alignment survives untrimmed (title/role gain near-equal leading). */
+@supports not (text-box-trim: trim-both) {
+  .role {
+    margin-bottom: 20px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Responsive (BUILD-PLAN breakpoints; 1024-1439 keeps the structure and
+   scales via clamp + fluid widths — no overrides needed there)
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1023px) {
+  .divider {
+    margin-top: 48px;
+  }
+
+  .plate {
+    --plate-pad-x: 16px;
+    margin-top: 24px;
+    padding-top: 16px;
+    padding-bottom: 20px;
+  }
+
+  .sep {
+    margin-block: 20px;
+  }
+
+  .sepHeader {
+    margin-top: 14px;
+    margin-bottom: 24px;
+  }
+
+  /* Title stacks above the role/body column, everything full width */
+  .row {
+    display: block;
+  }
+
+  .title {
+    margin-bottom: 20px;
+  }
+
+  .rowBody {
+    padding-inline: 0;
+  }
+
+  .role {
+    margin-bottom: 24px;
+  }
+}
+
+@media (max-width: 639px) {
+  .divider {
+    margin-top: 32px;
+  }
+
+  .plate {
+    margin-top: 16px;
+  }
+
+  .sep {
+    margin-block: 16px;
+  }
+
+  .sepHeader {
+    margin-top: 12px;
+    margin-bottom: 20px;
+  }
+
+  .title {
+    margin-bottom: 16px;
+  }
+}

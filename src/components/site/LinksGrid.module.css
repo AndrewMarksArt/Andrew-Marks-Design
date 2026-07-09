@@ -1,0 +1,314 @@
+/* ==========================================================================
+   Links grid band — spec §4 "Links grid", §5 "Links-grid cell" + motifs.
+   Design geometry at 1728: rules y=5069 (full-bleed) / 5363 (inset, plate
+   only) / 5657 (full-bleed); interior verticals x=462 / x=864 → plate
+   columns 25% / 25% / 50% (402/402/804 of the 1608 plate); rows 294px.
+   The band is full-bleed (top/bottom rules cross the gutters); the grid is
+   pulled back onto the plate with a gutter margin.
+   ========================================================================== */
+
+.band {
+  position: relative;
+  border-top: 2px solid var(--rule);
+  border-bottom: 2px solid var(--rule);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 25% 25% 50%;
+  margin-inline: var(--gutter);
+}
+
+/* --- corner registration marks -------------------------------------------
+   Centered on the band-rule x plate-rule intersections (x=60/1668 at 1728).
+   The band's 2px borders sit outside its padding box, so -1px lands on the
+   rule's center line. */
+
+.plus {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.plusTopLeft {
+  top: -1px;
+  left: var(--gutter);
+  transform: translate(-50%, -50%);
+}
+
+.plusTopRight {
+  top: -1px;
+  right: var(--gutter);
+  transform: translate(50%, -50%);
+}
+
+.plusBottomLeft {
+  bottom: -1px;
+  left: var(--gutter);
+  transform: translate(-50%, 50%);
+}
+
+.plusBottomRight {
+  bottom: -1px;
+  right: var(--gutter);
+  transform: translate(50%, 50%);
+}
+
+/* --- cells ---------------------------------------------------------------- */
+
+.cell {
+  position: relative;
+  min-height: 294px;
+  padding: 42px 16px 40px; /* link cap top = rule + 42 (double-margin: 16px inner pads) */
+}
+
+/* Interior vertical rules (x=462 / x=864): drawn by column-2/3 cells so they
+   re-flow with the responsive grid. */
+.cellXcom,
+.cellLinkedIn,
+.cellGitHub,
+.cellAbout {
+  border-left: 2px solid var(--rule);
+}
+
+/* Middle rule (y=5363): INSET — spans the plate only, drawn by row-2 cells. */
+.cellDots,
+.cellGitHub,
+.cellAbout {
+  border-top: 2px solid var(--rule);
+}
+
+/* --- numbered link (Geist SemiBold 24, lh 0.95, uppercase) ----------------- */
+
+.link {
+  display: block;
+  width: fit-content;
+  font-family: var(--font-geist), sans-serif;
+  font-size: clamp(20px, 1.3889vw, 24px);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--black);
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.cellResume .link {
+  color: var(--ink-deep);
+}
+
+/* --- arrow-out icon (top-aligned with link, 16px before the cell rule) ----- */
+
+.icon {
+  position: absolute;
+  top: 42px;
+  right: 16px;
+}
+
+/* --- description (Geist Medium 18, lh 1.45, +2% tracking) ------------------ */
+
+/* Trimmed cap top lands at rule + 174: 42 pad + ~17px link cap box + 115. */
+.desc {
+  max-width: 369px;
+  margin: 115px 0 0;
+  font-family: var(--font-geist), sans-serif;
+  font-size: clamp(16px, 1.0417vw, 18px);
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+  color: var(--text-body-80);
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.desc strong {
+  font-weight: 700;
+  color: var(--black);
+}
+
+/* --- cell 03: orange hatch block + shifted icon ----------------------------
+   Hatch 362x211 at (1290, 5110): right-aligned 16px, top rule+41; 2px accent
+   lines ASCENDING left-to-right ("/") at 28px x-spacing = 19.8px
+   perpendicular period (-45deg gradient). Width formula lets the hatch
+   absorb all shrink first, keeping the icon's left edge clear of the link. */
+
+.hatch {
+  position: absolute;
+  top: 41px;
+  right: 16px;
+  width: min(362px, calc(100% - 440px));
+  height: 211px;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--accent) 0 2px,
+    transparent 2px 19.8px
+  );
+}
+
+/* Icon sits 40px left of the hatch (icon x=1198 at 1728). */
+.cellLinkedIn .icon {
+  right: calc(min(362px, 100% - 440px) + 56px);
+}
+
+/* --- dots cell (368x210 at 16px pad, rule+42) ------------------------------ */
+
+.dotGrid {
+  width: 368px;
+  max-width: 100%;
+  height: auto;
+}
+
+/* --- About cell ------------------------------------------------------------ */
+
+/* Wide justified paragraph: 764px, lh 1.55, tracking 0, cap top at rule+168. */
+.cellAbout .desc {
+  max-width: 764px;
+  margin-top: 109px;
+  line-height: 1.55;
+  letter-spacing: 0;
+  text-align: justify;
+}
+
+/* Coil + circled-R (measured: badge right edge 24px in from the plate rule,
+   16px gap between coil and badge, tops at rule+42). */
+.reg {
+  position: absolute;
+  top: 42px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.coil {
+  flex: none;
+}
+
+.badge {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--black);
+  border-radius: 12px; /* circle — the one sanctioned radius on the page */
+  font-family: var(--font-geist), sans-serif;
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  color: var(--black);
+}
+
+/* --- cap-trim fallback (no text-box-trim: tighten single-line link box,
+   absorb the descriptions' first-line half-leading in the margins) --------- */
+
+@supports not (text-box-trim: trim-both) {
+  .link {
+    line-height: 0.72;
+  }
+
+  .desc {
+    margin-top: 108px;
+  }
+
+  .cellAbout .desc {
+    margin-top: 101px;
+  }
+}
+
+/* ==========================================================================
+   1024-1439: same structure — gutter tokens shrink, clamp() scales type,
+   the hatch narrows via its min() width, descriptions wrap, rows grow.
+
+   640-1023: two columns; rows become [01|02] [03|dots] [04|05]. The orange
+   hatch is dropped (no room beside link + icon in a half column) and the
+   About coil is dropped (collides with the link below ~780px); R badge stays.
+   ========================================================================== */
+
+@media (max-width: 1023px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* column 2 is now: 02, dots, 05 */
+  .cellLinkedIn,
+  .cellGitHub {
+    border-left: 0;
+  }
+
+  .cellXcom,
+  .cellDots,
+  .cellAbout {
+    border-left: 2px solid var(--rule);
+  }
+
+  /* rows 2-3: 03, dots, 04, 05 */
+  .cellLinkedIn,
+  .cellDots,
+  .cellGitHub,
+  .cellAbout {
+    border-top: 2px solid var(--rule);
+  }
+
+  .hatch {
+    display: none;
+  }
+
+  .cellLinkedIn .icon {
+    right: 16px;
+  }
+
+  .coil {
+    display: none;
+  }
+}
+
+/* <640: single column, inset rules between rows, compact rhythm */
+
+@media (max-width: 639px) {
+  .grid {
+    grid-template-columns: 100%;
+  }
+
+  .cellXcom,
+  .cellLinkedIn,
+  .cellDots,
+  .cellGitHub,
+  .cellAbout {
+    border-left: 0;
+    border-top: 2px solid var(--rule);
+  }
+
+  .cell {
+    min-height: 0;
+    padding: 24px 16px 32px;
+  }
+
+  .icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .icon,
+  .reg {
+    top: 24px;
+  }
+
+  .desc,
+  .cellAbout .desc {
+    max-width: 100%;
+    margin-top: 32px;
+  }
+
+  .cellAbout .desc {
+    text-align: left;
+  }
+
+  /* keep the corner marks inside the 12px gutters (no horizontal scroll) */
+  .plus {
+    width: 20px;
+    height: 20px;
+  }
+}

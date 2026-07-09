@@ -1,0 +1,166 @@
+/* ==========================================================================
+   Hero band — spec §5 "Hero band", §3 hero text styles, §4 vertical map.
+   Design-scale geometry (1728): words at y=292/394.4, tagline 520, sub 626,
+   band (76, 81.5) 1592x709.5 ending on the y=791 rule.
+   The section's top edge = NameMark bottom (page y≈188.6); all hero spacing
+   is provided internally (words start 103px below that edge).
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  /* 791 (band bottom / rule) - 695.6 (sub-line box bottom) */
+  padding-bottom: 95px;
+}
+
+/* Text column sits on the white plate above the band (band is behind). */
+.text {
+  position: relative;
+  z-index: 1;
+}
+
+/* --- Display words (Strelka SVG lockups) ------------------------------- */
+
+.words {
+  /* 292 (word 1 top) - 188.63 (NameMark frame bottom) */
+  margin-top: 103px;
+}
+
+.word {
+  width: 100%;
+  height: auto;
+}
+
+.wordUx {
+  max-width: 734.152px; /* natural SVG size 734.152x76.8 */
+}
+
+.wordDesigner {
+  max-width: 530.221px; /* natural SVG size 530.221x76.8 */
+  margin-top: 25.6px; /* 394.4 - (292 + 76.8) */
+}
+
+/* --- Tagline / sub-line (spec §3) --------------------------------------- */
+
+.tagline {
+  margin: 48.8px 0 0; /* 520 - 471.2 (word 2 bottom) */
+  /* Wrap after "wrangling" as designed (line 1 measures ≈628px at 36px);
+     em unit keeps the same break across the clamp range. */
+  max-width: 19em;
+  font-size: clamp(22px, 2.0833vw, 36px); /* 36 / 1728 * 100vw */
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.02em; /* -0.72px at 36px */
+  color: var(--ink);
+}
+
+.subline {
+  margin: 16px 0 0; /* 626 - 610 (tagline box bottom) */
+  font-size: clamp(16px, 1.3889vw, 24px); /* 24 / 1728 * 100vw */
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: -0.02em; /* -0.48px at 24px */
+  color: var(--ink);
+}
+
+/* Designed line break (U+2028 in the Figma node) after "humans, ". */
+.sublineBreak {
+  display: block;
+}
+
+/* --- Masked band (lattice + robot) -------------------------------------- */
+
+.band {
+  position: absolute;
+  left: 16px; /* page x=76: 16px inside the left rule */
+  right: 0; /* flush to the right rule (page x=1668) */
+  bottom: 0; /* bottom edge on the y=791 rule */
+  aspect-ratio: 1592 / 709.5;
+  overflow: hidden; /* render-faithful fallback clip where mask unsupported */
+  pointer-events: none;
+  z-index: 0;
+  /* Notched-silhouette alpha mask, from hero-mask.svg — with the top edge
+     opened (V0) right of the diagonal shoulder: the 1:1 export renders the
+     top lattice marks (page y≈137) and robot antennae ABOVE the polygon's
+     y=145.5 top edge, so the verbatim mask would clip content the design
+     visibly shows. Tab + shoulder notch kept exactly as drawn. */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201592%20709.5'%20preserveAspectRatio='none'%3E%3Cpath%20d='M0%20145.5L99.4267%20144.915H194.5L198.853%200H397.707L596.56%20145.5L795.841%20144.915H1000V0H1592V709.5H0Z'%20fill='black'/%3E%3C/svg%3E");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201592%20709.5'%20preserveAspectRatio='none'%3E%3Cpath%20d='M0%20145.5L99.4267%20144.915H194.5L198.853%200H397.707L596.56%20145.5L795.841%20144.915H1000V0H1592V709.5H0Z'%20fill='black'/%3E%3C/svg%3E");
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%;
+}
+
+.lattice {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.robot {
+  position: absolute;
+  left: 65.829%; /* 1048 / 1592 (band-relative; page x=1124) */
+  top: 11.346%; /* 80.5 / 709.5 (page y=162) */
+  width: 35.741%; /* 569 / 1592 — right/bottom overflow clips as designed */
+  height: auto;
+}
+
+/* ==========================================================================
+   Responsive (build plan): 1439 / 1023 / 639 max-width tiers.
+   ========================================================================== */
+
+@media (max-width: 1439px) {
+  .hero {
+    padding-bottom: 80px;
+  }
+
+  .words {
+    margin-top: 88px;
+  }
+}
+
+/* <1024: text full-width first, masked band below at full width.
+   The band precedes .text in DOM (desktop absolute-layer contract), so flex
+   order flips them here. */
+@media (max-width: 1023px) {
+  .hero {
+    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .text {
+    order: 1;
+  }
+
+  .words {
+    margin-top: 56px;
+  }
+
+  .band {
+    order: 2;
+    position: relative;
+    inset: auto;
+    width: 100%;
+    margin-top: 48px;
+  }
+}
+
+@media (max-width: 639px) {
+  .words {
+    margin-top: 40px;
+  }
+
+  .wordDesigner {
+    margin-top: 16px;
+  }
+
+  .tagline {
+    margin-top: 32px;
+  }
+
+  .band {
+    margin-top: 32px;
+  }
+}

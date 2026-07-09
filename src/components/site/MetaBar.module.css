@@ -1,0 +1,58 @@
+/* MetaBar — utility line at plate top + the y=60 full-bleed rule.
+   Measured: text box at (125, 24) h20, lh 1; rule spans y 60-62. */
+
+.metaBar {
+  padding-top: 24px;
+}
+
+.line {
+  margin: 0 0 16px;
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 300;
+  font-size: clamp(14px, calc(20 / 1728 * 100vw), 20px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--meta-gray);
+  /* pre-wrap keeps the literal double spaces between segments while
+     still allowing line wraps at them */
+  white-space: pre-wrap;
+}
+
+/* Each `// ...` segment wraps as a whole — never mid-segment */
+.segment {
+  white-space: nowrap;
+}
+
+.ruleRow {
+  position: relative;
+}
+
+/* 32px registration crosses centered on the rule x plate-edge verticals */
+.plus {
+  position: absolute;
+  top: -15px; /* rule center (1px) - mark half (16px) */
+  z-index: 4;
+}
+
+.plusLeft {
+  left: calc(var(--gutter) - 16px);
+}
+
+.plusRight {
+  right: calc(var(--gutter) - 16px);
+}
+
+/* Below 1024 the line can wrap — open the leading so rows don't collide */
+@media (max-width: 1023px) {
+  .line {
+    line-height: 1.4;
+  }
+}
+
+/* At the smallest gutters (12px) the marks would overhang the viewport
+   and cause horizontal scroll — plate is effectively full-bleed here */
+@media (max-width: 639px) {
+  .plus {
+    display: none;
+  }
+}

@@ -1,0 +1,149 @@
+/* NameMark — brand lockup at (125, 96), 783x92.63 at design scale.
+   Measured internals of the 77px box row (from the 1:1 export):
+   pad-top 12 + cap 34 + gap 11 + underline 8 + pad-bottom 12 = 77.
+   Everything is em-based off the 48px lockup font size so the mark
+   scales proportionally (1em = 48px at design scale). */
+
+.nameMark {
+  /* rule bottom y=62 -> lockup top y=96 */
+  padding-top: 34px;
+}
+
+.lockup {
+  position: relative;
+  z-index: 1; /* stays above the hero band's decorative field */
+  display: flex;
+  align-items: stretch;
+  font-size: 48px;
+  color: var(--ink);
+}
+
+/* --- logo square: 77px solid ink-deep, white circle-crosshair --------- */
+
+.logo {
+  flex: none;
+  width: 1.60417em; /* 77px */
+  background: var(--ink-deep);
+}
+
+.logo svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* --- name box: 1px border, 24px pads, text + underline bar ------------ */
+
+.nameBox {
+  position: relative;
+  margin-left: -1px; /* share the border with the logo square */
+  border: 1px solid var(--ink);
+  padding: 0.25em 0.5em; /* 12px / 24px */
+}
+
+.nameText {
+  font-family: var(--font-geist), sans-serif;
+  font-size: 1em; /* 48px */
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.02em; /* -0.96px */
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink);
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* Cap-trim fallback: shrink the line box to the ~34px cap height */
+@supports not (text-box-trim: trim-both) {
+  .nameText {
+    line-height: 0.70833; /* 34/48 */
+  }
+}
+
+/* underline bar 396x8 ink-deep, 11px below the caps (spans the text) */
+.bar {
+  height: 0.16667em; /* 8px */
+  margin-top: 0.22917em; /* 11px */
+  background: var(--ink-deep);
+}
+
+/* --- folded-chevron row hanging below the name box --------------------
+   The rotated 16px chevron paints a 22.63x11.31 "V" centered on the
+   element's midpoint: painted box extends 3.31px past each side and
+   3.31px below; its top edge sits at element-y + 8. Offsets below place
+   the painted Vs exactly at the measured positions (first painted left
+   = text left; outlier painted right = underline right; painted top
+   4.3px below the box row bottom). */
+
+.chevrons {
+  position: absolute;
+  left: calc(0.5em + 0.069em - 1px);
+  right: calc(0.5em + 0.069em - 1px);
+  top: calc(100% - 0.05625em); /* element top = box bottom - 3.7px */
+  display: flex;
+  gap: 0.29167em; /* 30px pitch - 16px box */
+  height: 0.33333em;
+}
+
+.chevron {
+  flex: none;
+  width: 0.33333em; /* 16px */
+  height: 0.33333em;
+  transform: rotate(45deg);
+}
+
+.chevronEnd {
+  margin-left: auto;
+}
+
+/* --- bordered spacer + QR block + barcode ------------------------------ */
+
+.spacer {
+  flex: none;
+  width: 0.5em; /* 24px */
+  margin-left: -1px;
+  border: 1px solid var(--ink);
+}
+
+.qr {
+  flex: none;
+  width: 1.60417em; /* 77px */
+  margin-left: -1px;
+  border: 1px solid var(--ink);
+  display: grid;
+  place-items: center;
+}
+
+.qr svg {
+  width: 68.83%; /* 53/77, centered */
+  height: auto;
+}
+
+.barcode {
+  flex: none;
+  align-self: flex-start;
+  margin-left: 0.5em; /* 24px gap after the QR box */
+  margin-top: 0.25em; /* bars start level with the text cap top */
+}
+
+/* --- responsive --------------------------------------------------------
+   640-1023: drop QR + barcode + spacer (build plan); logo + name keep.
+   <640: whole lockup scales proportionally via the em base. */
+
+@media (max-width: 1023px) {
+  .spacer,
+  .qr,
+  .barcode {
+    display: none;
+  }
+}
+
+@media (max-width: 639px) {
+  .nameMark {
+    padding-top: 24px;
+  }
+
+  .lockup {
+    font-size: clamp(24px, 7.5vw, 48px);
+  }
+}

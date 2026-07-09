@@ -1,0 +1,90 @@
+/* BrandRow — swatches + design mark band between rules y=791 and y=866.
+   Band interior 73px; content (36px) vertically centered; 16px pads
+   from the plate edges (NOT the 64px content grid). Background stays
+   transparent: the hero avatar bleeds into this band in the design. */
+
+.brandRow {
+  position: relative;
+  z-index: 1; /* band furniture paints above the hero's overflow */
+}
+
+.ruleRow {
+  position: relative;
+}
+
+/* 32px registration crosses centered on rule x plate-edge verticals */
+.plus {
+  position: absolute;
+  top: -15px; /* rule center (1px) - mark half (16px) */
+  z-index: 4;
+}
+
+.plusLeft {
+  left: calc(var(--gutter) - 16px);
+}
+
+.plusRight {
+  right: calc(var(--gutter) - 16px);
+}
+
+.band {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18.5px 16px; /* 36px content -> 73px band */
+}
+
+/* --- color swatch row: 4x 36px, 2px ink borders, 9px gaps ------------- */
+
+.swatches {
+  flex: none;
+  display: flex;
+  gap: 9px;
+}
+
+.swatch {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--ink);
+}
+
+.swatchNone {
+  background: none;
+}
+
+.swatchTeal {
+  background: var(--teal);
+}
+
+.swatchGreen {
+  background: var(--green-gray);
+}
+
+.swatchInk {
+  background: var(--ink-deep);
+}
+
+/* --- design mark: right-aligned, shrinks-to-fit on tiny screens ------- */
+
+.mark {
+  flex: 0 1 auto;
+  min-width: 0;
+  margin-left: auto;
+  max-width: 100%;
+  height: auto;
+}
+
+/* --- responsive -------------------------------------------------------- */
+
+@media (max-width: 639px) {
+  .plus {
+    display: none; /* would overhang the 12px gutters (h-scroll) */
+  }
+
+  .band {
+    flex-wrap: wrap; /* swatches + mark wrap rather than squeeze */
+    row-gap: 16px;
+  }
+}

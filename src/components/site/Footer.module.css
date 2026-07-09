@@ -1,0 +1,149 @@
+/* ==========================================================================
+   Footer band — spec §5 "Footer band" + §4 vertical map (y 5657-6062).
+   Solid ink band 1608x405 at design width, inside the .page gutters
+   (NOT full-bleed), flush to page bottom, radius 0, no border/shadow.
+   Height is content-driven so it scales with the fluid wordmarks:
+   30 + 160 + 24 + 160 + 31 = 405 at 1728.
+   ========================================================================== */
+
+.band {
+  background: var(--ink);
+  padding: 30px 16px 31px;
+}
+
+/* "Andrew Marks" wordmark: 1576 wide = full content width inside the 16px
+   insets (1608 - 32); scales fluidly, vector-crisp. */
+.wordmarkMain {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* --------------------------------------------------------------------------
+   Second row (design y 5871-6031, 160 tall at full width).
+   Grid reproduces the measured positions:
+   - col 1 = "Design" wordmark, 820/1576 = 52.0305% of content width
+   - col 2 = 81/1576 = 5.1396% gap → flag left edge at x=977
+   - col 5 = right stack: globe (60 tall) top, legal (57 trimmed) bottom;
+     with the wordmark driving row height (160), the middle 1fr row becomes
+     exactly the measured 43px gap between globe and legal.
+   Wordmark, flag, and legal all bottom-align (design y=6031, 31px above
+   band bottom); globe top-aligns with the wordmark top.
+   -------------------------------------------------------------------------- */
+.row2 {
+  display: grid;
+  grid-template-columns: 52.0305% 5.1396% auto 1fr auto;
+  grid-template-rows: auto 1fr auto;
+  margin-top: 24px;
+}
+
+.wordmarkDesign {
+  grid-area: 1 / 1 / 4 / 2;
+  align-self: end;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Flag + globe are genuinely fixed marks (icon register): natural px size,
+   only max-width:100% (globals) lets them shrink on very narrow screens. */
+.flag {
+  grid-area: 1 / 3 / 4 / 4;
+  align-self: end;
+}
+
+.globe {
+  grid-area: 1 / 5 / 2 / 6;
+  justify-self: end;
+}
+
+/* Legal block: Geist Mono SemiBold 16px (body floor — no clamp needed),
+   lh 1.45 (23.2px), tracking -2%, right-aligned, cap-trimmed so the last
+   baseline bottom-aligns with the Design wordmark (measured box 251x57). */
+.legal {
+  grid-area: 3 / 5 / 4 / 6;
+  align-self: end;
+  justify-self: end;
+  margin: 0;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
+  color: var(--on-dark);
+  text-align: right;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* Cap-trim fallback: pull the untrimmed outer half-leading/descender back in
+   (69.6px untrimmed vs 57px trimmed → ~5.6px top / ~7px bottom at 16px). */
+@supports not (text-box-trim: trim-both) {
+  .legal {
+    margin-top: -0.35em;
+    margin-bottom: -0.44em;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   640-1023: the fixed-width legal block + marks no longer fit beside the
+   wordmark (row2 overflows below ~1030px viewport), so the legal block drops
+   to its own row, right-aligned; flag and globe bottom-align with the
+   wordmark, globe staying on the right edge.
+   -------------------------------------------------------------------------- */
+@media (max-width: 1023px) {
+  .row2 {
+    grid-template-columns: 52.0305% 1fr auto 1fr auto;
+    grid-template-rows: auto auto;
+    row-gap: 24px;
+  }
+
+  .wordmarkDesign {
+    grid-area: 1 / 1 / 2 / 2;
+  }
+
+  .flag {
+    grid-area: 1 / 3 / 2 / 4;
+  }
+
+  .globe {
+    grid-area: 1 / 5 / 2 / 6;
+    align-self: end;
+  }
+
+  .legal {
+    grid-area: 2 / 1 / 3 / 6;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   <640 (build plan): wordmarks keep scaling with width; everything stacks
+   in one left-aligned column — Design wordmark (keeps its 52.03% lockup
+   proportion so its letter height matches ANDREW MARKS), flag, globe, then
+   the legal block left-aligned below the marks.
+   -------------------------------------------------------------------------- */
+@media (max-width: 639px) {
+  .row2 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .wordmarkDesign {
+    width: 52.0305%;
+  }
+
+  /* Neutralize the grid-era align-self: end values — in the column flex the
+     cross axis is horizontal and "end" would pin items to the right. */
+  .wordmarkDesign,
+  .flag,
+  .globe,
+  .legal {
+    align-self: flex-start;
+  }
+
+  .legal {
+    text-align: left;
+  }
+}

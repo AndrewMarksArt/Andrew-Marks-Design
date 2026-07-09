@@ -1,0 +1,131 @@
+/* ==========================================================================
+   Case Study Status block — spec §5 (6727:4215), page (125, 902) 1478x160.
+   Section spans design y 866 (below the swatch-band rule) → 1062 (the next
+   separator, drawn by CaseStudies). 36px strip above the y=902 separator.
+   ========================================================================== */
+
+.status {
+  position: relative;
+  /* Design y 866 → 902 strip above the separator (35px + 2px rule = 902±1) */
+  padding-top: 35px;
+}
+
+/* --- Interior column rules (2px, --rule recipe) --------------------------
+   Left/right straddle the content column edges (normalized grid, ruling #7);
+   mid rule center at design x=484 → (484-124)/1480 = 24.324% of content. */
+.vrule {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--rule);
+  pointer-events: none;
+}
+
+.vruleLeft {
+  left: -1px;
+}
+
+.vruleRight {
+  right: -1px;
+}
+
+.vruleMid {
+  left: calc(24.324% - 1px);
+  top: 35px; /* starts at the y=902 separator (Vector 17) */
+}
+
+/* --- Top boundary separator (design y=902) --------------------------------
+   Overhangs the content column to the plate edges (1608px equivalent). */
+.separator {
+  position: relative;
+  height: 2px;
+  margin-inline: calc(-1 * var(--content-inset));
+  background: var(--rule);
+}
+
+/* 32px plus marks centered on the separator x interior-rule intersections */
+.sepMark {
+  position: absolute;
+  top: -15px;
+}
+
+.sepMarkLeft {
+  left: calc(var(--content-inset) - 16px);
+}
+
+.sepMarkRight {
+  right: calc(var(--content-inset) - 16px);
+}
+
+/* --- Block content (p-16; title y=918, terminal lines at 970/1002/1030) -- */
+.block {
+  padding: 15px 16px 16px;
+}
+
+/* Status section title: Geist SemiBold 32, lh 1.25 (40px box; the Figma
+   frame clamps it to 36px — ledger #23: NOT cap-trimmed, unlike case titles).
+   40px box + 12px margin = the measured 52px step to the terminal block. */
+.title {
+  margin: 0 0 12px;
+  font-family: var(--font-geist), sans-serif;
+  font-size: clamp(20px, 1.852vw, 32px);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--black);
+}
+
+/* Terminal block, indented 16px from the title, 12px row gap */
+.terminal {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-left: 16px;
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 400;
+}
+
+/* `// INITIALIZING...` — Geist Mono 20, accent orange; the `//` span carries
+   the measured -6.8px (-34%) tracking, the rest -0.4px (-2%). */
+.initLine {
+  margin: 0;
+  font-size: clamp(16px, 1.157vw, 20px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+}
+
+.slashes {
+  letter-spacing: -0.34em;
+}
+
+/* STATUS rows — Geist Mono 16, green-gray; 300px flex box, nowrap label,
+   right-aligned value (row 2 value-only, column-aligned by the same box).
+   NO dotted leaders — alignment is pure flex. */
+.statusRow {
+  display: flex;
+  width: min(300px, 100%);
+  margin: 0;
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--green-gray);
+}
+
+.statusLabel {
+  white-space: pre; /* keep the literal trailing space in "STATUS: " */
+}
+
+.statusValue {
+  flex: 1;
+  text-align: right;
+}
+
+/* --- Responsive: interior rules + their plus marks hide below 1024 ------- */
+@media (max-width: 1023px) {
+  .vrule,
+  .sepMark {
+    display: none;
+  }
+}

@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import styles from "./LoadingAnimation.module.css";
 import clsx from "clsx";
 
@@ -12,17 +11,12 @@ interface LoadingAnimationProps {
 }
 
 export default function LoadingAnimation({ loadingState, targetRect }: LoadingAnimationProps) {
-  const [migratorStyle, setMigratorStyle] = useState({ top: "50%", left: "50%" });
-
-
-  useEffect(() => {
-    if (loadingState >= 5 && targetRect) {
-      setMigratorStyle({
-        top: `${targetRect.top}px`,
-        left: `${targetRect.left}px`,
-      });
-    }
-  }, [loadingState, targetRect]);
+  // Derived, not state: the sequence only advances, so once state >= 5 with a
+  // rect the migrator target sticks for the remaining phases.
+  const migratorStyle =
+    loadingState >= 5 && targetRect
+      ? { top: `${targetRect.top}px`, left: `${targetRect.left}px` }
+      : { top: "50%", left: "50%" };
 
   if (loadingState >= 11) return null; // Fully loaded, hide this layer entirely
 
