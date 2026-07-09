@@ -24,4 +24,7 @@ approved and merged.
 
 ## Figma
 
-- (add file/frame links here)
+- **Main page (final design)**: https://www.figma.com/design/CwHbrO2k4Euk4s3MDviQMy/Portfolio-redesign?node-id=6727-3413
+  - File key `CwHbrO2k4Euk4s3MDviQMy`, frame `6727:3413` ("MacBook Pro 16 - 3", 1728x6062)
+  - Full-res export: `full-page/home-desktop.png`
+  - Measured spec: `../.claude/design-spec-portfolio-redesign.md`
