@@ -32,7 +32,10 @@ export default function CaseStudyStatus() {
         </h2>
 
         <div className={styles.terminal}>
-          <p className={styles.initLine}>
+          {/* Decorative boot-log flourish: the status rows below carry the
+              information, and #EC4E09 at this size fails AA for announced
+              text — formally decoration (UX audit item 5). */}
+          <p className={styles.initLine} aria-hidden="true">
             <span className={styles.slashes}>{"//"}</span>
             <span>{" INITIALIZING..."}</span>
           </p>

@@ -241,20 +241,22 @@
   padding-inline: 16px;
 }
 
-/* Role line: NHG 65 Medium 36px, lh 1.45, -0.5% */
+/* Role line: NHG 65 Medium 28px, lh 1.45, -0.5%
+   (UX audit item 2: was 36px — same weight/color as the 48px company
+   titles read as two competing headings; 1.71x restores scan order) */
 .role {
   margin: 0 0 36px;
   font-family: var(--font-nhg);
   font-weight: 500;
-  font-size: clamp(22px, 2.0833vw, 36px);
+  font-size: clamp(20px, 1.6204vw, 28px);
   line-height: 1.45;
   letter-spacing: -0.005em;
   color: var(--black);
 }
 
-/* Date / institution line: NHG 65 Medium 24px (inherits lh/tracking) */
+/* Date / institution line: NHG 65 Medium 20px (inherits lh/tracking) */
 .meta {
-  font-size: clamp(16px, 1.3889vw, 24px);
+  font-size: clamp(14px, 1.1574vw, 20px);
 }
 
 /* Body: NHG 55 Roman 24px, lh 1.45, -0.5% */

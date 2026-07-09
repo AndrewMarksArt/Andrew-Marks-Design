@@ -103,6 +103,21 @@
   color: var(--ink-deep);
 }
 
+/* Stretched links (UX audit item 3): the anchors were ~14px-tall text
+   strips under 40px arrow affordances. On nav cells the whole cell is the
+   hit area (cells are position:relative); About keeps its paragraph
+   selectable, so only its label gets a padded target. */
+.cell:not(.cellAbout) .link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.cellAbout .link {
+  padding: 12px;
+  margin: -12px;
+}
+
 /* --- arrow-out icon (top-aligned with link, 16px before the cell rule) ----- */
 
 .icon {

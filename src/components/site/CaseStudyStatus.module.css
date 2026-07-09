@@ -90,7 +90,7 @@
    the measured -6.8px (-34%) tracking, the rest -0.4px (-2%). */
 .initLine {
   margin: 0;
-  font-size: clamp(16px, 1.157vw, 20px);
+  font-size: clamp(13px, 1.1574vw, 20px);
   line-height: 1;
   letter-spacing: -0.02em;
   color: var(--accent);
@@ -105,9 +105,12 @@
    NO dotted leaders — alignment is pure flex. */
 .statusRow {
   display: flex;
-  width: min(300px, 100%);
+  /* ~295px at 16px — the box scales with the fluid font; sized so the
+     right-aligned values keep the design's ~27px clearance to the rule
+     at 1728 and ≥10px at the tight 1450-1600 band */
+  width: min(18.4em, 100%);
   margin: 0;
-  font-size: 16px;
+  font-size: clamp(12px, 0.9259vw, 16px); /* 16 / 1728 * 100vw */
   line-height: 1;
   letter-spacing: -0.02em;
   color: var(--green-gray);
@@ -123,42 +126,15 @@
 }
 
 /* --- Responsive ----------------------------------------------------------
-   The left status cell (bounded by the 24.324% interior rule) narrows as the
-   viewport shrinks; the 300px terminal rows overflow it below ~1650px.
-   Scale the terminal text + row width down per band so it stays inside the
-   cell (Andrew's ruling 2026-07-09). Rules hide below 1024, so the base
-   sizes come back there. */
+   Terminal text scales fluidly via the clamps above (UX audit item 1 —
+   replaced the stepped band overrides that bottomed out at 11px mono).
+   Below 1450 the status cell itself widens: the interior mid rule moves
+   from 24.324% to 32% (mirrored in CaseStudies.module.css — rule AND
+   numeral rail — so the rule stays continuous and on the rail boundary). */
 
-@media (max-width: 1649px) and (min-width: 1450px) {
-  .statusRow {
-    width: min(266px, 100%);
-    font-size: 14px;
-  }
-}
-
-@media (max-width: 1449px) and (min-width: 1250px) {
-  .statusRow {
-    width: min(220px, 100%);
-    font-size: 11.5px;
-  }
-
-  .initLine {
-    font-size: 15px;
-  }
-}
-
-@media (max-width: 1249px) and (min-width: 1024px) {
-  .title {
-    font-size: 17px;
-  }
-
-  .statusRow {
-    width: min(172px, 100%);
-    font-size: 11px;
-  }
-
-  .initLine {
-    font-size: 13px;
+@media (max-width: 1449px) {
+  .vruleMid {
+    left: calc(32% - 1px);
   }
 }
 

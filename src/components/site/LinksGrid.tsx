@@ -176,7 +176,7 @@ export function LinksGrid() {
           </p>
         </div>
 
-        <div className={`${styles.cell} ${styles.cellAbout}`}>
+        <div id="about" className={`${styles.cell} ${styles.cellAbout}`}>
           <a href="#about" className={styles.link}>
             05 About
           </a>

@@ -37,6 +37,15 @@
   left: calc(24.324% - 1px); /* design x=484 of the 1480 content column */
 }
 
+/* Below 1450 the status cell widens to 32% (UX audit item 1) — keep the
+   interior rule continuous with CaseStudyStatus's override. The matching
+   rail move lives AFTER the .rail base rule (source order). */
+@media (max-width: 1449px) {
+  .vruleMid {
+    left: calc(32% - 1px);
+  }
+}
+
 /* --- Separators (design y=1062 / 1991 / 2952) -----------------------------
    2px --rule, overhanging the content column to the plate edges (1608px
    equivalent), plus marks pinning the interior-rule intersections. */
@@ -80,6 +89,15 @@
   flex: 0 0 24.31%; /* 352px of the 1448px row interior at design width */
   min-width: 0;
   padding-inline: 32px; /* uniform 32px numeral inset (ruling #4) */
+}
+
+/* Rail widens with the interior rule below 1450 (UX audit item 1) so the
+   rule stays on the rail/card boundary. Must follow the base rule above —
+   same specificity, source order decides. */
+@media (max-width: 1449px) {
+  .rail {
+    flex-basis: 32%;
+  }
 }
 
 /* Giant outlined numeral: NHG 75 Bold 200px, transparent fill, 2px sage
