@@ -216,6 +216,8 @@ The file contains ZERO hover/pressed/focus/interaction states for ANY element. E
 
 **Rulings from Andrew, 2026-07-09:** display font = Strelka (Adobe Fonts), flattened/manipulated in the design → use the exported SVGs for hero words + footer wordmarks (exact fidelity), with real text equivalents kept in the DOM for SEO/a11y. NHG Display Pro license: Andrew has it (Adobe Fonts) — needs a kit/embed for the build. Interactions: designs exist but are deferred — build static layout first, do NOT invent hover states. Responsiveness: designed by the builder (Claude) — no Figma mobile frames coming for v1. Inconsistencies: fix them; builder recommends, records choices here.
 
+**Post-design rulings from Andrew's QA, 2026-07-09 (deviations from the Figma frame, deliberate):** (1) The resume plate gets a **2px dashed `--rule-soft` border** — no stroke exists in the Figma frame; added at Andrew's direction. (2) **Full-bleed rules span the full viewport** on screens wider than 1728 (the frame can't express this; `.fullBleed` uses `margin-inline: calc(50% - 50vw)`, plate-pinned marks/insets offset by `--vp-edge`). (3) Status terminal text scales down per breakpoint band (1650/1450/1250) so it stays inside the 24.324% status cell. (4) 48px gap between the resume plate and the links band (32px <640).
+
 1. ~~Display font unidentified~~ **RESOLVED**: Strelka (Adobe Fonts), flattened/manipulated per art direction. Build from saved SVGs; do not substitute live Strelka for the manipulated lockups.
 2. ~~Ink variance~~ **RESOLVED**: tokenize to `ink` #231A09 (absorbs #241B09, #281E0A) + `ink-deep` #271E0C + `black` #000000.
 3. ~~Orange variance~~ **RESOLVED**: `accent` #EC4E09 (absorbs #ED5613); `accent-deep` #A43B0D stays separate (hero plus field).

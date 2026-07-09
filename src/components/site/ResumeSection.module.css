@@ -37,11 +37,11 @@
 }
 
 .dividerMarkLeft {
-  left: calc(var(--gutter) - 16px);
+  left: calc(var(--vp-edge) + var(--gutter) - 16px);
 }
 
 .dividerMarkRight {
-  right: calc(var(--gutter) - 16px);
+  right: calc(var(--vp-edge) + var(--gutter) - 16px);
 }
 
 /* --------------------------------------------------------------------------
@@ -56,6 +56,9 @@
   position: relative;
   margin-top: 33px;
   background: var(--plate-resume);
+  /* dashed dieline around the plate (Andrew's ruling 2026-07-09 — not in the
+     original Figma frame); soft-rule recipe to match the section separators */
+  border: 2px dashed var(--rule-soft);
   padding: 18px var(--plate-pad-x) 22px;
 }
 

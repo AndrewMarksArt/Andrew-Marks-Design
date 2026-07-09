@@ -9,6 +9,8 @@
 
 .band {
   position: relative;
+  /* design: resume plate bottom (y=5021) → band top rule (y=5069) = 48px */
+  margin-top: 48px;
   border-top: 2px solid var(--rule);
   border-bottom: 2px solid var(--rule);
 }
@@ -16,7 +18,8 @@
 .grid {
   display: grid;
   grid-template-columns: 25% 25% 50%;
-  margin-inline: var(--gutter);
+  /* band is viewport-wide; pull the grid back onto the plate */
+  margin-inline: calc(var(--vp-edge) + var(--gutter));
 }
 
 /* --- corner registration marks -------------------------------------------
@@ -32,25 +35,25 @@
 
 .plusTopLeft {
   top: -1px;
-  left: var(--gutter);
+  left: calc(var(--vp-edge) + var(--gutter));
   transform: translate(-50%, -50%);
 }
 
 .plusTopRight {
   top: -1px;
-  right: var(--gutter);
+  right: calc(var(--vp-edge) + var(--gutter));
   transform: translate(50%, -50%);
 }
 
 .plusBottomLeft {
   bottom: -1px;
-  left: var(--gutter);
+  left: calc(var(--vp-edge) + var(--gutter));
   transform: translate(-50%, 50%);
 }
 
 .plusBottomRight {
   bottom: -1px;
-  right: var(--gutter);
+  right: calc(var(--vp-edge) + var(--gutter));
   transform: translate(50%, 50%);
 }
 
@@ -310,5 +313,12 @@
   .plus {
     width: 20px;
     height: 20px;
+  }
+}
+
+/* Tighter band gap in the compact mobile rhythm */
+@media (max-width: 639px) {
+  .band {
+    margin-top: 32px;
   }
 }

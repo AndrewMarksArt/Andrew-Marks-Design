@@ -35,11 +35,11 @@
 }
 
 .plusLeft {
-  left: calc(var(--gutter) - 16px);
+  left: calc(var(--vp-edge) + var(--gutter) - 16px);
 }
 
 .plusRight {
-  right: calc(var(--gutter) - 16px);
+  right: calc(var(--vp-edge) + var(--gutter) - 16px);
 }
 
 /* Below 1024 the line can wrap — open the leading so rows don't collide */

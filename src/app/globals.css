@@ -35,6 +35,10 @@
   --page-max: 1728px;
   --gutter: 60px;
   --content-inset: 64px;
+  /* Distance from the viewport edge to the page edge — 0 below --page-max.
+     Used to keep plate-pinned marks/insets in place inside viewport-wide
+     full-bleed rows on screens wider than the design frame. */
+  --vp-edge: max(0px, calc(50vw - var(--page-max) / 2));
 }
 
 @media (max-width: 1439px) {
@@ -66,6 +70,12 @@ html,
 body {
   margin: 0;
   padding: 0;
+}
+
+html {
+  /* Full-bleed rows use 50vw math (which includes the scrollbar) and the
+     registration marks overhang tiny gutters — clip instead of h-scrolling */
+  overflow-x: clip;
 }
 
 body {
@@ -125,9 +135,12 @@ body {
   padding-inline: var(--content-inset);
 }
 
-/* Full-bleed rows (rules/divider/links band extend across the gutters) */
+/* Full-bleed rows (rules/divider/links band) span the FULL VIEWPORT at every
+   size — below --page-max this equals the old -gutter pull; above it the row
+   keeps extending to the screen edges (Andrew's ruling 2026-07-09). Elements
+   inside that must stay pinned to the plate add var(--vp-edge). */
 .fullBleed {
-  margin-inline: calc(-1 * var(--gutter));
+  margin-inline: calc(50% - 50vw);
 }
 
 /* Full-width horizontal rule (Vector 5/12/11 recipe) */

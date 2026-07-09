@@ -122,7 +122,47 @@
   text-align: right;
 }
 
-/* --- Responsive: interior rules + their plus marks hide below 1024 ------- */
+/* --- Responsive ----------------------------------------------------------
+   The left status cell (bounded by the 24.324% interior rule) narrows as the
+   viewport shrinks; the 300px terminal rows overflow it below ~1650px.
+   Scale the terminal text + row width down per band so it stays inside the
+   cell (Andrew's ruling 2026-07-09). Rules hide below 1024, so the base
+   sizes come back there. */
+
+@media (max-width: 1649px) and (min-width: 1450px) {
+  .statusRow {
+    width: min(266px, 100%);
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 1449px) and (min-width: 1250px) {
+  .statusRow {
+    width: min(220px, 100%);
+    font-size: 11.5px;
+  }
+
+  .initLine {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 1249px) and (min-width: 1024px) {
+  .title {
+    font-size: 17px;
+  }
+
+  .statusRow {
+    width: min(172px, 100%);
+    font-size: 11px;
+  }
+
+  .initLine {
+    font-size: 13px;
+  }
+}
+
+/* Interior rules + their plus marks hide below 1024 */
 @media (max-width: 1023px) {
   .vrule,
   .sepMark {
