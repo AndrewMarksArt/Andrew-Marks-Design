@@ -35,10 +35,6 @@
   --page-max: 1728px;
   --gutter: 60px;
   --content-inset: 64px;
-  /* Distance from the viewport edge to the page edge — 0 below --page-max.
-     Used to keep plate-pinned marks/insets in place inside viewport-wide
-     full-bleed rows on screens wider than the design frame. */
-  --vp-edge: max(0px, calc(50vw - var(--page-max) / 2));
 }
 
 @media (max-width: 1439px) {
@@ -107,6 +103,10 @@ body {
 .plateMain {
   position: relative;
   background: var(--plate);
+  /* Query container: inside viewport-bleeding .fullBleed rows, plate-pinned
+     marks anchor with calc(50% - 50cqw ...) — 50cqw = half the plate width,
+     immune to the scrollbar skew that 50vw carries. */
+  container-type: inline-size;
 }
 
 /* Vertical page rules straddling the plate edges (x=60/1668 at 1728) */

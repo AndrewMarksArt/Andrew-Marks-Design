@@ -20,11 +20,12 @@
 }
 
 .plusLeft {
-  left: calc(var(--vp-edge) + var(--gutter) - 16px);
+  /* 50% - 50cqw = plate left edge (scrollbar-immune) */
+  left: calc(50% - 50cqw - 16px);
 }
 
 .plusRight {
-  right: calc(var(--vp-edge) + var(--gutter) - 16px);
+  right: calc(50% - 50cqw - 16px);
 }
 
 .band {

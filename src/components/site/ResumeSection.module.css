@@ -37,11 +37,14 @@
 }
 
 .dividerMarkLeft {
-  left: calc(var(--vp-edge) + var(--gutter) - 16px);
+  /* 50% of the viewport-bleeding row = plate center; 50cqw = half the plate
+     (plateMain is the query container) → 50% - 50cqw = the plate's left
+     edge, independent of scrollbar width */
+  left: calc(50% - 50cqw - 16px);
 }
 
 .dividerMarkRight {
-  right: calc(var(--vp-edge) + var(--gutter) - 16px);
+  right: calc(50% - 50cqw - 16px);
 }
 
 /* --------------------------------------------------------------------------
@@ -53,72 +56,79 @@
 
 .plate {
   --plate-pad-x: 32px;
+  /* dash rhythm ~3:2 like the footer globe's dashed circle (measured 9/6);
+     scaled up for the plate — tune here */
+  --dash: 14px;
+  --dash-gap: 9px;
   position: relative;
   margin-top: 33px;
   background: var(--plate-resume);
-  /* dashed dieline around the plate (Andrew's ruling 2026-07-09 — not in the
-     original Figma frame); soft-rule recipe to match the section separators */
-  border: 2px dashed var(--rule-soft);
   padding: 18px var(--plate-pad-x) 22px;
 }
 
-/* Corner brackets: 32x32 windows overhanging each plate corner by 4px,
-   each showing the inward-pointing quadrant of a 64px plus mark
-   (8px arms — measured: L-bars 8px thick, 32px long). */
+/* Dashed dieline around the plate (Andrew's ruling 2026-07-09 — not in the
+   original Figma frame). CSS border-style:dashed can't control dash length
+   (renders tiny dense dashes), so the four edges are repeating gradients. */
+.plate::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(90deg, var(--rule-soft) 0 var(--dash), transparent var(--dash) calc(var(--dash) + var(--dash-gap))),
+    repeating-linear-gradient(90deg, var(--rule-soft) 0 var(--dash), transparent var(--dash) calc(var(--dash) + var(--dash-gap))),
+    repeating-linear-gradient(180deg, var(--rule-soft) 0 var(--dash), transparent var(--dash) calc(var(--dash) + var(--dash-gap))),
+    repeating-linear-gradient(180deg, var(--rule-soft) 0 var(--dash), transparent var(--dash) calc(var(--dash) + var(--dash-gap)));
+  background-size:
+    100% 2px,
+    100% 2px,
+    2px 100%,
+    2px 100%;
+  background-position:
+    0 0,
+    0 100%,
+    0 0,
+    100% 0;
+  background-repeat: no-repeat;
+}
+
+/* Corner brackets: 32x32 border-drawn L's with 4px arms (same stroke weight
+   as the plus marks — Andrew's ruling, QA round 2), overhanging each plate
+   corner by 4px. */
 
 .corner {
   position: absolute;
   width: 32px;
   height: 32px;
-  overflow: hidden;
   pointer-events: none;
-}
-
-.corner svg {
-  position: absolute;
-  /* globals sets svg { max-width: 100% }, which would clamp the 64px plus
-     to the 32px window and leave only a sliver — the bracket needs overflow */
-  max-width: none;
 }
 
 .cornerTopLeft {
   top: -4px;
   left: -4px;
-}
-
-.cornerTopLeft svg {
-  top: -28px;
-  left: -28px;
+  border-top: 4px solid var(--black);
+  border-left: 4px solid var(--black);
 }
 
 .cornerTopRight {
   top: -4px;
   right: -4px;
-}
-
-.cornerTopRight svg {
-  top: -28px;
-  right: -28px;
+  border-top: 4px solid var(--black);
+  border-right: 4px solid var(--black);
 }
 
 .cornerBottomLeft {
   bottom: -4px;
   left: -4px;
-}
-
-.cornerBottomLeft svg {
-  bottom: -28px;
-  left: -28px;
+  border-bottom: 4px solid var(--black);
+  border-left: 4px solid var(--black);
 }
 
 .cornerBottomRight {
   bottom: -4px;
   right: -4px;
-}
-
-.cornerBottomRight svg {
-  bottom: -28px;
-  right: -28px;
+  border-bottom: 4px solid var(--black);
+  border-right: 4px solid var(--black);
 }
 
 /* --------------------------------------------------------------------------

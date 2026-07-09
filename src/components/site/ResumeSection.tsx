@@ -63,20 +63,12 @@ export function ResumeSection() {
 
       <div className="content">
         <div className={styles.plate}>
-          {/* Corner brackets: bottom-right/-left/top-right/top-left quadrants
-              of a 64px plus (8px arms), clipped to 32x32 windows. */}
-          <span className={`${styles.corner} ${styles.cornerTopLeft}`} aria-hidden="true">
-            <PlusMark size={64} />
-          </span>
-          <span className={`${styles.corner} ${styles.cornerTopRight}`} aria-hidden="true">
-            <PlusMark size={64} />
-          </span>
-          <span className={`${styles.corner} ${styles.cornerBottomLeft}`} aria-hidden="true">
-            <PlusMark size={64} />
-          </span>
-          <span className={`${styles.corner} ${styles.cornerBottomRight}`} aria-hidden="true">
-            <PlusMark size={64} />
-          </span>
+          {/* Corner brackets: 32px border-drawn L's with 4px arms (matching
+              the plus-mark stroke weight), overhanging the plate 4px. */}
+          <span className={`${styles.corner} ${styles.cornerTopLeft}`} aria-hidden="true" />
+          <span className={`${styles.corner} ${styles.cornerTopRight}`} aria-hidden="true" />
+          <span className={`${styles.corner} ${styles.cornerBottomLeft}`} aria-hidden="true" />
+          <span className={`${styles.corner} ${styles.cornerBottomRight}`} aria-hidden="true" />
 
           <header className={styles.header}>
             <div className={styles.headerLeft}>
