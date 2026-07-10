@@ -45,7 +45,7 @@
 /* --- Tagline / sub-line (spec §3) --------------------------------------- */
 
 .tagline {
-  margin: 48px 0 0; /* 520 - 471.2 (word 2 bottom) = 48.8, snapped to 48 (8pt grid) */
+  margin: 32px 0 0; /* tightened from the design's 48.8 (Andrew's ruling) */
   /* Holds the swapped (longer) subhead to a ~3-line block with a clean rag;
      em unit keeps the same breaks across the clamp range. */
   max-width: 19em;
@@ -177,7 +177,7 @@
   }
 
   .tagline {
-    margin-top: 32px;
+    margin-top: 24px;
   }
 
   .band {
