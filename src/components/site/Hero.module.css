@@ -108,12 +108,18 @@
   height: 100%;
 }
 
+/* Gaze portrait: square atlas frame (bust bleeds to the frame's bottom
+   edge), anchored to the band bottom so the cut lands on the y=791 rule —
+   same register as the placeholder card. Width tuned so the head size
+   matches the old static robot's; right margin of the frame is transparent
+   so the slight band-edge clip is invisible. */
 .robot {
   position: absolute;
-  left: 65.829%; /* 1048 / 1592 (band-relative; page x=1124) */
-  top: 11.346%; /* 80.5 / 709.5 (page y=162) */
-  width: 35.741%; /* 569 / 1592 — right/bottom overflow clips as designed */
-  height: auto;
+  left: 63%;
+  bottom: 0;
+  width: 42%;
+  aspect-ratio: 1 / 1;
+  pointer-events: none;
 }
 
 /* ==========================================================================

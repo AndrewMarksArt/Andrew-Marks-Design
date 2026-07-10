@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { preload } from "react-dom";
+import HeroGaze from "./HeroGaze";
 import styles from "./Hero.module.css";
 
 /**
@@ -74,23 +76,20 @@ function PlusLattice() {
 }
 
 export default function Hero() {
+  // Gaze atlas is a CSS background (no <img> priority hint) — preload it so
+  // the resting frame paints with the hero instead of popping in late.
+  preload("/hero/robot-atlas.webp", { as: "image" });
+
   return (
     <section className={styles.hero}>
       <h1 className="visually-hidden">Andrew Marks — UX &amp; Product Designer</h1>
 
-      {/* Masked robot band: plus lattice behind, portrait in front. Decorative. */}
+      {/* Masked robot band: plus lattice behind, cursor-following gaze
+          portrait in front (placeholder site's system, transparent atlas).
+          Decorative. */}
       <div className={styles.band} aria-hidden="true">
         <PlusLattice />
-        <Image
-          className={styles.robot}
-          src="/hero/robot.webp"
-          alt=""
-          aria-hidden="true"
-          width={1200}
-          height={2101}
-          priority
-          sizes="(max-width: 1023px) 36vw, (max-width: 1728px) 33vw, 569px"
-        />
+        <HeroGaze className={styles.robot} />
       </div>
 
       <div className={`content ${styles.text}`}>
