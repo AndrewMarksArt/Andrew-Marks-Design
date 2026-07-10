@@ -63,7 +63,7 @@ const CHATVET_DOG: PeekSprite = {
   aspect: "273.138 / 362.65",
   /* rest Δ (+240px, +160px) — slides in diagonally from off the right edge */
   rest: "translate(87.87%, 44.12%)",
-  inner: "scaleY(-1) rotate(-179.42deg)", // = horizontal mirror + 0.58° tilt
+  inner: "rotate(-179.42deg) scaleY(-1)", // = horizontal mirror + 0.58° tilt
 };
 
 /* Knowledge OS (6749:4690 → 6749:4687): the hero robot itself (identical
@@ -78,7 +78,7 @@ const KNOWLEDGE_ROBOT: PeekSprite = {
   spriteWidth: "41.65%", // 446.87 / 1073
   aspect: "446.872 / 619.312",
   rest: "translate(-48.34%, 68.46%)", // Δ(-216px, +424px) from engaged
-  inner: "scaleY(-1) rotate(-167.18deg)",
+  inner: "rotate(-167.18deg) scaleY(-1)",
   objectPosition: "top", // bottom ~26% cropped, matching the hero band
 };
 
