@@ -45,8 +45,8 @@
 
 .tagline {
   margin: 48px 0 0; /* 520 - 471.2 (word 2 bottom) = 48.8, snapped to 48 (8pt grid) */
-  /* Wrap after "wrangling" as designed (line 1 measures ≈628px at 36px);
-     em unit keeps the same break across the clamp range. */
+  /* Holds the swapped (longer) subhead to a ~3-line block with a clean rag;
+     em unit keeps the same breaks across the clamp range. */
   max-width: 19em;
   font-size: clamp(22px, 2.0833vw, 36px); /* 36 / 1728 * 100vw */
   font-weight: 500;
@@ -57,16 +57,12 @@
 
 .subline {
   margin: 16px 0 0; /* 626 - 610 (tagline box bottom) */
+  max-width: 28em; /* single-line comfort for the swapped short paragraph */
   font-size: clamp(16px, 1.3889vw, 24px); /* 24 / 1728 * 100vw */
   font-weight: 400;
   line-height: 1.45;
   letter-spacing: -0.02em; /* -0.48px at 24px */
   color: var(--ink);
-}
-
-/* Designed line break (U+2028 in the Figma node) after "humans, ". */
-.sublineBreak {
-  display: block;
 }
 
 /* --- Masked band (lattice + robot) -------------------------------------- */

@@ -117,14 +117,15 @@ export default function Hero() {
           />
         </div>
 
+        {/* Copy swapped between the two slots (Andrew, 2026-07-09): the
+            "Building agentic..." line is the 36px subhead, "Research &
+            design..." the 24px paragraph. */}
         <p className={styles.tagline}>
-          Research &amp; design for users wrangling electric sheep.
+          Building agentic workflows &amp; complex AI systems for humans,
+          agents, &amp; everything in between.
         </p>
         <p className={styles.subline}>
-          Building agentic workflows &amp; complex AI systems for humans,{" "}
-          <span className={styles.sublineBreak}>
-            agents, &amp; everything in between.
-          </span>
+          Research &amp; design for users wrangling electric sheep.
         </p>
       </div>
     </section>

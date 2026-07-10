@@ -36,7 +36,7 @@ You are an AI coding assistant. Whenever you generate CSS or inline styles for t
 
 ## 3. Text Styles (re-scaled 2026-07-09: one tier smaller than the Figma frame — Andrew's ruling; ladder 40-28-24-20-18-16-14 under the locked display sizes. Tracking = em equivalents of the measured -2%/+2%.)
 
-- **Meta bar**: Geist Mono Light 300, 18px, lh 1, tracking -2%, `--meta-gray`
+- **Meta bar**: Geist Mono Light 300, 14px, lh 1, tracking -2%, `--meta-gray` (utility line — dropped from the frame's 20px in two steps, Andrew's rulings)
 - **Name mark**: Geist ExtraBold 800, 48px, lh 1.25 cap-trimmed, tracking -2%, `--ink`, UPPERCASE (drawn brand mark — LOCKED)
 - **Hero tagline**: Geist Medium 500, 36px, lh 1.25, tracking -2%, `--ink` (LOCKED)
 - **Hero sub-line**: Geist Regular 400, 24px, lh 1.45, tracking -2%, `--ink` (LOCKED)
