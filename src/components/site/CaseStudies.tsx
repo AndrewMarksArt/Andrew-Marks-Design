@@ -1,6 +1,7 @@
 import { Fragment, type ReactNode } from "react";
 import Image from "next/image";
 import { PlusMark } from "./motifs";
+import CaseStudyMedia from "./CaseStudyMedia";
 import styles from "./CaseStudies.module.css";
 
 /**
@@ -18,6 +19,8 @@ type CaseStudy = {
   img: string;
   alt: string;
   desc: ReactNode;
+  /** Rows with signed-off hover interactions render CaseStudyMedia */
+  interactive?: boolean;
 };
 
 const CASES: CaseStudy[] = [
@@ -26,6 +29,7 @@ const CASES: CaseStudy[] = [
     title: "Platform One AI Assistant & Chat Bot",
     img: "/case-studies/platform-one.png",
     alt: "Platform One website with the P1 Assistant chat panel open, offering answers and quick links for account questions",
+    interactive: true,
     desc: (
       <>
         An AI assistant projected to{" "}
@@ -95,15 +99,19 @@ export default function CaseStudies() {
             </div>
             <div className={styles.card}>
               <h3 className={styles.title}>{cs.title}</h3>
-              <Image
-                className={styles.screenshot}
-                src={cs.img}
-                alt={cs.alt}
-                width={1440}
-                height={1080}
-                sizes="(max-width: 1023px) 94vw, 62vw"
-                priority={i === 0}
-              />
+              {cs.interactive ? (
+                <CaseStudyMedia img={cs.img} alt={cs.alt} priority={i === 0} />
+              ) : (
+                <Image
+                  className={styles.screenshot}
+                  src={cs.img}
+                  alt={cs.alt}
+                  width={1440}
+                  height={1080}
+                  sizes="(max-width: 1023px) 94vw, 62vw"
+                  priority={i === 0}
+                />
+              )}
               <p className={styles.desc}>{cs.desc}</p>
             </div>
           </article>
