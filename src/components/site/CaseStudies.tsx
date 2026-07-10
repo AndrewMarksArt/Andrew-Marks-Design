@@ -66,6 +66,22 @@ const CHATVET_DOG: PeekSprite = {
   inner: "scaleY(-1) rotate(-179.42deg)", // = horizontal mirror + 0.58° tilt
 };
 
+/* Knowledge OS (6749:4690 → 6749:4687): the hero robot itself (identical
+   asset, reused from /hero/) peeks from the bottom-left — mirrored + tilted
+   12.82° (scaleY(-1) rotate(-167.18°)), rising diagonally up-right. */
+const KNOWLEDGE_ROBOT: PeekSprite = {
+  src: "/hero/robot.webp",
+  width: 1200,
+  height: 2101,
+  left: "-3.06%", // inner box top-left -32.85 / 1073
+  top: "44.25%", // 331.87 / 750
+  spriteWidth: "41.65%", // 446.87 / 1073
+  aspect: "446.872 / 619.312",
+  rest: "translate(-48.34%, 68.46%)", // Δ(-216px, +424px) from engaged
+  inner: "scaleY(-1) rotate(-167.18deg)",
+  objectPosition: "top", // bottom ~26% cropped, matching the hero band
+};
+
 const CASES: CaseStudy[] = [
   {
     num: "1",
@@ -101,6 +117,8 @@ const CASES: CaseStudy[] = [
     title: "AI Powered Personal Knowledge OS",
     img: "/case-studies/knowledge-os.png",
     alt: "Arclight knowledge dashboard listing captured links with sources, categories, scores, and agent navigation",
+    href: "/case-studies/knowledge-os",
+    sprites: [KNOWLEDGE_ROBOT],
     desc: (
       <>
         A <strong>multi-agent system that reads 1,000&apos;s of sources</strong>{" "}

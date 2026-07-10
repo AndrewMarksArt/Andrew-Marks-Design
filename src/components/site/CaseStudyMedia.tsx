@@ -30,6 +30,8 @@ export type PeekSprite = {
   rest: string;
   /** constant transform on the img itself (mirror/rotation) */
   inner?: string;
+  /** crop anchor when the asset overflows the sprite box (default center) */
+  objectPosition?: string;
 };
 
 export default function CaseStudyMedia({
@@ -88,7 +90,17 @@ export default function CaseStudyMedia({
               } as CSSProperties
             }
           >
-            <Image src={s.src} alt="" width={s.width} height={s.height} />
+            <Image
+              src={s.src}
+              alt=""
+              width={s.width}
+              height={s.height}
+              style={
+                s.objectPosition
+                  ? { objectPosition: s.objectPosition }
+                  : undefined
+              }
+            />
           </span>
         ))}
       </span>
