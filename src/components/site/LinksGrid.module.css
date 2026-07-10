@@ -131,8 +131,8 @@
 /* Hover/focus: title bolds (600 → 700; Geist is variable, so it thickens
    smoothly) and the underline draws in. The stretched link makes the whole
    nav cell the hover surface; About fires on its padded label only. */
-.link:hover,
-.link:focus-visible {
+a.link:hover,
+a.link:focus-visible {
   font-weight: 700;
   background-position: 0% 100%;
   background-size: 100% 2px;
@@ -151,19 +151,6 @@
   inset: 0;
 }
 
-.cellAbout .link {
-  padding: 12px;
-  margin: -12px;
-  /* underline rides 6px above the padded box bottom = 6px below the text,
-     matching the nav cells' runway */
-  background-position: 100% calc(100% - 6px);
-}
-
-.cellAbout .link:hover,
-.cellAbout .link:focus-visible {
-  background-position: 0% calc(100% - 6px);
-}
-
 /* --- arrow-out icon (top-aligned with link, 16px before the cell rule) ----- */
 
 /* Icon strokes shimmer to the dark accent when the cell's link is engaged:
@@ -174,28 +161,28 @@
   transition: stroke 200ms ease;
 }
 
-.link:hover ~ .icon path,
-.link:focus-visible ~ .icon path {
+a.link:hover ~ .icon path,
+a.link:focus-visible ~ .icon path {
   animation: iconShimmer 450ms ease forwards;
 }
 
-.link:hover ~ .icon path:nth-of-type(4),
-.link:focus-visible ~ .icon path:nth-of-type(4) {
+a.link:hover ~ .icon path:nth-of-type(4),
+a.link:focus-visible ~ .icon path:nth-of-type(4) {
   animation-delay: 40ms;
 }
 
-.link:hover ~ .icon path:nth-of-type(5),
-.link:focus-visible ~ .icon path:nth-of-type(5) {
+a.link:hover ~ .icon path:nth-of-type(5),
+a.link:focus-visible ~ .icon path:nth-of-type(5) {
   animation-delay: 80ms;
 }
 
-.link:hover ~ .icon path:nth-of-type(2),
-.link:focus-visible ~ .icon path:nth-of-type(2) {
+a.link:hover ~ .icon path:nth-of-type(2),
+a.link:focus-visible ~ .icon path:nth-of-type(2) {
   animation-delay: 120ms;
 }
 
-.link:hover ~ .icon path:nth-of-type(3),
-.link:focus-visible ~ .icon path:nth-of-type(3) {
+a.link:hover ~ .icon path:nth-of-type(3),
+a.link:focus-visible ~ .icon path:nth-of-type(3) {
   animation-delay: 160ms;
 }
 

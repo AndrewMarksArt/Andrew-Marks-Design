@@ -180,9 +180,9 @@ export function LinksGrid() {
         </div>
 
         <div id="about" className={`${styles.cell} ${styles.cellAbout}`}>
-          <a href="#about" className={styles.link}>
-            05 About
-          </a>
+          {/* Not a link (Andrew's ruling) — a section label; hover styles
+              are scoped to a.link so this stays inert */}
+          <span className={styles.link}>05 About</span>
           <span className={styles.reg} aria-hidden="true">
             <CoilMark />
             <span className={styles.badge}>R</span>
