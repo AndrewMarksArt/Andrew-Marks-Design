@@ -64,6 +64,7 @@ const CHATVET_DOG: PeekSprite = {
   /* rest Δ (+240px, +160px) — slides in diagonally from off the right edge */
   rest: "translate(87.87%, 44.12%)",
   inner: "rotate(-179.42deg) scaleY(-1)", // = horizontal mirror + 0.58° tilt
+  delay: "100ms", // arrives a beat after the cat
 };
 
 /* Knowledge OS (6749:4690 → 6749:4687): the hero robot itself (identical

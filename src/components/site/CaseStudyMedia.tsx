@@ -32,6 +32,8 @@ export type PeekSprite = {
   inner?: string;
   /** crop anchor when the asset overflows the sprite box (default center) */
   objectPosition?: string;
+  /** entrance stagger (exit is always immediate) */
+  delay?: string;
 };
 
 export default function CaseStudyMedia({
@@ -87,6 +89,7 @@ export default function CaseStudyMedia({
                 aspectRatio: s.aspect,
                 "--peek-rest": s.rest,
                 "--peek-inner": s.inner ?? "none",
+                "--peek-delay": s.delay ?? "0ms",
               } as CSSProperties
             }
           >
