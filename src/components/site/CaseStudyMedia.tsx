@@ -1,31 +1,54 @@
 "use client";
 
-import { useCallback, useState, type MouseEvent } from "react";
+import {
+  useCallback,
+  useState,
+  type CSSProperties,
+  type MouseEvent,
+} from "react";
 import Image from "next/image";
 import styles from "./CaseStudies.module.css";
 
 /**
- * Interactive case-study media — Figma "Hover State 1/2 - Platform One"
- * (nodes 6739:4672 → 6739:4669): the whole image is the link. Hover zooms
- * the screenshot ~5% while the peek-a-boo character drops in upside-down
- * from the top edge (rest: fully above, tilted 3.33°; end: flush at top,
- * square 180°). Mouse-out eases back. Touch/keyboard toggle the same state
- * via data-peek.
- *
- * Navigation is STUBBED (Andrew's ruling: no case-study page until the
- * animation is signed off) — clicks preventDefault and toggle the peek.
+ * One peeking character on an interactive case-study card. Geometry is
+ * measured from the Figma hover frames (rest = "Hover State 1", engaged =
+ * "Hover State 2"): the wrapper is positioned at the ENGAGED location and
+ * `rest` is the transform that tucks it outside the frame. `inner` carries
+ * any constant flip/rotate baked into the design (kept off the animation).
  */
+export type PeekSprite = {
+  src: string;
+  /** intrinsic asset size (next/image) */
+  width: number;
+  height: number;
+  /** engaged-position geometry, relative to the 1073x750 frame */
+  left: string;
+  top: string;
+  spriteWidth: string;
+  aspect: string;
+  /** transform at rest (tucked outside the frame) */
+  rest: string;
+  /** constant transform on the img itself (mirror/rotation) */
+  inner?: string;
+};
+
 export default function CaseStudyMedia({
   img,
   alt,
+  href,
+  sprites,
   priority,
 }: {
   img: string;
   alt: string;
+  href: string;
+  sprites: PeekSprite[];
   priority?: boolean;
 }) {
   const [peeked, setPeeked] = useState(false);
 
+  // Navigation STUBBED (Andrew's ruling: no case-study pages yet) —
+  // clicks toggle the peek state instead; hover works via CSS.
   const handleClick = useCallback((e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     setPeeked((p) => !p);
@@ -33,7 +56,7 @@ export default function CaseStudyMedia({
 
   return (
     <a
-      href="/case-studies/platform-one"
+      href={href}
       className={styles.mediaLink}
       data-peek={peeked || undefined}
       onClick={handleClick}
@@ -49,14 +72,25 @@ export default function CaseStudyMedia({
           priority={priority}
           sizes="(max-width: 1023px) 94vw, 62vw"
         />
-        <span className={styles.peekSprite} aria-hidden="true">
-          <Image
-            src="/case-studies/grogu-peek.webp"
-            alt=""
-            width={720}
-            height={335}
-          />
-        </span>
+        {sprites.map((s) => (
+          <span
+            key={s.src}
+            className={styles.peekSprite}
+            aria-hidden="true"
+            style={
+              {
+                left: s.left,
+                top: s.top,
+                width: s.spriteWidth,
+                aspectRatio: s.aspect,
+                "--peek-rest": s.rest,
+                "--peek-inner": s.inner ?? "none",
+              } as CSSProperties
+            }
+          >
+            <Image src={s.src} alt="" width={s.width} height={s.height} />
+          </span>
+        ))}
       </span>
     </a>
   );

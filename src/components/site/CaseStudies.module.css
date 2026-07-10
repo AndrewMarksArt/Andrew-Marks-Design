@@ -243,15 +243,14 @@
   will-change: transform;
 }
 
-/* Peek sprite: hangs upside down (inner img rotated 180°); wrapper carries
-   the drop (translateY) + the rest-state tilt (Figma 176.67° = 180 − 3.33). */
+/* Peek sprite (config-driven): the wrapper sits at the ENGAGED position
+   (left/top/width/aspect inline from the case data) and --peek-rest tucks
+   it outside the frame at rest; --peek-inner carries any constant
+   mirror/rotation the design bakes into the character. */
 .peekSprite {
   position: absolute;
-  top: 0;
-  left: 5.41%; /* 58 / 1073 */
-  width: 48.09%; /* 516 / 1073 */
-  transform: translateY(-102%) rotate(-3.33deg);
-  transform-origin: 50% 0;
+  transform: var(--peek-rest);
+  transform-origin: 50% 50%;
   transition: transform 250ms ease; /* hover-out */
   will-change: transform;
 }
@@ -259,8 +258,9 @@
 .peekSprite img {
   display: block;
   width: 100%;
-  height: auto;
-  transform: rotate(180deg);
+  height: 100%;
+  object-fit: cover;
+  transform: var(--peek-inner, none);
 }
 
 /* Engaged state: hover (pointer devices), keyboard focus, or tap toggle */
@@ -271,7 +271,7 @@
   }
 
   .mediaLink:hover .peekSprite {
-    transform: translateY(0) rotate(0deg);
+    transform: none;
     transition: transform 550ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 }
@@ -284,6 +284,6 @@
 
 .mediaLink:focus-visible .peekSprite,
 .mediaLink[data-peek] .peekSprite {
-  transform: translateY(0) rotate(0deg);
+  transform: none;
   transition: transform 550ms cubic-bezier(0.22, 1, 0.36, 1);
 }
