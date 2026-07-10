@@ -220,25 +220,8 @@
    ========================================================================== */
 
 .mediaLink {
-  position: relative; /* anchors the gradient-stroke overlay */
   display: block;
   cursor: pointer;
-}
-
-/* Soft dual-tone glow behind the image on hover (replaced the gradient
-   stroke — read harsh and faint at once): accent-orange bloom from the
-   top-left, teal bloom from the bottom-right. Pre-rendered shadows fading
-   via opacity (cheaper than transitioning box-shadow itself). */
-.mediaLink::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  box-shadow:
-    -16px -16px 40px rgba(236, 78, 9, 0.28),
-    16px 16px 40px rgba(69, 133, 123, 0.3);
-  opacity: 0;
-  transition: opacity 250ms ease; /* hover-out */
-  pointer-events: none;
 }
 
 /* Same frame contract as .screenshot, but clipping (border stays fixed) */
@@ -291,11 +274,6 @@
     transform: translateY(0) rotate(0deg);
     transition: transform 550ms cubic-bezier(0.22, 1, 0.36, 1);
   }
-
-  .mediaLink:hover::after {
-    opacity: 1;
-    transition: opacity 400ms ease;
-  }
 }
 
 .mediaLink:focus-visible .mediaShot,
@@ -308,10 +286,4 @@
 .mediaLink[data-peek] .peekSprite {
   transform: translateY(0) rotate(0deg);
   transition: transform 550ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.mediaLink:focus-visible::after,
-.mediaLink[data-peek]::after {
-  opacity: 1;
-  transition: opacity 400ms ease;
 }
