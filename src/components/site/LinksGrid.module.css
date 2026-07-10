@@ -10,8 +10,9 @@
 
 .band {
   position: relative;
-  /* design: resume plate bottom (y=5021) → band top rule (y=5069) = 48px */
-  margin-top: 48px;
+  /* 64px below the resume plate — section breathing room, Andrew's ruling
+     (design measured 48) */
+  margin-top: 64px;
   border-top: 2px solid var(--rule);
   border-bottom: 2px solid var(--rule);
 }
@@ -349,6 +350,6 @@
 /* Tighter band gap in the compact mobile rhythm */
 @media (max-width: 639px) {
   .band {
-    margin-top: 32px;
+    margin-top: 40px;
   }
 }
