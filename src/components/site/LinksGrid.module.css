@@ -106,10 +106,19 @@
   color: var(--black);
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
+  transition: font-weight 200ms ease;
 }
 
 .cellResume .link {
   color: var(--ink-deep);
+}
+
+/* Hover/focus: title bolds (600 → 700; Geist is variable, so it thickens
+   smoothly). The stretched link makes the whole nav cell the hover surface;
+   About fires on its padded label only. */
+.link:hover,
+.link:focus-visible {
+  font-weight: 700;
 }
 
 /* Stretched links (UX audit item 3): the anchors were ~14px-tall text
@@ -128,6 +137,50 @@
 }
 
 /* --- arrow-out icon (top-aligned with link, 16px before the cell rule) ----- */
+
+/* Icon strokes shimmer to the dark accent when the cell's link is engaged:
+   each path flashes bright orange then settles on --accent, staggered a
+   beat apart so the shine travels through the glyph (top bar → left bar →
+   diagonal → right bar → bottom bar). Hover-out transitions back. */
+.icon path {
+  transition: stroke 200ms ease;
+}
+
+.link:hover ~ .icon path,
+.link:focus-visible ~ .icon path {
+  animation: iconShimmer 450ms ease forwards;
+}
+
+.link:hover ~ .icon path:nth-of-type(4),
+.link:focus-visible ~ .icon path:nth-of-type(4) {
+  animation-delay: 40ms;
+}
+
+.link:hover ~ .icon path:nth-of-type(5),
+.link:focus-visible ~ .icon path:nth-of-type(5) {
+  animation-delay: 80ms;
+}
+
+.link:hover ~ .icon path:nth-of-type(2),
+.link:focus-visible ~ .icon path:nth-of-type(2) {
+  animation-delay: 120ms;
+}
+
+.link:hover ~ .icon path:nth-of-type(3),
+.link:focus-visible ~ .icon path:nth-of-type(3) {
+  animation-delay: 160ms;
+}
+
+/* no 0% frame: each path animates from its own current stroke color */
+@keyframes iconShimmer {
+  45% {
+    stroke: #f69870;
+  }
+
+  100% {
+    stroke: var(--accent);
+  }
+}
 
 .icon {
   position: absolute;
