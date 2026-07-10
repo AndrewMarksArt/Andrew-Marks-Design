@@ -180,6 +180,8 @@
      exactly 44px whatever the clamp resolves the label to (18px → 9.2px py;
      14px → 11.6px py) */
   display: inline-block;
+  position: relative;
+  overflow: hidden; /* clips the shimmer band */
   padding: calc((40px - 1.2em) / 2) 16px;
   min-height: 44px;
   background: var(--accent-soft);
@@ -193,6 +195,50 @@
   color: var(--black);
   text-decoration: none;
   white-space: nowrap;
+}
+
+/* Darker-orange shimmer band, swept across once per hover (animation, not
+   transition, so it never plays backwards on exit) */
+.button::before {
+  content: "";
+  position: absolute;
+  inset: -2px auto -2px 0;
+  width: 60%;
+  background: linear-gradient(
+    105deg,
+    transparent,
+    rgba(236, 78, 9, 0.35) 50%,
+    transparent
+  );
+  transform: translateX(-170%);
+  pointer-events: none;
+}
+
+.button:hover::before,
+.button:focus-visible::before {
+  animation: buttonShimmer 650ms ease;
+}
+
+@keyframes buttonShimmer {
+  from {
+    transform: translateX(-170%);
+  }
+
+  to {
+    transform: translateX(280%);
+  }
+}
+
+/* Arrow nudges right on hover (kept above the shimmer band) */
+.buttonArrow {
+  display: inline-block;
+  position: relative;
+  transition: transform 200ms ease;
+}
+
+.button:hover .buttonArrow,
+.button:focus-visible .buttonArrow {
+  transform: translateX(4px);
 }
 
 /* --------------------------------------------------------------------------
