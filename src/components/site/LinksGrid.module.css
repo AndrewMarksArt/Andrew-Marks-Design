@@ -96,6 +96,9 @@
 .link {
   display: block;
   width: fit-content;
+  /* 6px underline runway below the cap-trimmed text (the .desc datum
+     margins are compensated -6px to hold the rule+176/168 alignment) */
+  padding-bottom: 6px;
   font-family: var(--font-geist), sans-serif;
   font-size: clamp(17px, 1.1574vw, 20px);
   font-weight: 600;
@@ -106,7 +109,19 @@
   color: var(--black);
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
-  transition: font-weight 200ms ease;
+  /* Underline that draws in left→right and EXITS left→right (passes
+     through): a 2px accent gradient bar anchored RIGHT at rest — so on
+     hover-out the shrink pulls the left edge rightward — and anchored LEFT
+     while engaged so it grows rightward. The anchor swap happens when the
+     bar is 0% (enter, invisible) or 100% (exit, both anchors render
+     identically), so it never jumps. */
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  background-size: 0% 2px;
+  transition:
+    font-weight 200ms ease,
+    background-size 250ms ease;
 }
 
 .cellResume .link {
@@ -114,11 +129,16 @@
 }
 
 /* Hover/focus: title bolds (600 → 700; Geist is variable, so it thickens
-   smoothly). The stretched link makes the whole nav cell the hover surface;
-   About fires on its padded label only. */
+   smoothly) and the underline draws in. The stretched link makes the whole
+   nav cell the hover surface; About fires on its padded label only. */
 .link:hover,
 .link:focus-visible {
   font-weight: 700;
+  background-position: 0% 100%;
+  background-size: 100% 2px;
+  transition:
+    font-weight 200ms ease,
+    background-size 300ms ease;
 }
 
 /* Stretched links (UX audit item 3): the anchors were ~14px-tall text
@@ -134,6 +154,14 @@
 .cellAbout .link {
   padding: 12px;
   margin: -12px;
+  /* underline rides 6px above the padded box bottom = 6px below the text,
+     matching the nav cells' runway */
+  background-position: 100% calc(100% - 6px);
+}
+
+.cellAbout .link:hover,
+.cellAbout .link:focus-visible {
+  background-position: 0% calc(100% - 6px);
 }
 
 /* --- arrow-out icon (top-aligned with link, 16px before the cell rule) ----- */
@@ -190,10 +218,10 @@
 
 /* --- description (Geist Medium 16, lh 1.45, +2% tracking) ------------------ */
 
-/* Trimmed cap top lands at rule + 176: 40 pad + ~14px link cap box + 122. */
+/* Trimmed cap top lands at rule + 176: 40 pad + ~20px link box (14 cap + 6 underline runway) + 116. */
 .desc {
   max-width: 369px;
-  margin: 122px 0 0;
+  margin: 116px 0 0;
   font-family: var(--font-geist), sans-serif;
   font-size: clamp(14px, 0.9259vw, 16px);
   font-weight: 500;
@@ -244,12 +272,12 @@
 /* --- About cell ------------------------------------------------------------ */
 
 /* Wide paragraph: 764px, lh 1.55, tracking 0, cap top at rule+168
-   (40 pad + ~14px link cap box + 114). Justified ONLY at >=1440 where the
+   (40 pad + ~20px link box + 108). Justified ONLY at >=1440 where the
    measure sets cleanly (audit item 10) — narrow columns pay word-gap
    rivers for the flush edge. */
 .cellAbout .desc {
   max-width: 764px;
-  margin-top: 114px;
+  margin-top: 108px;
   line-height: 1.55;
   letter-spacing: 0;
   text-align: left;
@@ -301,11 +329,11 @@
   }
 
   .desc {
-    margin-top: 116px;
+    margin-top: 110px;
   }
 
   .cellAbout .desc {
-    margin-top: 107px;
+    margin-top: 101px;
   }
 }
 
