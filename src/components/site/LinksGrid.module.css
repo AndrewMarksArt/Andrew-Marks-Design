@@ -10,11 +10,18 @@
 
 .band {
   position: relative;
-  /* 64px below the resume plate — section breathing room, Andrew's ruling
-     (design measured 48) */
-  margin-top: 64px;
+  /* 80px below the resume plate — matches the 80px from the divider rule
+     to the plate top (verified imbalance was 80 above vs 64 below) */
+  margin-top: 80px;
   border-top: 2px solid var(--rule);
   border-bottom: 2px solid var(--rule);
+}
+
+/* Match the mobile plate-top rhythm (divider rule -> plate = 56 / 48) */
+@media (max-width: 1023px) {
+  .band {
+    margin-top: 56px;
+  }
 }
 
 .grid {
@@ -350,6 +357,6 @@
 /* Tighter band gap in the compact mobile rhythm */
 @media (max-width: 639px) {
   .band {
-    margin-top: 40px;
+    margin-top: 48px;
   }
 }
