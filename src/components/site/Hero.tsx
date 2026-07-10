@@ -124,7 +124,11 @@ export default function Hero() {
           Building agentic workflows &amp; complex AI systems for humans,
           agents, &amp; everything in between.
         </p>
+        {/* Terminal micro-graphic (Andrew's ruling): the electric-sheep line
+            drops to the utility register — mono, prompt-prefixed, muted —
+            so it reads as a wry boot-log aside under the subhead. */}
         <p className={styles.subline}>
+          <span aria-hidden="true">{"> "}</span>
           Research &amp; design for users wrangling electric sheep.
         </p>
       </div>
