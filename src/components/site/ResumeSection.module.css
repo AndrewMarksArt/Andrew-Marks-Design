@@ -197,20 +197,21 @@
   white-space: nowrap;
   transition:
     background-color 250ms ease,
-    font-size 200ms ease; /* hover-out */
+    font-weight 200ms ease; /* hover-out */
 }
 
 /* Engaged: the background settles to the shimmer's color (accent @35% over
    the peach = #F69870 — what the band looks like mid-sweep, and it keeps
    black text at AA contrast unlike the full accent) as if the sweep left it
-   behind; label grows 1px. */
+   behind; label weight steps 400 → 500 (Geist is variable, so the weight
+   interpolates instead of snapping and the box geometry barely moves). */
 .button:hover,
 .button:focus-visible {
   background-color: #f69870;
-  font-size: calc(clamp(14px, 1.0417vw, 18px) + 1px);
+  font-weight: 500;
   transition:
     background-color 500ms ease 120ms,
-    font-size 200ms ease;
+    font-weight 200ms ease;
 }
 
 /* Darker-orange shimmer band, swept across once per hover (animation, not
