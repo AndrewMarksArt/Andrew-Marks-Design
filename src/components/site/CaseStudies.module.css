@@ -225,24 +225,17 @@
   cursor: pointer;
 }
 
-/* Gradient stroke on hover: accent orange (top-left) → teal (bottom-right),
-   2px ring drawn OUTSIDE the clipping frame (the frame's overflow:hidden
-   would cut it), covering the 1px black border + 1px inside. Mask trick
-   keeps only the ring so it can fade via opacity with the hover timing. */
+/* Soft dual-tone glow behind the image on hover (replaced the gradient
+   stroke — read harsh and faint at once): accent-orange bloom from the
+   top-left, teal bloom from the bottom-right. Pre-rendered shadows fading
+   via opacity (cheaper than transitioning box-shadow itself). */
 .mediaLink::after {
   content: "";
   position: absolute;
   inset: 0;
-  padding: 2px;
-  background: linear-gradient(135deg, var(--accent), var(--teal));
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  mask-composite: exclude;
+  box-shadow:
+    -16px -16px 40px rgba(236, 78, 9, 0.28),
+    16px 16px 40px rgba(69, 133, 123, 0.3);
   opacity: 0;
   transition: opacity 250ms ease; /* hover-out */
   pointer-events: none;
