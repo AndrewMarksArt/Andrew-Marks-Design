@@ -8,9 +8,10 @@
 
 .hero {
   position: relative;
-  /* 791 (band bottom / rule) - 695.6 (sub-line box bottom) ≈ 95.4, snapped
-     to 96 (8pt grid) */
-  padding-bottom: 96px;
+  /* The terminal micro-line occupies the old 96px bottom zone: subhead →
+     48px → line → 32px → rule (bottom-left anchor balancing the NameMark
+     top-left; display + subhead keep the main focus). */
+  padding-bottom: 32px;
 }
 
 /* Text column sits on the white plate above the band (band is behind). */
@@ -56,9 +57,11 @@
 }
 
 /* Terminal micro-graphic: EXACTLY the meta bar's style (Mono Light 300,
-   14px, --meta-gray, lh 1) — one shared utility voice, not a new variant. */
+   14px, --meta-gray, lh 1) — one shared utility voice, not a new variant.
+   Bottom-anchored in the hero (48px below the subhead, 32px above the
+   rule) as the bottom-left counterweight to the NameMark. */
 .subline {
-  margin: 24px 0 0; /* extra air so it reads as its own small artifact */
+  margin: 48px 0 0;
   font-family: var(--font-geist-mono), monospace;
   font-size: clamp(12px, 0.8102vw, 14px);
   font-weight: 300;
@@ -119,11 +122,15 @@
 
 @media (max-width: 1439px) {
   .hero {
-    padding-bottom: 80px;
+    padding-bottom: 32px;
   }
 
   .words {
     margin-top: 88px;
+  }
+
+  .subline {
+    margin-top: 40px;
   }
 }
 
@@ -143,6 +150,12 @@
 
   .words {
     margin-top: 56px;
+  }
+
+  /* Stacked flow: the micro-line re-attaches under the subhead (no
+     bottom-anchor concept once everything is a single column) */
+  .subline {
+    margin-top: 32px;
   }
 
   .band {
