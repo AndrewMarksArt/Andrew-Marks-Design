@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import styles from "./Footer.module.css";
 
 /**
@@ -68,16 +69,20 @@ export default function Footer() {
     <footer className={styles.band}>
       <h2 className="visually-hidden">Andrew Marks Design</h2>
 
-      {/* "Andrew Marks" wordmark: 1576x160, 30px below band top, full content width */}
-      <Image
-        className={styles.wordmarkMain}
-        src="/footer/andrew-marks-wordmark.svg"
-        alt=""
-        aria-hidden="true"
-        width={1576}
-        height={160}
-        unoptimized
-      />
+      {/* "Andrew Marks" wordmark: 1576x160, 30px below band top, full content
+          width — links home (standard wordmark affordance; matters on the
+          case-study pages) */}
+      <Link href="/" aria-label="Andrew Marks Design — home">
+        <Image
+          className={styles.wordmarkMain}
+          src="/footer/andrew-marks-wordmark.svg"
+          alt=""
+          aria-hidden="true"
+          width={1576}
+          height={160}
+          unoptimized
+        />
+      </Link>
 
       {/* Second row: "Design" wordmark 820x160 (24px below), flag at x=977,
           globe top-right; legal bottom-right — flag/legal/wordmark all

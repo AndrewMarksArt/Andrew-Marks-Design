@@ -1,0 +1,25 @@
+/* ChatVET case content — wireframe figure: media placeholder + gray
+   caption bars (Figma 480x322 box over two 25px bars, second 434px).
+   Bars snapped to the 8pt grid (24px); widths kept proportional. */
+
+.figure {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.figCaption {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.figCaption span {
+  display: block;
+  height: 24px;
+  background: #d9d9d9;
+}
+
+.figCaption span:last-child {
+  width: 90%;
+}

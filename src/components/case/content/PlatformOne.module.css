@@ -1,0 +1,20 @@
+/* PlatformOne case content — local layout the shared primitives can't
+   express: each wireframe media unit is a 480x322 image placeholder with
+   two caption strips beneath (Figma 6755:4845 et al.: 25px bars, the
+   second 434/480 wide). 8pt gaps. */
+
+.mediaUnit {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.captions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.captionShort {
+  width: 90.4167%; /* 434 / 480 */
+}

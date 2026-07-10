@@ -7,6 +7,7 @@ import {
   type MouseEvent,
 } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import styles from "./CaseStudies.module.css";
 
 /**
@@ -51,20 +52,27 @@ export default function CaseStudyMedia({
 }) {
   const [peeked, setPeeked] = useState(false);
 
-  // Navigation STUBBED (Andrew's ruling: no case-study pages yet) —
-  // clicks toggle the peek state instead; hover works via CSS.
-  const handleClick = useCallback((e: MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    setPeeked((p) => !p);
-  }, []);
+  // Touch devices get Andrew's two-beat spec: first tap plays the peek,
+  // second tap navigates. Pointer devices navigate on click (hover already
+  // played the animation).
+  const handleClick = useCallback(
+    (e: MouseEvent<HTMLAnchorElement>) => {
+      const touchOnly = window.matchMedia("(hover: none)").matches;
+      if (touchOnly && !peeked) {
+        e.preventDefault();
+        setPeeked(true);
+      }
+    },
+    [peeked]
+  );
 
   return (
-    <a
+    <Link
       href={href}
       className={styles.mediaLink}
       data-peek={peeked || undefined}
       onClick={handleClick}
-      aria-label={`${alt} — case study coming soon`}
+      aria-label={`${alt} — view case study`}
     >
       <span className={styles.mediaFrame}>
         <Image
@@ -107,6 +115,6 @@ export default function CaseStudyMedia({
           </span>
         ))}
       </span>
-    </a>
+    </Link>
   );
 }

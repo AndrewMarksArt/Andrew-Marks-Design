@@ -1,0 +1,44 @@
+/* ==========================================================================
+   Knowledge OS case content — layout the shared case primitives can't
+   express (Figma "Knowledge OS case study template", node 6759:5781):
+   the 4-up capture strip and the figure caption bars under media boxes.
+   ========================================================================== */
+
+/* four 230x209 boxes in a row (Figma 6759:5923) */
+.quadRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* media box + caption-bar stack (Figma 6759:5940 pattern: 480x322 image,
+   then two 25px caption bars, the second 434px wide) */
+.figure {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.captions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+/* second caption bar is shorter: 434/480 of the column width */
+.captions > :last-child {
+  width: calc(100% * 434 / 480);
+}
+
+@media (max-width: 1023px) {
+  .quadRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 639px) {
+  .quadRow {
+    gap: 16px;
+  }
+}
