@@ -2,7 +2,8 @@
    Links grid band — spec §4 "Links grid", §5 "Links-grid cell" + motifs.
    Design geometry at 1728: rules y=5069 (full-bleed) / 5363 (inset, plate
    only) / 5657 (full-bleed); interior verticals x=462 / x=864 → plate
-   columns 25% / 25% / 50% (402/402/804 of the 1608 plate); rows 294px.
+   columns 25% / 25% / 50% (402/402/804 of the 1608 plate); rows 294px in
+   Figma, snapped to a 296px min-height (8pt grid).
    The band is full-bleed (top/bottom rules cross the gutters); the grid is
    pulled back onto the plate with a gutter margin.
    ========================================================================== */
@@ -62,8 +63,8 @@
 
 .cell {
   position: relative;
-  min-height: 294px;
-  padding: 42px 16px 40px; /* link cap top = rule + 42 (double-margin: 16px inner pads) */
+  min-height: 296px;
+  padding: 40px 16px 40px; /* link cap top = rule + 40 (double-margin: 16px inner pads) */
 }
 
 /* Interior vertical rules (x=462 / x=864): drawn by column-2/3 cells so they
@@ -82,13 +83,13 @@
   border-top: 2px solid var(--rule);
 }
 
-/* --- numbered link (Geist SemiBold 24, lh 0.95, uppercase) ----------------- */
+/* --- numbered link (Geist SemiBold 20, lh 0.95, uppercase) ----------------- */
 
 .link {
   display: block;
   width: fit-content;
   font-family: var(--font-geist), sans-serif;
-  font-size: clamp(20px, 1.3889vw, 24px);
+  font-size: clamp(17px, 1.1574vw, 20px);
   font-weight: 600;
   line-height: 0.95;
   letter-spacing: 0;
@@ -122,18 +123,18 @@
 
 .icon {
   position: absolute;
-  top: 42px;
+  top: 40px;
   right: 16px;
 }
 
-/* --- description (Geist Medium 18, lh 1.45, +2% tracking) ------------------ */
+/* --- description (Geist Medium 16, lh 1.45, +2% tracking) ------------------ */
 
-/* Trimmed cap top lands at rule + 174: 42 pad + ~17px link cap box + 115. */
+/* Trimmed cap top lands at rule + 176: 40 pad + ~14px link cap box + 122. */
 .desc {
   max-width: 369px;
-  margin: 115px 0 0;
+  margin: 122px 0 0;
   font-family: var(--font-geist), sans-serif;
-  font-size: clamp(16px, 1.0417vw, 18px);
+  font-size: clamp(14px, 0.9259vw, 16px);
   font-weight: 500;
   line-height: 1.45;
   letter-spacing: 0.02em;
@@ -171,7 +172,7 @@
   right: calc(min(362px, 100% - 440px) + 56px);
 }
 
-/* --- dots cell (368x210 at 16px pad, rule+42) ------------------------------ */
+/* --- dots cell (368x210 at 16px pad, rule+40) ------------------------------ */
 
 .dotGrid {
   width: 368px;
@@ -181,20 +182,21 @@
 
 /* --- About cell ------------------------------------------------------------ */
 
-/* Wide justified paragraph: 764px, lh 1.55, tracking 0, cap top at rule+168. */
+/* Wide justified paragraph: 764px, lh 1.55, tracking 0, cap top at rule+168
+   (40 pad + ~14px link cap box + 114). */
 .cellAbout .desc {
   max-width: 764px;
-  margin-top: 109px;
+  margin-top: 114px;
   line-height: 1.55;
   letter-spacing: 0;
   text-align: justify;
 }
 
 /* Coil + circled-R (measured: badge right edge 24px in from the plate rule,
-   16px gap between coil and badge, tops at rule+42). */
+   16px gap between coil and badge, tops at rule+40). */
 .reg {
   position: absolute;
-  top: 42px;
+  top: 40px;
   right: 24px;
   display: flex;
   align-items: center;
@@ -229,11 +231,11 @@
   }
 
   .desc {
-    margin-top: 108px;
+    margin-top: 116px;
   }
 
   .cellAbout .desc {
-    margin-top: 101px;
+    margin-top: 107px;
   }
 }
 

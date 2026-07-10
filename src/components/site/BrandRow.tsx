@@ -3,11 +3,12 @@ import styles from "./BrandRow.module.css";
 
 /**
  * Brand band between the hero and the case-study status section:
- * full-bleed rules at y=791 and y=866 with a 73px band between them —
+ * full-bleed rules with a 68px band between them (8pt pads; Figma
+ * measured y=791/y=866, 73px) —
  * color-swatch row left (16px inside the plate edge) and the
  * hazard-slant design mark right (right edge 16px inside the plate).
  * Both rules are pinned by plus marks on the plate-edge verticals
- * (root marks at y=775/850). Entirely decorative.
+ * (Figma root marks at y=775/850). Entirely decorative.
  */
 
 /* 7 slanted parallelograms: 27.2px wide, slanting 34.85px right over

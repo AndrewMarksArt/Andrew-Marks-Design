@@ -3,7 +3,7 @@ import { PlusMark } from "./motifs";
 import styles from "./MetaBar.module.css";
 
 /**
- * Top utility line (spec §3/§5 "Meta bar") + the full-bleed y=60 rule.
+ * Top utility line (spec §3/§5 "Meta bar") + the full-bleed y=56 rule.
  * Copy is the exact literal string, split at the `//` boundaries so each
  * segment wraps as a unit on small screens (never truncates).
  * Joined with double spaces via `white-space: pre-wrap` — the rendered
@@ -30,7 +30,7 @@ export function MetaBar() {
           ))}
         </p>
       </div>
-      {/* y=60 rule, full-bleed, pinned by plus marks centered on the
+      {/* y=56 rule, full-bleed, pinned by plus marks centered on the
           plate-edge verticals (root marks at (44,44)/(1652,44)) */}
       <div className={`fullBleed ${styles.ruleRow}`} aria-hidden="true">
         <hr className="hrule" />

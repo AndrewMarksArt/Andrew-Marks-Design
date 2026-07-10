@@ -3,13 +3,14 @@
    Design-scale geometry (1728): words at y=292/394.4, tagline 520, sub 626,
    band (76, 81.5) 1592x709.5 ending on the y=791 rule.
    The section's top edge = NameMark bottom (page y≈188.6); all hero spacing
-   is provided internally (words start 103px below that edge).
+   is provided internally (words start 104px below that edge — 8pt grid).
    ========================================================================== */
 
 .hero {
   position: relative;
-  /* 791 (band bottom / rule) - 695.6 (sub-line box bottom) */
-  padding-bottom: 95px;
+  /* 791 (band bottom / rule) - 695.6 (sub-line box bottom) ≈ 95.4, snapped
+     to 96 (8pt grid) */
+  padding-bottom: 96px;
 }
 
 /* Text column sits on the white plate above the band (band is behind). */
@@ -21,8 +22,9 @@
 /* --- Display words (Strelka SVG lockups) ------------------------------- */
 
 .words {
-  /* 292 (word 1 top) - 188.63 (NameMark frame bottom) */
-  margin-top: 103px;
+  /* 292 (word 1 top) - 188.63 (NameMark frame bottom) ≈ 103.4, snapped to
+     104 (8pt grid) */
+  margin-top: 104px;
 }
 
 .word {
@@ -36,13 +38,13 @@
 
 .wordDesigner {
   max-width: 530.221px; /* natural SVG size 530.221x76.8 */
-  margin-top: 25.6px; /* 394.4 - (292 + 76.8) */
+  margin-top: 24px; /* 394.4 - (292 + 76.8) = 25.6, snapped to 24 (8pt grid) */
 }
 
 /* --- Tagline / sub-line (spec §3) --------------------------------------- */
 
 .tagline {
-  margin: 48.8px 0 0; /* 520 - 471.2 (word 2 bottom) */
+  margin: 48px 0 0; /* 520 - 471.2 (word 2 bottom) = 48.8, snapped to 48 (8pt grid) */
   /* Wrap after "wrangling" as designed (line 1 measures ≈628px at 36px);
      em unit keeps the same break across the clamp range. */
   max-width: 19em;

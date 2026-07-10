@@ -1,14 +1,15 @@
 /* ==========================================================================
    Case Studies — 3 rows (spec §5 "Case-study row", frame 6727:4226 at
-   page (127, 1098), 1477 wide, rows on 96px gaps; ledger ruling #4 applied:
-   1px black image border on ALL rows, desc rgba(0,0,0,0.9) max-width 726px,
-   rail padding uniform 32px). Section spans design y 1062 → 3913.
+   page (127, 1098), 1477 wide; the design's 96px row gaps are 8pt-normalized
+   to 48/48 around the 2px separators; ledger ruling #4 applied: 1px black
+   image border on ALL rows, desc rgba(0,0,0,0.9) max-width 36.5em, rail
+   padding uniform 32px). Section spans design y 1062 → 3913.
    ========================================================================== */
 
 .caseStudies {
   position: relative;
-  /* Row 3 bottom (y=3839) → section end at the divider band top (y=3913) */
-  padding-bottom: 74px;
+  /* Row 3 bottom (y=3839) → divider band top (y=3913): design 74 → 72 (8pt) */
+  padding-bottom: 72px;
 }
 
 /* --- Interior column rules (2px, --rule recipe) --------------------------
@@ -57,11 +58,13 @@
 }
 
 .separatorTop {
-  margin-bottom: 36px; /* separator (1062) → case-studies frame top (1098) */
+  /* separator (1062) → frame top: design 36 is an exact 8pt tie; rounded UP
+     to 40 — it abuts the first row's numeral/title text */
+  margin-bottom: 40px;
 }
 
 .separatorMid {
-  margin-block: 47px; /* 96px row gap, separator centered (normalized) */
+  margin-block: 48px; /* design 96 gap → 48 above/below the centered 2px rule (8pt) */
 }
 
 .sepMark {
@@ -78,10 +81,12 @@
 }
 
 /* --- Row: numeral rail + card --------------------------------------------
-   Design row interior 1448px (16px side pads): rail 352 + gap 20 + card 1073. */
+   Design row interior 1448px (16px side pads): rail 352 + card 1073; the
+   design's 20px rail↔card gap rounds UP to 24 (8pt — <24px abutting the
+   card's title text). */
 .row {
   display: flex;
-  gap: 20px;
+  gap: 24px;
   padding-inline: 16px;
 }
 
@@ -124,13 +129,15 @@
   max-width: 1073px;
 }
 
-/* Case title: Geist Medium 32, lh 125%, -0.5% tracking, cap-trimmed
-   (32px title measures 23.34px — spec §4). */
+/* Case title: Geist Medium, design 32 → 28 (reduced ladder), lh 125%,
+   -0.5% tracking, cap-trimmed (caps ≈20.4px at 28; spec §4 measured 23.34px
+   at 32). Max-width 24em keeps the design's ~72ch measure (672px @28,
+   replacing the fixed 726px). */
 .title {
   margin: 0;
-  max-width: 726px;
+  max-width: 24em;
   font-family: var(--font-geist), sans-serif;
-  font-size: clamp(20px, 1.852vw, 32px);
+  font-size: clamp(20px, 1.6204vw, 28px);
   font-weight: 500;
   line-height: 1.25;
   letter-spacing: -0.005em;
@@ -161,13 +168,14 @@
   border: 1px solid var(--black);
 }
 
-/* Description: Geist 20, lh 145%, +2% tracking, rgba(0,0,0,0.9), bold spans
-   same size as body (ruling #4). */
+/* Description: Geist, design 20 → 18 (reduced ladder), lh 145%, +2% tracking,
+   rgba(0,0,0,0.9), bold spans same size as body (ruling #4). Max-width
+   36.5em keeps ~72ch (657px @18, replacing the fixed 726px). */
 .desc {
   margin: 0;
-  max-width: 726px;
+  max-width: 36.5em;
   font-family: var(--font-geist), sans-serif;
-  font-size: clamp(16px, 1.157vw, 20px);
+  font-size: clamp(15px, 1.0417vw, 18px);
   font-weight: 400;
   line-height: 1.45;
   letter-spacing: 0.02em;

@@ -1,13 +1,14 @@
 /* ==========================================================================
    Case Study Status block — spec §5 (6727:4215), page (125, 902) 1478x160.
    Section spans design y 866 (below the swatch-band rule) → 1062 (the next
-   separator, drawn by CaseStudies). 36px strip above the y=902 separator.
+   separator, drawn by CaseStudies). Strip above the y=902 separator is
+   normalized to 32px (8pt grid; design 35).
    ========================================================================== */
 
 .status {
   position: relative;
-  /* Design y 866 → 902 strip above the separator (35px + 2px rule = 902±1) */
-  padding-top: 35px;
+  /* Design y 866 → 902 strip above the separator: design 35 → 32 (8pt grid) */
+  padding-top: 32px;
 }
 
 /* --- Interior column rules (2px, --rule recipe) --------------------------
@@ -32,7 +33,7 @@
 
 .vruleMid {
   left: calc(24.324% - 1px);
-  top: 35px; /* starts at the y=902 separator (Vector 17) */
+  top: 32px; /* starts at the y=902 separator (Vector 17) — tracks .status padding-top */
 }
 
 /* --- Top boundary separator (design y=902) --------------------------------
@@ -58,39 +59,40 @@
   right: calc(var(--content-inset) - 16px);
 }
 
-/* --- Block content (p-16; title y=918, terminal lines at 970/1002/1030) -- */
+/* --- Block content (padding 16 all round — design 15 top, 8pt-normalized;
+   design title y=918, terminal lines at 970/1002/1030) -------------------- */
 .block {
-  padding: 15px 16px 16px;
+  padding: 16px;
 }
 
-/* Status section title: Geist SemiBold 32, lh 1.25 (40px box; the Figma
-   frame clamps it to 36px — ledger #23: NOT cap-trimmed, unlike case titles).
-   40px box + 12px margin = the measured 52px step to the terminal block. */
+/* Status section title: Geist SemiBold, design 32 → 24 on the reduced type
+   ladder; lh 1.25 (30px box — ledger #23: NOT cap-trimmed, unlike case
+   titles). 30px box + 16px margin = 46px step to the terminal block. */
 .title {
-  margin: 0 0 12px;
+  margin: 0 0 16px;
   font-family: var(--font-geist), sans-serif;
-  font-size: clamp(20px, 1.852vw, 32px);
+  font-size: clamp(18px, 1.3889vw, 24px);
   font-weight: 600;
   line-height: 1.25;
   letter-spacing: -0.02em;
   color: var(--black);
 }
 
-/* Terminal block, indented 16px from the title, 12px row gap */
+/* Terminal block, indented 16px from the title, 8px row gap */
 .terminal {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
   margin-left: 16px;
   font-family: var(--font-geist-mono), monospace;
   font-weight: 400;
 }
 
-/* `// INITIALIZING...` — Geist Mono 20, accent orange; the `//` span carries
-   the measured -6.8px (-34%) tracking, the rest -0.4px (-2%). */
+/* `// INITIALIZING...` — Geist Mono, design 20 → 18 (reduced ladder), accent
+   orange; the `//` span carries the measured -34% tracking, the rest -2%. */
 .initLine {
   margin: 0;
-  font-size: clamp(13px, 1.1574vw, 20px);
+  font-size: clamp(13px, 1.0417vw, 18px);
   line-height: 1;
   letter-spacing: -0.02em;
   color: var(--accent);
@@ -100,17 +102,19 @@
   letter-spacing: -0.34em;
 }
 
-/* STATUS rows — Geist Mono 16, green-gray; 300px flex box, nowrap label,
-   right-aligned value (row 2 value-only, column-aligned by the same box).
-   NO dotted leaders — alignment is pure flex. */
+/* STATUS rows — Geist Mono, design 16 → 14 (reduced ladder), green-gray;
+   18.4em flex box, nowrap label, right-aligned value (row 2 value-only,
+   column-aligned by the same box). NO dotted leaders — alignment is pure
+   flex. */
 .statusRow {
   display: flex;
-  /* ~295px at 16px — the box scales with the fluid font; sized so the
-     right-aligned values keep the design's ~27px clearance to the rule
-     at 1728 and ≥10px at the tight 1450-1600 band */
+  /* ~258px at 14px — the box is em-based so it scales with the fluid font;
+     at the smaller ladder size the right-aligned values' clearance to the
+     rule GROWS (~64px at 1728 vs the design's ~27px, and comfortably past
+     the old ≥10px floor in the tight 1450-1600 band) */
   width: min(18.4em, 100%);
   margin: 0;
-  font-size: clamp(12px, 0.9259vw, 16px); /* 16 / 1728 * 100vw */
+  font-size: clamp(12px, 0.8102vw, 14px); /* 14 / 1728 * 100vw */
   line-height: 1;
   letter-spacing: -0.02em;
   color: var(--green-gray);

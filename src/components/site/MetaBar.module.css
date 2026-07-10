@@ -1,15 +1,19 @@
-/* MetaBar — utility line at plate top + the y=60 full-bleed rule.
-   Measured: text box at (125, 24) h20, lh 1; rule spans y 60-62. */
+/* MetaBar — utility line at plate top + the y=56 full-bleed rule.
+   Figma measured the text box at (125, 24) h20 with the rule at y 60-62;
+   the 2026-07 re-scale drops the type to 18px and re-lands the rule on
+   the 8pt datum y=56 (rule spans y 56-58). */
 
 .metaBar {
   padding-top: 24px;
 }
 
 .line {
-  margin: 0 0 16px;
+  /* 14px bottom margin is a datum constituent, not grid spacing:
+     24 pad + 18 line + 14 = rule top on the 8pt datum y=56 */
+  margin: 0 0 14px;
   font-family: var(--font-geist-mono), monospace;
   font-weight: 300;
-  font-size: clamp(14px, calc(20 / 1728 * 100vw), 20px);
+  font-size: clamp(13px, 1.0417vw, 18px);
   line-height: 1;
   letter-spacing: -0.02em;
   color: var(--meta-gray);

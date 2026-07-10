@@ -34,31 +34,34 @@ You are an AI coding assistant. Whenever you generate CSS or inline styles for t
 - **Mono**: `Geist Mono` (next/font/google, weights 300/400/600) → `var(--font-geist-mono)`
 - **Editorial**: `Neue Haas Grotesk Display Pro` via Adobe Fonts kit (55 Roman / 65 Medium / 75 Bold) → `var(--font-nhg)`; until the kit ID lands, the variable falls back to Geist. Used ONLY in resume rows and giant case numerals.
 
-## 3. Text Styles (all tracking = em equivalents of the measured -2%/+2% px values)
+## 3. Text Styles (re-scaled 2026-07-09: one tier smaller than the Figma frame — Andrew's ruling; ladder 40-28-24-20-18-16-14 under the locked display sizes. Tracking = em equivalents of the measured -2%/+2%.)
 
-- **Meta bar**: Geist Mono Light 300, 20px, lh 1, tracking -2%, `--meta-gray`
-- **Name mark**: Geist ExtraBold 800, 48px, lh 1.25 cap-trimmed, tracking -2%, `--ink`, UPPERCASE
-- **Hero tagline**: Geist Medium 500, 36px, lh 1.25, tracking -2%, `--ink`
-- **Hero sub-line**: Geist Regular 400, 24px, lh 1.45, tracking -2%, `--ink`
-- **Section title (status)**: Geist SemiBold 600, 32px, lh 1.25, tracking -2%, `--black`
-- **Terminal lines**: Geist Mono Regular 400, 20px (status rows 16px), lh 1, tracking -2%; `--accent` for `// ...` lines, `--green-gray` for STATUS rows
-- **Case numeral**: NHG 75 Bold 200px, transparent fill + 2px `--numeral-sage` stroke (`-webkit-text-stroke`)
-- **Case title**: Geist Medium 500, 32px, lh 1.25, tracking -0.5%, `--black`
-- **Case description**: Geist Regular 400, 20px, lh 1.45, tracking +2%, `rgba(0,0,0,0.9)`; bold spans Geist Bold 700 same size
-- **Resume label**: Geist Mono Light 300, 28px, lh 1, tracking -2%, `--ink`
-- **Resume row title**: NHG 65 Medium 48px, lh 1.25, tracking +2%, `--black`
-- **Resume role / date**: NHG 65 Medium 36px / 24px, lh 1.45, tracking -0.5%, `--black`
-- **Resume body**: NHG 55 Roman 24px, lh 1.45, tracking -0.5%, `--black`
-- **Numbered link**: Geist SemiBold 600, 24px, lh 0.95, UPPERCASE, `--ink-deep`/`--black`
-- **Link description**: Geist Medium 500, 18px, lh 1.45, tracking +2%, `rgba(0,0,0,0.8)`; bold lead-ins 700 `--black`
-- **Footer legal**: Geist Mono SemiBold 600, 16px, lh 1.45, tracking -2%, `--on-dark`, UPPERCASE
-- Cap-height trim: layouts assume `text-box-trim: trim-both; text-box-edge: cap alphabetic` on display/heading text (with sensible fallback margins where unsupported).
+- **Meta bar**: Geist Mono Light 300, 18px, lh 1, tracking -2%, `--meta-gray`
+- **Name mark**: Geist ExtraBold 800, 48px, lh 1.25 cap-trimmed, tracking -2%, `--ink`, UPPERCASE (drawn brand mark — LOCKED)
+- **Hero tagline**: Geist Medium 500, 36px, lh 1.25, tracking -2%, `--ink` (LOCKED)
+- **Hero sub-line**: Geist Regular 400, 24px, lh 1.45, tracking -2%, `--ink` (LOCKED)
+- **Section title (status)**: Geist SemiBold 600, 24px, lh 1.25, tracking -2%, `--black`
+- **Terminal lines**: Geist Mono Regular 400, 18px (status rows 14px), lh 1, tracking -2%; `--accent` for `// ...` lines (aria-hidden decoration), `--green-gray` for STATUS rows
+- **Case numeral**: NHG 75 Bold 200px, transparent fill + 2px `--numeral-sage` stroke (LOCKED)
+- **Case title**: Geist Medium 500, 28px, lh 1.25, tracking -0.5%, `--black`
+- **Case description**: Geist Regular 400, 18px, lh 1.45, tracking +2%, `rgba(0,0,0,0.9)`; bold spans Geist Bold 700 same size
+- **Resume label**: Geist Mono Light 300, 24px, lh 1, tracking -2%, `--ink`
+- **Resume row title**: NHG 65 Medium 40px, lh 1.25, tracking +2%, `--black`
+- **Resume role / date**: NHG 65 Medium 24px / 16px, lh 1.45, tracking -0.5%, `--black`
+- **Resume body**: NHG 55 Roman 20px, lh 1.45, tracking -0.5%, `--black`
+- **Button label**: Geist Regular 400, 18px, in a 44px-min box at all widths
+- **Numbered link**: Geist SemiBold 600, 20px, lh 0.95, UPPERCASE, `--ink-deep`/`--black`
+- **Link description**: Geist Medium 500, 16px, lh 1.45, tracking +2%, `rgba(0,0,0,0.8)`; bold lead-ins 700 `--black`
+- **Footer legal**: Geist Mono SemiBold 600, 14px, lh 1.45, tracking -2%, `--on-dark`, UPPERCASE
+- Sizes are clamp() fluid: `clamp(MIN, calc(MAX / 1728 * 100vw), MAXpx)`, MIN ≈ proportional with floors (12px mono / 14px body).
+- Cap-height trim: layouts assume `text-box-trim: trim-both; text-box-edge: cap alphabetic` on display/heading text (with fallback margins where unsupported).
 
 ## 4. Layout Constants
 
 - Design width **1728px**; page plate = white, spanning between vertical rules at **x=60 / x=1668** (60px gutters showing the hatch).
 - Content column inset **64px** from the rules (content spans 124..1604 at 1728) — single alignment grid, ratified.
 - Rules: **2px** stroke at `--rule`. Section furniture (16px insets inside bands/cells) = the "double margin" system: 60px gutter → 64px content inset → 16px inner pads.
+- **8-POINT SPACING SYSTEM (ratified 2026-07-09)**: every padding/margin/gap/min-height is a multiple of 8 (4px allowed as a deliberate micro half-step). Round UP where padding abuts text. EXEMPT — drawn geometry is ink, not spacing: plus marks, swatches, barcode/QR/chevrons, icons, dot pitches, dash patterns, rule thicknesses/straddle offsets (-1px), cap-trim compensations, and the NameMark lockup's internal em-based boxes.
 - Gutter hatch (page background, behind the plate): `repeating-linear-gradient(50.79deg, var(--hatch) 0 31.35px, transparent 31.35px 61.81px)`.
 
 ## 5. Distinctive Motifs

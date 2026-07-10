@@ -1,12 +1,14 @@
-/* NameMark — brand lockup at (125, 96), 783x92.63 at design scale.
+/* NameMark — brand lockup, 783x92.63 at design scale. Figma placed it
+   at (125, 96); after the 2026-07 8pt spacing pass it sits at (125, 90)
+   (rule bottom y=58 + 32px pad).
    Measured internals of the 77px box row (from the 1:1 export):
    pad-top 12 + cap 34 + gap 11 + underline 8 + pad-bottom 12 = 77.
    Everything is em-based off the 48px lockup font size so the mark
    scales proportionally (1em = 48px at design scale). */
 
 .nameMark {
-  /* rule bottom y=62 -> lockup top y=96 */
-  padding-top: 34px;
+  /* rule bottom y=58 -> lockup top y=90 (8pt: 32px; Figma measured 34) */
+  padding-top: 32px;
 }
 
 .lockup {

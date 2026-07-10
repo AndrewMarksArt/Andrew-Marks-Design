@@ -49,9 +49,10 @@
 
 /* --------------------------------------------------------------------------
    Resume plate: rgba(237,237,237,.425), spans the full content column
-   (1480px at design width). Divider bottom 3945 → plate top 3978 = 33px.
+   (1480px at design width). Divider → plate gap 32px (8pt grid; measured 33).
    Plate padding = 16px plate inset + 16px section px-16 = 32px inline;
-   18px top (plate 3978 → section 3996), 22px bottom (4999 → 5021).
+   24px top / 32px bottom (measured 18/22 read tight — rounded up to 8pt,
+   Andrew's 2026-07-09 re-scale).
    -------------------------------------------------------------------------- */
 
 .plate {
@@ -61,9 +62,9 @@
   --dash: 14px;
   --dash-gap: 9px;
   position: relative;
-  margin-top: 33px;
+  margin-top: 32px;
   background: var(--plate-resume);
-  padding: 18px var(--plate-pad-x) 22px;
+  padding: 24px var(--plate-pad-x) 32px;
 }
 
 /* Dashed dieline around the plate (Andrew's ruling 2026-07-09 — not in the
@@ -153,12 +154,12 @@
   min-width: 0;
 }
 
-/* Resume section label: Geist Mono Light 28px, lh 1, -2%, --ink */
+/* Resume section label: Geist Mono Light 24px, lh 1, -2%, --ink */
 .label {
   margin: 0;
   font-family: var(--font-geist-mono), monospace;
   font-weight: 300;
-  font-size: clamp(20px, 1.6204vw, 28px);
+  font-size: clamp(18px, 1.3889vw, 24px);
   line-height: 1;
   letter-spacing: -0.02em;
   color: var(--ink);
@@ -170,19 +171,22 @@
   margin-bottom: 4px;
 }
 
-/* See Full Resume →: 203x44 (auto: 20px/1.2 + 8px py + 2px border),
-   px-16, bg --accent-soft, 2px solid --black, radius 0 */
+/* See Full Resume →: 44px-tall box at ALL widths (WCAG tap target, audit
+   item 11) — px-16, bg --accent-soft, 2px solid --black, radius 0 */
 .button {
   /* inline-block (not flex) so the literal space before the arrow renders;
-     height = 20px * 1.2 + 2*8px padding + 2*2px border = 44px */
+     padding-block = (44px − 2*2px border − 1.2em label) / 2, so the box is
+     exactly 44px whatever the clamp resolves the label to (18px → 9.2px py;
+     14px → 11.6px py) */
   display: inline-block;
-  padding: 8px 16px;
+  padding: calc((40px - 1.2em) / 2) 16px;
+  min-height: 44px;
   background: var(--accent-soft);
   border: 2px solid var(--black);
   border-radius: 0;
   font-family: var(--font-geist), sans-serif;
   font-weight: 400;
-  font-size: clamp(16px, 1.1574vw, 20px);
+  font-size: clamp(14px, 1.0417vw, 18px);
   line-height: 1.2;
   letter-spacing: -0.02em;
   color: var(--black);
@@ -193,26 +197,26 @@
 /* --------------------------------------------------------------------------
    Separators: 2px --rule-soft (DISTINCT recipe from --rule, keep), spanning
    the full plate width (negative inline margins = overhang past the section
-   frame). Header sep: 19px below header / 33px above row 1; row seps
-   centered in the 54px row gaps (26/26).
+   frame). Header sep: 16px below header / 32px above row 1; row seps
+   centered in the 50px row gaps (24/24, 8pt grid — measured 26/26).
    -------------------------------------------------------------------------- */
 
 .sep {
   height: 2px;
   border: 0;
-  margin: 26px calc(-1 * var(--plate-pad-x));
+  margin: 24px calc(-1 * var(--plate-pad-x));
   background: var(--rule-soft);
 }
 
 .sepHeader {
-  margin-top: 19px;
-  margin-bottom: 33px;
+  margin-top: 16px;
+  margin-bottom: 32px;
 }
 
 /* --------------------------------------------------------------------------
    Resume rows: title left (hug), right column 729/1412 = 51.63% with 16px
-   inline padding. Role (36px) + date (24px) as one paragraph, 36px gap,
-   3-line body (24px).
+   inline padding. Role (24px) + date (16px) as one paragraph, 32px gap,
+   body (20px).
    -------------------------------------------------------------------------- */
 
 .row {
@@ -222,14 +226,14 @@
   gap: 24px;
 }
 
-/* NHG 65 Medium 48px, lh 1.25, +2%, --black */
+/* NHG 65 Medium 40px, lh 1.25, +2%, --black */
 .title {
   margin: 0;
   flex: 0 1 auto;
   min-width: 0;
   font-family: var(--font-nhg);
   font-weight: 500;
-  font-size: clamp(28px, 2.7778vw, 48px);
+  font-size: clamp(26px, 2.3148vw, 40px);
   line-height: 1.25;
   letter-spacing: 0.02em;
   color: var(--black);
@@ -241,30 +245,31 @@
   padding-inline: 16px;
 }
 
-/* Role line: NHG 65 Medium 28px, lh 1.45, -0.5%
-   (UX audit item 2: was 36px — same weight/color as the 48px company
-   titles read as two competing headings; 1.71x restores scan order) */
+/* Role line: NHG 65 Medium 24px, lh 1.45, -0.5%
+   (UX audit item 2 took 36 → 28; 2026-07-09 re-scale → 24 — same weight/
+   color as the company titles read as two competing headings; 1.67x vs
+   the 40px titles keeps scan order) */
 .role {
-  margin: 0 0 36px;
+  margin: 0 0 32px;
   font-family: var(--font-nhg);
   font-weight: 500;
-  font-size: clamp(20px, 1.6204vw, 28px);
+  font-size: clamp(17px, 1.3889vw, 24px);
   line-height: 1.45;
   letter-spacing: -0.005em;
   color: var(--black);
 }
 
-/* Date / institution line: NHG 65 Medium 20px (inherits lh/tracking) */
+/* Date / institution line: NHG 65 Medium 16px (inherits lh/tracking) */
 .meta {
-  font-size: clamp(14px, 1.1574vw, 20px);
+  font-size: clamp(13px, 0.9259vw, 16px);
 }
 
-/* Body: NHG 55 Roman 24px, lh 1.45, -0.5% */
+/* Body: NHG 55 Roman 20px, lh 1.45, -0.5% */
 .desc {
   margin: 0;
   font-family: var(--font-nhg);
   font-weight: 400;
-  font-size: clamp(16px, 1.3889vw, 24px);
+  font-size: clamp(15px, 1.1574vw, 20px);
   line-height: 1.45;
   letter-spacing: -0.005em;
   color: var(--black);
@@ -280,11 +285,12 @@
 }
 
 /* Fallback: without trim the role's descent + the body's above-cap leading
-   inflate the 36px gap to ~52px — tighten it back. Cross-column top
-   alignment survives untrimmed (title/role gain near-equal leading). */
+   inflate the 32px gap to ~46px — tighten it back (compensation value, off
+   the 8pt grid by design). Cross-column top alignment survives untrimmed
+   (title/role gain near-equal leading). */
 @supports not (text-box-trim: trim-both) {
   .role {
-    margin-bottom: 20px;
+    margin-bottom: 18px;
   }
 }
 
@@ -301,16 +307,17 @@
   .plate {
     --plate-pad-x: 16px;
     margin-top: 24px;
-    padding-top: 16px;
-    padding-bottom: 20px;
+    /* mirrors the desktop tight-padding bump (16/20 abutted text) */
+    padding-top: 24px;
+    padding-bottom: 24px;
   }
 
   .sep {
-    margin-block: 20px;
+    margin-block: 16px;
   }
 
   .sepHeader {
-    margin-top: 14px;
+    margin-top: 16px;
     margin-bottom: 24px;
   }
 
@@ -320,7 +327,7 @@
   }
 
   .title {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 
   .rowBody {
@@ -346,8 +353,8 @@
   }
 
   .sepHeader {
-    margin-top: 12px;
-    margin-bottom: 20px;
+    margin-top: 8px;
+    margin-bottom: 16px;
   }
 
   .title {
