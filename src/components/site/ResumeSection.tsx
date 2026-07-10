@@ -91,11 +91,11 @@ export function ResumeSection() {
               <article className={styles.row}>
                 <h3 className={styles.title}>{entry.company}</h3>
                 <div className={styles.rowBody}>
-                  <p className={styles.role}>
-                    {entry.role}
-                    <br />
-                    <span className={styles.meta}>{entry.meta}</span>
-                  </p>
+                  {/* Date in its own block (audit item 8): tight to the role,
+                      larger gap to the body — proximity grouping so the date
+                      reads as the role's attribute. */}
+                  <p className={styles.role}>{entry.role}</p>
+                  <p className={styles.metaLine}>{entry.meta}</p>
                   <p className={styles.desc}>{entry.body}</p>
                 </div>
               </article>

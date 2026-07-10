@@ -182,14 +182,23 @@
 
 /* --- About cell ------------------------------------------------------------ */
 
-/* Wide justified paragraph: 764px, lh 1.55, tracking 0, cap top at rule+168
-   (40 pad + ~14px link cap box + 114). */
+/* Wide paragraph: 764px, lh 1.55, tracking 0, cap top at rule+168
+   (40 pad + ~14px link cap box + 114). Justified ONLY at >=1440 where the
+   measure sets cleanly (audit item 10) — narrow columns pay word-gap
+   rivers for the flush edge. */
 .cellAbout .desc {
   max-width: 764px;
   margin-top: 114px;
   line-height: 1.55;
   letter-spacing: 0;
-  text-align: justify;
+  text-align: left;
+}
+
+@media (min-width: 1440px) {
+  .cellAbout .desc {
+    text-align: justify;
+    hyphens: auto;
+  }
 }
 
 /* Coil + circled-R (measured: badge right edge 24px in from the plate rule,
@@ -323,8 +332,10 @@
     margin-top: 32px;
   }
 
-  .cellAbout .desc {
-    text-align: left;
+  /* Inert dot-grid panel closes the band instead of interrupting the
+     03 -> 04 link flow mid-stack (audit item 12) */
+  .cellDots {
+    order: 6;
   }
 
   /* keep the corner marks inside the 12px gutters (no horizontal scroll) */

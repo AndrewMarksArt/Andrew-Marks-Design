@@ -250,7 +250,7 @@
    color as the company titles read as two competing headings; 1.67x vs
    the 40px titles keeps scan order) */
 .role {
-  margin: 0 0 32px;
+  margin: 0;
   font-family: var(--font-nhg);
   font-weight: 500;
   font-size: clamp(17px, 1.3889vw, 24px);
@@ -259,9 +259,17 @@
   color: var(--black);
 }
 
-/* Date / institution line: NHG 65 Medium 16px (inherits lh/tracking) */
-.meta {
+/* Date / institution line — own block (audit item 8): tight to the role
+   (8px), larger gap to the body (32px) so the date reads as the role's
+   attribute, not a peer line. NHG 65 Medium 16px. */
+.metaLine {
+  margin: 8px 0 32px;
+  font-family: var(--font-nhg);
+  font-weight: 500;
   font-size: clamp(13px, 0.9259vw, 16px);
+  line-height: 1.45;
+  letter-spacing: -0.005em;
+  color: var(--black);
 }
 
 /* Body: NHG 55 Roman 20px, lh 1.45, -0.5% */
@@ -279,18 +287,19 @@
    on the row top; row bottom = body's last baseline). */
 .title,
 .role,
+.metaLine,
 .desc {
   text-box-trim: trim-both;
   text-box-edge: cap alphabetic;
 }
 
-/* Fallback: without trim the role's descent + the body's above-cap leading
-   inflate the 32px gap to ~46px — tighten it back (compensation value, off
-   the 8pt grid by design). Cross-column top alignment survives untrimmed
-   (title/role gain near-equal leading). */
+/* Fallback: without trim the extra leading inflates both gaps — tighten
+   back (compensation values, off the 8pt grid by design). Cross-column top
+   alignment survives untrimmed (title/role gain near-equal leading). */
 @supports not (text-box-trim: trim-both) {
-  .role {
-    margin-bottom: 18px;
+  .metaLine {
+    margin-top: 2px;
+    margin-bottom: 22px;
   }
 }
 
@@ -334,7 +343,7 @@
     padding-inline: 0;
   }
 
-  .role {
+  .metaLine {
     margin-bottom: 24px;
   }
 }

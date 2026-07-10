@@ -11,7 +11,7 @@ import Footer from "../components/site/Footer";
 export default function Home() {
   return (
     <div className="page">
-      <div className="plateMain">
+      <main className="plateMain">
         <MetaBar />
         <NameMark />
         {/* Hero before BrandRow: the robot bleeds into the brand band; the
@@ -24,7 +24,7 @@ export default function Home() {
         </div>
         <ResumeSection />
         <LinksGrid />
-      </div>
+      </main>
       <Footer />
     </div>
   );
