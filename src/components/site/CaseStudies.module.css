@@ -212,10 +212,11 @@
    Interactive media — Platform One hover (Figma nodes 6739:4672 → 6739:4669).
    The bordered frame is a fixed clipping stage; the screenshot zooms ~5%
    inside it while the peek sprite (516/1073 = 48.09% wide at left 5.41%)
-   drops in from above the top edge. Transitions are asymmetric: playful
-   overshoot in (file has no motion data — builder's easing, flagged for
-   Andrew), quick ease out. Reduced-motion collapses to instant swaps via
-   the global kill-switch.
+   drops in from above the top edge. Transitions are asymmetric: the
+   character eases in with NO overshoot (Andrew's ruling — the hard clip
+   line makes bounce read wrong) and slightly slower than the zoom
+   (550ms vs 400ms); both ease back quickly on exit. Reduced-motion
+   collapses to instant swaps via the global kill-switch.
    ========================================================================== */
 
 .mediaLink {
@@ -271,7 +272,7 @@
 
   .mediaLink:hover .peekSprite {
     transform: translateY(0) rotate(0deg);
-    transition: transform 400ms cubic-bezier(0.34, 1.4, 0.64, 1);
+    transition: transform 550ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 }
 
@@ -284,5 +285,5 @@
 .mediaLink:focus-visible .peekSprite,
 .mediaLink[data-peek] .peekSprite {
   transform: translateY(0) rotate(0deg);
-  transition: transform 400ms cubic-bezier(0.34, 1.4, 0.64, 1);
+  transition: transform 550ms cubic-bezier(0.22, 1, 0.36, 1);
 }
