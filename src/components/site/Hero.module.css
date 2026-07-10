@@ -55,16 +55,23 @@
   color: var(--ink);
 }
 
-/* Terminal micro-graphic: utility register (matches meta bar / status rows),
-   `>` prompt prefix, muted green-gray — an aside, not a paragraph. */
+/* Terminal micro-graphic: EXACTLY the meta bar's style (Mono Light 300,
+   14px, --meta-gray, lh 1) — one shared utility voice, not a new variant. */
 .subline {
   margin: 24px 0 0; /* extra air so it reads as its own small artifact */
   font-family: var(--font-geist-mono), monospace;
   font-size: clamp(12px, 0.8102vw, 14px);
-  font-weight: 400;
-  line-height: 1.4;
+  font-weight: 300;
+  line-height: 1;
   letter-spacing: -0.02em;
-  color: var(--green-gray);
+  color: var(--meta-gray);
+}
+
+/* Opens leading when the line wraps on narrow screens (same as meta bar) */
+@media (max-width: 639px) {
+  .subline {
+    line-height: 1.4;
+  }
 }
 
 /* --- Masked band (lattice + robot) -------------------------------------- */

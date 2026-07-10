@@ -125,10 +125,10 @@ export default function Hero() {
           agents, &amp; everything in between.
         </p>
         {/* Terminal micro-graphic (Andrew's ruling): the electric-sheep line
-            drops to the utility register — mono, prompt-prefixed, muted —
-            so it reads as a wry boot-log aside under the subhead. */}
+            in the meta bar's exact utility style, with the site's `//`
+            comment idiom — a wry boot-log aside under the subhead. */}
         <p className={styles.subline}>
-          <span aria-hidden="true">{"> "}</span>
+          <span aria-hidden="true">{"// "}</span>
           Research &amp; design for users wrangling electric sheep.
         </p>
       </div>

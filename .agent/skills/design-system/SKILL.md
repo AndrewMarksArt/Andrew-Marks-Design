@@ -39,7 +39,7 @@ You are an AI coding assistant. Whenever you generate CSS or inline styles for t
 - **Meta bar**: Geist Mono Light 300, 14px, lh 1, tracking -2%, `--meta-gray` (utility line — dropped from the frame's 20px in two steps, Andrew's rulings)
 - **Name mark**: Geist ExtraBold 800, 48px, lh 1.25 cap-trimmed, tracking -2%, `--ink`, UPPERCASE (drawn brand mark — LOCKED)
 - **Hero subhead**: Geist Medium 500, 36px, lh 1.25, tracking -2%, `--ink` (LOCKED; carries the "Building agentic workflows..." mission line)
-- **Hero terminal micro-line**: Geist Mono Regular 400, 14px, lh 1.4, tracking -2%, `--green-gray`, `>` prompt prefix (aria-hidden) — the electric-sheep aside, utility register by design (Andrew's ruling 2026-07-09)
+- **Hero terminal micro-line**: IDENTICAL to the meta bar style (Mono Light 300, 14px, lh 1, `--meta-gray`), `//` comment prefix (aria-hidden) — the electric-sheep aside shares the utility voice, not a new variant (Andrew's ruling: the display/lockup/subhead/mono-utility quartet is the style budget — do not add a fifth text voice)
 - **Section title (status)**: Geist SemiBold 600, 24px, lh 1.25, tracking -2%, `--black`
 - **Terminal lines**: Geist Mono Regular 400, 18px (status rows 14px), lh 1, tracking -2%; `--accent` for `// ...` lines (aria-hidden decoration), `--green-gray` for STATUS rows
 - **Case numeral**: NHG 75 Bold 200px, transparent fill + 2px `--numeral-sage` stroke (LOCKED)
