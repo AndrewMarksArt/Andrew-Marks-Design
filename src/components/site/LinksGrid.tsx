@@ -131,6 +131,7 @@ export function LinksGrid() {
             className={styles.link}
           >
             02 X.com
+            <span className="visually-hidden"> (opens in new tab)</span>
           </a>
           <ArrowOutIcon className={styles.icon} />
           <p className={styles.desc}>
@@ -147,6 +148,7 @@ export function LinksGrid() {
             className={styles.link}
           >
             03 Linked in
+            <span className="visually-hidden"> (opens in new tab)</span>
           </a>
           <ArrowOutIcon className={styles.icon} />
           <span className={styles.hatch} aria-hidden="true" />
@@ -168,6 +170,7 @@ export function LinksGrid() {
             className={styles.link}
           >
             04 GitHub
+            <span className="visually-hidden"> (opens in new tab)</span>
           </a>
           <ArrowOutIcon className={styles.icon} />
           <p className={styles.desc}>
@@ -184,15 +187,14 @@ export function LinksGrid() {
             <CoilMark />
             <span className={styles.badge}>R</span>
           </span>
+          {/* Single bold lead-in matching cells 01-04 (audit item 16 — the
+              second bold span made 55% of the paragraph bold, inverting
+              emphasis) */}
           <p className={styles.desc}>
             <strong>Focused on the architecture of human-AI collaboration</strong>
             , from secure DoD systems to rapid AI prototyping, I use my
-            background{" "}
-            <strong>
-              to simplify complex data into high-performance UX research and
-              designs
-            </strong>{" "}
-            allowing AI systems to scale.
+            background to simplify complex data into high-performance UX
+            research and designs allowing AI systems to scale.
           </p>
         </div>
       </div>

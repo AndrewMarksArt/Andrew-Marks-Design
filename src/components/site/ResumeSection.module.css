@@ -309,9 +309,9 @@
    -------------------------------------------------------------------------- */
 
 @media (max-width: 1023px) {
-  .divider {
-    margin-top: 48px;
-  }
+  /* No divider margin-top here: CaseStudies' 72px padding-bottom alone
+     provides the gap (audit item 15 — the old stacked margins made this
+     the only gap that GREW as the viewport shrank) */
 
   .plate {
     --plate-pad-x: 16px;
@@ -349,10 +349,6 @@
 }
 
 @media (max-width: 639px) {
-  .divider {
-    margin-top: 32px;
-  }
-
   .plate {
     margin-top: 16px;
   }

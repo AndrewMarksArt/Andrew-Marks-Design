@@ -249,15 +249,16 @@
 }
 
 /* ==========================================================================
-   1024-1439: same structure — gutter tokens shrink, clamp() scales type,
+   1280-1439: same structure — gutter tokens shrink, clamp() scales type,
    the hatch narrows via its min() width, descriptions wrap, rows grow.
 
-   640-1023: two columns; rows become [01|02] [03|dots] [04|05]. The orange
-   hatch is dropped (no room beside link + icon in a half column) and the
-   About coil is dropped (collides with the link below ~780px); R badge stays.
+   640-1279: two columns; rows become [01|02] [03|dots] [04|05] (audit item
+   17 — three columns below 1280 gave 5-line ~26ch caption towers). The
+   orange hatch is dropped (no room beside link + icon in a half column) and
+   the About coil is dropped (collides with the link); R badge stays.
    ========================================================================== */
 
-@media (max-width: 1023px) {
+@media (max-width: 1279px) {
   .grid {
     grid-template-columns: 1fr 1fr;
   }
