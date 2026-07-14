@@ -78,7 +78,7 @@ function PlusLattice() {
 export default function Hero() {
   // Gaze atlas is a CSS background (no <img> priority hint) — preload it so
   // the resting frame paints with the hero instead of popping in late.
-  preload("/hero/robot-atlas.webp", { as: "image" });
+  preload("/hero/robot-atlas-v2.webp", { as: "image" });
 
   return (
     <section className={styles.hero}>
