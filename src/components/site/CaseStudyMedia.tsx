@@ -114,14 +114,13 @@ export default function CaseStudyMedia({
             />
           </span>
         ))}
-        {/* Border-beam layer stack, isolated in its own subtree so the
-            spinning inherited custom property never invalidates the
-            image/sprite styles (that jank was visible). Stroke + inner
-            glow are the host's pseudos; the blurred beam head needs a
-            real child element. */}
-        <span className={styles.beamHost} aria-hidden="true">
-          <span className={styles.beamBloom} />
-        </span>
+      </span>
+      {/* Border beam v3: two small comet capsules traveling the card's
+          perimeter (offset-path: border-box, compositor-driven), riding
+          OUTSIDE the clipped frame so the glow reads on the white plate. */}
+      <span className={styles.beamTrack} aria-hidden="true">
+        <span className={styles.beamGlow} />
+        <span className={styles.beamHead} />
       </span>
     </Link>
   );

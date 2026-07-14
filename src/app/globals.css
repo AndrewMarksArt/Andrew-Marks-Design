@@ -183,22 +183,6 @@ svg {
   max-width: 100%;
 }
 
-/* Border-beam custom properties (case-study card hover) — registered here
-   because @property must live at the top level with un-hashed names. The
-   registration is what lets the spin animate the angle smoothly and the
-   opacity TRANSITION (fade-in/out) instead of snapping. */
-@property --cs-beam-angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: true;
-}
-
-@property --cs-beam-o {
-  syntax: "<number>";
-  initial-value: 0;
-  inherits: true;
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
