@@ -255,9 +255,14 @@
   transition: opacity 0.4s ease;
 }
 
+/* the glow layer is clipped to the card bounds (Andrew: no glow outside
+   the card) — halos bloom inward over the imagery only */
+.beamGlows {
+  overflow: hidden;
+}
+
 /* the ring layer shows ONLY the border annulus (MagicUI double-mask trick,
-   static — never repaints); the glow layer is unmasked so its halo bleeds
-   naturally onto the card edge and the white plate */
+   static — never repaints) */
 .beamRing {
   border: 2px solid transparent;
   -webkit-mask:
@@ -288,10 +293,14 @@
   }
 
   /* the in-ring segment: a long gradient square clipped to the annulus by
-     the parent mask — the border line itself lights up (bake-off look) */
+     the parent mask — the border line itself lights up (bake-off look).
+     transform-origin matches the offset-anchor so scaleX in the sweep
+     keyframes stretches the TAIL while the head stays pinned to the path:
+     the beam is born short, grows as it travels, contracts on arrival. */
   .beamSeg {
     width: 420px;
     aspect-ratio: 1;
+    transform-origin: 90% 50%;
     background: linear-gradient(
       to left,
       var(--accent-soft),
@@ -307,6 +316,7 @@
     width: 380px;
     height: 56px;
     offset-anchor: 78% 50%;
+    transform-origin: 78% 50%;
     background: radial-gradient(
       ellipse 46% 50% at 72% 50%,
       rgba(236, 78, 9, 0.5) 0%,
@@ -324,13 +334,23 @@
    animation is applied by the ENGAGED state (below), so every hover
    restarts the gesture from the corners and nothing animates at rest. */
 
+/* length lifecycle: born short (scaleX 0.12), stretches to full through
+   the cruise, contracts back into the endpoint — the tail grows/shrinks
+   behind the pinned head. Opacity fades bracket the gesture. */
 @keyframes csBeamSweepA {
   0% {
     offset-distance: 0%;
     opacity: 0;
+    transform: scaleX(0.12);
   }
   12% {
     opacity: 1;
+  }
+  38% {
+    transform: scaleX(1);
+  }
+  68% {
+    transform: scaleX(1);
   }
   86% {
     opacity: 1;
@@ -338,6 +358,7 @@
   100% {
     offset-distance: 50%;
     opacity: 0;
+    transform: scaleX(0.12);
   }
 }
 
@@ -345,9 +366,16 @@
   0% {
     offset-distance: 50%;
     opacity: 0;
+    transform: scaleX(0.12);
   }
   12% {
     opacity: 1;
+  }
+  38% {
+    transform: scaleX(1);
+  }
+  68% {
+    transform: scaleX(1);
   }
   86% {
     opacity: 1;
@@ -355,6 +383,7 @@
   100% {
     offset-distance: 100%;
     opacity: 0;
+    transform: scaleX(0.12);
   }
 }
 
