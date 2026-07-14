@@ -313,17 +313,19 @@
   /* the glow: a soft capsule riding the same path (blur baked into the
      gradient — no filter), giving the segment its halo */
   .beamHalo {
-    width: 380px;
-    height: 64px;
-    offset-anchor: 78% 50%;
-    transform-origin: 78% 50%;
-    /* much softer than v4: weak core, long feathered falloff */
+    width: 640px;
+    height: 170px;
+    offset-anchor: 62% 50%;
+    transform-origin: 62% 50%;
+    /* a wide ambient wash, not a shape: the gradient fades out well inside
+       the element bounds (previous version's ellipse was clipped by its own
+       box edge, which is what read as a hard-edged oval) */
     background: radial-gradient(
-      ellipse 52% 50% at 72% 50%,
-      rgba(236, 78, 9, 0.24) 0%,
-      rgba(236, 78, 9, 0.1) 45%,
-      rgba(251, 192, 166, 0.04) 72%,
-      transparent 100%
+      ellipse 44% 46% at 55% 50%,
+      rgba(236, 78, 9, 0.33) 0%,
+      rgba(236, 78, 9, 0.16) 38%,
+      rgba(251, 192, 166, 0.06) 68%,
+      transparent 92%
     );
   }
 
@@ -446,11 +448,11 @@
   }
 
   .mediaLink:hover .beamA {
-    animation: csBeamSweepA 2.6s cubic-bezier(0.33, 0.33, 0.62, 0.97) infinite;
+    animation: csBeamSweepA 1.3s cubic-bezier(0.33, 0.33, 0.62, 0.97) infinite;
   }
 
   .mediaLink:hover .beamB {
-    animation: csBeamSweepB 2.6s cubic-bezier(0.33, 0.33, 0.62, 0.97) infinite;
+    animation: csBeamSweepB 1.3s cubic-bezier(0.33, 0.33, 0.62, 0.97) infinite;
   }
 }
 
@@ -476,10 +478,10 @@
 
 .mediaLink:focus-visible .beamA,
 .mediaLink[data-peek] .beamA {
-  animation: csBeamSweepA 2.6s cubic-bezier(0.33, 0.33, 0.62, 0.97) infinite;
+  animation: csBeamSweepA 1.3s cubic-bezier(0.33, 0.33, 0.62, 0.97) infinite;
 }
 
 .mediaLink:focus-visible .beamB,
 .mediaLink[data-peek] .beamB {
-  animation: csBeamSweepB 2.6s cubic-bezier(0.33, 0.33, 0.62, 0.97) infinite;
+  animation: csBeamSweepB 1.3s cubic-bezier(0.33, 0.33, 0.62, 0.97) infinite;
 }
