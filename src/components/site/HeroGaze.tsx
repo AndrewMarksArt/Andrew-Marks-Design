@@ -4,38 +4,38 @@ import { useEffect, useRef } from "react";
 import MAP from "./heroGazeMap.json";
 
 /**
- * Cursor-following robot v5 — 2D pose-graph tracking.
+ * Cursor-following robot v6 — 2D star-graph tracking over five clips.
  *
- * The source video is a gaze TOUR (center -> left -> up-left -> across the
- * top -> center [blink] -> up-right -> back-left slightly down [blink] ->
- * bottom-right [squint]), so tracking is two-dimensional: the cursor
- * targets the node whose measured eye-gaze is nearest in (x, y), and the
- * robot travels there along a graph whose every edge is a verified-smooth
- * transition — chain edges are 2 video frames apart, shortcut edges join
- * the tour's self-crossings (near-identical poses, hand-inspected). Travel
- * follows a precomputed next-hop matrix, so the rendered sequence can never
- * jump between unrelated poses; blinks appear naturally when a route passes
- * through the video's blink frames.
+ * Five direction videos (design/assets/robot video/directions/), all
+ * generated from one shared reference still, form an 8-spoke star in gaze
+ * space: level left-right, vertical up-down, the up-left -> down-right
+ * diagonal, and center -> up-right / center -> down-left half-spokes. Node
+ * 0 is the canonical center pose (the reference). The cursor targets the
+ * node whose measured eye-gaze is nearest in (x, y) and the robot travels
+ * there along the graph via a precomputed next-hop matrix — chain edges
+ * are a few video frames apart, hub edges join each clip to center at its
+ * measured center-crossing (all pixel-verified at build time). Spoke-to-
+ * spoke travel passes through center, which reads as the robot naturally
+ * re-orienting its head.
  *
  * heroGazeMap.json (built by scripts/build-gaze-atlas.py):
- *   nodes      normalized gaze (x, y) per node, timeline order
- *   targetable node indices the argmin may select — blink/blur/squint and
- *              duplicate-center frames are traversal-only
- *   next       61x61 next-hop matrix (next[i][i] = i)
- *   rest       center-level eyes-open node: initial paint, reduced-motion,
- *              scrolled-away pose
- *   squint     narrowest-glow node, reachable only via proximity override
+ *   cols/rows  atlas grid dimensions
+ *   nodes      gaze (x, y) per node, piecewise-normalized around the
+ *              center pose so cursor (0.5, 0.5) = center exactly
+ *   targetable node indices the argmin may select
+ *   next       next-hop matrix (next[i][i] = i)
+ *   rest       the center node: initial paint, reduced-motion, scrolled-away
+ *   squint     proximity-override node, or -1 when the clips provide none
  *
- * Tuning below comes from simulation (design-review panel, 2026-07-14):
- * hysteresis needs BOTH an absolute epsilon and a minimum switch interval
- * or cursor jitter churns the target; far-away candidates need a stricter
- * gate or the bottom-left seam (a data gap: no bottom-left gaze exists in
- * the video) flaps between look-left segments 45 hops apart.
+ * Hysteresis tuning comes from the v5 design-review simulations: an
+ * absolute epsilon plus a minimum switch interval stops cursor jitter from
+ * churning the target, and far-away candidates need a stricter (but not
+ * paranoid — the star has no fake seams) gate against boundary flapping.
  */
 
-const ATLAS = "/hero/robot-atlas-v5.webp";
-const COLS = 8;
-const ROWS = 8;
+const ATLAS = "/hero/robot-atlas-v6.webp";
+const COLS: number = MAP.cols;
+const ROWS: number = MAP.rows;
 const N: number = MAP.n;
 const NODES: number[][] = MAP.nodes;
 const TARGETABLE: number[] = MAP.targetable;
@@ -43,14 +43,14 @@ const NEXT: number[][] = MAP.next;
 const REST_IDX: number = MAP.rest;
 const SQUINT_IDX: number = MAP.squint;
 
-const Y_WEIGHT = 0.6; // Y is pre-amplified ~2.8x by normalization; keep low
+const Y_WEIGHT = 1.0; // piecewise normalization already makes axes symmetric
 const SMOOTH_MOUSE = 0.22;
 const SMOOTH_TOUCH = 0.1; // scroll IS touchmove — blur sweeps into a glance
 const HYST = 0.85; // multiplicative form only — NEVER rewrite as a division
 const HYST_EPS = 1.5e-4;
 const MIN_SWITCH_TICKS = 8; // 133ms dwell between retargets
 const FAR_HOPS = 6;
-const FAR_RATIO = 0.55; // far targets must be decisively better
+const FAR_RATIO = 0.7; // far targets must be clearly better (sector jitter)
 const SPEED_BUDGET = 2; // per tick: two chain hops OR one shortcut hop
 const SQUINT_MARGIN = 48;
 
@@ -116,7 +116,7 @@ export default function HeroGaze({ className }: { className?: string }) {
       // desired node: proximity squint > scrolled-away rest > nearest gaze
       let want: number;
       let deliberate = false;
-      if (near) {
+      if (near && SQUINT_IDX >= 0) {
         want = SQUINT_IDX;
         deliberate = true;
       } else if (rect.bottom < 0) {

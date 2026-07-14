@@ -81,7 +81,7 @@ export default function Hero() {
   // Filename is versioned (v5): the atlas layout must match the bundled
   // heroGazeMap.json, so a new build ships under a new URL — never overwrite
   // a deployed atlas in place (browser cache serves stale cells).
-  preload("/hero/robot-atlas-v5.webp", { as: "image" });
+  preload("/hero/robot-atlas-v6.webp", { as: "image" });
 
   return (
     <section className={styles.hero}>

@@ -1,53 +1,39 @@
-"""Build the hero gaze atlas from the robot scanning video (pose-graph, v5).
+"""Build the hero gaze atlas from the five direction videos (star graph, v6).
 
-The video is a 2D gaze TOUR (center -> left -> up-left -> across the top ->
-center [blink] -> up-right -> back-left slightly down [blink] -> bottom-right
-[squint]), so the frontend (src/components/site/HeroGaze.tsx) tracks the
-cursor in BOTH axes: it targets the node whose measured gaze is nearest the
-cursor and travels there along a graph of verified-smooth transitions.
+Sources (design/assets/robot video/directions/): five clips generated from
+one shared reference still (robot-center-reference.png), so they share the
+character and the neutral center pose:
 
-Graph construction:
-  - Nodes: every 2nd video frame (61 of 121), timeline order, in an 8x8
-    atlas. Chain edges (i, i+1) are 2 video frames apart — smooth.
-  - Shortcut edges: hand-verified pairs where the tour crosses itself at
-    near-identical poses (96px grayscale RMS diff ~13-27 vs adjacent-pair
-    median 12.3 / p90 28; every pair also passed side-by-side visual
-    inspection). They cut worst-case travel from ~500ms to ~250ms and — the
-    critical one, f2<->f72 — merge the video's two duplicate center poses so
-    cursor jitter at screen center can't trigger 32-hop timeline tours.
-  - Dijkstra (chain weight 1, shortcut weight 2) -> 61x61 next-hop matrix.
+  lr    left -> right level turn        (level row,   gaze X 322..584)
+  ud    up -> down sweep (down leg)     (center col,  gaze Y 278..459)
+  tlbr  up-left -> down-right diagonal  (gaze 388,305 .. 641,418)
+  ur    center -> up-right              (gaze 511,362 .. 629,277)
+  dl    center -> down-left             (gaze 511,362 .. 281,454)
 
-Targeting metadata (from the v5 design review):
-  - targetable: nodes the runtime argmin may SELECT. Excludes blink frames
-    (f58-62, f88), squint/blur swing frames (f106-112), motion-blurred
-    transitional frames (f10, f30, f54), and the duplicate first center
-    cluster (f0-4; f64-74 is the canonical center — it owns the shortcut
-    hub). Excluded nodes remain in the graph as pass-through animation
-    (that's what makes blinks appear naturally in transit) but the robot
-    never PARKS on one. NOTE: glow height alone can't drive this — looking
-    down naturally shortens the glow (f90-120 all measure h 76-96), so the
-    lists are explicit, not thresholded.
-  - rest: f68 (center-level, eyes open) — initial paint, reduced-motion
-    static frame, scrolled-away pose, and the padding cells' content.
-  - squint: f108 (narrowest glow) — reachable only via the proximity
-    override, never via argmin.
+Topology: an 8-spoke star. Node 0 is the canonical CENTER (dl f0 — the
+reference pose). Each clip contributes a chain of arc-length-sampled nodes
+(blink frames excluded — the generator blinked mid-sweep in every clip; see
+CLEAN ranges). Chains join the hub at their measured center-crossings.
+Travel between spokes passes through center, which reads as the robot
+naturally re-orienting its head.
 
-Shared pipeline stages (unchanged): white-key via border flood-fill (only
-edge-connected background dies; interior highlights survive), torso
-stabilization (translate+scale anchored bottom-center to the median torso
-band), 8px edge-extruded atlas cells (fractional-pixel background scaling
-bleeds into the SAME frame, never a neighbor).
+Cursor mapping: node gaze coords are warped to the global stabilization
+frame, then piecewise-normalized PER HALF-AXIS around the center pose, so
+cursor (0.5, 0.5) lands exactly on the center node even though the measured
+gaze range is asymmetric (X 281..641 around 511; Y 277..459 around 363).
 
-Output: public/hero/robot-atlas-v5.webp (NEW name — the old v3 name is
-cache-poisoned in deployed browsers) plus src/components/site/
-heroGazeMap.json {nodes, targetable, next, rest, squint, n}.
+Per-video extraction (frames + torso + gaze measurement) is
+scripts/measure-gaze-video.py -> scratch dirs; this script consumes those.
 
-NOTE: frame numbers here were measured against THIS video (design/assets/
-robot video/Robot Scanning Motion.mp4). If the video is regenerated,
-re-measure the segments (print each frame's eye-glow centroid) before
-trusting SHORTCUTS / EXCLUDE_TARGET / REST_FRAME / SQUINT_FRAME.
+Output: public/hero/robot-atlas-v6.webp (versioned name — never overwrite a
+deployed atlas; browser caches serve stale cells), heroGazeMap.json
+{n, cols, rows, nodes, targetable, next, rest, squint:-1}, plus review
+sheets in design/assets/robot video/directions/:
+  atlas-v6-contact.png  the atlas cells labeled with node id + clip
+  gaze-map-9x9.png      Andrew's spatial map: each cell = the pose the
+                        tracker shows when the cursor is at that screen cell
 
-Usage:  python scripts/build-gaze-atlas.py "design/assets/robot video/Robot Scanning Motion.mp4"
+Usage:  python scripts/build-gaze-atlas.py <scratch-directions-dir>
 """
 
 import json
@@ -58,77 +44,37 @@ import cv2
 import numpy as np
 from PIL import Image
 
-COLS = ROWS = 8
+COLS = ROWS = 9
 CELL, INSET = 512, 8
-SUBSAMPLE = 2
-OUT_ATLAS = os.path.join("public", "hero", "robot-atlas-v5.webp")
+H = W = 960
+OUT_ATLAS = os.path.join("public", "hero", "robot-atlas-v6.webp")
 OUT_MAP = os.path.join("src", "components", "site", "heroGazeMap.json")
+REVIEW_DIR = os.path.join("design", "assets", "robot video", "directions")
 
-# Shortcut edges as (video frame, video frame) — all visually verified.
-SHORTCUTS = [
-    (2, 72),    # center start <-> center mid (near-identical) — MANDATORY
-    (0, 76),    # center start <-> right-swing start
-    (68, 90),   # center mid <-> back-left start (reads as a blink)
-    (80, 88),   # right-swing peak <-> return start (reads as a blink)
-    (94, 106),  # back-left hold <-> bottom-right swing start
-    (16, 24),   # left hold <-> up-left rise
-    (42, 50),   # within the top hold
-]
-CHAIN_W, SHORTCUT_W = 1, 2
-
-# Frames the argmin must never SELECT (still traversed): blinks, squints,
-# motion-blurred swings, and the duplicate first center cluster.
-EXCLUDE_TARGET = {0, 2, 4, 10, 30, 54, 58, 60, 62, 88, 106, 108, 110, 112}
-REST_FRAME = 68
-SQUINT_FRAME = 108
-
-
-def key_frame(bgr):
-    h, w = bgr.shape[:2]
-    gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
-    white = (gray > 216).astype(np.uint8)
-    flood = white.copy()
-    ffm = np.zeros((h + 2, w + 2), np.uint8)
-    seeds = (
-        [(x, 0) for x in range(0, w, 8)]
-        + [(x, h - 1) for x in range(0, w, 8)]
-        + [(0, y) for y in range(0, h, 8)]
-        + [(w - 1, y) for y in range(0, h, 8)]
-    )
-    for sx, sy in seeds:
-        if flood[sy, sx] == 1:
-            cv2.floodFill(flood, ffm, (sx, sy), 2)
-    fg = (flood != 2).astype(np.uint8) * 255
-    n, labels, stats, _ = cv2.connectedComponentsWithStats(fg, 8)
-    if n > 1:
-        big = max(range(1, n), key=lambda i: stats[i][4])
-        keep = np.zeros_like(fg)
-        for i in range(1, n):
-            if i == big or stats[i][4] > 0.01 * h * w:
-                keep[labels == i] = 255
-        fg = keep
-    return cv2.GaussianBlur(fg, (3, 3), 0)
+# clip -> (clean monotonic frame ranges [inclusive], node budget, forced
+# frames that must become nodes: chain ends + hub-join crossings)
+CLIPS = {
+    "lr":   {"ranges": [(0, 61)], "n": 18, "forced": [0, 42, 61]},
+    "ud":   {"ranges": [(8, 38)], "n": 13, "forced": [8, 21, 38]},
+    "tlbr": {"ranges": [(0, 25), (31, 39), (45, 76)], "n": 16,
+             "forced": [0, 39, 45, 76]},
+    "ur":   {"ranges": [(8, 13), (17, 33), (37, 46), (51, 68)], "n": 12,
+             "forced": [8, 68]},
+    "dl":   {"ranges": [(10, 15), (20, 36), (40, 56), (61, 83)], "n": 15,
+             "forced": [10, 83]},
+}
+CENTER = ("dl", 0)  # the reference pose the ur/dl clips start from
+# hub edges: center <-> each clip's center-adjacent node (weight 2)
+HUB_JOINS = [("lr", 42), ("ud", 21), ("tlbr", 39), ("tlbr", 45),
+             ("ur", 8), ("dl", 10)]
+CHAIN_W, HUB_W = 1, 2
 
 
-def gaze_of(bgra):
-    hsv = cv2.cvtColor(bgra[:, :, :3], cv2.COLOR_BGR2HSV)
-    mask = cv2.inRange(hsv, (5, 80, 140), (45, 255, 255))
-    mask = cv2.bitwise_and(mask, bgra[:, :, 3])
-    n, _, stats, cents = cv2.connectedComponentsWithStats(mask, 8)
-    comps = sorted(
-        [(stats[j], cents[j]) for j in range(1, n) if stats[j][4] > 300],
-        key=lambda c: -c[0][4],
-    )[:2]
-    if len(comps) < 2:
-        return None
-    return (
-        float((comps[0][1][0] + comps[1][1][0]) / 2),
-        float((comps[0][1][1] + comps[1][1][1]) / 2),
-    )
+def load_metrics(scratch, slug):
+    return json.load(open(os.path.join(scratch, slug, "metrics.json")))
 
 
 def dijkstra_next_hop(n_nodes, edges):
-    """Per-source Dijkstra over the tiny graph -> next-hop matrix."""
     import heapq
 
     adj = {i: [] for i in range(n_nodes)}
@@ -150,11 +96,12 @@ def dijkstra_next_hop(n_nodes, edges):
                     dist[v] = d + w
                     prev[v] = u
                     heapq.heappush(pq, (d + w, v))
-        # walk each destination back to src; first hop out of src -> dest
         for dst in range(n_nodes):
             if dst == src:
-                nxt[src][dst] = src  # diagonal MUST be identity
+                nxt[src][dst] = src
                 continue
+            if prev[dst] == -1:
+                raise SystemExit(f"graph disconnected: {src} -/-> {dst}")
             node = dst
             while prev[node] != src:
                 node = prev[node]
@@ -162,123 +109,226 @@ def dijkstra_next_hop(n_nodes, edges):
     return nxt, adj
 
 
-def main(video):
-    cap = cv2.VideoCapture(video)
-    raw = []
-    while True:
-        ok, f = cap.read()
-        if not ok:
-            break
-        raw.append(f)
-    cap.release()
-    print(f"extracted {len(raw)} frames")
+def main(scratch):
+    metrics = {s: load_metrics(scratch, s) for s in CLIPS}
 
-    rgba = [np.dstack([f, key_frame(f)]) for f in raw]
+    # global torso reference across ALL clips (they share the character)
+    all_t = [t for m in metrics.values() for t in m["torso"] if t]
+    ref_cx = float(np.median([t[0] for t in all_t]))
+    ref_w = float(np.median([t[1] for t in all_t]))
+    print(f"global torso ref: cx {ref_cx:.1f}, width {ref_w:.1f}")
 
-    # stabilize on the torso band
-    H, W = rgba[0].shape[:2]
-    band_y0 = int(H * 0.854)
-    torso = []
-    for f in rgba:
-        ys_, xs_ = np.nonzero(f[band_y0:, :, 3] > 128)
-        torso.append(
-            (float(xs_.mean()), float(np.percentile(xs_, 95) - np.percentile(xs_, 5)))
-        )
-    ref_cx = float(np.median([t[0] for t in torso]))
-    ref_w = float(np.median([t[1] for t in torso]))
-    stab = []
-    for f, (cx, w) in zip(rgba, torso):
+    def warp_params(slug, fi):
+        cx, w = metrics[slug]["torso"][fi]
         sc = ref_w / w
-        M = np.float32([[sc, 0, ref_cx - sc * cx], [0, sc, H - sc * H]])
-        stab.append(
-            cv2.warpAffine(
-                f, M, (W, H), flags=cv2.INTER_LINEAR,
-                borderMode=cv2.BORDER_CONSTANT, borderValue=(0, 0, 0, 0),
-            )
-        )
-    print(f"stabilized to torso cx {ref_cx:.1f}, width {ref_w:.1f}")
+        return sc, ref_cx - sc * cx, H - sc * H
 
-    node_frames = list(range(0, len(raw), SUBSAMPLE))
-    n_nodes = len(node_frames)
+    def warped_gaze(slug, fi):
+        g = metrics[slug]["gaze"][fi]
+        sc, tx, ty = warp_params(slug, fi)
+        return sc * g[0] + tx, sc * g[1] + ty
+
+    def load_stab(slug, fi):
+        f = cv2.imread(os.path.join(scratch, slug, f"f{fi:03d}.png"),
+                       cv2.IMREAD_UNCHANGED)
+        sc, tx, ty = warp_params(slug, fi)
+        M = np.float32([[sc, 0, tx], [0, sc, ty]])
+        return cv2.warpAffine(f, M, (W, H), flags=cv2.INTER_LINEAR,
+                              borderMode=cv2.BORDER_CONSTANT,
+                              borderValue=(0, 0, 0, 0))
+
+    # ---- node selection: forced frames + arc-length sampling ----
+    nodes = [CENTER]  # node 0 = canonical center
+    chains = {}  # slug -> [node ids in chain order]
+    for slug, cfg in CLIPS.items():
+        frames = [f for a, b in cfg["ranges"] for f in range(a, b + 1)]
+        pts = {f: warped_gaze(slug, f) for f in frames}
+        arc = 0.0
+        arcs = {}
+        prev = None
+        for f in frames:
+            if prev is not None:
+                arc += float(np.hypot(pts[f][0] - pts[prev][0],
+                                      pts[f][1] - pts[prev][1]))
+            arcs[f] = arc
+            prev = f
+        chosen = set(cfg["forced"])
+        step = arc / max(cfg["n"] - 1, 1)
+        nxt_arc = step
+        for f in frames:
+            if len(chosen) >= cfg["n"]:
+                break
+            if arcs[f] >= nxt_arc and all(abs(f - c) > 1 for c in chosen):
+                chosen.add(f)
+                nxt_arc = arcs[f] + step
+        ordered = sorted(chosen)
+        ids = []
+        for f in ordered:
+            nodes.append((slug, f))
+            ids.append(len(nodes) - 1)
+        chains[slug] = ids
+        print(f"{slug}: {len(ids)} nodes, frames {ordered}")
+
+    n_nodes = len(nodes)
     if n_nodes > COLS * ROWS:
         raise SystemExit(f"{n_nodes} nodes won't fit {COLS}x{ROWS}")
-    frame_to_node = {f: i for i, f in enumerate(node_frames)}
+    print(f"total nodes: {n_nodes} (grid capacity {COLS * ROWS})")
+    node_id = {nf: i for i, nf in enumerate(nodes)}
 
-    # gaze per node (carry-forward only fills blink gaps for traversal math;
-    # those nodes are excluded from targeting anyway)
-    gz = []
-    for fi in node_frames:
-        g = gaze_of(stab[fi])
-        gz.append(g if g else gz[-1])
-    xs = np.array([g[0] for g in gz])
-    ys = np.array([g[1] for g in gz])
-    nx = (xs - xs.min()) / (xs.max() - xs.min())
-    ny = (ys - ys.min()) / (ys.max() - ys.min())
+    # ---- edges ----
+    edges = []
+    for slug, ids in chains.items():
+        for a, b in zip(ids, ids[1:]):
+            edges.append((a, b, CHAIN_W))
+    for slug, f in HUB_JOINS:
+        if (slug, f) not in node_id:
+            raise SystemExit(f"hub frame {slug} f{f} was not selected as a node")
+        edges.append((0, node_id[(slug, f)], HUB_W))
 
-    # graph -> next-hop
-    edges = [(i, i + 1, CHAIN_W) for i in range(n_nodes - 1)]
-    for fa, fb in SHORTCUTS:
-        if fa not in frame_to_node or fb not in frame_to_node:
-            raise SystemExit(f"shortcut frame f{fa}/f{fb} not in node set")
-        edges.append((frame_to_node[fa], frame_to_node[fb], SHORTCUT_W))
+    # ---- edge quality: 96px grayscale RMS diff over every edge ----
+    small = {}
+
+    def small_of(i):
+        if i not in small:
+            st = load_stab(*nodes[i])
+            a = st[:, :, 3:4].astype(np.float32) / 255
+            g = (st[:, :, :3].astype(np.float32) * a + 255 * (1 - a)).mean(axis=2)
+            small[i] = cv2.resize(g, (96, 96), interpolation=cv2.INTER_AREA)
+        return small[i]
+
+    diffs = []
+    for a, b, w in edges:
+        d = float(np.sqrt(((small_of(a) - small_of(b)) ** 2).mean()))
+        diffs.append((d, a, b, w))
+    diffs.sort(reverse=True)
+    chain_d = [d for d, a, b, w in diffs if w == CHAIN_W]
+    print(f"chain-edge diff: median {np.median(chain_d):.1f}, "
+          f"p90 {np.percentile(chain_d, 90):.1f}, max {max(chain_d):.1f}")
+    print("hub-edge diffs:")
+    for d, a, b, w in diffs:
+        if w == HUB_W:
+            print(f"  center <-> {nodes[b]}  {d:.1f}")
+    print("worst 6 edges overall:")
+    for d, a, b, w in diffs[:6]:
+        print(f"  {nodes[a]} <-> {nodes[b]}  {d:.1f}")
+
+    # review strip: hub joins + worst chain edges, side by side
+    def review_cell(i):
+        st = load_stab(*nodes[i])
+        a = st[:, :, 3:4].astype(np.float32) / 255
+        rgb = (st[:, :, :3].astype(np.float32) * a + 255 * (1 - a)).astype(np.uint8)
+        img = cv2.resize(rgb, (260, 260), interpolation=cv2.INTER_AREA)
+        cv2.putText(img, f"{nodes[i][0]} f{nodes[i][1]}", (6, 22),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (20, 20, 20), 2)
+        return img
+
+    rows_img = []
+    for d, a, b, w in [x for x in diffs if x[3] == HUB_W] + diffs[:4]:
+        row = np.hstack([review_cell(a), review_cell(b)])
+        cv2.putText(row, f"diff {d:.0f}", (6, 250),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (9, 78, 236), 2)
+        rows_img.append(row)
+    cv2.imwrite(os.path.join(REVIEW_DIR, "edge-joins-review.png"),
+                np.vstack(rows_img))
+
+    # ---- next-hop ----
     nxt, adj = dijkstra_next_hop(n_nodes, edges)
-
-    # sanity: diagonal identity + every hop is a real graph neighbor
     neighbor_sets = {i: {v for v, _ in adj[i]} for i in range(n_nodes)}
     for i in range(n_nodes):
         assert nxt[i][i] == i
         for j in range(n_nodes):
             if i != j:
-                assert nxt[i][j] in neighbor_sets[i], (i, j, nxt[i][j])
-    assert (frame_to_node[2], frame_to_node[72], SHORTCUT_W) in [
-        (a, b, w) for a, b, w in edges
-    ], "center shortcut missing — anti-oscillation mechanism, not optional"
+                assert nxt[i][j] in neighbor_sets[i]
 
-    targetable = [
-        i for i, fi in enumerate(node_frames) if fi not in EXCLUDE_TARGET
-    ]
-    rest = frame_to_node[REST_FRAME]
-    squint = frame_to_node[SQUINT_FRAME]
-    assert rest in targetable
+    # ---- piecewise normalization anchored at the center pose ----
+    g = np.array([warped_gaze(*nf) for nf in nodes])
+    cx0, cy0 = g[0]
+    xmin, xmax = g[:, 0].min(), g[:, 0].max()
+    ymin, ymax = g[:, 1].min(), g[:, 1].max()
 
-    # atlas: nodes in timeline order; padding cells hold the REST frame so
-    # any index bug degrades invisibly instead of flashing the corner glare
+    def norm(v, lo, mid, hi):
+        return 0.5 * (v - lo) / (mid - lo) if v <= mid else \
+            0.5 + 0.5 * (v - mid) / (hi - mid)
+
+    coords = [[round(norm(x, xmin, cx0, xmax), 4),
+               round(norm(y, ymin, cy0, ymax), 4)] for x, y in g]
+    print(f"gaze bbox X {xmin:.0f}..{xmax:.0f} (center {cx0:.0f}), "
+          f"Y {ymin:.0f}..{ymax:.0f} (center {cy0:.0f})")
+
+    # ---- atlas ----
     content = CELL - 2 * INSET
     atlas = np.zeros((CELL * ROWS, CELL * COLS, 4), np.uint8)
 
-    def put(fi, cell_i):
+    def put(nf, cell_i):
         r, c = cell_i // COLS, cell_i % COLS
-        img = cv2.resize(stab[fi], (content, content), interpolation=cv2.INTER_AREA)
+        img = cv2.resize(load_stab(*nf), (content, content),
+                         interpolation=cv2.INTER_AREA)
         cell = np.zeros((CELL, CELL, 4), np.uint8)
-        cell[INSET : INSET + content, INSET : INSET + content] = img
-        cell[:INSET, INSET : INSET + content] = img[0:1, :]
-        cell[INSET + content :, INSET : INSET + content] = img[-1:, :]
-        cell[:, :INSET] = cell[:, INSET : INSET + 1]
-        cell[:, INSET + content :] = cell[:, INSET + content - 1 : INSET + content]
-        atlas[r * CELL : (r + 1) * CELL, c * CELL : (c + 1) * CELL] = cell
+        cell[INSET:INSET + content, INSET:INSET + content] = img
+        cell[:INSET, INSET:INSET + content] = img[0:1, :]
+        cell[INSET + content:, INSET:INSET + content] = img[-1:, :]
+        cell[:, :INSET] = cell[:, INSET:INSET + 1]
+        cell[:, INSET + content:] = cell[:, INSET + content - 1:INSET + content]
+        atlas[r * CELL:(r + 1) * CELL, c * CELL:(c + 1) * CELL] = cell
 
-    for i, fi in enumerate(node_frames):
-        put(fi, i)
+    for i, nf in enumerate(nodes):
+        put(nf, i)
     for i in range(n_nodes, COLS * ROWS):
-        put(REST_FRAME, i)
+        put(CENTER, i)
 
     out = Image.fromarray(cv2.cvtColor(atlas, cv2.COLOR_BGRA2RGBA))
     out.save(OUT_ATLAS, "WEBP", quality=80, method=6)
-    print(f"atlas {out.size} -> {OUT_ATLAS} ({os.path.getsize(OUT_ATLAS)//1024} KB)")
+    print(f"atlas {out.size} -> {OUT_ATLAS} "
+          f"({os.path.getsize(OUT_ATLAS) // 1024} KB)")
 
-    data = {
-        "n": n_nodes,
-        "nodes": [[round(float(a), 4), round(float(b), 4)] for a, b in zip(nx, ny)],
-        "targetable": targetable,
-        "next": nxt,
-        "rest": rest,
-        "squint": squint,
-    }
-    json.dump(data, open(OUT_MAP, "w"), separators=(",", ":"))
-    print(
-        f"map -> {OUT_MAP} ({os.path.getsize(OUT_MAP)} B; {n_nodes} nodes, "
-        f"{len(targetable)} targetable, rest={rest}, squint={squint})"
+    json.dump(
+        {"n": n_nodes, "cols": COLS, "rows": ROWS, "nodes": coords,
+         "targetable": list(range(n_nodes)), "next": nxt,
+         "rest": 0, "squint": -1},
+        open(OUT_MAP, "w"), separators=(",", ":"),
     )
+    print(f"map -> {OUT_MAP} ({os.path.getsize(OUT_MAP)} B)")
+
+    # ---- review sheets ----
+    # (a) atlas contact sheet with node ids + clip slugs
+    csz = 200
+    sheet = np.full((ROWS * csz, COLS * csz, 3), 255, np.uint8)
+    for i in range(COLS * ROWS):
+        nf = nodes[i] if i < n_nodes else CENTER
+        st = load_stab(*nf)
+        a = st[:, :, 3:4].astype(np.float32) / 255
+        bgv = 255 if i < n_nodes else 235
+        rgb = (st[:, :, :3].astype(np.float32) * a + bgv * (1 - a)).astype(np.uint8)
+        img = cv2.resize(rgb, (csz, csz), interpolation=cv2.INTER_AREA)
+        label = f"{i} {nf[0]}f{nf[1]}" if i < n_nodes else "pad"
+        cv2.putText(img, label, (5, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+                    (20, 20, 20) if i < n_nodes else (150, 150, 150), 1)
+        cv2.rectangle(img, (0, 0), (csz - 1, csz - 1), (210, 210, 210), 1)
+        r, c = i // COLS, i % COLS
+        sheet[r * csz:(r + 1) * csz, c * csz:(c + 1) * csz] = img
+    cv2.imwrite(os.path.join(REVIEW_DIR, "atlas-v6-contact.png"), sheet)
+
+    # (b) Andrew's spatial 9x9 gaze map: cell (r, c) = the pose shown when
+    # the cursor sits at that screen cell (nearest node, same cost as runtime)
+    sheet2 = np.full((ROWS * csz, COLS * csz, 3), 255, np.uint8)
+    for r in range(ROWS):
+        for c in range(COLS):
+            sx, sy = c / (COLS - 1), r / (ROWS - 1)
+            best = min(range(n_nodes),
+                       key=lambda i: (coords[i][0] - sx) ** 2
+                       + (coords[i][1] - sy) ** 2)
+            nf = nodes[best]
+            st = load_stab(*nf)
+            a = st[:, :, 3:4].astype(np.float32) / 255
+            rgb = (st[:, :, :3].astype(np.float32) * a
+                   + 255 * (1 - a)).astype(np.uint8)
+            img = cv2.resize(rgb, (csz, csz), interpolation=cv2.INTER_AREA)
+            cv2.putText(img, f"{nf[0]} f{nf[1]}", (5, 20),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (20, 20, 20), 1)
+            cv2.rectangle(img, (0, 0), (csz - 1, csz - 1), (210, 210, 210), 1)
+            sheet2[r * csz:(r + 1) * csz, c * csz:(c + 1) * csz] = img
+    cv2.imwrite(os.path.join(REVIEW_DIR, "gaze-map-9x9.png"), sheet2)
+    print("review sheets -> design/assets/robot video/directions/")
 
 
 if __name__ == "__main__":
