@@ -246,17 +246,37 @@
    only while engaged and restart from the corners on every hover.
    ========================================================================== */
 
-/* the ring layer shows ONLY the 2px border annulus (MagicUI double-mask
-   trick, static — never repaints): the beam cannot bleed outside the
-   stroke or into the card (Andrew's final ruling — stroke only, no
-   interior glow) */
+/* the ring layer shows ONLY the border annulus (MagicUI double-mask
+   trick, static — never repaints): the glow cannot bleed outside the
+   stroke or into the card (Andrew's ruling — stroke only, no interior
+   glow) */
 .beamRing {
   position: absolute;
   inset: -1px; /* sit exactly over the frame's 1px border line */
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.4s ease;
-  border: 3px solid transparent;
+  border: 4px solid transparent;
+  -webkit-mask:
+    linear-gradient(transparent, transparent) padding-box,
+    linear-gradient(#fff 0 0) border-box;
+  -webkit-mask-composite: source-in;
+  mask:
+    linear-gradient(transparent, transparent) padding-box,
+    linear-gradient(#fff 0 0) border-box;
+  mask-composite: intersect;
+}
+
+/* echo hairline: a 1px ghost dieline ~4px outside the border that the
+   glow ignites as it passes — same annulus trick, its own traveler pair
+   riding its own (slightly larger) rect so it tracks the main glow */
+.beamEcho {
+  position: absolute;
+  inset: -6px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  border: 1px solid transparent;
   -webkit-mask:
     linear-gradient(transparent, transparent) padding-box,
     linear-gradient(#fff 0 0) border-box;
@@ -284,31 +304,35 @@
 
   /* The traveler: a soft radial GLOW with a long tail streaming behind
      it (offset-rotate: auto points +x along travel, so "behind" is the
-     left of the element; the glow sits at x=75% and the tail dissolves
-     toward x=0). The ring mask reveals only the slice crossing the 3px
-     stroke — soft ends everywhere, no hard edges. transform-origin sits
-     at the glow center, so the length-breathing stretches the tail on
-     the surge and reabsorbs it into the landing. */
+     left of the element; the glow sits at x=76% and the tail dissolves
+     toward x=0). Doubled in length and given a white-hot plateau core —
+     luminance contrast is what reads on both dark and light imagery; the
+     old smooth cone put peak brightness at a single point. The ring mask
+     reveals only the stroke slice — soft ends everywhere. transform-
+     origin sits at the glow center, so the length-breathing stretches
+     the tail on the surge and reabsorbs it into the landing. */
   .beamSeg {
-    width: 820px;
-    height: 460px;
-    offset-anchor: 75% 50%;
-    transform-origin: 75% 50%;
+    width: 1500px;
+    height: 620px;
+    offset-anchor: 76% 50%;
+    transform-origin: 76% 50%;
     background:
       radial-gradient(
-        circle 230px at 75% 50%,
-        var(--accent-soft) 0%,
-        var(--accent) 34%,
-        rgba(164, 59, 13, 0.55) 64%,
+        circle 300px at 76% 50%,
+        #fff7f0 0%,
+        #ffd9bd 10%,
+        var(--accent-soft) 24%,
+        var(--accent) 46%,
+        rgba(164, 59, 13, 0.6) 70%,
         transparent 100%
       ),
       linear-gradient(
         90deg,
         transparent 0%,
-        rgba(164, 59, 13, 0.14) 16%,
-        rgba(236, 78, 9, 0.34) 52%,
-        rgba(236, 78, 9, 0.5) 71%,
-        transparent 77%
+        rgba(164, 59, 13, 0.16) 16%,
+        rgba(236, 78, 9, 0.38) 50%,
+        rgba(236, 78, 9, 0.6) 72%,
+        transparent 78%
       );
   }
 
@@ -335,7 +359,7 @@
     transform: scaleX(0.12);
     filter: hue-rotate(0deg);
   }
-  12% {
+  7% {
     opacity: 1;
   }
   38% {
@@ -344,7 +368,7 @@
   68% {
     transform: scaleX(1);
   }
-  86% {
+  91% {
     opacity: 1;
   }
   100% {
@@ -362,7 +386,7 @@
     transform: scaleX(0.12);
     filter: hue-rotate(0deg);
   }
-  12% {
+  7% {
     opacity: 1;
   }
   38% {
@@ -371,7 +395,7 @@
   68% {
     transform: scaleX(1);
   }
-  86% {
+  91% {
     opacity: 1;
   }
   100% {
@@ -431,6 +455,10 @@
     opacity: 1;
   }
 
+  .mediaLink:hover .beamEcho {
+    opacity: 0.7; /* the ghost dieline runs dimmer than the main stroke */
+  }
+
   .mediaLink:hover .beamA {
     animation: csBeamSweepA 2.4s cubic-bezier(0.33, 0.33, 0.62, 0.97) infinite;
   }
@@ -456,6 +484,11 @@
 .mediaLink:focus-visible .beamRing,
 .mediaLink[data-peek] .beamRing {
   opacity: 1;
+}
+
+.mediaLink:focus-visible .beamEcho,
+.mediaLink[data-peek] .beamEcho {
+  opacity: 0.7;
 }
 
 .mediaLink:focus-visible .beamA,

@@ -126,6 +126,12 @@ export default function CaseStudyMedia({
         <span className={`${styles.beamSeg} ${styles.beamA}`} />
         <span className={`${styles.beamSeg} ${styles.beamB}`} />
       </span>
+      {/* echo hairline: a 1px ghost dieline outside the border, lit by its
+          own synchronized traveler pair as the glow passes */}
+      <span className={styles.beamEcho} aria-hidden="true">
+        <span className={`${styles.beamSeg} ${styles.beamA}`} />
+        <span className={`${styles.beamSeg} ${styles.beamB}`} />
+      </span>
     </Link>
   );
 }
