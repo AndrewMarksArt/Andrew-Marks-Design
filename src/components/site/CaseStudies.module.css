@@ -231,20 +231,30 @@
   aspect-ratio: 1073 / 750;
   overflow: hidden;
   border: 1px solid var(--black);
-  /* Border beam (Andrew's pick: jakubantalik/border-beam, size="md"
-     colorVariant="sunset" strength={0.33}, dark-theme rotate values ported
-     verbatim to CSS modules). The angle spins continuously — layers are
-     invisible until engaged, so the idle cost is a style tick, not paint —
-     and the beam opacity is a TRANSITIONED registered property, giving the
-     library's 0.6s fade-in / 0.5s fade-out while the arc keeps moving. */
+}
+
+/* Border beam (Andrew's pick: jakubantalik/border-beam, size="md"
+   colorVariant="sunset", dark-theme rotate values ported verbatim to CSS
+   modules; strength currently 1.0 for layering review). The spinning angle
+   and the beam opacity live on THIS dedicated element — custom properties
+   inherit, so animating them on .mediaFrame invalidated the whole card
+   subtree every frame and janked the zoom/peek transforms. Here the
+   per-frame style tick touches only the three beam layers. Opacity is a
+   TRANSITIONED registered property: the library's 0.6s fade-in / 0.5s
+   fade-out while the arc keeps moving. */
+.beamHost {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
   --cs-beam-o: 0;
   animation: csBeamSpin 1.96s linear infinite;
   transition: --cs-beam-o 0.5s ease;
 }
 
-/* Stroke: 1px border ring lit by the rotating arc window (lib ::after, z2).
-   Opacity = strokeOpacity 0.26 x strength 0.33. */
-.mediaFrame::after {
+/* Stroke: 1px border ring lit by the rotating arc window (lib ::after).
+   Opacity = strokeOpacity 0.26 x strength 1.0. */
+.beamHost::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -297,13 +307,13 @@
   mask-composite: intersect, exclude;
   pointer-events: none;
   z-index: 2;
-  opacity: calc(var(--cs-beam-o) * 0.0858);
+  opacity: calc(var(--cs-beam-o) * 0.26);
   animation: csBeamHue 12s ease-in-out infinite;
 }
 
 /* Inner glow: soft sunset wash hugging the frame edges inside the beam's
-   arc (lib ::before, z1). Opacity = innerOpacity 0.42 x strength 0.33. */
-.mediaFrame::before {
+   arc (lib ::before). Opacity = innerOpacity 0.42 x strength 1.0. */
+.beamHost::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -344,12 +354,12 @@
   mask-composite: intersect, add;
   pointer-events: none;
   z-index: 1;
-  opacity: calc(var(--cs-beam-o) * 0.1386);
+  opacity: calc(var(--cs-beam-o) * 0.42);
   animation: csBeamHue 12s ease-in-out infinite;
 }
 
 /* Bloom: blurred bright head of the beam, confined to the border ring
-   (lib's [data-beam-bloom] child, z3). Opacity = bloom 0.24 x 0.33. */
+   (lib's [data-beam-bloom] child). Opacity = bloom 0.24 x strength 1.0. */
 .beamBloom {
   position: absolute;
   inset: 0;
@@ -376,7 +386,7 @@
   filter: blur(8px) brightness(1.3) saturate(1.2);
   pointer-events: none;
   z-index: 3;
-  opacity: calc(var(--cs-beam-o) * 0.0792);
+  opacity: calc(var(--cs-beam-o) * 0.24);
   animation: csBeamHueBloom 12s ease-in-out infinite;
 }
 
@@ -455,7 +465,7 @@
       var(--peek-delay, 0ms);
   }
 
-  .mediaLink:hover .mediaFrame {
+  .mediaLink:hover .beamHost {
     --cs-beam-o: 1;
     transition-duration: 0.6s; /* lib fade-in; exit falls back to 0.5s */
   }
@@ -474,8 +484,8 @@
     var(--peek-delay, 0ms);
 }
 
-.mediaLink:focus-visible .mediaFrame,
-.mediaLink[data-peek] .mediaFrame {
+.mediaLink:focus-visible .beamHost,
+.mediaLink[data-peek] .beamHost {
   --cs-beam-o: 1;
   transition-duration: 0.6s;
 }

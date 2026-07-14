@@ -114,9 +114,14 @@ export default function CaseStudyMedia({
             />
           </span>
         ))}
-        {/* blurred bright head of the border beam — needs a real element
-            (both pseudo-elements are taken by the stroke + inner glow) */}
-        <span className={styles.beamBloom} aria-hidden="true" />
+        {/* Border-beam layer stack, isolated in its own subtree so the
+            spinning inherited custom property never invalidates the
+            image/sprite styles (that jank was visible). Stroke + inner
+            glow are the host's pseudos; the blurred beam head needs a
+            real child element. */}
+        <span className={styles.beamHost} aria-hidden="true">
+          <span className={styles.beamBloom} />
+        </span>
       </span>
     </Link>
   );
