@@ -1,25 +1,26 @@
-"""Build the hero gaze atlas from a robot scanning video.
+"""Build the hero gaze atlas from a robot scanning video (timeline model).
+
+The frontend (src/components/site/HeroGaze.tsx) scrubs the video's own
+timeline toward whichever frame best matches the cursor, so the atlas keeps
+frames in TEMPORAL order — every rendered transition is between adjacent
+video frames and motion stays coherent by construction.
 
 Pipeline (run whenever the source video is re-generated):
-  1. Extract every frame from the video.
-  2. Key out the white background via border flood-fill (only background
-     CONNECTED to the frame edge is removed, so interior white highlights
-     survive; stray dust islands in the white are dropped by size).
-  2b. Stabilize the body: measure the torso band's centroid + width per
-     frame and warp (translate + scale, anchored bottom-center) to the
-     median — kills the body jumps between grid cells.
-  3. Auto-map each frame's gaze by the eye-glow centroid (the eyes glow
-     orange — HSV threshold, two largest components) and measure the glow
-     height as a squint/wide metric.
-  4. Fill a COLS x GAZE_ROWS grid with the nearest frame per cell in
-     normalized gaze space, plus an expression row: 3 squints (lowest glow)
-     and 3 wides (highest glow), spread across X.
-  5. Compose the atlas with 8px edge-extruded cell padding (bleed from
-     fractional-pixel background scaling samples the frame's own replicated
-     edges instead of the neighboring cell) and write a webp with alpha.
+  1. Extract every frame; key out the white background via border
+     flood-fill (only background CONNECTED to the frame edge is removed, so
+     interior white highlights survive; dust islands are dropped by size).
+  2. Stabilize the body: warp each frame (translate + scale, anchored
+     bottom-center) so the torso matches the median — no body jumps.
+  3. Subsample the timeline (every 2nd frame) and measure each kept frame's
+     gaze by eye-glow centroid (HSV threshold on the orange glow) plus glow
+     height (squint/wide metric).
+  4. Compose an 8x8 atlas in timeline order with 8px edge-extruded cell
+     padding (fractional-pixel background scaling bleeds into the SAME
+     frame, never a neighbor).
+  5. Write the atlas webp + heroGazeMap.json ([x, y, glowH] normalized, per
+     timeline index) consumed by HeroGaze for target selection.
 
 Usage:  python scripts/build-gaze-atlas.py "design/assets/robot video/Robot Scanning Motion.mp4"
-Output: public/hero/robot-atlas-v2.webp (consumed by src/components/site/HeroGaze.tsx)
 """
 
 import json
@@ -30,10 +31,11 @@ import cv2
 import numpy as np
 from PIL import Image
 
-COLS, GAZE_ROWS = 9, 4
-CELL = 512
-INSET = 8  # edge-extrusion padding per cell side
-OUT = os.path.join("public", "hero", "robot-atlas-v2.webp")
+COLS = ROWS = 8
+CELL, INSET = 512, 8
+SUBSAMPLE = 2
+OUT_ATLAS = os.path.join("public", "hero", "robot-atlas-v3.webp")
+OUT_MAP = os.path.join("src", "components", "site", "heroGazeMap.json")
 
 
 def key_frame(bgr):
@@ -51,7 +53,7 @@ def key_frame(bgr):
     for sx, sy in seeds:
         if flood[sy, sx] == 1:
             cv2.floodFill(flood, ffm, (sx, sy), 2)
-    fg = ((flood != 2)).astype(np.uint8) * 255
+    fg = (flood != 2).astype(np.uint8) * 255
     n, labels, stats, _ = cv2.connectedComponentsWithStats(fg, 8)
     if n > 1:
         big = max(range(1, n), key=lambda i: stats[i][4])
@@ -63,9 +65,10 @@ def key_frame(bgr):
     return cv2.GaussianBlur(fg, (3, 3), 0)
 
 
-def gaze_of(bgr):
-    hsv = cv2.cvtColor(bgr, cv2.COLOR_BGR2HSV)
+def gaze_of(bgra):
+    hsv = cv2.cvtColor(bgra[:, :, :3], cv2.COLOR_BGR2HSV)
     mask = cv2.inRange(hsv, (5, 80, 140), (45, 255, 255))
+    mask = cv2.bitwise_and(mask, bgra[:, :, 3])
     n, _, stats, cents = cv2.connectedComponentsWithStats(mask, 8)
     comps = sorted(
         [(stats[j], cents[j]) for j in range(1, n) if stats[j][4] > 300],
@@ -73,28 +76,27 @@ def gaze_of(bgr):
     )[:2]
     if len(comps) < 2:
         return None
-    cx = (comps[0][1][0] + comps[1][1][0]) / 2
-    cy = (comps[0][1][1] + comps[1][1][1]) / 2
-    hgt = (comps[0][0][3] + comps[1][0][3]) / 2
-    return float(cx), float(cy), float(hgt)
+    return (
+        float((comps[0][1][0] + comps[1][1][0]) / 2),
+        float((comps[0][1][1] + comps[1][1][1]) / 2),
+        float((comps[0][0][3] + comps[1][0][3]) / 2),
+    )
 
 
 def main(video):
     cap = cv2.VideoCapture(video)
-    frames = []
+    raw = []
     while True:
         ok, f = cap.read()
         if not ok:
             break
-        frames.append(f)
+        raw.append(f)
     cap.release()
-    print(f"extracted {len(frames)} frames")
+    print(f"extracted {len(raw)} frames")
 
-    rgba = []
-    for f in frames:
-        rgba.append(np.dstack([f, key_frame(f)]))
+    rgba = [np.dstack([f, key_frame(f)]) for f in raw]
 
-    # --- stabilize the body: torso-band centroid + width -> warp to median
+    # stabilize on the torso band
     H, W = rgba[0].shape[:2]
     band_y0 = int(H * 0.854)
     torso = []
@@ -108,7 +110,6 @@ def main(video):
     stab = []
     for f, (cx, w) in zip(rgba, torso):
         sc = ref_w / w
-        # scale + translate, anchored bottom-center so the bust stays flush
         M = np.float32([[sc, 0, ref_cx - sc * cx], [0, sc, H - sc * H]])
         stab.append(
             cv2.warpAffine(
@@ -116,67 +117,57 @@ def main(video):
                 borderMode=cv2.BORDER_CONSTANT, borderValue=(0, 0, 0, 0),
             )
         )
-    rgba = stab
     print(f"stabilized to torso cx {ref_cx:.1f}, width {ref_w:.1f}")
 
-    # --- gaze-map the STABILIZED frames
-    mapped = []
-    for i, f in enumerate(rgba):
-        g = gaze_of(f[:, :, :3])
-        if g:
-            mapped.append((i, *g))
-    print(f"gaze-mapped {len(mapped)}/{len(frames)}")
+    frames = stab[::SUBSAMPLE]
+    if len(frames) > COLS * ROWS:
+        raise SystemExit(
+            f"{len(frames)} frames won't fit {COLS}x{ROWS}; raise SUBSAMPLE"
+        )
 
-    idxs = [m[0] for m in mapped]
-    xs = np.array([m[1] for m in mapped])
-    ys = np.array([m[2] for m in mapped])
-    hs = np.array([m[3] for m in mapped])
+    gmap = []
+    for f in frames:
+        g = gaze_of(f)
+        gmap.append(g if g else gmap[-1])
+    xs = np.array([g[0] for g in gmap])
+    ys = np.array([g[1] for g in gmap])
+    hs = np.array([g[2] for g in gmap])
     nx = (xs - xs.min()) / (xs.max() - xs.min())
     ny = (ys - ys.min()) / (ys.max() - ys.min())
+    nh = (hs - hs.min()) / (hs.max() - hs.min())
 
-    grid = []
-    for row in range(GAZE_ROWS):
-        for col in range(COLS):
-            tx, ty = col / (COLS - 1), row / (GAZE_ROWS - 1)
-            grid.append(idxs[int(np.argmin((nx - tx) ** 2 + (ny - ty) ** 2))])
+    content = CELL - 2 * INSET
+    atlas = np.zeros((CELL * ROWS, CELL * COLS, 4), np.uint8)
 
-    order_h = np.argsort(hs)
-    squints = sorted([idxs[i] for i in order_h[:3]])
-    wide_pool = sorted(
-        [(idxs[i], xs[i]) for i in order_h[-max(3, len(order_h) // 4):]],
-        key=lambda t: t[1],
-    )
-    wides = [wide_pool[0][0], wide_pool[len(wide_pool) // 2][0], wide_pool[-1][0]]
-    expr = squints + wides + [grid[COLS + COLS // 2]] * (COLS - 6)
-    print("grid:", grid)
-    print("expressions:", expr)
-
-    atlas = np.zeros((CELL * (GAZE_ROWS + 1), CELL * COLS, 4), np.uint8)
-    content_px = CELL - 2 * INSET
-
-    def put(fi, r, c):
-        content = cv2.resize(
-            rgba[fi], (content_px, content_px), interpolation=cv2.INTER_AREA
-        )
+    def put(fi, cell_i):
+        r, c = cell_i // COLS, cell_i % COLS
+        img = cv2.resize(frames[fi], (content, content), interpolation=cv2.INTER_AREA)
         cell = np.zeros((CELL, CELL, 4), np.uint8)
-        cell[INSET : INSET + content_px, INSET : INSET + content_px] = content
-        # edge extrusion: replicate content borders outward so fractional-pixel
-        # background scaling bleeds into the SAME frame, never the neighbor
-        cell[:INSET, INSET : INSET + content_px] = content[0:1, :]
-        cell[INSET + content_px :, INSET : INSET + content_px] = content[-1:, :]
+        cell[INSET : INSET + content, INSET : INSET + content] = img
+        cell[:INSET, INSET : INSET + content] = img[0:1, :]
+        cell[INSET + content :, INSET : INSET + content] = img[-1:, :]
         cell[:, :INSET] = cell[:, INSET : INSET + 1]
-        cell[:, INSET + content_px :] = cell[:, INSET + content_px - 1 : INSET + content_px]
+        cell[:, INSET + content :] = cell[:, INSET + content - 1 : INSET + content]
         atlas[r * CELL : (r + 1) * CELL, c * CELL : (c + 1) * CELL] = cell
 
-    for row in range(GAZE_ROWS):
-        for col in range(COLS):
-            put(grid[row * COLS + col], row, col)
-    for col, fi in enumerate(expr):
-        put(fi, GAZE_ROWS, col)
+    for i in range(len(frames)):
+        put(i, i)
+    for i in range(len(frames), COLS * ROWS):
+        put(len(frames) - 1, i)
 
-    img = Image.fromarray(cv2.cvtColor(atlas, cv2.COLOR_BGRA2RGBA))
-    img.save(OUT, "WEBP", quality=80, method=6)
-    print(f"atlas {img.size} -> {OUT} ({os.path.getsize(OUT)//1024} KB)")
+    out = Image.fromarray(cv2.cvtColor(atlas, cv2.COLOR_BGRA2RGBA))
+    out.save(OUT_ATLAS, "WEBP", quality=80, method=6)
+    print(f"atlas {out.size} -> {OUT_ATLAS} ({os.path.getsize(OUT_ATLAS)//1024} KB)")
+
+    data = [
+        [round(float(a), 4), round(float(b), 4), round(float(c), 4)]
+        for a, b, c in zip(nx, ny, nh)
+    ]
+    json.dump(data, open(OUT_MAP, "w"))
+    print(
+        f"map -> {OUT_MAP} ({len(data)} frames; "
+        f"squintiest {int(np.argmin(nh))}, widest {int(np.argmax(nh))})"
+    )
 
 
 if __name__ == "__main__":

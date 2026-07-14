@@ -1,36 +1,72 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import GAZE_MAP from "./heroGazeMap.json";
 
 /**
- * Cursor-following robot v2 — built from Andrew's "Robot Scanning Motion"
- * video (121 frames, border-flood keyed to transparency, auto-mapped by
- * eye-glow centroid). The atlas is a 9x5 sprite sheet:
+ * Cursor-following robot v3 — the "scrub the timeline" model.
  *
- *   rows 0-3: gaze grid — cursor X -> column (left..right),
- *             cursor Y -> row (up..down)
- *   row 4:    expressions — cols 0-2 squint (by cursor X third),
- *             cols 3-5 wide/alert (by cursor X third)
+ * The atlas holds 61 frames of Andrew's scanning video in TEMPORAL order
+ * (8x8 sheet, stabilized + edge-extruded). Each tick, the current frame
+ * scrubs a few steps toward the frame whose measured gaze (from
+ * heroGazeMap.json: [x, y, glowHeight] per frame, normalized) best matches
+ * the cursor — so every rendered transition is between temporally adjacent
+ * frames and the head always MOVES through poses instead of jumping
+ * between them. Squint (cursor near the robot) and wide-eyed alert (fast
+ * cursor pass) are just timeline targets reached by the same scrub.
  *
- * Personality triggers: squint when the cursor comes close to the robot
- * (proximity to the element rect + margin); brief wide-eyed alert on a
- * fast cursor pass. Otherwise 2D gaze with smoothing + idle drift.
- * prefers-reduced-motion: static resting frame, no listeners.
+ * v2's grid model caused the jerk Andrew saw: the video's gaze coverage is
+ * a curve, and rectangular-gridding a curve makes dead plateaus and pose
+ * cliffs. Scrubbing follows the curve itself.
  */
 
-const ATLAS = "/hero/robot-atlas-v2.webp";
-const COLS = 9;
-const ROWS = 5; // 4 gaze rows + 1 expression row
-const GAZE_ROWS = 4;
-const EXPR_ROW = 4;
-const REST: [number, number] = [4, 1];
+const ATLAS = "/hero/robot-atlas-v3.webp";
+const COLS = 8;
+const ROWS = 8;
+const N = GAZE_MAP.length;
 
-const SQUINT_MARGIN = 48; // px around the robot that triggers the squint
-const ALERT_SPEED = 2.2; // viewport-widths/second that triggers alert
-const ALERT_HOLD_MS = 450;
+const SPEED = 1.7; // frames per tick (~100 source-frames/s at 60fps)
+const X_WEIGHT = 1;
+const Y_WEIGHT = 0.55; // vertical gaze span is smaller — weigh it less
+const HYSTERESIS = 0.06; // distance bonus for staying near the current frame
+const SQUINT_MARGIN = 48;
+const ALERT_SPEED = 2.2; // viewport-widths/sec
+const ALERT_HOLD_MS = 500;
 
-function pos(col: number, row: number): string {
+// derived targets
+const SQUINT_IDX = GAZE_MAP.reduce((m, g, i) => (g[2] < GAZE_MAP[m][2] ? i : m), 0);
+const WIDE_IDX = GAZE_MAP.reduce((m, g, i) => (g[2] > GAZE_MAP[m][2] ? i : m), 0);
+const REST_IDX = GAZE_MAP.reduce(
+  (m, g, i) =>
+    Math.abs(g[0] - 0.5) + Math.abs(g[1] - 0.5) <
+    Math.abs(GAZE_MAP[m][0] - 0.5) + Math.abs(GAZE_MAP[m][1] - 0.5)
+      ? i
+      : m,
+  0
+);
+
+function pos(idx: number): string {
+  const col = idx % COLS;
+  const row = Math.floor(idx / COLS);
   return `${(col / (COLS - 1)) * 100}% ${(row / (ROWS - 1)) * 100}%`;
+}
+
+function nearestFrame(mx: number, my: number, cur: number): number {
+  let best = 0;
+  let bestCost = Infinity;
+  for (let i = 0; i < N; i++) {
+    const dx = GAZE_MAP[i][0] - mx;
+    const dy = GAZE_MAP[i][1] - my;
+    const cost =
+      X_WEIGHT * dx * dx +
+      Y_WEIGHT * dy * dy +
+      HYSTERESIS * Math.abs(i - cur) / N;
+    if (cost < bestCost) {
+      bestCost = cost;
+      best = i;
+    }
+  }
+  return best;
 }
 
 export default function HeroGaze({ className }: { className?: string }) {
@@ -43,46 +79,41 @@ export default function HeroGaze({ className }: { className?: string }) {
 
     let mx = 0.5;
     let my = 0.4;
-    let sx = mx;
-    let sy = my;
-    let last = "";
+    let cur = REST_IDX;
+    let target = REST_IDX;
+    let lastRendered = -1;
     let rafId: number;
     let rect = el.getBoundingClientRect();
     let near = false;
     let alertUntil = 0;
-    let lastMove = 0;
+    let lastMoveAt = 0;
     let lastX = 0.5;
-    const t0 = performance.now();
 
     const updateRect = () => {
       rect = el.getBoundingClientRect();
     };
 
     const tick = (now: number) => {
-      sx += (mx - sx) * 0.25;
-      sy += (my - sy) * 0.25;
-      const drift = Math.sin((now - t0) / 3000) * 0.015;
-
-      let col: number;
-      let row: number;
       if (near) {
-        // squint, roughly tracking x
-        col = Math.min(2, Math.floor(sx * 3));
-        row = EXPR_ROW;
+        target = SQUINT_IDX;
       } else if (now < alertUntil) {
-        col = 3 + Math.min(2, Math.floor(sx * 3));
-        row = EXPR_ROW;
+        target = WIDE_IDX;
+      } else if (now - lastMoveAt < 2500 || lastMoveAt === 0) {
+        target = nearestFrame(mx, my, cur);
       } else {
-        const gx = Math.max(0, Math.min(1, sx + drift));
-        const gy = Math.max(0, Math.min(1, sy + drift * 0.5));
-        col = Math.round(gx * (COLS - 1));
-        row = Math.round(gy * (GAZE_ROWS - 1));
+        // idle: small wander around wherever we settled
+        target = Math.max(
+          0,
+          Math.min(N - 1, Math.round(target + Math.sin(now / 1500) * 0.6))
+        );
       }
 
-      const p = pos(col, row);
-      if (p !== last) {
-        last = p;
-        el.style.backgroundPosition = p;
+      const delta = target - cur;
+      cur += Math.max(-SPEED, Math.min(SPEED, delta));
+      const idx = Math.round(cur);
+      if (idx !== lastRendered) {
+        lastRendered = idx;
+        el.style.backgroundPosition = pos(idx);
       }
       rafId = requestAnimationFrame(tick);
     };
@@ -96,20 +127,20 @@ export default function HeroGaze({ className }: { className?: string }) {
         e.clientX < rect.right + SQUINT_MARGIN &&
         e.clientY > rect.top - SQUINT_MARGIN &&
         e.clientY < rect.bottom + SQUINT_MARGIN;
-      // alert on fast horizontal passes
       const now = performance.now();
-      if (lastMove) {
-        const dt = (now - lastMove) / 1000;
+      if (lastMoveAt) {
+        const dt = (now - lastMoveAt) / 1000;
         const speed = Math.abs(mx - lastX) / Math.max(dt, 0.008);
         if (speed > ALERT_SPEED && !near) alertUntil = now + ALERT_HOLD_MS;
       }
-      lastMove = now;
+      lastMoveAt = now;
       lastX = mx;
     };
     const onTouch = (e: TouchEvent) => {
       if (e.touches[0]) {
         mx = e.touches[0].clientX / window.innerWidth;
         my = e.touches[0].clientY / window.innerHeight;
+        lastMoveAt = performance.now();
       }
     };
 
@@ -135,7 +166,7 @@ export default function HeroGaze({ className }: { className?: string }) {
       style={{
         backgroundImage: `url(${ATLAS})`,
         backgroundSize: `${COLS * 100}% ${ROWS * 100}%`,
-        backgroundPosition: pos(REST[0], REST[1]),
+        backgroundPosition: pos(REST_IDX),
         backgroundRepeat: "no-repeat",
       }}
     />
