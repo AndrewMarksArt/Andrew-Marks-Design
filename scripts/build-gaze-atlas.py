@@ -1,24 +1,44 @@
-"""Build the hero gaze atlas from a robot scanning video (timeline model).
+"""Build the hero gaze atlas from the robot scanning video (line model, v4).
 
-The frontend (src/components/site/HeroGaze.tsx) scrubs the video's own
-timeline toward whichever frame best matches the cursor, so the atlas keeps
-frames in TEMPORAL order — every rendered transition is between adjacent
-video frames and motion stays coherent by construction.
+The frontend (src/components/site/HeroGaze.tsx) maps cursor X DIRECTLY to a
+position on one pose-continuous "line" of frames, then scrubs toward it at
+most 2 cells per tick. For that to look right the line must satisfy two
+properties this script constructs by hand-picked frame ranges:
 
-Pipeline (run whenever the source video is re-generated):
-  1. Extract every frame; key out the white background via border
-     flood-fill (only background CONNECTED to the frame edge is removed, so
-     interior white highlights survive; dust islands are dropped by size).
-  2. Stabilize the body: warp each frame (translate + scale, anchored
-     bottom-center) so the torso matches the median — no body jumps.
-  3. Subsample the timeline (every 2nd frame) and measure each kept frame's
-     gaze by eye-glow centroid (HSV threshold on the orange glow) plus glow
-     height (squint/wide metric).
-  4. Compose an 8x8 atlas in timeline order with 8px edge-extruded cell
-     padding (fractional-pixel background scaling bleeds into the SAME
-     frame, never a neighbor).
-  5. Write the atlas webp + heroGazeMap.json ([x, y, glowH] normalized, per
-     timeline index) consumed by HeroGaze for target selection.
+  1. Adjacent cells are temporally adjacent-or-near in the source video
+     (max 3-frame gap), so any +/-2-cell scrub renders as coherent motion.
+  2. The line is monotonic in (virtual) gaze X, so cursor position maps to
+     gaze direction with no timeline "tours" through unrelated poses.
+
+The source video's scan path is non-monotonic, so the line is assembled from
+its two clean monotonic sweeps plus a compressed crossing:
+
+  run B   frames 23-56   gaze X 325 -> 540 (left -> center-right), 34 cells
+  bridge  frames 59-104 every 3rd, + 106, 108 — 18 flourish cells whose
+          virtual X is squeezed into the ~1% sliver between the runs, so a
+          cursor crossing plays a quick pose-coherent head-flick and (almost)
+          no cursor position rests on a bridge frame
+  run C   frames 109-120 gaze X 545 -> 721 (center-right -> hard right),
+          12 cells; picks up exactly where run B's real gaze left off
+
+64 cells total — a full 8x8 atlas. The squint (frame 109, the narrowest
+eye-glow) lands at run C's first cell and doubles as the proximity
+expression: HeroGaze targets it when the cursor hovers the robot.
+
+Shared pipeline stages (same as ever): white-key via border flood-fill (only
+edge-connected background dies; interior highlights survive), torso
+stabilization (translate+scale anchored bottom-center to the median torso
+band), and 8px edge-extruded atlas cells (fractional-pixel background
+scaling bleeds into the SAME frame, never a neighbor).
+
+Output: public/hero/robot-atlas-v3.webp plus
+src/components/site/heroGazeMap.json {vx: normalized virtual gaze-X per
+cell (strictly increasing), squint: cell index, n}.
+
+NOTE: the frame ranges above were measured against THIS video
+(design/assets/robot video/Robot Scanning Motion.mp4). If the video is
+re-generated, re-measure the monotonic runs (print each frame's eye-glow
+centroid X) before trusting RUN_B/BRIDGE/RUN_C.
 
 Usage:  python scripts/build-gaze-atlas.py "design/assets/robot video/Robot Scanning Motion.mp4"
 """
@@ -33,9 +53,13 @@ from PIL import Image
 
 COLS = ROWS = 8
 CELL, INSET = 512, 8
-SUBSAMPLE = 2
 OUT_ATLAS = os.path.join("public", "hero", "robot-atlas-v3.webp")
 OUT_MAP = os.path.join("src", "components", "site", "heroGazeMap.json")
+
+RUN_B = list(range(23, 57))
+BRIDGE = list(range(59, 105, 3)) + [106, 108]
+RUN_C = list(range(109, 121))
+SQUINT_FRAME = 109
 
 
 def key_frame(bgr):
@@ -76,11 +100,7 @@ def gaze_of(bgra):
     )[:2]
     if len(comps) < 2:
         return None
-    return (
-        float((comps[0][1][0] + comps[1][1][0]) / 2),
-        float((comps[0][1][1] + comps[1][1][1]) / 2),
-        float((comps[0][0][3] + comps[1][0][3]) / 2),
-    )
+    return float((comps[0][1][0] + comps[1][1][0]) / 2)
 
 
 def main(video):
@@ -119,29 +139,42 @@ def main(video):
         )
     print(f"stabilized to torso cx {ref_cx:.1f}, width {ref_w:.1f}")
 
-    frames = stab[::SUBSAMPLE]
-    if len(frames) > COLS * ROWS:
-        raise SystemExit(
-            f"{len(frames)} frames won't fit {COLS}x{ROWS}; raise SUBSAMPLE"
-        )
+    line = RUN_B + BRIDGE + RUN_C
+    n_cells = len(line)
+    if n_cells > COLS * ROWS:
+        raise SystemExit(f"{n_cells} cells won't fit {COLS}x{ROWS}")
+    print(
+        f"line: {n_cells} cells (B {len(RUN_B)} + bridge {len(BRIDGE)} "
+        f"+ C {len(RUN_C)}), max video gap "
+        f"{max(line[i + 1] - line[i] for i in range(n_cells - 1))}"
+    )
 
-    gmap = []
-    for f in frames:
-        g = gaze_of(f)
-        gmap.append(g if g else gmap[-1])
-    xs = np.array([g[0] for g in gmap])
-    ys = np.array([g[1] for g in gmap])
-    hs = np.array([g[2] for g in gmap])
-    nx = (xs - xs.min()) / (xs.max() - xs.min())
-    ny = (ys - ys.min()) / (ys.max() - ys.min())
-    nh = (hs - hs.min()) / (hs.max() - hs.min())
+    xs = []
+    for fi in line:
+        g = gaze_of(stab[fi])
+        xs.append(g if g is not None else xs[-1])
+
+    # virtual X: runs keep real gaze X; bridge interpolates across the sliver
+    # between them, then strict monotonicity is enforced
+    vx = xs.copy()
+    b_end = len(RUN_B)
+    c_start = b_end + len(BRIDGE)
+    for k in range(len(BRIDGE)):
+        vx[b_end + k] = xs[b_end - 1] + (xs[c_start] - xs[b_end - 1]) * (k + 1) / (
+            len(BRIDGE) + 1
+        )
+    for i in range(1, n_cells):
+        if vx[i] <= vx[i - 1]:
+            vx[i] = vx[i - 1] + 0.01
+    vmin, vmax = vx[0], vx[-1]
+    nvx = [round((v - vmin) / (vmax - vmin), 4) for v in vx]
 
     content = CELL - 2 * INSET
     atlas = np.zeros((CELL * ROWS, CELL * COLS, 4), np.uint8)
 
     def put(fi, cell_i):
         r, c = cell_i // COLS, cell_i % COLS
-        img = cv2.resize(frames[fi], (content, content), interpolation=cv2.INTER_AREA)
+        img = cv2.resize(stab[fi], (content, content), interpolation=cv2.INTER_AREA)
         cell = np.zeros((CELL, CELL, 4), np.uint8)
         cell[INSET : INSET + content, INSET : INSET + content] = img
         cell[:INSET, INSET : INSET + content] = img[0:1, :]
@@ -150,24 +183,20 @@ def main(video):
         cell[:, INSET + content :] = cell[:, INSET + content - 1 : INSET + content]
         atlas[r * CELL : (r + 1) * CELL, c * CELL : (c + 1) * CELL] = cell
 
-    for i in range(len(frames)):
-        put(i, i)
-    for i in range(len(frames), COLS * ROWS):
-        put(len(frames) - 1, i)
+    for i, fi in enumerate(line):
+        put(fi, i)
+    for i in range(n_cells, COLS * ROWS):
+        put(line[-1], i)
 
     out = Image.fromarray(cv2.cvtColor(atlas, cv2.COLOR_BGRA2RGBA))
     out.save(OUT_ATLAS, "WEBP", quality=80, method=6)
     print(f"atlas {out.size} -> {OUT_ATLAS} ({os.path.getsize(OUT_ATLAS)//1024} KB)")
 
-    data = [
-        [round(float(a), 4), round(float(b), 4), round(float(c), 4)]
-        for a, b, c in zip(nx, ny, nh)
-    ]
-    json.dump(data, open(OUT_MAP, "w"))
-    print(
-        f"map -> {OUT_MAP} ({len(data)} frames; "
-        f"squintiest {int(np.argmin(nh))}, widest {int(np.argmax(nh))})"
+    json.dump(
+        {"vx": nvx, "squint": line.index(SQUINT_FRAME), "n": n_cells},
+        open(OUT_MAP, "w"),
     )
+    print(f"map -> {OUT_MAP} ({n_cells} cells, squint at {line.index(SQUINT_FRAME)})")
 
 
 if __name__ == "__main__":
