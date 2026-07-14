@@ -5,13 +5,18 @@ Pipeline (run whenever the source video is re-generated):
   2. Key out the white background via border flood-fill (only background
      CONNECTED to the frame edge is removed, so interior white highlights
      survive; stray dust islands in the white are dropped by size).
+  2b. Stabilize the body: measure the torso band's centroid + width per
+     frame and warp (translate + scale, anchored bottom-center) to the
+     median — kills the body jumps between grid cells.
   3. Auto-map each frame's gaze by the eye-glow centroid (the eyes glow
      orange — HSV threshold, two largest components) and measure the glow
      height as a squint/wide metric.
   4. Fill a COLS x GAZE_ROWS grid with the nearest frame per cell in
      normalized gaze space, plus an expression row: 3 squints (lowest glow)
      and 3 wides (highest glow), spread across X.
-  5. Compose the atlas and write a webp with alpha.
+  5. Compose the atlas with 8px edge-extruded cell padding (bleed from
+     fractional-pixel background scaling samples the frame's own replicated
+     edges instead of the neighboring cell) and write a webp with alpha.
 
 Usage:  python scripts/build-gaze-atlas.py "design/assets/robot video/Robot Scanning Motion.mp4"
 Output: public/hero/robot-atlas-v2.webp (consumed by src/components/site/HeroGaze.tsx)
@@ -27,6 +32,7 @@ from PIL import Image
 
 COLS, GAZE_ROWS = 9, 4
 CELL = 512
+INSET = 8  # edge-extrusion padding per cell side
 OUT = os.path.join("public", "hero", "robot-atlas-v2.webp")
 
 
@@ -84,12 +90,39 @@ def main(video):
     cap.release()
     print(f"extracted {len(frames)} frames")
 
-    mapped = []
     rgba = []
-    for i, f in enumerate(frames):
-        g = gaze_of(f)
-        a = key_frame(f)
-        rgba.append(np.dstack([f, a]))
+    for f in frames:
+        rgba.append(np.dstack([f, key_frame(f)]))
+
+    # --- stabilize the body: torso-band centroid + width -> warp to median
+    H, W = rgba[0].shape[:2]
+    band_y0 = int(H * 0.854)
+    torso = []
+    for f in rgba:
+        ys_, xs_ = np.nonzero(f[band_y0:, :, 3] > 128)
+        torso.append(
+            (float(xs_.mean()), float(np.percentile(xs_, 95) - np.percentile(xs_, 5)))
+        )
+    ref_cx = float(np.median([t[0] for t in torso]))
+    ref_w = float(np.median([t[1] for t in torso]))
+    stab = []
+    for f, (cx, w) in zip(rgba, torso):
+        sc = ref_w / w
+        # scale + translate, anchored bottom-center so the bust stays flush
+        M = np.float32([[sc, 0, ref_cx - sc * cx], [0, sc, H - sc * H]])
+        stab.append(
+            cv2.warpAffine(
+                f, M, (W, H), flags=cv2.INTER_LINEAR,
+                borderMode=cv2.BORDER_CONSTANT, borderValue=(0, 0, 0, 0),
+            )
+        )
+    rgba = stab
+    print(f"stabilized to torso cx {ref_cx:.1f}, width {ref_w:.1f}")
+
+    # --- gaze-map the STABILIZED frames
+    mapped = []
+    for i, f in enumerate(rgba):
+        g = gaze_of(f[:, :, :3])
         if g:
             mapped.append((i, *g))
     print(f"gaze-mapped {len(mapped)}/{len(frames)}")
@@ -119,9 +152,20 @@ def main(video):
     print("expressions:", expr)
 
     atlas = np.zeros((CELL * (GAZE_ROWS + 1), CELL * COLS, 4), np.uint8)
+    content_px = CELL - 2 * INSET
 
     def put(fi, r, c):
-        cell = cv2.resize(rgba[fi], (CELL, CELL), interpolation=cv2.INTER_AREA)
+        content = cv2.resize(
+            rgba[fi], (content_px, content_px), interpolation=cv2.INTER_AREA
+        )
+        cell = np.zeros((CELL, CELL, 4), np.uint8)
+        cell[INSET : INSET + content_px, INSET : INSET + content_px] = content
+        # edge extrusion: replicate content borders outward so fractional-pixel
+        # background scaling bleeds into the SAME frame, never the neighbor
+        cell[:INSET, INSET : INSET + content_px] = content[0:1, :]
+        cell[INSET + content_px :, INSET : INSET + content_px] = content[-1:, :]
+        cell[:, :INSET] = cell[:, INSET : INSET + 1]
+        cell[:, INSET + content_px :] = cell[:, INSET + content_px - 1 : INSET + content_px]
         atlas[r * CELL : (r + 1) * CELL, c * CELL : (c + 1) * CELL] = cell
 
     for row in range(GAZE_ROWS):
