@@ -256,7 +256,7 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.4s ease;
-  border: 2px solid transparent;
+  border: 3px solid transparent;
   -webkit-mask:
     linear-gradient(transparent, transparent) padding-box,
     linear-gradient(#fff 0 0) border-box;
@@ -282,20 +282,22 @@
     opacity: 0;
   }
 
-  /* the in-ring segment: a long gradient square clipped to the annulus by
-     the parent mask — the border line itself lights up (bake-off look).
-     transform-origin matches the offset-anchor so scaleX in the sweep
-     keyframes stretches the TAIL while the head stays pinned to the path:
-     the beam is born short, grows as it travels, contracts on arrival. */
+  /* The traveler is a soft radial GLOW, not a comet: bright center
+     feathering to transparent at both ends, centered on the path. The
+     ring mask reveals only the slice crossing the 3px stroke, so what you
+     see is a glow orbiting the card through the stroke window — soft
+     ends, no hard head. scaleX (in the sweep keyframes) breathes its
+     length symmetrically around the center. */
   .beamSeg {
-    width: 420px;
+    width: 460px;
     aspect-ratio: 1;
-    transform-origin: 90% 50%;
-    background: linear-gradient(
-      to left,
-      var(--accent-soft),
-      var(--accent) 25%,
-      var(--accent-deep) 55%,
+    offset-anchor: 50% 50%;
+    transform-origin: 50% 50%;
+    background: radial-gradient(
+      circle closest-side at 50% 50%,
+      var(--accent-soft) 0%,
+      var(--accent) 32%,
+      rgba(164, 59, 13, 0.55) 62%,
       transparent 100%
     );
   }
@@ -420,11 +422,11 @@
   }
 
   .mediaLink:hover .beamA {
-    animation: csBeamSweepA 1.3s cubic-bezier(0.33, 0.33, 0.62, 0.97) infinite;
+    animation: csBeamSweepA 2.4s cubic-bezier(0.33, 0.33, 0.62, 0.97) infinite;
   }
 
   .mediaLink:hover .beamB {
-    animation: csBeamSweepB 1.3s cubic-bezier(0.33, 0.33, 0.62, 0.97) infinite;
+    animation: csBeamSweepB 2.4s cubic-bezier(0.33, 0.33, 0.62, 0.97) infinite;
   }
 }
 
@@ -448,10 +450,10 @@
 
 .mediaLink:focus-visible .beamA,
 .mediaLink[data-peek] .beamA {
-  animation: csBeamSweepA 1.3s cubic-bezier(0.33, 0.33, 0.62, 0.97) infinite;
+  animation: csBeamSweepA 2.4s cubic-bezier(0.33, 0.33, 0.62, 0.97) infinite;
 }
 
 .mediaLink:focus-visible .beamB,
 .mediaLink[data-peek] .beamB {
-  animation: csBeamSweepB 1.3s cubic-bezier(0.33, 0.33, 0.62, 0.97) infinite;
+  animation: csBeamSweepB 2.4s cubic-bezier(0.33, 0.33, 0.62, 0.97) infinite;
 }
