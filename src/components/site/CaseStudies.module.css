@@ -282,24 +282,34 @@
     opacity: 0;
   }
 
-  /* The traveler is a soft radial GLOW, not a comet: bright center
-     feathering to transparent at both ends, centered on the path. The
-     ring mask reveals only the slice crossing the 3px stroke, so what you
-     see is a glow orbiting the card through the stroke window — soft
-     ends, no hard head. scaleX (in the sweep keyframes) breathes its
-     length symmetrically around the center. */
+  /* The traveler: a soft radial GLOW with a long tail streaming behind
+     it (offset-rotate: auto points +x along travel, so "behind" is the
+     left of the element; the glow sits at x=75% and the tail dissolves
+     toward x=0). The ring mask reveals only the slice crossing the 3px
+     stroke — soft ends everywhere, no hard edges. transform-origin sits
+     at the glow center, so the length-breathing stretches the tail on
+     the surge and reabsorbs it into the landing. */
   .beamSeg {
-    width: 460px;
-    aspect-ratio: 1;
-    offset-anchor: 50% 50%;
-    transform-origin: 50% 50%;
-    background: radial-gradient(
-      circle closest-side at 50% 50%,
-      var(--accent-soft) 0%,
-      var(--accent) 32%,
-      rgba(164, 59, 13, 0.55) 62%,
-      transparent 100%
-    );
+    width: 820px;
+    height: 460px;
+    offset-anchor: 75% 50%;
+    transform-origin: 75% 50%;
+    background:
+      radial-gradient(
+        circle 230px at 75% 50%,
+        var(--accent-soft) 0%,
+        var(--accent) 34%,
+        rgba(164, 59, 13, 0.55) 64%,
+        transparent 100%
+      ),
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(164, 59, 13, 0.14) 16%,
+        rgba(236, 78, 9, 0.34) 52%,
+        rgba(236, 78, 9, 0.5) 71%,
+        transparent 77%
+      );
   }
 
   /* the glow: a soft capsule riding the same path (blur baked into the
