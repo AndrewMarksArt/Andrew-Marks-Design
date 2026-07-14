@@ -115,16 +115,13 @@ export default function CaseStudyMedia({
           </span>
         ))}
       </span>
-      {/* Border beam v4 (bake-off winner): twin in-ring beams born at the
-          top-left and bottom-right corners, each sweeping half the
-          perimeter to die at the other's origin, fading in/out. The ring
-          layer recolors the border line itself (masked annulus); the glow
-          layer rides the same path unmasked for the halo. Siblings of the
-          clipped frame so nothing is cut off. */}
-      <span className={styles.beamGlows} aria-hidden="true">
-        <span className={`${styles.beamHalo} ${styles.beamA}`} />
-        <span className={`${styles.beamHalo} ${styles.beamB}`} />
-      </span>
+      {/* Border beam (bake-off winner, final form): twin beams living
+          ONLY in the 2px stroke band around the card — the ring mask
+          clips them to the annulus, nothing bleeds outside the stroke or
+          into the card. Born at the top-left and bottom-right corners,
+          each sweeps half the perimeter to die at the other's origin,
+          growing/contracting in length, fading in/out, journeying from
+          orange to the P1 mint. */}
       <span className={styles.beamRing} aria-hidden="true">
         <span className={`${styles.beamSeg} ${styles.beamA}`} />
         <span className={`${styles.beamSeg} ${styles.beamB}`} />

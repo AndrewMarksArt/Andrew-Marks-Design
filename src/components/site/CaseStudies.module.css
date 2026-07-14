@@ -246,24 +246,16 @@
    only while engaged and restart from the corners on every hover.
    ========================================================================== */
 
-.beamRing,
-.beamGlows {
+/* the ring layer shows ONLY the 2px border annulus (MagicUI double-mask
+   trick, static — never repaints): the beam cannot bleed outside the
+   stroke or into the card (Andrew's final ruling — stroke only, no
+   interior glow) */
+.beamRing {
   position: absolute;
   inset: -1px; /* sit exactly over the frame's 1px border line */
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.4s ease;
-}
-
-/* the glow layer is clipped to the card bounds (Andrew: no glow outside
-   the card) — halos bloom inward over the imagery only */
-.beamGlows {
-  overflow: hidden;
-}
-
-/* the ring layer shows ONLY the border annulus (MagicUI double-mask trick,
-   static — never repaints) */
-.beamRing {
   border: 2px solid transparent;
   -webkit-mask:
     linear-gradient(transparent, transparent) padding-box,
@@ -277,14 +269,12 @@
 
 /* travelers exist only where offset-path rect() is supported — without the
    guard, non-supporting browsers would show them parked in a corner */
-.beamSeg,
-.beamHalo {
+.beamSeg {
   display: none;
 }
 
 @supports (offset-path: rect(0 auto auto 0)) {
-  .beamSeg,
-  .beamHalo {
+  .beamSeg {
     display: block;
     position: absolute;
     offset-path: rect(0 auto auto 0);
@@ -312,23 +302,6 @@
 
   /* the glow: a soft capsule riding the same path (blur baked into the
      gradient — no filter), giving the segment its halo */
-  .beamHalo {
-    width: 640px;
-    height: 170px;
-    offset-anchor: 62% 50%;
-    transform-origin: 62% 50%;
-    /* a wide ambient wash, not a shape: the gradient fades out well inside
-       the element bounds (previous version's ellipse was clipped by its own
-       box edge, which is what read as a hard-edged oval) */
-    background: radial-gradient(
-      ellipse 44% 46% at 55% 50%,
-      rgba(236, 78, 9, 0.33) 0%,
-      rgba(236, 78, 9, 0.16) 38%,
-      rgba(251, 192, 166, 0.06) 68%,
-      transparent 92%
-    );
-  }
-
 }
 
 /* choreography: A born at the top-left corner (0%), B at the bottom-right
@@ -442,8 +415,7 @@
       var(--peek-delay, 0ms);
   }
 
-  .mediaLink:hover .beamRing,
-  .mediaLink:hover .beamGlows {
+  .mediaLink:hover .beamRing {
     opacity: 1;
   }
 
@@ -470,9 +442,7 @@
 }
 
 .mediaLink:focus-visible .beamRing,
-.mediaLink:focus-visible .beamGlows,
-.mediaLink[data-peek] .beamRing,
-.mediaLink[data-peek] .beamGlows {
+.mediaLink[data-peek] .beamRing {
   opacity: 1;
 }
 
