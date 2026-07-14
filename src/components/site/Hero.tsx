@@ -78,7 +78,7 @@ function PlusLattice() {
 export default function Hero() {
   // Gaze atlas is drawn onto a canvas after JS loads — preload it so the
   // first frame paints with the hero instead of popping in late.
-  preload("/hero/robot-atlas-live.webp", { as: "image" });
+  preload("/hero/robot-atlas-live2.webp", { as: "image" });
 
   return (
     <section className={styles.hero}>

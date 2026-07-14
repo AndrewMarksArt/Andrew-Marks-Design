@@ -9,20 +9,22 @@ import { useEffect, useRef } from "react";
  *
  * The atlas is the temp page's /atlas.jpg — 81 frames of the original
  * robot video in a 9x9 sheet, one continuous head sweep with natural
- * blinks baked in — re-keyed to transparency (public/hero/
- * robot-atlas-live.webp, same frames, background removed so the hero's
- * plus lattice shows through). Mouse X maps straight to a frame index
- * with 0.35 smoothing plus a slow sinusoidal idle drift; frames render
- * on a canvas with a 1px source inset. Nothing else — no graph, no grid,
- * no dissolve. Tracking constants are verbatim from the live page.
+ * blinks baked in — upscaled 4x with Real-ESRGAN (realesr-animevideov3,
+ * the temporally-stable video model; approved by Andrew 2026-07-14),
+ * keyed to transparency at 1024px, and rebuilt at 512px cells so the
+ * ~660px display renders crisp instead of upscaling 256px frames.
+ * Mouse X maps straight to a frame index with 0.35 smoothing plus a
+ * slow sinusoidal idle drift; frames render on a canvas with a 1px
+ * source inset. Nothing else — no graph, no grid, no dissolve.
+ * Tracking constants are verbatim from the live page.
  */
 
-const ATLAS_SRC = "/hero/robot-atlas-live.webp";
+const ATLAS_SRC = "/hero/robot-atlas-live2.webp";
 const COLS = 9;
 const ROWS = 9;
 const TOTAL = COLS * ROWS;
-const FRAME_W = 256;
-const FRAME_H = 256;
+const FRAME_W = 512;
+const FRAME_H = 512;
 
 export default function HeroGaze({ className }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
