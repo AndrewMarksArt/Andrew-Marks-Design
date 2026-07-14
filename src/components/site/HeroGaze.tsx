@@ -1,155 +1,108 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import MAP from "./heroGazeMap.json";
 
 /**
- * Cursor-following robot v8 — direct 9x9 gaze-grid lookup.
+ * Cursor-following robot — direct port of the live temp page's
+ * GazePortrait (main:src/components/GazePortrait.tsx), the mechanism and
+ * footage that are proven in production on andrewmarks.net.
  *
- * The atlas IS the map (built by scripts/build-gaze-atlas.py): cell
- * (row, col) holds the pose for cursor position (col/8, row/8) — center
- * cell = neutral pose, top-left = looking up-left, and so on. The cursor
- * converts straight to a sheet position with light smoothing; no graph, no
- * pathfinding, no travel model. This is the placeholder site's proven
- * direct-lookup mechanism in two dimensions.
- *
- * The only rendering nicety kept from the graph era: when the shown cell
- * changes, the new pose cross-dissolves in over ~90ms on a second layer,
- * softening pose steps into motion. A small rounding margin keeps a cursor
- * parked on a cell boundary from shimmering between two poses.
+ * The atlas is the temp page's /atlas.jpg — 81 frames of the original
+ * robot video in a 9x9 sheet, one continuous head sweep with natural
+ * blinks baked in — re-keyed to transparency (public/hero/
+ * robot-atlas-live.webp, same frames, background removed so the hero's
+ * plus lattice shows through). Mouse X maps straight to a frame index
+ * with 0.35 smoothing plus a slow sinusoidal idle drift; frames render
+ * on a canvas with a 1px source inset. Nothing else — no graph, no grid,
+ * no dissolve. Tracking constants are verbatim from the live page.
  */
 
-const ATLAS = "/hero/robot-atlas-v8.webp";
-const COLS: number = MAP.cols;
-const ROWS: number = MAP.rows;
-const REST: number = MAP.rest;
-
-const SMOOTH_MOUSE = 0.18;
-const SMOOTH_TOUCH = 0.1; // scroll IS touchmove — blur sweeps into a glance
-const FADE_MS = 90;
-const SNAP_MARGIN = 0.55; // cells; > 0.5 = hysteresis against boundary flicker
-
-function pos(cell: number): string {
-  // CSS background-position % resolves as (container - image) * p: with the
-  // image COLS x the element, column c sits at c/(COLS-1) — the -1 matters.
-  const i = Math.min(Math.max(cell | 0, 0), COLS * ROWS - 1);
-  const col = i % COLS;
-  const row = Math.floor(i / COLS);
-  return `${(col / (COLS - 1)) * 100}% ${(row / (ROWS - 1)) * 100}%`;
-}
-
-// The wrapper is positioned by its CSS-module class (Hero.module.css
-// .robot) — no position/inset here or the inline style would override it.
-const baseStyle: React.CSSProperties = {
-  backgroundImage: `url(${ATLAS})`,
-  backgroundSize: `${COLS * 100}% ${ROWS * 100}%`,
-  backgroundPosition: pos(REST),
-  backgroundRepeat: "no-repeat",
-};
-const fadeStyle: React.CSSProperties = {
-  ...baseStyle,
-  position: "absolute",
-  inset: 0,
-  opacity: 0,
-};
+const ATLAS_SRC = "/hero/robot-atlas-live.webp";
+const COLS = 9;
+const ROWS = 9;
+const TOTAL = COLS * ROWS;
+const FRAME_W = 256;
+const FRAME_H = 256;
 
 export default function HeroGaze({ className }: { className?: string }) {
-  const baseRef = useRef<HTMLDivElement>(null);
-  const fadeRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const base = baseRef.current;
-    const fade = fadeRef.current;
-    if (!base || !fade) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
+    canvas.width = FRAME_W;
+    canvas.height = FRAME_H;
+
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    let mouse = 0.5;
+    let smooth = 0.5;
+    let lastIdx = -1;
+    let animationFrameId = 0;
     let alive = true;
-    let mx = 0.5;
-    let my = 0.5;
-    let sx = 0.5;
-    let sy = 0.5;
-    let smooth = SMOOTH_MOUSE;
-    let col = COLS >> 1;
-    let row = ROWS >> 1;
-    let shown = REST;
-    let fadeFrom = -1;
-    let fadeStart = 0;
-    let rafId: number;
-    let rect = base.getBoundingClientRect();
 
-    const updateRect = () => {
-      rect = base.getBoundingClientRect();
+    const draw = (idx: number) => {
+      const col = idx % COLS;
+      const row = Math.floor(idx / COLS);
+      ctx.clearRect(0, 0, FRAME_W, FRAME_H);
+      ctx.drawImage(
+        atlas,
+        col * FRAME_W + 1, row * FRAME_H + 1, FRAME_W - 2, FRAME_H - 2,
+        1, 1, FRAME_W - 2, FRAME_H - 2,
+      );
     };
 
-    const tick = (now: number) => {
+    const atlas = new Image();
+    atlas.src = ATLAS_SRC;
+
+    let t0 = 0;
+    atlas.onload = () => {
       if (!alive) return;
-      // hero scrolled out of view -> drift home to the neutral pose
-      const tx = rect.bottom < 0 ? 0.5 : mx;
-      const ty = rect.bottom < 0 ? 0.5 : my;
-      sx += (tx - sx) * smooth;
-      sy += (ty - sy) * smooth;
-
-      // snap to a new cell only when the smoothed position has clearly
-      // left the current one (SNAP_MARGIN > 0.5 = boundary hysteresis)
-      const fx = sx * (COLS - 1);
-      const fy = sy * (ROWS - 1);
-      if (Math.abs(fx - col) > SNAP_MARGIN) col = Math.round(fx);
-      if (Math.abs(fy - row) > SNAP_MARGIN) row = Math.round(fy);
-      const cell = row * COLS + col;
-
-      if (cell !== shown) {
-        // mid-fade retarget: promote the in-flight pose, start a new ramp
-        fadeFrom = shown;
-        shown = cell;
-        fadeStart = now;
-        base.style.backgroundPosition = pos(fadeFrom);
-        fade.style.backgroundPosition = pos(shown);
+      if (reduced) {
+        draw(Math.round(0.5 * (TOTAL - 1)));
+        return;
       }
-      if (fadeFrom >= 0) {
-        const t = Math.min(1, (now - fadeStart) / FADE_MS);
-        const e = t * t * (3 - 2 * t);
-        fade.style.opacity = String(e);
-        if (t >= 1) {
-          base.style.backgroundPosition = pos(shown);
-          fade.style.opacity = "0";
-          fadeFrom = -1;
+      t0 = performance.now();
+
+      function tick(now: number) {
+        if (!alive) return;
+        smooth += (mouse - smooth) * 0.35;
+        const drift = Math.sin((now - t0) / 3000) * 0.015;
+        const val = Math.max(0, Math.min(1, smooth + drift));
+        const idx = Math.round(val * (TOTAL - 1));
+        if (idx !== lastIdx) {
+          lastIdx = idx;
+          draw(idx);
         }
+        animationFrameId = requestAnimationFrame(tick);
       }
-      rafId = requestAnimationFrame(tick);
-    };
-    rafId = requestAnimationFrame(tick);
-
-    const onMouse = (e: MouseEvent) => {
-      smooth = SMOOTH_MOUSE;
-      mx = Math.min(1, Math.max(0, e.clientX / window.innerWidth));
-      my = Math.min(1, Math.max(0, e.clientY / window.innerHeight));
-    };
-    const onTouch = (e: TouchEvent) => {
-      const t = e.touches[0];
-      if (!t) return;
-      smooth = SMOOTH_TOUCH;
-      mx = Math.min(1, Math.max(0, t.clientX / window.innerWidth));
-      my = Math.min(1, Math.max(0, t.clientY / window.innerHeight));
+      animationFrameId = requestAnimationFrame(tick);
     };
 
-    window.addEventListener("mousemove", onMouse, { passive: true });
-    window.addEventListener("touchmove", onTouch, { passive: true });
-    window.addEventListener("resize", updateRect, { passive: true });
-    window.addEventListener("scroll", updateRect, { passive: true });
+    const handleMouseMove = (e: MouseEvent) => {
+      mouse = e.clientX / window.innerWidth;
+    };
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches[0]) {
+        mouse = e.touches[0].clientX / window.innerWidth;
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
 
     return () => {
       alive = false;
-      cancelAnimationFrame(rafId);
-      window.removeEventListener("mousemove", onMouse);
-      window.removeEventListener("touchmove", onTouch);
-      window.removeEventListener("resize", updateRect);
-      window.removeEventListener("scroll", updateRect);
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchmove", handleTouchMove);
     };
   }, []);
 
-  return (
-    <div ref={baseRef} className={className} aria-hidden="true" style={baseStyle}>
-      <div ref={fadeRef} style={fadeStyle} />
-    </div>
-  );
+  return <canvas ref={canvasRef} className={className} aria-hidden="true" />;
 }

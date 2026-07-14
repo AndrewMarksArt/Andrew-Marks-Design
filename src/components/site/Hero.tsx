@@ -76,12 +76,9 @@ function PlusLattice() {
 }
 
 export default function Hero() {
-  // Gaze atlas is a CSS background (no <img> priority hint) — preload it so
-  // the resting frame paints with the hero instead of popping in late.
-  // Filename is versioned (v5): the atlas layout must match the bundled
-  // heroGazeMap.json, so a new build ships under a new URL — never overwrite
-  // a deployed atlas in place (browser cache serves stale cells).
-  preload("/hero/robot-atlas-v8.webp", { as: "image" });
+  // Gaze atlas is drawn onto a canvas after JS loads — preload it so the
+  // first frame paints with the hero instead of popping in late.
+  preload("/hero/robot-atlas-live.webp", { as: "image" });
 
   return (
     <section className={styles.hero}>
