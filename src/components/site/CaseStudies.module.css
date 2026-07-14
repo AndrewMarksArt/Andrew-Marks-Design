@@ -231,6 +231,184 @@
   aspect-ratio: 1073 / 750;
   overflow: hidden;
   border: 1px solid var(--black);
+  /* Border beam (Andrew's pick: jakubantalik/border-beam, size="md"
+     colorVariant="sunset" strength={0.33}, dark-theme rotate values ported
+     verbatim to CSS modules). The angle spins continuously — layers are
+     invisible until engaged, so the idle cost is a style tick, not paint —
+     and the beam opacity is a TRANSITIONED registered property, giving the
+     library's 0.6s fade-in / 0.5s fade-out while the arc keeps moving. */
+  --cs-beam-o: 0;
+  animation: csBeamSpin 1.96s linear infinite;
+  transition: --cs-beam-o 0.5s ease;
+}
+
+/* Stroke: 1px border ring lit by the rotating arc window (lib ::after, z2).
+   Opacity = strokeOpacity 0.26 x strength 0.33. */
+.mediaFrame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background:
+    conic-gradient(
+      from var(--cs-beam-angle),
+      transparent 0%, transparent 54%,
+      rgba(255, 255, 255, 0.1) 57%,
+      rgba(255, 255, 255, 0.3) 60%,
+      rgba(255, 255, 255, 0.6) 63%,
+      rgba(255, 255, 255, 0.75) 66%,
+      rgba(255, 255, 255, 0.6) 69%,
+      rgba(255, 255, 255, 0.3) 72%,
+      rgba(255, 255, 255, 0.1) 75%,
+      transparent 78%, transparent 100%
+    ),
+    radial-gradient(ellipse 70px 40px at 33% -7.4%, rgb(255, 80, 50), transparent),
+    radial-gradient(ellipse 60px 35px at 12% -5%, rgb(255, 160, 40), transparent),
+    radial-gradient(ellipse 40px 70px at 2.1% 68.3%, rgb(255, 120, 60), transparent),
+    radial-gradient(ellipse 20px 35px at 2.1% 68.3%, rgb(255, 200, 50), transparent),
+    radial-gradient(ellipse 180px 32px at 74.4% 100%, rgb(255, 100, 80), transparent),
+    radial-gradient(ellipse 85px 26px at 55% 100%, rgb(255, 180, 60), transparent),
+    radial-gradient(ellipse 74px 32px at 93.9% 0%, rgb(255, 60, 60), transparent),
+    radial-gradient(ellipse 26px 42px at 100% 27.1%, rgb(255, 140, 50), transparent),
+    radial-gradient(ellipse 52px 48px at 100% 27.1%, rgb(255, 90, 70), transparent);
+  -webkit-mask:
+    conic-gradient(
+      from var(--cs-beam-angle),
+      transparent 0%, transparent 30%,
+      rgba(255, 255, 255, 0.1) 36%, rgba(255, 255, 255, 0.35) 44%,
+      white 52%, white 80%,
+      rgba(255, 255, 255, 0.35) 86%, rgba(255, 255, 255, 0.1) 92%,
+      transparent 95%, transparent 100%
+    ),
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: source-in, xor;
+  mask:
+    conic-gradient(
+      from var(--cs-beam-angle),
+      transparent 0%, transparent 30%,
+      rgba(255, 255, 255, 0.1) 36%, rgba(255, 255, 255, 0.35) 44%,
+      white 52%, white 80%,
+      rgba(255, 255, 255, 0.35) 86%, rgba(255, 255, 255, 0.1) 92%,
+      transparent 95%, transparent 100%
+    ),
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: intersect, exclude;
+  pointer-events: none;
+  z-index: 2;
+  opacity: calc(var(--cs-beam-o) * 0.0858);
+  animation: csBeamHue 12s ease-in-out infinite;
+}
+
+/* Inner glow: soft sunset wash hugging the frame edges inside the beam's
+   arc (lib ::before, z1). Opacity = innerOpacity 0.42 x strength 0.33. */
+.mediaFrame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 63px 36px at 33% -7.4%, rgba(255, 80, 50, 0.45), transparent),
+    radial-gradient(ellipse 54px 32px at 12% -5%, rgba(255, 160, 40, 0.45), transparent),
+    radial-gradient(ellipse 36px 63px at 2.1% 68.3%, rgba(255, 120, 60, 0.45), transparent),
+    radial-gradient(ellipse 18px 32px at 2.1% 68.3%, rgba(255, 200, 50, 0.45), transparent),
+    radial-gradient(ellipse 162px 29px at 74.4% 100%, rgba(255, 100, 80, 0.45), transparent),
+    radial-gradient(ellipse 77px 23px at 55% 100%, rgba(255, 180, 60, 0.45), transparent),
+    radial-gradient(ellipse 67px 29px at 93.9% 0%, rgba(255, 60, 60, 0.45), transparent),
+    radial-gradient(ellipse 23px 38px at 100% 27.1%, rgba(255, 140, 50, 0.45), transparent),
+    radial-gradient(ellipse 47px 43px at 100% 27.1%, rgba(255, 90, 70, 0.45), transparent);
+  box-shadow: inset 0 0 9px 1px rgba(255, 255, 255, 0.27);
+  -webkit-mask-image:
+    conic-gradient(
+      from var(--cs-beam-angle),
+      transparent 0%, transparent 30%,
+      rgba(255, 255, 255, 0.1) 36%, rgba(255, 255, 255, 0.35) 44%,
+      white 52%, white 80%,
+      rgba(255, 255, 255, 0.35) 86%, rgba(255, 255, 255, 0.1) 92%,
+      transparent 95%, transparent 100%
+    ),
+    linear-gradient(white, transparent 28px, transparent calc(100% - 28px), white),
+    linear-gradient(to right, white, transparent 28px, transparent calc(100% - 28px), white);
+  -webkit-mask-composite: source-in, source-over;
+  mask-image:
+    conic-gradient(
+      from var(--cs-beam-angle),
+      transparent 0%, transparent 30%,
+      rgba(255, 255, 255, 0.1) 36%, rgba(255, 255, 255, 0.35) 44%,
+      white 52%, white 80%,
+      rgba(255, 255, 255, 0.35) 86%, rgba(255, 255, 255, 0.1) 92%,
+      transparent 95%, transparent 100%
+    ),
+    linear-gradient(white, transparent 28px, transparent calc(100% - 28px), white),
+    linear-gradient(to right, white, transparent 28px, transparent calc(100% - 28px), white);
+  mask-composite: intersect, add;
+  pointer-events: none;
+  z-index: 1;
+  opacity: calc(var(--cs-beam-o) * 0.1386);
+  animation: csBeamHue 12s ease-in-out infinite;
+}
+
+/* Bloom: blurred bright head of the beam, confined to the border ring
+   (lib's [data-beam-bloom] child, z3). Opacity = bloom 0.24 x 0.33. */
+.beamBloom {
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--cs-beam-angle),
+    transparent 0%, transparent 58%,
+    rgba(255, 255, 255, 0.03) 62%,
+    rgba(255, 255, 255, 0.08) 65%,
+    rgba(255, 255, 255, 0.2) 67%,
+    rgba(255, 255, 255, 0.45) 69%,
+    rgba(255, 255, 255, 0.85) 70%,
+    rgba(255, 255, 255, 0.85) 70.5%,
+    rgba(255, 255, 255, 0.45) 71.5%,
+    rgba(255, 255, 255, 0.2) 73%,
+    rgba(255, 255, 255, 0.08) 75%,
+    rgba(255, 255, 255, 0.03) 78%,
+    transparent 82%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  filter: blur(8px) brightness(1.3) saturate(1.2);
+  pointer-events: none;
+  z-index: 3;
+  opacity: calc(var(--cs-beam-o) * 0.0792);
+  animation: csBeamHueBloom 12s ease-in-out infinite;
+}
+
+@keyframes csBeamSpin {
+  to {
+    --cs-beam-angle: 360deg;
+  }
+}
+
+@keyframes csBeamHue {
+  0% {
+    filter: hue-rotate(-30deg) brightness(1.3) saturate(1.2);
+  }
+  50% {
+    filter: hue-rotate(30deg) brightness(1.3) saturate(1.2);
+  }
+  100% {
+    filter: hue-rotate(-30deg) brightness(1.3) saturate(1.2);
+  }
+}
+
+/* Bloom keeps its blur while hue-shifting */
+@keyframes csBeamHueBloom {
+  0% {
+    filter: blur(8px) hue-rotate(-30deg) brightness(1.3) saturate(1.2);
+  }
+  50% {
+    filter: blur(8px) hue-rotate(30deg) brightness(1.3) saturate(1.2);
+  }
+  100% {
+    filter: blur(8px) hue-rotate(-30deg) brightness(1.3) saturate(1.2);
+  }
 }
 
 .mediaShot {
@@ -276,6 +454,11 @@
     transition: transform 550ms cubic-bezier(0.22, 1, 0.36, 1)
       var(--peek-delay, 0ms);
   }
+
+  .mediaLink:hover .mediaFrame {
+    --cs-beam-o: 1;
+    transition-duration: 0.6s; /* lib fade-in; exit falls back to 0.5s */
+  }
 }
 
 .mediaLink:focus-visible .mediaShot,
@@ -289,4 +472,10 @@
   transform: none;
   transition: transform 550ms cubic-bezier(0.22, 1, 0.36, 1)
     var(--peek-delay, 0ms);
+}
+
+.mediaLink:focus-visible .mediaFrame,
+.mediaLink[data-peek] .mediaFrame {
+  --cs-beam-o: 1;
+  transition-duration: 0.6s;
 }

@@ -114,6 +114,9 @@ export default function CaseStudyMedia({
             />
           </span>
         ))}
+        {/* blurred bright head of the border beam — needs a real element
+            (both pseudo-elements are taken by the stroke + inner glow) */}
+        <span className={styles.beamBloom} aria-hidden="true" />
       </span>
     </Link>
   );
