@@ -4,36 +4,31 @@ import { useEffect, useRef } from "react";
 import MAP from "./heroGazeMap.json";
 
 /**
- * Cursor-following robot v6 — 2D star-graph tracking over five clips.
+ * Cursor-following robot v7 — star-graph tracking with cross-dissolve.
  *
- * Five direction videos (design/assets/robot video/directions/), all
- * generated from one shared reference still, form an 8-spoke star in gaze
- * space: level left-right, vertical up-down, the up-left -> down-right
- * diagonal, and center -> up-right / center -> down-left half-spokes. Node
- * 0 is the canonical center pose (the reference). The cursor targets the
- * node whose measured eye-gaze is nearest in (x, y) and the robot travels
- * there along the graph via a precomputed next-hop matrix — chain edges
- * are a few video frames apart, hub edges join each clip to center at its
- * measured center-crossing (all pixel-verified at build time). Spoke-to-
- * spoke travel passes through center, which reads as the robot naturally
- * re-orienting its head.
+ * Pose data (see scripts/build-gaze-atlas.py): five direction clips form an
+ * 8-spoke star in gaze space; node 0 is the canonical center pose; chains
+ * join the hub at pixel-verified center-crossings; a next-hop matrix routes
+ * travel so consecutive poses are always graph-adjacent.
  *
- * heroGazeMap.json (built by scripts/build-gaze-atlas.py):
- *   cols/rows  atlas grid dimensions
- *   nodes      gaze (x, y) per node, piecewise-normalized around the
- *              center pose so cursor (0.5, 0.5) = center exactly
- *   targetable node indices the argmin may select
- *   next       next-hop matrix (next[i][i] = i)
- *   rest       the center node: initial paint, reduced-motion, scrolled-away
- *   squint     proximity-override node, or -1 when the clips provide none
+ * Rendering: TWO stacked layers of the same atlas. The scrub position along
+ * the travel path is CONTINUOUS — (from, to, frac) — and the top layer's
+ * opacity is frac, so every step between adjacent poses plays as a short
+ * cross-dissolve instead of a hard cut. Discrete stepping was the last
+ * source of perceived chop: no matter how dense the atlas, hard cuts read
+ * as flip-book; the dissolve reads as in-between motion. Travel speed eases
+ * with remaining distance (fast when far, gentle on arrival).
  *
- * Hysteresis tuning comes from the v5 design-review simulations: an
- * absolute epsilon plus a minimum switch interval stops cursor jitter from
- * churning the target, and far-away candidates need a stricter (but not
- * paranoid — the star has no fake seams) gate against boundary flapping.
+ * heroGazeMap.json: cols/rows (atlas grid), nodes (gaze per node,
+ * piecewise-normalized around center so cursor (0.5, 0.5) = center pose),
+ * targetable, next (next[i][i] = i), rest, squint (-1 = no squint pose).
+ *
+ * Hysteresis tuning from the v5 design-review simulations: absolute
+ * epsilon + minimum switch dwell stop cursor jitter from churning the
+ * target; far candidates need a clearer margin against sector flapping.
  */
 
-const ATLAS = "/hero/robot-atlas-v6.webp";
+const ATLAS = "/hero/robot-atlas-v7.webp";
 const COLS: number = MAP.cols;
 const ROWS: number = MAP.rows;
 const N: number = MAP.n;
@@ -51,12 +46,15 @@ const HYST_EPS = 1.5e-4;
 const MIN_SWITCH_TICKS = 8; // 133ms dwell between retargets
 const FAR_HOPS = 6;
 const FAR_RATIO = 0.7; // far targets must be clearly better (sector jitter)
-const SPEED_BUDGET = 2; // per tick: two chain hops OR one shortcut hop
-const SQUINT_MARGIN = 48;
+// travel speed in nodes/sec: eases with remaining hops — snappy when far,
+// soft landing on arrival. 12..55 spans "one-node adjust" to "corner dash".
+const RATE_MIN = 12;
+const RATE_MAX = 55;
+const RATE_PER_HOP = 11;
 
 function pos(idx: number): string {
   // CSS background-position % resolves as (container - image) * p: with the
-  // image 8x the element, column c sits at c/(COLS-1) — the -1 is load-bearing.
+  // image COLS x the element, column c sits at c/(COLS-1) — the -1 matters.
   const i = Math.min(Math.max(idx | 0, 0), N - 1);
   const col = i % COLS;
   const row = Math.floor(i / COLS);
@@ -80,12 +78,29 @@ function hopDist(a: number, b: number): number {
   return d;
 }
 
+// The wrapper is positioned by its CSS-module class (Hero.module.css
+// .robot) — no position/inset here or the inline style would override it.
+const baseStyle: React.CSSProperties = {
+  backgroundImage: `url(${ATLAS})`,
+  backgroundSize: `${COLS * 100}% ${ROWS * 100}%`,
+  backgroundPosition: pos(REST_IDX),
+  backgroundRepeat: "no-repeat",
+};
+const fadeStyle: React.CSSProperties = {
+  ...baseStyle,
+  position: "absolute",
+  inset: 0,
+  opacity: 0,
+};
+
 export default function HeroGaze({ className }: { className?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
+  const baseRef = useRef<HTMLDivElement>(null);
+  const fadeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    const base = baseRef.current;
+    const fade = fadeRef.current;
+    if (!base || !fade) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let alive = true;
@@ -94,21 +109,26 @@ export default function HeroGaze({ className }: { className?: string }) {
     let sx = mx;
     let sy = my;
     let smooth = SMOOTH_MOUSE;
-    let cur = REST_IDX; // integer node id, end to end
+    // continuous scrub state: dissolving from -> to, frac in [0, 1)
+    let from = REST_IDX;
+    let to = REST_IDX;
+    let frac = 0;
     let target = REST_IDX;
     let tickN = 0;
     let lastSwitch = -MIN_SWITCH_TICKS;
-    let lastRendered = -1;
+    let lastTime = 0;
     let near = false;
     let rafId: number;
-    let rect = el.getBoundingClientRect();
+    let rect = base.getBoundingClientRect();
 
     const updateRect = () => {
-      rect = el.getBoundingClientRect();
+      rect = base.getBoundingClientRect();
     };
 
-    const tick = () => {
+    const tick = (now: number) => {
       if (!alive) return;
+      const dt = lastTime ? Math.min((now - lastTime) / 1000, 0.05) : 1 / 60;
+      lastTime = now;
       tickN++;
       sx += (mx - sx) * smooth;
       sy += (my - sy) * smooth;
@@ -149,20 +169,45 @@ export default function HeroGaze({ className }: { className?: string }) {
         }
       }
 
-      // travel: chain hop costs 1, shortcut hop costs the whole budget so a
-      // rendered transition is always a single vetted edge or two chain frames
-      let budget = SPEED_BUDGET;
-      while (budget > 0 && cur !== target) {
-        const step = NEXT[cur][target];
-        const isChain = Math.abs(step - cur) === 1;
-        if (!isChain && budget < SPEED_BUDGET) break;
-        cur = step;
-        budget -= isChain ? 1 : SPEED_BUDGET;
+      // travel: advance the continuous scrub along the next-hop path
+      if (to === from && target !== from) {
+        to = NEXT[from][target];
+        frac = 0;
+      } else if (to !== from && NEXT[from][target] !== to) {
+        // rerouted mid-dissolve: play the dissolve backwards to `from`,
+        // then pick the new direction — never a hard cut
+        const t = from;
+        from = to;
+        to = t;
+        frac = 1 - frac;
+      }
+      if (to !== from) {
+        const remaining = hopDist(from, target);
+        const rate = Math.min(
+          RATE_MAX,
+          Math.max(RATE_MIN, remaining * RATE_PER_HOP),
+        );
+        frac += rate * dt;
+        while (frac >= 1) {
+          frac -= 1;
+          from = to;
+          if (from === target) {
+            to = from;
+            frac = 0;
+            break;
+          }
+          to = NEXT[from][target];
+        }
       }
 
-      if (cur !== lastRendered) {
-        lastRendered = cur;
-        el.style.backgroundPosition = pos(cur);
+      base.style.backgroundPosition = pos(from);
+      if (to !== from) {
+        fade.style.backgroundPosition = pos(to);
+        // smoothstep the opacity ramp — softer than linear at the ends
+        const f = frac * frac * (3 - 2 * frac);
+        fade.style.opacity = String(f);
+      } else {
+        fade.style.opacity = "0";
       }
       rafId = requestAnimationFrame(tick);
     };
@@ -173,10 +218,10 @@ export default function HeroGaze({ className }: { className?: string }) {
       mx = Math.min(1, Math.max(0, e.clientX / window.innerWidth));
       my = Math.min(1, Math.max(0, e.clientY / window.innerHeight));
       near =
-        e.clientX > rect.left - SQUINT_MARGIN &&
-        e.clientX < rect.right + SQUINT_MARGIN &&
-        e.clientY > rect.top - SQUINT_MARGIN &&
-        e.clientY < rect.bottom + SQUINT_MARGIN;
+        e.clientX > rect.left - 48 &&
+        e.clientX < rect.right + 48 &&
+        e.clientY > rect.top - 48 &&
+        e.clientY < rect.bottom + 48;
     };
     const onTouch = (e: TouchEvent) => {
       const t = e.touches[0];
@@ -203,16 +248,8 @@ export default function HeroGaze({ className }: { className?: string }) {
   }, []);
 
   return (
-    <div
-      ref={ref}
-      className={className}
-      aria-hidden="true"
-      style={{
-        backgroundImage: `url(${ATLAS})`,
-        backgroundSize: `${COLS * 100}% ${ROWS * 100}%`,
-        backgroundPosition: pos(REST_IDX),
-        backgroundRepeat: "no-repeat",
-      }}
-    />
+    <div ref={baseRef} className={className} aria-hidden="true" style={baseStyle}>
+      <div ref={fadeRef} style={fadeStyle} />
+    </div>
   );
 }

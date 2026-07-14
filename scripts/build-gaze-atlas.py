@@ -47,18 +47,18 @@ from PIL import Image
 COLS = ROWS = 9
 CELL, INSET = 512, 8
 H = W = 960
-OUT_ATLAS = os.path.join("public", "hero", "robot-atlas-v6.webp")
+OUT_ATLAS = os.path.join("public", "hero", "robot-atlas-v7.webp")
 OUT_MAP = os.path.join("src", "components", "site", "heroGazeMap.json")
 REVIEW_DIR = os.path.join("design", "assets", "robot video", "directions")
 
 # clip -> (clean monotonic frame ranges [inclusive], node budget, forced
 # frames that must become nodes: chain ends + hub-join crossings)
 CLIPS = {
-    "lr":   {"ranges": [(0, 61)], "n": 18, "forced": [0, 42, 61]},
-    "ud":   {"ranges": [(8, 38)], "n": 13, "forced": [8, 21, 38]},
-    "tlbr": {"ranges": [(0, 25), (31, 39), (45, 76)], "n": 16,
+    "lr":   {"ranges": [(0, 61)], "n": 20, "forced": [0, 42, 61]},
+    "ud":   {"ranges": [(8, 38)], "n": 14, "forced": [8, 21, 38]},
+    "tlbr": {"ranges": [(0, 25), (31, 39), (45, 76)], "n": 18,
              "forced": [0, 39, 45, 76]},
-    "ur":   {"ranges": [(8, 13), (17, 33), (37, 46), (51, 68)], "n": 12,
+    "ur":   {"ranges": [(8, 13), (17, 33), (37, 46), (51, 68)], "n": 13,
              "forced": [8, 68]},
     "dl":   {"ranges": [(10, 15), (20, 36), (40, 56), (61, 83)], "n": 15,
              "forced": [10, 83]},
@@ -306,7 +306,7 @@ def main(scratch):
         cv2.rectangle(img, (0, 0), (csz - 1, csz - 1), (210, 210, 210), 1)
         r, c = i // COLS, i % COLS
         sheet[r * csz:(r + 1) * csz, c * csz:(c + 1) * csz] = img
-    cv2.imwrite(os.path.join(REVIEW_DIR, "atlas-v6-contact.png"), sheet)
+    cv2.imwrite(os.path.join(REVIEW_DIR, "atlas-contact.png"), sheet)
 
     # (b) Andrew's spatial 9x9 gaze map: cell (r, c) = the pose shown when
     # the cursor sits at that screen cell (nearest node, same cost as runtime)
