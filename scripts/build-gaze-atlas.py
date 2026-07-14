@@ -1,44 +1,51 @@
-"""Build the hero gaze atlas from the robot scanning video (line model, v4).
+"""Build the hero gaze atlas from the robot scanning video (pose-graph, v5).
 
-The frontend (src/components/site/HeroGaze.tsx) maps cursor X DIRECTLY to a
-position on one pose-continuous "line" of frames, then scrubs toward it at
-most 2 cells per tick. For that to look right the line must satisfy two
-properties this script constructs by hand-picked frame ranges:
+The video is a 2D gaze TOUR (center -> left -> up-left -> across the top ->
+center [blink] -> up-right -> back-left slightly down [blink] -> bottom-right
+[squint]), so the frontend (src/components/site/HeroGaze.tsx) tracks the
+cursor in BOTH axes: it targets the node whose measured gaze is nearest the
+cursor and travels there along a graph of verified-smooth transitions.
 
-  1. Adjacent cells are temporally adjacent-or-near in the source video
-     (max 3-frame gap), so any +/-2-cell scrub renders as coherent motion.
-  2. The line is monotonic in (virtual) gaze X, so cursor position maps to
-     gaze direction with no timeline "tours" through unrelated poses.
+Graph construction:
+  - Nodes: every 2nd video frame (61 of 121), timeline order, in an 8x8
+    atlas. Chain edges (i, i+1) are 2 video frames apart — smooth.
+  - Shortcut edges: hand-verified pairs where the tour crosses itself at
+    near-identical poses (96px grayscale RMS diff ~13-27 vs adjacent-pair
+    median 12.3 / p90 28; every pair also passed side-by-side visual
+    inspection). They cut worst-case travel from ~500ms to ~250ms and — the
+    critical one, f2<->f72 — merge the video's two duplicate center poses so
+    cursor jitter at screen center can't trigger 32-hop timeline tours.
+  - Dijkstra (chain weight 1, shortcut weight 2) -> 61x61 next-hop matrix.
 
-The source video's scan path is non-monotonic, so the line is assembled from
-its two clean monotonic sweeps plus a compressed crossing:
+Targeting metadata (from the v5 design review):
+  - targetable: nodes the runtime argmin may SELECT. Excludes blink frames
+    (f58-62, f88), squint/blur swing frames (f106-112), motion-blurred
+    transitional frames (f10, f30, f54), and the duplicate first center
+    cluster (f0-4; f64-74 is the canonical center — it owns the shortcut
+    hub). Excluded nodes remain in the graph as pass-through animation
+    (that's what makes blinks appear naturally in transit) but the robot
+    never PARKS on one. NOTE: glow height alone can't drive this — looking
+    down naturally shortens the glow (f90-120 all measure h 76-96), so the
+    lists are explicit, not thresholded.
+  - rest: f68 (center-level, eyes open) — initial paint, reduced-motion
+    static frame, scrolled-away pose, and the padding cells' content.
+  - squint: f108 (narrowest glow) — reachable only via the proximity
+    override, never via argmin.
 
-  run B   frames 23-56   gaze X 325 -> 540 (left -> center-right), 34 cells
-  bridge  frames 59-104 every 3rd, + 106, 108 — 18 flourish cells whose
-          virtual X is squeezed into the ~1% sliver between the runs, so a
-          cursor crossing plays a quick pose-coherent head-flick and (almost)
-          no cursor position rests on a bridge frame
-  run C   frames 109-120 gaze X 545 -> 721 (center-right -> hard right),
-          12 cells; picks up exactly where run B's real gaze left off
-
-64 cells total — a full 8x8 atlas. The squint (frame 109, the narrowest
-eye-glow) lands at run C's first cell and doubles as the proximity
-expression: HeroGaze targets it when the cursor hovers the robot.
-
-Shared pipeline stages (same as ever): white-key via border flood-fill (only
+Shared pipeline stages (unchanged): white-key via border flood-fill (only
 edge-connected background dies; interior highlights survive), torso
 stabilization (translate+scale anchored bottom-center to the median torso
-band), and 8px edge-extruded atlas cells (fractional-pixel background
-scaling bleeds into the SAME frame, never a neighbor).
+band), 8px edge-extruded atlas cells (fractional-pixel background scaling
+bleeds into the SAME frame, never a neighbor).
 
-Output: public/hero/robot-atlas-v3.webp plus
-src/components/site/heroGazeMap.json {vx: normalized virtual gaze-X per
-cell (strictly increasing), squint: cell index, n}.
+Output: public/hero/robot-atlas-v5.webp (NEW name — the old v3 name is
+cache-poisoned in deployed browsers) plus src/components/site/
+heroGazeMap.json {nodes, targetable, next, rest, squint, n}.
 
-NOTE: the frame ranges above were measured against THIS video
-(design/assets/robot video/Robot Scanning Motion.mp4). If the video is
-re-generated, re-measure the monotonic runs (print each frame's eye-glow
-centroid X) before trusting RUN_B/BRIDGE/RUN_C.
+NOTE: frame numbers here were measured against THIS video (design/assets/
+robot video/Robot Scanning Motion.mp4). If the video is regenerated,
+re-measure the segments (print each frame's eye-glow centroid) before
+trusting SHORTCUTS / EXCLUDE_TARGET / REST_FRAME / SQUINT_FRAME.
 
 Usage:  python scripts/build-gaze-atlas.py "design/assets/robot video/Robot Scanning Motion.mp4"
 """
@@ -53,13 +60,27 @@ from PIL import Image
 
 COLS = ROWS = 8
 CELL, INSET = 512, 8
-OUT_ATLAS = os.path.join("public", "hero", "robot-atlas-v3.webp")
+SUBSAMPLE = 2
+OUT_ATLAS = os.path.join("public", "hero", "robot-atlas-v5.webp")
 OUT_MAP = os.path.join("src", "components", "site", "heroGazeMap.json")
 
-RUN_B = list(range(23, 57))
-BRIDGE = list(range(59, 105, 3)) + [106, 108]
-RUN_C = list(range(109, 121))
-SQUINT_FRAME = 109
+# Shortcut edges as (video frame, video frame) — all visually verified.
+SHORTCUTS = [
+    (2, 72),    # center start <-> center mid (near-identical) — MANDATORY
+    (0, 76),    # center start <-> right-swing start
+    (68, 90),   # center mid <-> back-left start (reads as a blink)
+    (80, 88),   # right-swing peak <-> return start (reads as a blink)
+    (94, 106),  # back-left hold <-> bottom-right swing start
+    (16, 24),   # left hold <-> up-left rise
+    (42, 50),   # within the top hold
+]
+CHAIN_W, SHORTCUT_W = 1, 2
+
+# Frames the argmin must never SELECT (still traversed): blinks, squints,
+# motion-blurred swings, and the duplicate first center cluster.
+EXCLUDE_TARGET = {0, 2, 4, 10, 30, 54, 58, 60, 62, 88, 106, 108, 110, 112}
+REST_FRAME = 68
+SQUINT_FRAME = 108
 
 
 def key_frame(bgr):
@@ -100,7 +121,45 @@ def gaze_of(bgra):
     )[:2]
     if len(comps) < 2:
         return None
-    return float((comps[0][1][0] + comps[1][1][0]) / 2)
+    return (
+        float((comps[0][1][0] + comps[1][1][0]) / 2),
+        float((comps[0][1][1] + comps[1][1][1]) / 2),
+    )
+
+
+def dijkstra_next_hop(n_nodes, edges):
+    """Per-source Dijkstra over the tiny graph -> next-hop matrix."""
+    import heapq
+
+    adj = {i: [] for i in range(n_nodes)}
+    for a, b, w in edges:
+        adj[a].append((b, w))
+        adj[b].append((a, w))
+    nxt = [[0] * n_nodes for _ in range(n_nodes)]
+    for src in range(n_nodes):
+        dist = [float("inf")] * n_nodes
+        prev = [-1] * n_nodes
+        dist[src] = 0
+        pq = [(0, src)]
+        while pq:
+            d, u = heapq.heappop(pq)
+            if d > dist[u]:
+                continue
+            for v, w in adj[u]:
+                if d + w < dist[v]:
+                    dist[v] = d + w
+                    prev[v] = u
+                    heapq.heappush(pq, (d + w, v))
+        # walk each destination back to src; first hop out of src -> dest
+        for dst in range(n_nodes):
+            if dst == src:
+                nxt[src][dst] = src  # diagonal MUST be identity
+                continue
+            node = dst
+            while prev[node] != src:
+                node = prev[node]
+            nxt[src][dst] = node
+    return nxt, adj
 
 
 def main(video):
@@ -139,36 +198,51 @@ def main(video):
         )
     print(f"stabilized to torso cx {ref_cx:.1f}, width {ref_w:.1f}")
 
-    line = RUN_B + BRIDGE + RUN_C
-    n_cells = len(line)
-    if n_cells > COLS * ROWS:
-        raise SystemExit(f"{n_cells} cells won't fit {COLS}x{ROWS}")
-    print(
-        f"line: {n_cells} cells (B {len(RUN_B)} + bridge {len(BRIDGE)} "
-        f"+ C {len(RUN_C)}), max video gap "
-        f"{max(line[i + 1] - line[i] for i in range(n_cells - 1))}"
-    )
+    node_frames = list(range(0, len(raw), SUBSAMPLE))
+    n_nodes = len(node_frames)
+    if n_nodes > COLS * ROWS:
+        raise SystemExit(f"{n_nodes} nodes won't fit {COLS}x{ROWS}")
+    frame_to_node = {f: i for i, f in enumerate(node_frames)}
 
-    xs = []
-    for fi in line:
+    # gaze per node (carry-forward only fills blink gaps for traversal math;
+    # those nodes are excluded from targeting anyway)
+    gz = []
+    for fi in node_frames:
         g = gaze_of(stab[fi])
-        xs.append(g if g is not None else xs[-1])
+        gz.append(g if g else gz[-1])
+    xs = np.array([g[0] for g in gz])
+    ys = np.array([g[1] for g in gz])
+    nx = (xs - xs.min()) / (xs.max() - xs.min())
+    ny = (ys - ys.min()) / (ys.max() - ys.min())
 
-    # virtual X: runs keep real gaze X; bridge interpolates across the sliver
-    # between them, then strict monotonicity is enforced
-    vx = xs.copy()
-    b_end = len(RUN_B)
-    c_start = b_end + len(BRIDGE)
-    for k in range(len(BRIDGE)):
-        vx[b_end + k] = xs[b_end - 1] + (xs[c_start] - xs[b_end - 1]) * (k + 1) / (
-            len(BRIDGE) + 1
-        )
-    for i in range(1, n_cells):
-        if vx[i] <= vx[i - 1]:
-            vx[i] = vx[i - 1] + 0.01
-    vmin, vmax = vx[0], vx[-1]
-    nvx = [round((v - vmin) / (vmax - vmin), 4) for v in vx]
+    # graph -> next-hop
+    edges = [(i, i + 1, CHAIN_W) for i in range(n_nodes - 1)]
+    for fa, fb in SHORTCUTS:
+        if fa not in frame_to_node or fb not in frame_to_node:
+            raise SystemExit(f"shortcut frame f{fa}/f{fb} not in node set")
+        edges.append((frame_to_node[fa], frame_to_node[fb], SHORTCUT_W))
+    nxt, adj = dijkstra_next_hop(n_nodes, edges)
 
+    # sanity: diagonal identity + every hop is a real graph neighbor
+    neighbor_sets = {i: {v for v, _ in adj[i]} for i in range(n_nodes)}
+    for i in range(n_nodes):
+        assert nxt[i][i] == i
+        for j in range(n_nodes):
+            if i != j:
+                assert nxt[i][j] in neighbor_sets[i], (i, j, nxt[i][j])
+    assert (frame_to_node[2], frame_to_node[72], SHORTCUT_W) in [
+        (a, b, w) for a, b, w in edges
+    ], "center shortcut missing — anti-oscillation mechanism, not optional"
+
+    targetable = [
+        i for i, fi in enumerate(node_frames) if fi not in EXCLUDE_TARGET
+    ]
+    rest = frame_to_node[REST_FRAME]
+    squint = frame_to_node[SQUINT_FRAME]
+    assert rest in targetable
+
+    # atlas: nodes in timeline order; padding cells hold the REST frame so
+    # any index bug degrades invisibly instead of flashing the corner glare
     content = CELL - 2 * INSET
     atlas = np.zeros((CELL * ROWS, CELL * COLS, 4), np.uint8)
 
@@ -183,20 +257,28 @@ def main(video):
         cell[:, INSET + content :] = cell[:, INSET + content - 1 : INSET + content]
         atlas[r * CELL : (r + 1) * CELL, c * CELL : (c + 1) * CELL] = cell
 
-    for i, fi in enumerate(line):
+    for i, fi in enumerate(node_frames):
         put(fi, i)
-    for i in range(n_cells, COLS * ROWS):
-        put(line[-1], i)
+    for i in range(n_nodes, COLS * ROWS):
+        put(REST_FRAME, i)
 
     out = Image.fromarray(cv2.cvtColor(atlas, cv2.COLOR_BGRA2RGBA))
     out.save(OUT_ATLAS, "WEBP", quality=80, method=6)
     print(f"atlas {out.size} -> {OUT_ATLAS} ({os.path.getsize(OUT_ATLAS)//1024} KB)")
 
-    json.dump(
-        {"vx": nvx, "squint": line.index(SQUINT_FRAME), "n": n_cells},
-        open(OUT_MAP, "w"),
+    data = {
+        "n": n_nodes,
+        "nodes": [[round(float(a), 4), round(float(b), 4)] for a, b in zip(nx, ny)],
+        "targetable": targetable,
+        "next": nxt,
+        "rest": rest,
+        "squint": squint,
+    }
+    json.dump(data, open(OUT_MAP, "w"), separators=(",", ":"))
+    print(
+        f"map -> {OUT_MAP} ({os.path.getsize(OUT_MAP)} B; {n_nodes} nodes, "
+        f"{len(targetable)} targetable, rest={rest}, squint={squint})"
     )
-    print(f"map -> {OUT_MAP} ({n_cells} cells, squint at {line.index(SQUINT_FRAME)})")
 
 
 if __name__ == "__main__":
