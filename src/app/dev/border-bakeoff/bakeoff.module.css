@@ -1,0 +1,191 @@
+/* ==========================================================================
+   DEV-ONLY border-animation bake-off (research spike 001). Three hover
+   treatments on identical real cards. Not linked from the site; delete
+   after the decision. Techniques and tuning values come straight from the
+   spike's verified references — see .claude/research/001.
+   ========================================================================== */
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px 96px;
+}
+
+.title {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--meta-gray);
+  margin: 0 0 8px;
+}
+
+.hint {
+  font-size: 16px;
+  color: var(--ink);
+  margin: 0 0 48px;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+}
+
+.card {
+  display: block;
+}
+
+.frame {
+  position: relative;
+  display: block;
+  aspect-ratio: 1073 / 750;
+  border: 1px solid var(--black);
+  cursor: pointer;
+}
+
+.shot {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.label {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--meta-gray);
+  margin: 12px 0 0;
+}
+
+/* --- shared SVG dieline overlay (variants 1 + 2) ------------------------ */
+/* Sized 100%/100% with NO viewBox so user units = CSS px (dash math stays
+   uniform at any card width). Positioned over the 1px black border. */
+.dielineSvg {
+  position: absolute;
+  inset: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  pointer-events: none;
+  overflow: visible;
+}
+
+.dielineSvg rect {
+  x: 1px;
+  y: 1px;
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+  fill: none;
+}
+
+/* --- 1: DRAW-ON DIELINE -------------------------------------------------
+   The border draws itself around from the top-left corner on hover, like a
+   plotter tracing a cutline; retracts backwards on exit (the CSS transition
+   plays both ways). pathLength=100 normalizes dash math to percentages —
+   this page doubles as the Firefox/Safari pathLength support test the
+   spike flagged. Reference: mikeK eYYWNLV / GSAP forum 21633 pattern. */
+.drawRect {
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset 0.65s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.cardDraw:hover .drawRect,
+.cardDraw:focus-visible .drawRect {
+  stroke-dashoffset: 0;
+}
+
+/* --- 2: MARCHING DIELINE ------------------------------------------------
+   On hover an orange dashed dieline fades up over the black border and
+   crawls clockwise — deliberately slow (Martinsson recipe: static at rest,
+   slow crawl on hover, ~4:3 dash ratio, hairline weight, linear). The
+   black border showing through the gaps is the two-layer contrast that
+   reads "technical drawing", not "selection rectangle". */
+.marchRect {
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cardMarch:hover .marchRect,
+.cardMarch:focus-visible .marchRect {
+  opacity: 1;
+  animation: march 1.1s linear infinite;
+}
+
+@keyframes march {
+  to {
+    stroke-dashoffset: -9; /* exactly one dash period -> seamless loop */
+  }
+}
+
+/* --- 3: IN-RING BEAM (MagicUI recipe, vendored CSS-only) -----------------
+   A long gradient segment flows through the border line itself: an overlay
+   ring (double mask shows ONLY the 1.5px border annulus) contains one
+   pre-painted gradient square traveling offset-path: rect(). The hairline
+   itself appears to light up and carry current — nothing orbits on top.
+   Source: magicui border-beam @dea9b82 (MIT), adapted to radius 0 and the
+   site palette. */
+.beamRing {
+  display: none;
+}
+
+@supports (offset-path: rect(0 auto auto 0)) {
+  .beamRing {
+    display: block;
+    position: absolute;
+    inset: -1px;
+    border: 1.5px solid transparent;
+    pointer-events: none;
+    -webkit-mask:
+      linear-gradient(transparent, transparent) padding-box,
+      linear-gradient(#fff 0 0) border-box;
+    -webkit-mask-composite: source-in;
+    mask:
+      linear-gradient(transparent, transparent) padding-box,
+      linear-gradient(#fff 0 0) border-box;
+    mask-composite: intersect;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .beamRing::after {
+    content: "";
+    position: absolute;
+    width: 400px;
+    aspect-ratio: 1;
+    background: linear-gradient(
+      to left,
+      var(--accent-soft),
+      var(--accent) 30%,
+      var(--accent-deep) 55%,
+      transparent 100%
+    );
+    offset-path: rect(0 auto auto 0);
+    offset-anchor: 90% 50%;
+    animation: beamOrbit 7s linear infinite;
+    animation-play-state: paused;
+  }
+
+  .cardBeam:hover .beamRing,
+  .cardBeam:focus-visible .beamRing {
+    opacity: 1;
+  }
+
+  .cardBeam:hover .beamRing::after,
+  .cardBeam:focus-visible .beamRing::after {
+    animation-play-state: running;
+  }
+}
+
+@keyframes beamOrbit {
+  to {
+    offset-distance: 100%;
+  }
+}
