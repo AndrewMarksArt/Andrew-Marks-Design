@@ -115,12 +115,19 @@ export default function CaseStudyMedia({
           </span>
         ))}
       </span>
-      {/* Border beam v3: two small comet capsules traveling the card's
-          perimeter (offset-path: border-box, compositor-driven), riding
-          OUTSIDE the clipped frame so the glow reads on the white plate. */}
-      <span className={styles.beamTrack} aria-hidden="true">
-        <span className={styles.beamGlow} />
-        <span className={styles.beamHead} />
+      {/* Border beam v4 (bake-off winner): twin in-ring beams born at the
+          top-left and bottom-right corners, each sweeping half the
+          perimeter to die at the other's origin, fading in/out. The ring
+          layer recolors the border line itself (masked annulus); the glow
+          layer rides the same path unmasked for the halo. Siblings of the
+          clipped frame so nothing is cut off. */}
+      <span className={styles.beamGlows} aria-hidden="true">
+        <span className={`${styles.beamHalo} ${styles.beamA}`} />
+        <span className={`${styles.beamHalo} ${styles.beamB}`} />
+      </span>
+      <span className={styles.beamRing} aria-hidden="true">
+        <span className={`${styles.beamSeg} ${styles.beamA}`} />
+        <span className={`${styles.beamSeg} ${styles.beamB}`} />
       </span>
     </Link>
   );

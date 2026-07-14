@@ -235,94 +235,126 @@
 }
 
 /* ==========================================================================
-   Border beam v3 — our own recreation, small and compositor-only. The
-   ported library repainted card-sized angle-driven masks every frame
-   (jank #1); a rotate-a-giant-blurred-square attempt re-filtered ~1450px
-   textures per frame (jank #2, caught in testing). This version has no
-   masks, no filters, no big layers: two tiny pre-painted comet capsules
-   (a crisp tracer and a soft glow, softness baked into their gradients)
-   travel the card's perimeter via offset-path: border-box, which runs on
-   the compositor. Bonus over the conic original: uniform speed around
-   the rectangle. Riding the border OUTSIDE the clipped frame (siblings
-   of it) keeps the beam visible on the white plate.
+   Border beam v4 — the bake-off winner (in-ring beam, spike 001) with
+   Andrew's choreography: TWO beams born at opposite corners (top-left and
+   bottom-right), each sweeping half the perimeter to end where the other
+   began, fading in at birth and out on arrival; each carries a soft glow.
+   Mechanics stay in the proven-cheap class: pre-painted gradients on
+   offset-path (layout/paint-free), opacity fades, no masks-with-animated-
+   angles, no filters on big layers. offset-distance % runs clockwise from
+   the top-left corner, so TL = 0% and BR = exactly 50%. Animations run
+   only while engaged and restart from the corners on every hover.
    ========================================================================== */
 
-.beamTrack {
+.beamRing,
+.beamGlows {
   position: absolute;
-  inset: 0;
+  inset: -1px; /* sit exactly over the frame's 1px border line */
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.5s ease; /* exit fade; engaged rules use 0.6s in */
+  transition: opacity 0.4s ease;
 }
 
-/* travelers exist only where offset-path is supported — without the
-   guard, non-supporting browsers would show them parked at the origin */
-.beamGlow,
-.beamHead {
+/* the ring layer shows ONLY the border annulus (MagicUI double-mask trick,
+   static — never repaints); the glow layer is unmasked so its halo bleeds
+   naturally onto the card edge and the white plate */
+.beamRing {
+  border: 2px solid transparent;
+  -webkit-mask:
+    linear-gradient(transparent, transparent) padding-box,
+    linear-gradient(#fff 0 0) border-box;
+  -webkit-mask-composite: source-in;
+  mask:
+    linear-gradient(transparent, transparent) padding-box,
+    linear-gradient(#fff 0 0) border-box;
+  mask-composite: intersect;
+}
+
+/* travelers exist only where offset-path rect() is supported — without the
+   guard, non-supporting browsers would show them parked in a corner */
+.beamSeg,
+.beamHalo {
   display: none;
 }
 
-@supports (offset-path: border-box) {
-  .beamGlow,
-  .beamHead {
+@supports (offset-path: rect(0 auto auto 0)) {
+  .beamSeg,
+  .beamHalo {
     display: block;
     position: absolute;
-    offset-path: border-box;
-    offset-anchor: 50% 50%;
-    animation:
-      csBeamTravel 3.4s linear infinite,
-      csBeamHue 12s ease-in-out infinite;
-    will-change: offset-distance;
+    offset-path: rect(0 auto auto 0);
+    offset-anchor: 90% 50%;
+    opacity: 0;
   }
 
-  /* soft sunset glow: a wide low capsule, blur baked into the gradient */
-  .beamGlow {
-    width: 300px;
-    height: 30px;
-    background: radial-gradient(
-      ellipse 50% 50% at 62% 50%,
-      rgba(255, 110, 60, 0.55) 0%,
-      rgba(255, 140, 50, 0.32) 45%,
-      rgba(255, 160, 40, 0.12) 75%,
+  /* the in-ring segment: a long gradient square clipped to the annulus by
+     the parent mask — the border line itself lights up (bake-off look) */
+  .beamSeg {
+    width: 420px;
+    aspect-ratio: 1;
+    background: linear-gradient(
+      to left,
+      var(--accent-soft),
+      var(--accent) 25%,
+      var(--accent-deep) 55%,
       transparent 100%
     );
   }
 
-  /* crisp tracer: thin comet with a bright leading head (travel direction
-     is +x, so the head sits at the right end of the gradient) */
-  .beamHead {
-    width: 220px;
-    height: 3px;
-    border-radius: 999px;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(255, 160, 40, 0.25) 30%,
-      rgba(255, 110, 60, 0.75) 70%,
-      rgb(255, 80, 50) 90%,
-      rgb(255, 220, 150) 100%
+  /* the glow: a soft capsule riding the same path (blur baked into the
+     gradient — no filter), giving the segment its halo */
+  .beamHalo {
+    width: 380px;
+    height: 56px;
+    offset-anchor: 78% 50%;
+    background: radial-gradient(
+      ellipse 46% 50% at 72% 50%,
+      rgba(236, 78, 9, 0.5) 0%,
+      rgba(236, 78, 9, 0.22) 50%,
+      rgba(251, 192, 166, 0.12) 75%,
+      transparent 100%
     );
   }
+
 }
 
-@keyframes csBeamTravel {
-  from {
-    offset-distance: 0%;
-  }
-  to {
-    offset-distance: 100%;
-  }
-}
+/* choreography: A born at the top-left corner (0%), B at the bottom-right
+   (50%); each sweeps half the perimeter and dies at the other's origin.
+   Fades live inside the keyframes; ease-in-out on the travel. The
+   animation is applied by the ENGAGED state (below), so every hover
+   restarts the gesture from the corners and nothing animates at rest. */
 
-@keyframes csBeamHue {
+@keyframes csBeamSweepA {
   0% {
-    filter: hue-rotate(-30deg);
+    offset-distance: 0%;
+    opacity: 0;
   }
-  50% {
-    filter: hue-rotate(30deg);
+  12% {
+    opacity: 1;
+  }
+  86% {
+    opacity: 1;
   }
   100% {
-    filter: hue-rotate(-30deg);
+    offset-distance: 50%;
+    opacity: 0;
+  }
+}
+
+@keyframes csBeamSweepB {
+  0% {
+    offset-distance: 50%;
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  86% {
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
   }
 }
 
@@ -371,9 +403,17 @@
       var(--peek-delay, 0ms);
   }
 
-  .mediaLink:hover .beamTrack {
+  .mediaLink:hover .beamRing,
+  .mediaLink:hover .beamGlows {
     opacity: 1;
-    transition-duration: 0.6s; /* fade-in; exit falls back to 0.5s */
+  }
+
+  .mediaLink:hover .beamA {
+    animation: csBeamSweepA 2.6s ease-in-out infinite;
+  }
+
+  .mediaLink:hover .beamB {
+    animation: csBeamSweepB 2.6s ease-in-out infinite;
   }
 }
 
@@ -390,8 +430,19 @@
     var(--peek-delay, 0ms);
 }
 
-.mediaLink:focus-visible .beamTrack,
-.mediaLink[data-peek] .beamTrack {
+.mediaLink:focus-visible .beamRing,
+.mediaLink:focus-visible .beamGlows,
+.mediaLink[data-peek] .beamRing,
+.mediaLink[data-peek] .beamGlows {
   opacity: 1;
-  transition-duration: 0.6s;
+}
+
+.mediaLink:focus-visible .beamA,
+.mediaLink[data-peek] .beamA {
+  animation: csBeamSweepA 2.6s ease-in-out infinite;
+}
+
+.mediaLink:focus-visible .beamB,
+.mediaLink[data-peek] .beamB {
+  animation: csBeamSweepB 2.6s ease-in-out infinite;
 }
