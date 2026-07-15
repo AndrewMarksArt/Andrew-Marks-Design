@@ -95,11 +95,19 @@ export default function HeroGaze({ className }: { className?: string }) {
       }
     };
 
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+    // The robot is present from first paint but holds its center gaze
+    // until the hero's text ladder has finished (~1.5s after navigation)
+    // — then it wakes up and starts following the cursor. performance.now()
+    // is navigation-relative, so a late hydration just means no extra wait.
+    const FOLLOW_AFTER_NAV_MS = 1600;
+    const followTimer = setTimeout(() => {
+      window.addEventListener("mousemove", handleMouseMove, { passive: true });
+      window.addEventListener("touchmove", handleTouchMove, { passive: true });
+    }, Math.max(0, FOLLOW_AFTER_NAV_MS - performance.now()));
 
     return () => {
       alive = false;
+      clearTimeout(followTimer);
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("touchmove", handleTouchMove);

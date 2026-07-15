@@ -88,12 +88,10 @@ export default function Hero() {
 
       {/* Masked robot band: plus lattice behind, cursor-following gaze
           portrait in front (placeholder site's system, transparent atlas).
-          Decorative. Boot item 0: quick fade, no rise (the gaze system
-          shouldn't move while booting). */}
-      <div
-        className={`${styles.band} ${styles.bootFade}`}
-        aria-hidden="true"
-      >
+          Decorative. Present from first paint with NO entrance animation
+          (Andrew's ruling) — but the gaze doesn't follow the cursor until
+          the text ladder has finished (gated inside HeroGaze). */}
+      <div className={styles.band} aria-hidden="true">
         <PlusLattice />
         <HeroGaze className={styles.robot} />
       </div>
