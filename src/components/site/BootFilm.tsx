@@ -229,34 +229,45 @@ export default function BootFilm() {
     // far edge (a pinned mid-keyframe made the reveal read as two jerky
     // sections; Andrew's ruling: single sweep, Apple's gentle ease).
     const sAt = (ms: number) => ms / T.sweepEnd;
-    run(
-      curtR,
-      [
-        { offset: 0, transform: "translateX(0px)" },
-        { offset: sAt(T.sweep), transform: "translateX(0px)" },
-        {
-          offset: sAt(T.sweep + 16),
-          transform: `translateX(${anchor.x}px)`,
-          easing: APPLE,
-        },
-        { offset: 1, transform: `translateX(${vw}px)` },
-      ],
-      { duration: T.sweepEnd },
-    );
-    run(
-      curtB,
-      [
-        { offset: 0, transform: "translateY(0px)" },
-        { offset: sAt(T.sweep), transform: "translateY(0px)" },
-        {
-          offset: sAt(T.sweep + 16),
-          transform: `translateY(${anchor.y}px)`,
-          easing: APPLE,
-        },
-        { offset: 1, transform: `translateY(${vh}px)` },
-      ],
-      { duration: T.sweepEnd },
-    );
+    // each curtain's inner pattern layer counter-translates so the hatch
+    // stays viewport-locked while the clipping edge sweeps (the pattern
+    // riding the curtain read as the background being pushed)
+    const curtRI = $("cri");
+    const curtBI = $("cbi");
+    const sweepX = (el: HTMLElement, sign: 1 | -1) =>
+      run(
+        el,
+        [
+          { offset: 0, transform: "translateX(0px)" },
+          { offset: sAt(T.sweep), transform: "translateX(0px)" },
+          {
+            offset: sAt(T.sweep + 16),
+            transform: `translateX(${sign * anchor.x}px)`,
+            easing: APPLE,
+          },
+          { offset: 1, transform: `translateX(${sign * vw}px)` },
+        ],
+        { duration: T.sweepEnd },
+      );
+    const sweepY = (el: HTMLElement, sign: 1 | -1) =>
+      run(
+        el,
+        [
+          { offset: 0, transform: "translateY(0px)" },
+          { offset: sAt(T.sweep), transform: "translateY(0px)" },
+          {
+            offset: sAt(T.sweep + 16),
+            transform: `translateY(${sign * anchor.y}px)`,
+            easing: APPLE,
+          },
+          { offset: 1, transform: `translateY(${sign * vh}px)` },
+        ],
+        { duration: T.sweepEnd },
+      );
+    sweepX(curtR, 1);
+    sweepX(curtRI, -1);
+    sweepY(curtB, 1);
+    sweepY(curtBI, -1);
 
     // lines grow out of the anchor with the sweep
     glHero.style.top = `${slot.bottom - 1}px`;
@@ -325,11 +336,16 @@ export default function BootFilm() {
       {/* horizontal + vertical viewport rules (grow from center, then travel) */}
       <span data-f="h" className={styles.hRule} />
       <span data-f="v" className={styles.vRule} />
-      {/* the reveal curtains: hatch-painted covers (identical to the body
-          background) that retreat right/down from the anchor, unmasking
-          the real page beneath. Cover everything until the sweep. */}
-      <div data-f="cr" className={styles.curtainR} />
-      <div data-f="cb" className={styles.curtainB} />
+      {/* the reveal curtains: clipping covers that retreat right/down from
+          the anchor, unmasking the real page beneath. Their hatch pattern
+          lives on inner layers that counter-translate, staying viewport-
+          locked while the edges sweep. Cover everything until the sweep. */}
+      <div data-f="cr" className={styles.curtainR}>
+        <div data-f="cri" className={styles.curtainInner} />
+      </div>
+      <div data-f="cb" className={styles.curtainB}>
+        <div data-f="cbi" className={styles.curtainInner} />
+      </div>
       {/* structural lines + marks growing out of the anchor (above the
           curtains — the drafting lines span the hatch, per the storyboard) */}
       <span data-f="glr" className={styles.glVert} />

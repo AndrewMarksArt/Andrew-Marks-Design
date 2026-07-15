@@ -92,16 +92,20 @@
   }
 }
 
-/* --- boot film: chips + decorations arrive with the chrome beat --- */
-:global([data-film]:not(.film-chrome)) .brandRow {
+/* --- boot film: ONLY the decorations band (chips + hazard mark) waits
+   for the chrome beat. The structural rules + plus marks (.ruleRow) are
+   part of the page grid and reveal with the sweep - gating them left a
+   hole between the overlay's line fading out and the chrome beat (seen
+   live as a fade-out-blink-in under the hero). --- */
+:global([data-film]:not(.film-chrome)) .band {
   opacity: 0;
 }
 
-:global([data-film].film-chrome) .brandRow {
+:global([data-film].film-chrome) .band {
   animation: brFade 0.75s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
 }
 
-:global([data-film].film-skip) .brandRow {
+:global([data-film].film-skip) .band {
   animation-duration: 0.01ms;
 }
 

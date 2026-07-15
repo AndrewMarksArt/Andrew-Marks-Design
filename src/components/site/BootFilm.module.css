@@ -89,6 +89,20 @@
   top: 0;
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
+}
+
+/* The hatch pattern lives on an inner layer that JS counter-translates,
+   so the pattern stays viewport-locked while the curtain's clipping edge
+   moves (translating the pattern with the curtain read as the page
+   background being pushed by the sweep). Same recipe as the body hatch,
+   phase-aligned at scroll 0. */
+.curtainInner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
   background-color: var(--gutter-base);
   background-image: repeating-linear-gradient(
     50.79deg,
