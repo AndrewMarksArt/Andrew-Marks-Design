@@ -24,9 +24,9 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 26px;
-  height: 26px;
-  transform: translate(-50%, -50%) rotate(45deg);
+  width: 32px;
+  height: 32px;
+  transform: translate(-50%, -50%) rotate(45deg) scale(0.72);
 }
 
 /* viewport-spanning rules (2px, --rule recipe), scale from center */

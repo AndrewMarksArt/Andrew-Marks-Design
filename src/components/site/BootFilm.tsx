@@ -117,10 +117,19 @@ export default function BootFilm() {
     const vh = window.innerHeight;
     const plate = plateEl.getBoundingClientRect();
     const slot = heroCanvas.getBoundingClientRect();
-    const anchor = {
-      x: plate.left + 1,
-      y: (metaRuleEl ? metaRuleEl.getBoundingClientRect().top : plate.top + 56) + 1,
-    };
+    // The anchor is the CENTER of the real top-left corner plus mark (the
+    // MetaBar's plusLeft) so the traveling mark lands exactly on it — same
+    // position, same 32px size — and the reveal-jump beneath is invisible.
+    const realMark = document.querySelector(
+      '[class*="metaBar"] [class*="plusLeft"]',
+    );
+    const markRect = realMark ? realMark.getBoundingClientRect() : null;
+    const anchor = markRect
+      ? { x: markRect.left + markRect.width / 2, y: markRect.top + markRect.height / 2 }
+      : {
+          x: plate.left,
+          y: (metaRuleEl ? metaRuleEl.getBoundingClientRect().top : plate.top + 56) + 1,
+        };
 
     const run = (
       el: HTMLElement,
@@ -137,32 +146,37 @@ export default function BootFilm() {
     // animation-replacement rule auto-removes earlier finished transform
     // animations once a later one finishes, snapping elements back to their
     // CSS base state (caught live: the mark reverted to x mid-film).
-    const dx = anchor.x - vw / 2;
-    const dy = anchor.y - vh / 2;
+    // Travel delta is measured from the mark's RENDERED center — not
+    // innerWidth/2, which includes the scrollbar and landed the mark 7px
+    // off the real corner mark (caught live as a doubled line + plus).
+    const c0 = mark.getBoundingClientRect();
+    const dx = anchor.x - (c0.left + c0.width / 2);
+    const dy = anchor.y - (c0.top + c0.height / 2);
     const SPAN = T.travel + 430; // 0 .. end of travel
     const at = (ms: number) => ms / SPAN;
 
-    // mark: x -> + (0..380), hold, travel (950..1380)
+    // mark: x -> + (0..380), hold, travel (950..1380). Lands at scale(1) =
+    // exactly the real 32px corner mark it sits down on.
     run(
       mark,
       [
         {
           offset: 0,
-          transform: "translate(-50%, -50%) rotate(45deg) scale(1)",
+          transform: "translate(-50%, -50%) rotate(45deg) scale(0.72)",
           easing: EXPO,
         },
         {
           offset: at(380),
-          transform: "translate(-50%, -50%) rotate(0deg) scale(1.4)",
+          transform: "translate(-50%, -50%) rotate(0deg) scale(1)",
         },
         {
           offset: at(T.travel),
-          transform: "translate(-50%, -50%) rotate(0deg) scale(1.4)",
+          transform: "translate(-50%, -50%) rotate(0deg) scale(1)",
           easing: TRAVEL,
         },
         {
           offset: 1,
-          transform: `translate(-50%, -50%) translate(${dx}px, ${dy}px) rotate(0deg) scale(1.4)`,
+          transform: `translate(-50%, -50%) translate(${dx}px, ${dy}px) rotate(0deg) scale(1)`,
         },
       ],
       { duration: SPAN },
@@ -201,34 +215,52 @@ export default function BootFilm() {
     // plus-marks pop as they arrive at their intersections. Compositor-only
     // (translates); no doubles, no seams.
     const sweepDur = T.sweepEnd - T.sweep;
-    // mid-keyframe pins the moment each curtain's edge crosses the content
-    // it reveals (plate right edge / hero rule), so line + mark timing can
-    // be choreographed against it.
+    // Curtains run from t=0 so they COVER EVERYTHING through beats A-C
+    // (fill:both + a delayed start would pre-apply the retreated first
+    // keyframe and leave the page's top-left corner peeking out — shipped
+    // that bug once). At sweep start they jump to the anchor — invisible,
+    // because the landed overlay crosshair + mark sit exactly over the
+    // real rules/mark that jump reveals — then retreat. Mid-keyframes pin
+    // the moments each edge crosses the content it reveals (plate right
+    // edge / hero rule) for line + mark choreography.
+    const sAt = (ms: number) => ms / T.sweepEnd;
     run(
       curtR,
       [
-        { offset: 0, transform: `translateX(${anchor.x}px)`, easing: TRAVEL },
+        { offset: 0, transform: "translateX(0px)" },
+        { offset: sAt(T.sweep), transform: "translateX(0px)" },
         {
-          offset: 0.62,
+          offset: sAt(T.sweep + 16),
+          transform: `translateX(${anchor.x}px)`,
+          easing: TRAVEL,
+        },
+        {
+          offset: sAt(T.sweep + sweepDur * 0.62),
           transform: `translateX(${plate.right + 24}px)`,
           easing: "ease-out",
         },
         { offset: 1, transform: `translateX(${vw}px)` },
       ],
-      { delay: T.sweep, duration: sweepDur },
+      { duration: T.sweepEnd },
     );
     run(
       curtB,
       [
-        { offset: 0, transform: `translateY(${anchor.y}px)`, easing: TRAVEL },
+        { offset: 0, transform: "translateY(0px)" },
+        { offset: sAt(T.sweep), transform: "translateY(0px)" },
         {
-          offset: 0.62,
+          offset: sAt(T.sweep + 16),
+          transform: `translateY(${anchor.y}px)`,
+          easing: TRAVEL,
+        },
+        {
+          offset: sAt(T.sweep + sweepDur * 0.62),
           transform: `translateY(${slot.bottom + 24}px)`,
           easing: "ease-out",
         },
         { offset: 1, transform: `translateY(${vh}px)` },
       ],
-      { delay: T.sweep, duration: sweepDur },
+      { duration: T.sweepEnd },
     );
 
     // lines grow out of the anchor with the sweep
@@ -307,15 +339,15 @@ export default function BootFilm() {
           curtains — the drafting lines span the hatch, per the storyboard) */}
       <span data-f="glr" className={styles.glVert} />
       <span data-f="glh" className={styles.glHorz} />
-      <svg data-f="pma" className={styles.pm} viewBox="0 0 32 32">
-        <path d="M16 4V28M4 16H28" stroke="var(--black)" strokeWidth="2" />
+      <svg data-f="pma" className={styles.pm} viewBox="0 0 32 32" fill="none">
+        <path d="M16 0V32M0 16H32" stroke="var(--black)" strokeWidth="4" />
       </svg>
-      <svg data-f="pmb" className={styles.pm} viewBox="0 0 32 32">
-        <path d="M16 4V28M4 16H28" stroke="var(--black)" strokeWidth="2" />
+      <svg data-f="pmb" className={styles.pm} viewBox="0 0 32 32" fill="none">
+        <path d="M16 0V32M0 16H32" stroke="var(--black)" strokeWidth="4" />
       </svg>
       {/* the registration mark: starts as x (rotated plus), turns upright */}
-      <svg data-f="mark" className={styles.mark} viewBox="0 0 32 32">
-        <path d="M16 3V29M3 16H29" stroke="var(--black)" strokeWidth="2.2" />
+      <svg data-f="mark" className={styles.mark} viewBox="0 0 32 32" fill="none">
+        <path d="M16 0V32M0 16H32" stroke="var(--black)" strokeWidth="4" />
       </svg>
     </div>
   );
