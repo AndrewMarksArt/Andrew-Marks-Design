@@ -65,10 +65,36 @@ export default function BootLine({
       timer = setTimeout(() => typeFrom(i + 1), jitter + extra);
     };
 
-    timer = setTimeout(() => typeFrom(0), START_DELAY_MS);
+    // Under the boot film, typing waits for the film's text beat instead
+    // of the mount clock; a skip renders the full line instantly.
+    const filmed = document.documentElement.hasAttribute("data-film");
+    const onFilmText = () => {
+      timer = setTimeout(() => typeFrom(0), START_DELAY_MS);
+    };
+    const onFilmSkip = () => {
+      alive = false;
+      clearTimeout(timer);
+      setShown(text);
+      setCaretVisible(false);
+    };
+    if (filmed) {
+      if (document.documentElement.classList.contains("film-skip")) {
+        onFilmSkip();
+      } else if (document.documentElement.classList.contains("film-text")) {
+        onFilmText();
+      } else {
+        window.addEventListener("am:film-text", onFilmText, { once: true });
+        window.addEventListener("am:film-skip", onFilmSkip, { once: true });
+      }
+    } else {
+      timer = setTimeout(() => typeFrom(0), START_DELAY_MS);
+    }
+
     return () => {
       alive = false;
       clearTimeout(timer);
+      window.removeEventListener("am:film-text", onFilmText);
+      window.removeEventListener("am:film-skip", onFilmSkip);
     };
   }, [text]);
 

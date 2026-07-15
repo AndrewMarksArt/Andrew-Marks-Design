@@ -55,10 +55,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>
+    // suppressHydrationWarning: the boot-film head script stamps data-film
+    // on <html> before hydration (by design); React must not warn or patch.
+    <html
+      lang="en"
+      className={`${geist.variable} ${geistMono.variable}`}
+      suppressHydrationWarning
+    >
       {/* TODO(Andrew): Adobe Fonts kit for Neue Haas Grotesk Display Pro
           (55 Roman / 65 Medium / 75 Bold). Add inside <head> once created:
           <link rel="stylesheet" href="https://use.typekit.net/KIT_ID.css" /> */}
+      <head>
+        {/* Boot-film gate — must run BEFORE first paint. Stamps
+            <html data-film> only for: home page, first visit this session,
+            motion-ok, desktop. No stamp => nothing is ever hidden (no-JS,
+            crawlers, repeat visits, reduced-motion, mobile all render the
+            finished page instantly). See BootFilm.tsx. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(location.pathname==='/'&&!sessionStorage.getItem('am-film-seen')&&matchMedia('(prefers-reduced-motion: no-preference)').matches&&innerWidth>=1024){document.documentElement.setAttribute('data-film','')}}catch(e){}",
+          }}
+        />
+      </head>
       <body>{children}</body>
     </html>
   );

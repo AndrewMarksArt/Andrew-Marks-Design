@@ -1,3 +1,4 @@
+import BootFilm from "../components/site/BootFilm";
 import MetaBar from "../components/site/MetaBar";
 import NameMark from "../components/site/NameMark";
 import Hero from "../components/site/Hero";
@@ -10,7 +11,9 @@ import Footer from "../components/site/Footer";
 
 export default function Home() {
   return (
-    <div className="page">
+    <>
+      <BootFilm />
+      <div className="page">
       <main className="plateMain">
         <MetaBar />
         <NameMark />
@@ -26,6 +29,7 @@ export default function Home() {
         <LinksGrid />
       </main>
       <Footer />
-    </div>
+      </div>
+    </>
   );
 }

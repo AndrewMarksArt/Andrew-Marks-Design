@@ -183,6 +183,16 @@ svg {
   max-width: 100%;
 }
 
+/* ==========================================================================
+   Boot film page gate (see BootFilm.tsx): while the film plays, the real
+   page — server-rendered in its finished state — is hidden beneath the
+   overlay of doubles, then revealed at handoff (html.film-page). Without
+   the data-film stamp none of this applies.
+   ========================================================================== */
+[data-film]:not(.film-page) .page {
+  visibility: hidden;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

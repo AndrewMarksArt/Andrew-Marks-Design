@@ -91,3 +91,25 @@
     row-gap: 16px;
   }
 }
+
+/* --- boot film: chips + decorations arrive with the chrome beat --- */
+:global([data-film]:not(.film-chrome)) .brandRow {
+  opacity: 0;
+}
+
+:global([data-film].film-chrome) .brandRow {
+  animation: brFade 0.55s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+
+:global([data-film].film-skip) .brandRow {
+  animation-duration: 0.01ms;
+}
+
+@keyframes brFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

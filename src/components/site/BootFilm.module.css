@@ -1,0 +1,93 @@
+/* ==========================================================================
+   Boot film overlay (see BootFilm.tsx). Exists only while <html data-film>
+   is stamped (inline head script, first home visit per session, >=1024,
+   motion-ok). Everything here is a "double" of a real page element; the
+   real page is revealed beneath at handoff.
+   ========================================================================== */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* the overlay only shows during the film */
+:global(html:not([data-film])) .overlay {
+  display: none;
+}
+
+/* the registration mark — visible from first paint as an x (rotated plus);
+   JS animates it upright and onward. Sized like the site's plus marks. */
+.mark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 26px;
+  height: 26px;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+/* viewport-spanning rules (2px, --rule recipe), scale from center */
+.hRule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% - 1px);
+  height: 2px;
+  background: var(--rule);
+  transform: scaleX(0);
+}
+
+.vRule {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 1px);
+  width: 2px;
+  background: var(--rule);
+  transform: scaleY(0);
+}
+
+/* beat-D structural doubles: right plate rule + hero rule + plus marks */
+.glVert {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--rule);
+  transform: scaleY(0);
+  transform-origin: 50% 0;
+}
+
+.glHorz {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--rule);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
+.pm {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  opacity: 0;
+}
+
+/* the white window: clips the robot double while opening, then expands to
+   the plate. Rect-animated by JS (deliberate one-shot exception). */
+.win {
+  position: absolute;
+  background: var(--plate);
+  overflow: hidden;
+}
+
+.robot {
+  position: absolute;
+  display: block;
+  object-fit: cover;
+}

@@ -62,3 +62,31 @@
     display: none;
   }
 }
+
+/* --- boot film (BootFilm.tsx): the meta line types in at the chrome beat.
+   max-width steps over a nowrap line = terminal-burst typing; the film is
+   desktop-only (>=1024) so nowrap is safe. --- */
+:global([data-film]:not(.film-chrome)) .line {
+  opacity: 0;
+}
+
+:global([data-film].film-chrome) .line {
+  opacity: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  animation: metaType 0.8s steps(44, end) both;
+}
+
+:global([data-film].film-skip) .line {
+  animation: none;
+  max-width: none;
+}
+
+@keyframes metaType {
+  from {
+    max-width: 0;
+  }
+  to {
+    max-width: 100%;
+  }
+}

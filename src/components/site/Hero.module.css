@@ -265,3 +265,29 @@
     margin-top: 32px;
   }
 }
+
+/* --- boot film: the text ladder holds until the film's text beat (the
+   paused state also pauses the animation-delay countdown), then runs as
+   authored. Skip jumps everything to its end state. The lattice fades in
+   at handoff. --- */
+:global([data-film]) .bootItem {
+  animation-play-state: paused;
+}
+
+:global([data-film].film-text) .bootItem {
+  animation-play-state: running;
+}
+
+:global([data-film].film-skip) .bootItem {
+  animation-duration: 0.01ms, 0.01ms;
+  animation-delay: 0s;
+}
+
+:global([data-film]) .lattice {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+:global([data-film].film-page) .lattice {
+  opacity: 1;
+}
