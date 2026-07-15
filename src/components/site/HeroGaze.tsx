@@ -63,12 +63,16 @@ export default function HeroGaze({ className }: { className?: string }) {
     atlas.src = ATLAS_SRC;
 
     let t0 = 0;
-    atlas.onload = () => {
+    const start = () => {
       if (!alive) return;
-      if (reduced) {
-        draw(Math.round(0.5 * (TOTAL - 1)));
-        return;
-      }
+      // First draw is the center frame — pixel-identical to the inline
+      // data-URI placeholder painted by CSS since first paint — so
+      // dropping the background here is an invisible swap. (Without the
+      // placeholder, the blank canvas waiting on the 1.6MB atlas read as
+      // the robot "blinking in".)
+      draw(Math.round(0.5 * (TOTAL - 1)));
+      canvas.style.background = "none";
+      if (reduced) return;
       t0 = performance.now();
 
       function tick(now: number) {
@@ -85,6 +89,15 @@ export default function HeroGaze({ className }: { className?: string }) {
       }
       animationFrameId = requestAnimationFrame(tick);
     };
+    // decode() rasterizes the 4608px sheet off the main thread so the
+    // first draw can't hitch the text ladder mid-animation
+    atlas
+      .decode()
+      .then(start)
+      .catch(() => {
+        atlas.onload = start;
+        if (atlas.complete) start();
+      });
 
     const handleMouseMove = (e: MouseEvent) => {
       mouse = e.clientX / window.innerWidth;
