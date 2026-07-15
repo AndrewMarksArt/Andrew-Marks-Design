@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { preload } from "react-dom";
+import type { CSSProperties } from "react";
 import HeroGaze from "./HeroGaze";
+import BootLine from "./BootLine";
 import styles from "./Hero.module.css";
 
 /**
@@ -86,18 +88,25 @@ export default function Hero() {
 
       {/* Masked robot band: plus lattice behind, cursor-following gaze
           portrait in front (placeholder site's system, transparent atlas).
-          Decorative. */}
-      <div className={styles.band} aria-hidden="true">
+          Decorative. Boot item 0: quick fade, no rise (the gaze system
+          shouldn't move while booting). */}
+      <div
+        className={`${styles.band} ${styles.bootFade}`}
+        aria-hidden="true"
+      >
         <PlusLattice />
         <HeroGaze className={styles.robot} />
       </div>
 
       <div className={`content ${styles.text}`}>
         {/* Strelka display words — flattened SVG lockups (spec ruling #1);
-            the real text is in the <h1> above. */}
+            the real text is in the <h1> above. Boot items 1-2: Apple's
+            block rise+fade at whole-lockup granularity (per-char is
+            impossible on flattened SVGs, and Apple never splits anyway). */}
         <div className={styles.words} aria-hidden="true">
           <Image
-            className={`${styles.word} ${styles.wordUx}`}
+            className={`${styles.word} ${styles.wordUx} ${styles.bootItem}`}
+            style={{ "--boot-i": 1 } as CSSProperties}
             src="/hero/ux-product.svg"
             alt=""
             width={734}
@@ -106,7 +115,8 @@ export default function Hero() {
             unoptimized
           />
           <Image
-            className={`${styles.word} ${styles.wordDesigner}`}
+            className={`${styles.word} ${styles.wordDesigner} ${styles.bootItem}`}
+            style={{ "--boot-i": 2 } as CSSProperties}
             src="/hero/designer.svg"
             alt=""
             width={530}
@@ -118,17 +128,29 @@ export default function Hero() {
 
         {/* Copy swapped between the two slots (Andrew, 2026-07-09): the
             "Building agentic..." line is the 36px subhead, "Research &
-            design..." the 24px paragraph. */}
-        <p className={styles.tagline}>
+            design..." the 24px paragraph. Boot item 3. */}
+        <p
+          className={`${styles.tagline} ${styles.bootItem}`}
+          style={{ "--boot-i": 3 } as CSSProperties}
+        >
           Building agentic workflows &amp; complex AI systems for humans,
           agents, &amp; everything in between.
         </p>
         {/* Terminal micro-graphic (Andrew's ruling): the electric-sheep line
             in the meta bar's exact utility style, with the site's `//`
-            comment idiom — a wry boot-log aside under the subhead. */}
-        <p className={styles.subline}>
+            comment idiom — a wry boot-log aside under the subhead.
+            Boot item 4: the container fades in, then the sentence types
+            itself (research spike 002; the 53-char sentence is typed, the
+            "// " prefix stays static). */}
+        <p
+          className={`${styles.subline} ${styles.bootItem}`}
+          style={{ "--boot-i": 4 } as CSSProperties}
+        >
           <span aria-hidden="true">{"// "}</span>
-          Research &amp; design for users wrangling electric sheep.
+          <BootLine
+            text="Research & design for users wrangling electric sheep."
+            caretClassName={styles.caret}
+          />
         </p>
       </div>
     </section>

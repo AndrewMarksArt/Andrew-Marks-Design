@@ -14,6 +14,73 @@
   padding-bottom: 32px;
 }
 
+/* ==========================================================================
+   Boot sequence (research spike 002; Andrew's pick: Apple's verified
+   structure — 30px rise, dual-channel 0.9s fade / 0.7s transform so the
+   motion lands 200ms before the fade finishes, 0.15s stagger ladder —
+   driven by a hard-deceleration ease instead of Apple's soft one).
+   Authored OPT-IN inside prefers-reduced-motion: no-preference, so no-JS,
+   reduced-motion, and crawlers get instantly-visible content by
+   construction (also sidesteps the global kill-switch's unzeroed
+   animation-delay). Pure CSS: runs from first paint, no hydration
+   dependency. LCP note (spike 002): the robot canvas can never be LCP;
+   the lockups/tagline finish revealing well inside the 2.5s budget, and
+   the hard-deceleration curve makes them ~90% visible in the first ~40%
+   of their fade.
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  /* item 0: the robot band — quick fade, no rise */
+  .bootFade {
+    animation: bootFade 0.45s cubic-bezier(0.19, 1, 0.22, 1) both;
+  }
+
+  /* items 1-4: Apple's dual-channel block entrance, expo.out character */
+  .bootItem {
+    animation:
+      bootFade 0.9s cubic-bezier(0.19, 1, 0.22, 1) both,
+      bootRise 0.7s cubic-bezier(0.19, 1, 0.22, 1) both;
+    animation-delay: calc(var(--boot-i) * 0.15s);
+  }
+}
+
+@keyframes bootFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes bootRise {
+  from {
+    transform: translateY(30px);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* Typed-line caret: the placeholder's underscore idiom in the current
+   accent, step-end blink (530ms phases, OS convention). The component
+   stops rendering it a few blinks after typing completes. */
+.caret {
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--accent);
+  animation: caretBlink 1.06s step-end infinite;
+}
+
+@keyframes caretBlink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
 /* Text column sits on the white plate above the band (band is behind). */
 .text {
   position: relative;
@@ -70,10 +137,13 @@
   color: var(--meta-gray);
 }
 
-/* Opens leading when the line wraps on narrow screens (same as meta bar) */
+/* Opens leading when the line wraps on narrow screens (same as meta bar).
+   min-height reserves the wrapped height so the typewriter growing from
+   0 to 2 lines causes zero layout shift (spike 002 CLS note). */
 @media (max-width: 639px) {
   .subline {
     line-height: 1.4;
+    min-height: 2.8em;
   }
 }
 
