@@ -43,12 +43,15 @@ export default function CaseStudyMedia({
   href,
   sprites,
   priority,
+  beam,
 }: {
   img: string;
   alt: string;
   href: string;
   sprites: PeekSprite[];
   priority?: boolean;
+  /** per-case beam colors: hue-rotate destination + under-glow tint */
+  beam?: { hueEnd: string; glowEnd: string };
 }) {
   const [peeked, setPeeked] = useState(false);
 
@@ -73,6 +76,14 @@ export default function CaseStudyMedia({
       data-peek={peeked || undefined}
       onClick={handleClick}
       aria-label={`${alt} — view case study`}
+      style={
+        beam
+          ? ({
+              "--beam-hue-end": beam.hueEnd,
+              "--glow-end": beam.glowEnd,
+            } as CSSProperties)
+          : undefined
+      }
     >
       <span className={styles.mediaFrame}>
         <Image

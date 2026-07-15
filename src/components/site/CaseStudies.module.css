@@ -240,7 +240,7 @@
   transition: opacity 0.5s ease;
   box-shadow:
     -18px -14px 48px rgba(251, 192, 166, 0.55),
-    18px 14px 48px rgba(134, 206, 178, 0.5);
+    18px 14px 48px var(--glow-end, rgba(134, 206, 178, 0.5));
 }
 
 /* Same frame contract as .screenshot, but clipping (border stays fixed) */
@@ -373,7 +373,7 @@
     offset-distance: 50%;
     opacity: 0;
     transform: scaleX(0.12);
-    filter: hue-rotate(138deg);
+    filter: hue-rotate(var(--beam-hue-end, 138deg));
   }
 }
 
@@ -400,7 +400,7 @@
     offset-distance: 100%;
     opacity: 0;
     transform: scaleX(0.12);
-    filter: hue-rotate(138deg);
+    filter: hue-rotate(var(--beam-hue-end, 138deg));
   }
 }
 
@@ -445,7 +445,7 @@
   .mediaLink:hover .peekSprite {
     transform: none;
     /* entrance stagger per sprite (--peek-delay); exit stays immediate */
-    transition: transform 550ms cubic-bezier(0.22, 1, 0.36, 1)
+    transition: transform 450ms cubic-bezier(0.3, 0.8, 0.4, 1)
       var(--peek-delay, 0ms);
   }
 
@@ -475,7 +475,7 @@
 .mediaLink:focus-visible .peekSprite,
 .mediaLink[data-peek] .peekSprite {
   transform: none;
-  transition: transform 550ms cubic-bezier(0.22, 1, 0.36, 1)
+  transition: transform 450ms cubic-bezier(0.3, 0.8, 0.4, 1)
     var(--peek-delay, 0ms);
 }
 

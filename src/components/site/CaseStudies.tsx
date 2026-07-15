@@ -22,6 +22,10 @@ type CaseStudy = {
   /** Rows with hover interactions render CaseStudyMedia */
   href?: string;
   sprites?: PeekSprite[];
+  /** Per-case beam colors: the hover glow starts site-orange everywhere
+      and journeys to THIS case's brand color (hue-rotate delta from
+      orange hue 18°), with a matching light under-glow tint. */
+  beam?: { hueEnd: string; glowEnd: string };
 };
 
 /* Sprite geometry measured from the Figma hover frames (values are the
@@ -91,6 +95,8 @@ const CASES: CaseStudy[] = [
     alt: "Platform One website with the P1 Assistant chat panel open, offering answers and quick links for account questions",
     href: "/case-studies/platform-one",
     sprites: [GROGU],
+    // P1 assistant mint (hue ~156, sampled from the card)
+    beam: { hueEnd: "138deg", glowEnd: "rgba(134, 206, 178, 0.5)" },
     desc: (
       <>
         An AI assistant projected to{" "}
@@ -106,6 +112,9 @@ const CASES: CaseStudy[] = [
     alt: "chatVET app home screen: clinical search bar and VetMed prompt templates for veterinary professionals",
     href: "/case-studies/chat-vet",
     sprites: [CHATVET_CAT, CHATVET_DOG],
+    // chatVET navy/royal blue (hue ~230, sampled) — negative rotation
+    // travels orange -> violet -> blue instead of through green
+    beam: { hueEnd: "-148deg", glowEnd: "rgba(152, 172, 235, 0.5)" },
     desc: (
       <>
         An AI copilot that <strong>saves veterinarians 15 minutes per case</strong>
@@ -120,6 +129,9 @@ const CASES: CaseStudy[] = [
     alt: "Arclight knowledge dashboard listing captured links with sources, categories, scores, and agent navigation",
     href: "/case-studies/knowledge-os",
     sprites: [KNOWLEDGE_ROBOT],
+    // Arclight's palette is warm coral/amber (hue ~3, sampled) — the beam
+    // stays in the warm family, deepening from orange to coral
+    beam: { hueEnd: "-15deg", glowEnd: "rgba(240, 168, 152, 0.5)" },
     desc: (
       <>
         A <strong>multi-agent system that reads 1,000&apos;s of sources</strong>{" "}
@@ -171,6 +183,7 @@ export default function CaseStudies() {
                   href={cs.href}
                   sprites={cs.sprites}
                   priority={i === 0}
+                  beam={cs.beam}
                 />
               ) : (
                 <Image
