@@ -355,10 +355,10 @@
     offset-distance: 0%;
     opacity: 0;
     transform: scaleX(0.12);
-    filter: hue-rotate(0deg);
+    filter: hue-rotate(0deg) brightness(1);
   }
   7% {
-    opacity: 1;
+    opacity: var(--beam-max-o, 1);
   }
   38% {
     transform: scaleX(1);
@@ -367,13 +367,13 @@
     transform: scaleX(1);
   }
   91% {
-    opacity: 1;
+    opacity: var(--beam-max-o, 1);
   }
   100% {
     offset-distance: 50%;
     opacity: 0;
     transform: scaleX(0.12);
-    filter: hue-rotate(var(--beam-hue-end, 138deg));
+    filter: hue-rotate(var(--beam-hue-end, 138deg)) brightness(var(--beam-bright, 1));
   }
 }
 
@@ -382,10 +382,10 @@
     offset-distance: 50%;
     opacity: 0;
     transform: scaleX(0.12);
-    filter: hue-rotate(0deg);
+    filter: hue-rotate(0deg) brightness(1);
   }
   7% {
-    opacity: 1;
+    opacity: var(--beam-max-o, 1);
   }
   38% {
     transform: scaleX(1);
@@ -394,13 +394,13 @@
     transform: scaleX(1);
   }
   91% {
-    opacity: 1;
+    opacity: var(--beam-max-o, 1);
   }
   100% {
     offset-distance: 100%;
     opacity: 0;
     transform: scaleX(0.12);
-    filter: hue-rotate(var(--beam-hue-end, 138deg));
+    filter: hue-rotate(var(--beam-hue-end, 138deg)) brightness(var(--beam-bright, 1));
   }
 }
 

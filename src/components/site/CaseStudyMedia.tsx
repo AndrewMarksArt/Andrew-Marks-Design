@@ -50,8 +50,9 @@ export default function CaseStudyMedia({
   href: string;
   sprites: PeekSprite[];
   priority?: boolean;
-  /** per-case beam colors: hue-rotate destination + under-glow tint */
-  beam?: { hueEnd: string; glowEnd: string };
+  /** per-case beam tuning: hue destination, under-glow tint, peak
+      opacity cap, end-of-journey brightness lift */
+  beam?: { hueEnd: string; glowEnd: string; maxO?: number; bright?: number };
 }) {
   const [peeked, setPeeked] = useState(false);
 
@@ -81,6 +82,8 @@ export default function CaseStudyMedia({
           ? ({
               "--beam-hue-end": beam.hueEnd,
               "--glow-end": beam.glowEnd,
+              "--beam-max-o": beam.maxO ?? 1,
+              "--beam-bright": beam.bright ?? 1,
             } as CSSProperties)
           : undefined
       }

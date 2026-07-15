@@ -22,10 +22,13 @@ type CaseStudy = {
   /** Rows with hover interactions render CaseStudyMedia */
   href?: string;
   sprites?: PeekSprite[];
-  /** Per-case beam colors: the hover glow starts site-orange everywhere
+  /** Per-case beam tuning: the hover glow starts site-orange everywhere
       and journeys to THIS case's brand color (hue-rotate delta from
-      orange hue 18°), with a matching light under-glow tint. */
-  beam?: { hueEnd: string; glowEnd: string };
+      orange hue 18°), with a matching light under-glow tint. maxO caps
+      peak opacity (dim a beam that pops too hard against its card);
+      bright lifts luminosity toward the journey's end (make a beam
+      outshine a card whose palette it matches). */
+  beam?: { hueEnd: string; glowEnd: string; maxO?: number; bright?: number };
 };
 
 /* Sprite geometry measured from the Figma hover frames (values are the
@@ -95,8 +98,14 @@ const CASES: CaseStudy[] = [
     alt: "Platform One website with the P1 Assistant chat panel open, offering answers and quick links for account questions",
     href: "/case-studies/platform-one",
     sprites: [GROGU],
-    // P1 assistant mint (hue ~156, sampled from the card)
-    beam: { hueEnd: "138deg", glowEnd: "rgba(134, 206, 178, 0.5)" },
+    // P1 assistant mint (hue ~156, sampled from the card); the card's own
+    // imagery is mint/dark-green, so the beam gains luminosity through the
+    // journey to outshine it instead of dissolving into it
+    beam: {
+      hueEnd: "138deg",
+      glowEnd: "rgba(134, 206, 178, 0.5)",
+      bright: 1.35,
+    },
     desc: (
       <>
         An AI assistant projected to{" "}
@@ -113,8 +122,13 @@ const CASES: CaseStudy[] = [
     href: "/case-studies/chat-vet",
     sprites: [CHATVET_CAT, CHATVET_DOG],
     // chatVET navy/royal blue (hue ~230, sampled) — negative rotation
-    // travels orange -> violet -> blue instead of through green
-    beam: { hueEnd: "-148deg", glowEnd: "rgba(152, 172, 235, 0.5)" },
+    // travels orange -> violet -> blue instead of through green; dimmed,
+    // saturated violets pop hard against the white card
+    beam: {
+      hueEnd: "-148deg",
+      glowEnd: "rgba(152, 172, 235, 0.5)",
+      maxO: 0.72,
+    },
     desc: (
       <>
         An AI copilot that <strong>saves veterinarians 15 minutes per case</strong>
@@ -130,8 +144,13 @@ const CASES: CaseStudy[] = [
     href: "/case-studies/knowledge-os",
     sprites: [KNOWLEDGE_ROBOT],
     // Arclight's palette is warm coral/amber (hue ~3, sampled) — the beam
-    // stays in the warm family, deepening from orange to coral
-    beam: { hueEnd: "-15deg", glowEnd: "rgba(240, 168, 152, 0.5)" },
+    // stays in the warm family, deepening from orange to coral; dimmed to
+    // sit against the card's light neutrals
+    beam: {
+      hueEnd: "-15deg",
+      glowEnd: "rgba(240, 168, 152, 0.5)",
+      maxO: 0.72,
+    },
     desc: (
       <>
         A <strong>multi-agent system that reads 1,000&apos;s of sources</strong>{" "}
