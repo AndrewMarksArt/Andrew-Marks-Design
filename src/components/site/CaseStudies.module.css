@@ -225,6 +225,24 @@
   cursor: pointer;
 }
 
+/* Ambient under-glow (hover): a very slight halo behind the card, light
+   orange toward the top-left and light green toward the bottom-right —
+   echoing the beams' journey (orange born TL, mint arriving BR). Two
+   offset colored shadows on a dedicated behind-layer: painted once,
+   faded via opacity, no gradients to clip, nothing per-frame. */
+.mediaLink::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  box-shadow:
+    -18px -14px 48px rgba(251, 192, 166, 0.55),
+    18px 14px 48px rgba(134, 206, 178, 0.5);
+}
+
 /* Same frame contract as .screenshot, but clipping (border stays fixed) */
 .mediaFrame {
   position: relative;
@@ -435,6 +453,10 @@
     opacity: 1;
   }
 
+  .mediaLink:hover::before {
+    opacity: 1;
+  }
+
   .mediaLink:hover .beamA {
     animation: csBeamSweepA 2.4s cubic-bezier(0.33, 0.33, 0.62, 0.97) infinite;
   }
@@ -459,6 +481,11 @@
 
 .mediaLink:focus-visible .beamRing,
 .mediaLink[data-peek] .beamRing {
+  opacity: 1;
+}
+
+.mediaLink:focus-visible::before,
+.mediaLink[data-peek]::before {
   opacity: 1;
 }
 
