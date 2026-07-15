@@ -20,7 +20,7 @@ import { useEffect, useRef, useState } from "react";
 
 const BASE_MS = 30;
 const SPACE_EXTRA_MS = 75;
-const START_DELAY_MS = 1000; // after the subline container's boot fade
+const START_DELAY_MS = 1200; // after the subline container's boot fade
 const CARET_REST_BLINKS = 3;
 const CARET_PHASE_MS = 530; // OS caret convention
 

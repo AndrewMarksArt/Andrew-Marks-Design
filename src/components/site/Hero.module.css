@@ -29,17 +29,22 @@
    of their fade.
    ========================================================================== */
 @media (prefers-reduced-motion: no-preference) {
-  /* item 0: the robot band — quick fade, no rise */
+  /* item 0: the robot band — the page's largest mass, so it moves SLOWLY
+     (weight ∝ duration; a fast fade read as a distracting blink). It
+     materializes over 1.1s with a gradual ease while the text ladder
+     starts at 0.45s — overlapped, not sequential: once the words move,
+     the eye leaves the robot and its tail settles as background. */
   .bootFade {
-    animation: bootFade 0.45s cubic-bezier(0.19, 1, 0.22, 1) both;
+    animation: bootFade 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
   }
 
-  /* items 1-4: Apple's dual-channel block entrance, expo.out character */
+  /* items 1-4: Apple's dual-channel block entrance, expo.out character,
+     ladder offset +0.30s so the robot arrives first */
   .bootItem {
     animation:
       bootFade 0.9s cubic-bezier(0.19, 1, 0.22, 1) both,
       bootRise 0.7s cubic-bezier(0.19, 1, 0.22, 1) both;
-    animation-delay: calc(var(--boot-i) * 0.15s);
+    animation-delay: calc(var(--boot-i) * 0.15s + 0.3s);
   }
 }
 
