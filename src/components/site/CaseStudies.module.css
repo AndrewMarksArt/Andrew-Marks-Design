@@ -446,7 +446,7 @@
   .mediaLink:hover .peekSprite {
     transform: none;
     /* entrance stagger per sprite (--peek-delay); exit stays immediate */
-    transition: transform 450ms cubic-bezier(0.3, 0.8, 0.4, 1)
+    transition: transform 350ms ease
       var(--peek-delay, 0ms);
   }
 
@@ -476,7 +476,7 @@
 .mediaLink:focus-visible .peekSprite,
 .mediaLink[data-peek] .peekSprite {
   transform: none;
-  transition: transform 450ms cubic-bezier(0.3, 0.8, 0.4, 1)
+  transition: transform 350ms ease
     var(--peek-delay, 0ms);
 }
 
