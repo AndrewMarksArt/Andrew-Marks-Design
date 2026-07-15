@@ -109,19 +109,47 @@ export default function HeroGaze({ className }: { className?: string }) {
     };
 
     // The robot is present from first paint but holds its center gaze
-    // until the hero's text ladder has finished (~1.5s after navigation)
-    // — then it wakes up and starts following the cursor. performance.now()
-    // is navigation-relative, so a late hydration just means no extra wait.
+    // until the hero's text has finished — then it wakes up and follows
+    // the cursor. Plain loads: ~1.6s after navigation (performance.now()
+    // is navigation-relative, so late hydration adds no extra wait).
+    // Under the boot film: waits for the film's text beat instead (or
+    // wakes immediately on skip).
     const FOLLOW_AFTER_NAV_MS = 1600;
-    const followTimer = setTimeout(() => {
+    const FOLLOW_AFTER_FILM_TEXT_MS = 1400;
+    let followTimer: ReturnType<typeof setTimeout> | undefined;
+    const startFollowing = () => {
       window.addEventListener("mousemove", handleMouseMove, { passive: true });
       window.addEventListener("touchmove", handleTouchMove, { passive: true });
-    }, Math.max(0, FOLLOW_AFTER_NAV_MS - performance.now()));
+    };
+    const onFilmText = () => {
+      followTimer = setTimeout(startFollowing, FOLLOW_AFTER_FILM_TEXT_MS);
+    };
+    const onFilmSkip = () => {
+      clearTimeout(followTimer);
+      startFollowing();
+    };
+    if (document.documentElement.hasAttribute("data-film")) {
+      if (document.documentElement.classList.contains("film-skip")) {
+        startFollowing();
+      } else if (document.documentElement.classList.contains("film-text")) {
+        onFilmText();
+      } else {
+        window.addEventListener("am:film-text", onFilmText, { once: true });
+        window.addEventListener("am:film-skip", onFilmSkip, { once: true });
+      }
+    } else {
+      followTimer = setTimeout(
+        startFollowing,
+        Math.max(0, FOLLOW_AFTER_NAV_MS - performance.now()),
+      );
+    }
 
     return () => {
       alive = false;
       clearTimeout(followTimer);
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      window.removeEventListener("am:film-text", onFilmText);
+      window.removeEventListener("am:film-skip", onFilmSkip);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("touchmove", handleTouchMove);
     };

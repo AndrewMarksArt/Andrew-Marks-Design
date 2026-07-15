@@ -78,16 +78,21 @@
   opacity: 0;
 }
 
-/* the white window: clips the robot double while opening, then expands to
-   the plate. Rect-animated by JS (deliberate one-shot exception). */
-.win {
+/* Reveal curtains: painted EXACTLY like the body hatch so they read as the
+   page background; retreating right/down unmasks the real page beneath.
+   Pre-JS they sit at translate(0) covering everything — that plus the x
+   mark IS the film's starting frame. Compositor-only (translate). */
+.curtainR,
+.curtainB {
   position: absolute;
-  background: var(--plate);
-  overflow: hidden;
-}
-
-.robot {
-  position: absolute;
-  display: block;
-  object-fit: cover;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--gutter-base);
+  background-image: repeating-linear-gradient(
+    50.79deg,
+    rgba(0, 0, 0, 0.025) 0 31.35px,
+    transparent 31.35px 61.81px
+  );
 }

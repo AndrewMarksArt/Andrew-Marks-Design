@@ -184,14 +184,12 @@ svg {
 }
 
 /* ==========================================================================
-   Boot film page gate (see BootFilm.tsx): while the film plays, the real
-   page — server-rendered in its finished state — is hidden beneath the
-   overlay of doubles, then revealed at handoff (html.film-page). Without
-   the data-film stamp none of this applies.
+   Boot film (see BootFilm.tsx): the real page — server-rendered in its
+   finished state — stays VISIBLE beneath the film's hatch curtains, which
+   retreat from the anchor to unmask it (Andrew's mask model). Only the
+   chrome/text layers gate on the film's later beats, via rules in their
+   own component modules. Without the data-film stamp none of this applies.
    ========================================================================== */
-[data-film]:not(.film-page) .page {
-  visibility: hidden;
-}
 
 @media (prefers-reduced-motion: reduce) {
   *,

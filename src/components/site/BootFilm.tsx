@@ -44,11 +44,11 @@ const T = {
   markTurn: 0, //   A: x -> +
   rulesOut: 300, // B: rules to edges
   travel: 950, //   C: crosshair to anchor
-  grid: 1400, //    D: structural rules + marks + window reveal
-  expand: 2200, //  E: window -> plate, robot -> hero slot
-  handoff: 2750, // real page revealed, overlay fades
-  chrome: 2850, //  meta types, NameMark rises
-  text: 3250, //    hero text ladder (existing) + typewriter
+  sweep: 1450, //   D/E: the reveal wipe expands out of the anchor
+  sweepEnd: 2600,
+  handoff: 2650, // curtains gone; overlay crosshair fades
+  chrome: 2800, //  meta types, NameMark rises
+  text: 3200, //    hero text ladder (existing) + typewriter
 };
 
 export default function BootFilm() {
@@ -99,8 +99,8 @@ export default function BootFilm() {
     const glHero = $("glh");
     const pmA = $("pma");
     const pmB = $("pmb");
-    const win = $("win");
-    const robot = $("robot");
+    const curtR = $("cr");
+    const curtB = $("cb");
 
     // ---- measure the real page (hidden, but laid out) ----
     const plateEl = document.querySelector(".plateMain");
@@ -192,110 +192,75 @@ export default function BootFilm() {
       { duration: SPAN },
     );
 
-    // ---- D: structure draws in + the window reveals the robot ----
-    glRight.style.left = `${plate.right - 1}px`;
-    run(glRight, [{ transform: "scaleY(0)" }, { transform: "scaleY(1)" }], {
-      delay: T.grid,
-      duration: 520,
-      easing: EXPO,
-    });
+    // ---- D/E: the reveal wipe — everything expands OUT OF the anchor ----
+    // Two hatch-patterned curtains (identical to the body background, so
+    // they read as the page background itself) retreat rightward and
+    // downward from the anchor, unmasking the REAL page beneath: the white
+    // plate, the robot already sitting in its hero slot, the rules. The
+    // structural lines grow out of the anchor to lead the sweep, and
+    // plus-marks pop as they arrive at their intersections. Compositor-only
+    // (translates); no doubles, no seams.
+    const sweepDur = T.sweepEnd - T.sweep;
+    // mid-keyframe pins the moment each curtain's edge crosses the content
+    // it reveals (plate right edge / hero rule), so line + mark timing can
+    // be choreographed against it.
+    run(
+      curtR,
+      [
+        { offset: 0, transform: `translateX(${anchor.x}px)`, easing: TRAVEL },
+        {
+          offset: 0.62,
+          transform: `translateX(${plate.right + 24}px)`,
+          easing: "ease-out",
+        },
+        { offset: 1, transform: `translateX(${vw}px)` },
+      ],
+      { delay: T.sweep, duration: sweepDur },
+    );
+    run(
+      curtB,
+      [
+        { offset: 0, transform: `translateY(${anchor.y}px)`, easing: TRAVEL },
+        {
+          offset: 0.62,
+          transform: `translateY(${slot.bottom + 24}px)`,
+          easing: "ease-out",
+        },
+        { offset: 1, transform: `translateY(${vh}px)` },
+      ],
+      { delay: T.sweep, duration: sweepDur },
+    );
+
+    // lines grow out of the anchor with the sweep
     glHero.style.top = `${slot.bottom - 1}px`;
     run(glHero, [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], {
-      delay: T.grid + 80,
-      duration: 520,
+      delay: T.sweep + 80,
+      duration: 640,
       easing: EXPO,
     });
-    pmA.style.left = `${plate.right}px`;
-    pmA.style.top = `${anchor.y}px`;
+    glRight.style.left = `${plate.right - 1}px`;
+    run(glRight, [{ transform: "scaleY(0)" }, { transform: "scaleY(1)" }], {
+      delay: T.sweep + sweepDur * 0.5,
+      duration: 480,
+      easing: EXPO,
+    });
+    // marks pop as the structure reaches their intersections
     pmB.style.left = `${plate.left}px`;
     pmB.style.top = `${slot.bottom}px`;
-    [pmA, pmB].forEach((pm, i) =>
+    pmA.style.left = `${plate.right}px`;
+    pmA.style.top = `${anchor.y}px`;
+    [
+      { pm: pmB, at: T.sweep + 240 },
+      { pm: pmA, at: T.sweep + sweepDur * 0.62 },
+    ].forEach(({ pm, at: when }) =>
       run(
         pm,
         [
           { transform: "translate(-50%, -50%) scale(0)", opacity: 0 },
           { transform: "translate(-50%, -50%) scale(1)", opacity: 1 },
         ],
-        { delay: T.grid + 260 + i * 120, duration: 260, easing: EXPO },
+        { delay: when, duration: 260, easing: EXPO },
       ),
-    );
-
-    // window + robot: single animations spanning D (open at center) and E
-    // (expand to plate / travel to slot) — same one-animation-per-element
-    // rule as above.
-    const cw = Math.min(vw * 0.3, 520);
-    const ch = cw * 1.06;
-    const cell = { left: (vw - cw) / 2, top: (vh - ch) / 2 };
-    const rw = cw * 0.94;
-    const winStart = T.grid + 120;
-    const winSpan = T.expand + 520 - winStart;
-    const wAt = (ms: number) => (ms - winStart) / winSpan;
-    run(
-      win,
-      [
-        {
-          offset: 0,
-          left: `${vw / 2}px`,
-          top: `${vh / 2}px`,
-          width: "0px",
-          height: "0px",
-          easing: EXPO,
-        },
-        {
-          offset: wAt(winStart + 620),
-          left: `${cell.left}px`,
-          top: `${cell.top}px`,
-          width: `${cw}px`,
-          height: `${ch}px`,
-        },
-        {
-          offset: wAt(T.expand),
-          left: `${cell.left}px`,
-          top: `${cell.top}px`,
-          width: `${cw}px`,
-          height: `${ch}px`,
-          easing: TRAVEL,
-        },
-        {
-          offset: 1,
-          left: `${plate.left}px`,
-          top: "0px",
-          width: `${plate.width}px`,
-          height: `${vh}px`,
-        },
-      ],
-      { delay: winStart, duration: winSpan },
-    );
-    // the robot is a child of the window (clipped while it opens): its
-    // coordinates are window-local. Bottom-centered in the cell, then to
-    // the hero slot relative to the window's landing rect (plate.left, 0).
-    run(
-      robot,
-      [
-        {
-          offset: 0,
-          left: `${(cw - rw) / 2}px`,
-          top: `${ch - rw}px`,
-          width: `${rw}px`,
-          height: `${rw}px`,
-        },
-        {
-          offset: wAt(T.expand),
-          left: `${(cw - rw) / 2}px`,
-          top: `${ch - rw}px`,
-          width: `${rw}px`,
-          height: `${rw}px`,
-          easing: TRAVEL,
-        },
-        {
-          offset: 1,
-          left: `${slot.left - plate.left}px`,
-          top: `${slot.top}px`,
-          width: `${slot.width}px`,
-          height: `${slot.height}px`,
-        },
-      ],
-      { delay: winStart, duration: winSpan },
     );
 
     // ---- handoff + chrome + text (class-driven; CSS does the rest) ----
@@ -333,7 +298,13 @@ export default function BootFilm() {
       {/* horizontal + vertical viewport rules (grow from center, then travel) */}
       <span data-f="h" className={styles.hRule} />
       <span data-f="v" className={styles.vRule} />
-      {/* structural doubles for beat D (positioned at runtime) */}
+      {/* the reveal curtains: hatch-painted covers (identical to the body
+          background) that retreat right/down from the anchor, unmasking
+          the real page beneath. Cover everything until the sweep. */}
+      <div data-f="cr" className={styles.curtainR} />
+      <div data-f="cb" className={styles.curtainB} />
+      {/* structural lines + marks growing out of the anchor (above the
+          curtains — the drafting lines span the hatch, per the storyboard) */}
       <span data-f="glr" className={styles.glVert} />
       <span data-f="glh" className={styles.glHorz} />
       <svg data-f="pma" className={styles.pm} viewBox="0 0 32 32">
@@ -342,15 +313,6 @@ export default function BootFilm() {
       <svg data-f="pmb" className={styles.pm} viewBox="0 0 32 32">
         <path d="M16 4V28M4 16H28" stroke="var(--black)" strokeWidth="2" />
       </svg>
-      {/* the white window that reveals the robot, then becomes the plate */}
-      <div data-f="win" className={styles.win}>
-        <img
-          data-f="robot"
-          className={styles.robot}
-          src="/hero/robot-first-frame.webp"
-          alt=""
-        />
-      </div>
       {/* the registration mark: starts as x (rotated plus), turns upright */}
       <svg data-f="mark" className={styles.mark} viewBox="0 0 32 32">
         <path d="M16 3V29M3 16H29" stroke="var(--black)" strokeWidth="2.2" />
