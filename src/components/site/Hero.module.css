@@ -36,8 +36,8 @@
      is separately gated inside HeroGaze until this ladder finishes. */
   .bootItem {
     animation:
-      bootFade 0.9s cubic-bezier(0.19, 1, 0.22, 1) both,
-      bootRise 0.7s cubic-bezier(0.19, 1, 0.22, 1) both;
+      bootFade 0.9s cubic-bezier(0.455, 0.03, 0.515, 0.955) both,
+      bootRise 0.7s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
     animation-delay: calc(var(--boot-i) * 0.15s);
   }
 }

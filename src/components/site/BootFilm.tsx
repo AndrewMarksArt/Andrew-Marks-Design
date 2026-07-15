@@ -38,17 +38,20 @@ import styles from "./BootFilm.module.css";
 
 const EXPO = "cubic-bezier(0.19, 1, 0.22, 1)";
 const TRAVEL = "cubic-bezier(0.65, 0, 0.35, 1)";
+// Apple's easeInOutQuad (verified from their shipped easing table) — the
+// gentle voice for the reveal sweep and the post-reveal cadence
+const APPLE = "cubic-bezier(0.455, 0.03, 0.515, 0.955)";
 
 // beat schedule (ms from film start)
 const T = {
-  markTurn: 0, //   A: x -> +
-  rulesOut: 300, // B: rules to edges
-  travel: 950, //   C: crosshair to anchor
-  sweep: 1450, //   D/E: the reveal wipe expands out of the anchor
-  sweepEnd: 2600,
-  handoff: 2650, // curtains gone; overlay crosshair fades
-  chrome: 2800, //  meta types, NameMark rises
-  text: 3200, //    hero text ladder (existing) + typewriter
+  spin: 0, //       A: x does a full spin, growing into the plus
+  rulesOut: 480, // B: rules to edges
+  travel: 1150, //  C: crosshair to anchor (lands 1580)
+  sweep: 1680, //   D/E: ONE continuous reveal wipe out of the anchor
+  sweepEnd: 2880,
+  handoff: 2940, // curtains gone; overlay crosshair fades
+  chrome: 3260, //  meta types, NameMark rises
+  text: 3860, //    hero text ladder (existing) + typewriter
 };
 
 export default function BootFilm() {
@@ -155,8 +158,10 @@ export default function BootFilm() {
     const SPAN = T.travel + 430; // 0 .. end of travel
     const at = (ms: number) => ms / SPAN;
 
-    // mark: x -> + (0..380), hold, travel (950..1380). Lands at scale(1) =
-    // exactly the real 32px corner mark it sits down on.
+    // mark: full spin x -> + while growing (0..620), hold, travel to the
+    // anchor (1150..1580). Lands at scale(1) = exactly the real 32px
+    // corner mark it sits down on. 45deg -> 360deg reads as a full
+    // revolution for the 4-fold-symmetric mark.
     run(
       mark,
       [
@@ -166,29 +171,29 @@ export default function BootFilm() {
           easing: EXPO,
         },
         {
-          offset: at(380),
-          transform: "translate(-50%, -50%) rotate(0deg) scale(1)",
+          offset: at(620),
+          transform: "translate(-50%, -50%) rotate(360deg) scale(1)",
         },
         {
           offset: at(T.travel),
-          transform: "translate(-50%, -50%) rotate(0deg) scale(1)",
+          transform: "translate(-50%, -50%) rotate(360deg) scale(1)",
           easing: TRAVEL,
         },
         {
           offset: 1,
-          transform: `translate(-50%, -50%) translate(${dx}px, ${dy}px) rotate(0deg) scale(1)`,
+          transform: `translate(-50%, -50%) translate(${dx}px, ${dy}px) rotate(360deg) scale(1)`,
         },
       ],
       { duration: SPAN },
     );
 
-    // rules: grow (300..900), hold, travel (950..1380)
+    // rules: grow (480..1130), hold, travel (1150..1580)
     run(
       hRule,
       [
         { offset: 0, transform: "scaleX(0) translateY(0)" },
         { offset: at(T.rulesOut), transform: "scaleX(0) translateY(0)", easing: EXPO },
-        { offset: at(900), transform: "scaleX(1) translateY(0)" },
+        { offset: at(1130), transform: "scaleX(1) translateY(0)" },
         { offset: at(T.travel), transform: "scaleX(1) translateY(0)", easing: TRAVEL },
         { offset: 1, transform: `scaleX(1) translateY(${dy}px)` },
       ],
@@ -199,7 +204,7 @@ export default function BootFilm() {
       [
         { offset: 0, transform: "scaleY(0) translateX(0)" },
         { offset: at(T.rulesOut), transform: "scaleY(0) translateX(0)", easing: EXPO },
-        { offset: at(900), transform: "scaleY(1) translateX(0)" },
+        { offset: at(1130), transform: "scaleY(1) translateX(0)" },
         { offset: at(T.travel), transform: "scaleY(1) translateX(0)", easing: TRAVEL },
         { offset: 1, transform: `scaleY(1) translateX(${dx}px)` },
       ],
@@ -220,9 +225,9 @@ export default function BootFilm() {
     // keyframe and leave the page's top-left corner peeking out — shipped
     // that bug once). At sweep start they jump to the anchor — invisible,
     // because the landed overlay crosshair + mark sit exactly over the
-    // real rules/mark that jump reveals — then retreat. Mid-keyframes pin
-    // the moments each edge crosses the content it reveals (plate right
-    // edge / hero rule) for line + mark choreography.
+    // real rules/mark that jump reveals — then ONE continuous glide to the
+    // far edge (a pinned mid-keyframe made the reveal read as two jerky
+    // sections; Andrew's ruling: single sweep, Apple's gentle ease).
     const sAt = (ms: number) => ms / T.sweepEnd;
     run(
       curtR,
@@ -232,12 +237,7 @@ export default function BootFilm() {
         {
           offset: sAt(T.sweep + 16),
           transform: `translateX(${anchor.x}px)`,
-          easing: TRAVEL,
-        },
-        {
-          offset: sAt(T.sweep + sweepDur * 0.62),
-          transform: `translateX(${plate.right + 24}px)`,
-          easing: "ease-out",
+          easing: APPLE,
         },
         { offset: 1, transform: `translateX(${vw}px)` },
       ],
@@ -251,12 +251,7 @@ export default function BootFilm() {
         {
           offset: sAt(T.sweep + 16),
           transform: `translateY(${anchor.y}px)`,
-          easing: TRAVEL,
-        },
-        {
-          offset: sAt(T.sweep + sweepDur * 0.62),
-          transform: `translateY(${slot.bottom + 24}px)`,
-          easing: "ease-out",
+          easing: APPLE,
         },
         { offset: 1, transform: `translateY(${vh}px)` },
       ],
@@ -266,24 +261,24 @@ export default function BootFilm() {
     // lines grow out of the anchor with the sweep
     glHero.style.top = `${slot.bottom - 1}px`;
     run(glHero, [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], {
-      delay: T.sweep + 80,
-      duration: 640,
+      delay: T.sweep + 100,
+      duration: 700,
       easing: EXPO,
     });
+    // the right rule + far marks land as the (Apple-eased) edge reaches them
     glRight.style.left = `${plate.right - 1}px`;
     run(glRight, [{ transform: "scaleY(0)" }, { transform: "scaleY(1)" }], {
-      delay: T.sweep + sweepDur * 0.5,
-      duration: 480,
+      delay: T.sweep + sweepDur * 0.72,
+      duration: 420,
       easing: EXPO,
     });
-    // marks pop as the structure reaches their intersections
     pmB.style.left = `${plate.left}px`;
     pmB.style.top = `${slot.bottom}px`;
     pmA.style.left = `${plate.right}px`;
     pmA.style.top = `${anchor.y}px`;
     [
-      { pm: pmB, at: T.sweep + 240 },
-      { pm: pmA, at: T.sweep + sweepDur * 0.62 },
+      { pm: pmB, at: T.sweep + 300 },
+      { pm: pmA, at: T.sweep + sweepDur * 0.8 },
     ].forEach(({ pm, at: when }) =>
       run(
         pm,

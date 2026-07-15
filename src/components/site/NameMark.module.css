@@ -156,7 +156,7 @@
 }
 
 :global([data-film].film-chrome) .nameMark {
-  animation: nmRise 0.55s cubic-bezier(0.19, 1, 0.22, 1) both;
+  animation: nmRise 0.75s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
 }
 
 :global([data-film].film-skip) .nameMark {
