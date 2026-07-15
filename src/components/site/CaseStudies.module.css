@@ -423,7 +423,8 @@
   position: absolute;
   transform: var(--peek-rest);
   transform-origin: 50% 50%;
-  transition: transform 250ms ease; /* hover-out */
+  transition: transform 350ms ease; /* hover-out — slower than the zoom's
+    250ms so the characters withdraw rather than snap away */
   will-change: transform;
 }
 
