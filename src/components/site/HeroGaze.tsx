@@ -11,20 +11,23 @@ import { useEffect, useRef } from "react";
  * robot video in a 9x9 sheet, one continuous head sweep with natural
  * blinks baked in — upscaled 4x with Real-ESRGAN (realesr-animevideov3,
  * the temporally-stable video model; approved by Andrew 2026-07-14),
- * keyed to transparency at 1024px, and rebuilt at 512px cells so the
- * ~660px display renders crisp instead of upscaling 256px frames.
+ * keyed to transparency at 1024px, and rebuilt at 512px cells — then
+ * given an HD pass (2026-07-16, scripts/upscale-live2-atlas.py): every
+ * cell re-run through ESRGAN and re-cut at 1024px, and the canvas buffer
+ * sized to device pixels, because a fixed small buffer stretched by the
+ * compositor reads as blur no matter how good the atlas is.
  * Mouse X maps straight to a frame index with 0.35 smoothing plus a
  * slow sinusoidal idle drift; frames render on a canvas with a 1px
  * source inset. Nothing else — no graph, no grid, no dissolve.
  * Tracking constants are verbatim from the live page.
  */
 
-const ATLAS_SRC = "/hero/robot-atlas-live2.webp";
+const ATLAS_SRC = "/hero/robot-atlas-live2-hd.webp";
 const COLS = 9;
 const ROWS = 9;
 const TOTAL = COLS * ROWS;
-const FRAME_W = 512;
-const FRAME_H = 512;
+const FRAME_W = 1024;
+const FRAME_H = 1024;
 
 export default function HeroGaze({ className }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -35,8 +38,15 @@ export default function HeroGaze({ className }: { className?: string }) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    canvas.width = FRAME_W;
-    canvas.height = FRAME_H;
+    // Buffer at real device resolution, capped at the source cell size —
+    // the page is laid out (hidden, not display:none) under the boot
+    // film, so the rect is measurable here.
+    const dpr = window.devicePixelRatio || 1;
+    const cssSize = canvas.getBoundingClientRect().width || FRAME_W;
+    const buf = Math.min(FRAME_W, Math.max(64, Math.round(cssSize * dpr)));
+    canvas.width = buf;
+    canvas.height = buf;
+    ctx.imageSmoothingQuality = "high";
 
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -51,11 +61,11 @@ export default function HeroGaze({ className }: { className?: string }) {
     const draw = (idx: number) => {
       const col = idx % COLS;
       const row = Math.floor(idx / COLS);
-      ctx.clearRect(0, 0, FRAME_W, FRAME_H);
+      ctx.clearRect(0, 0, buf, buf);
       ctx.drawImage(
         atlas,
         col * FRAME_W + 1, row * FRAME_H + 1, FRAME_W - 2, FRAME_H - 2,
-        1, 1, FRAME_W - 2, FRAME_H - 2,
+        0, 0, buf, buf,
       );
     };
 
@@ -63,8 +73,10 @@ export default function HeroGaze({ className }: { className?: string }) {
     atlas.src = ATLAS_SRC;
 
     let t0 = 0;
+    let started = false;
     const start = () => {
-      if (!alive) return;
+      if (started || !alive) return;
+      started = true;
       // First draw is the center frame — pixel-identical to the inline
       // data-URI placeholder painted by CSS since first paint — so
       // dropping the background here is an invisible swap. (Without the
@@ -89,14 +101,52 @@ export default function HeroGaze({ className }: { className?: string }) {
       }
       animationFrameId = requestAnimationFrame(tick);
     };
-    // decode() rasterizes the 4608px sheet off the main thread so the
-    // first draw can't hitch the text ladder mid-animation
+    // decode() rasterizes the 9216px sheet off the main thread, but the
+    // ~340MB GPU texture upload happens at the FIRST drawImage — at
+    // whatever network-timed moment decode resolves, possibly mid-film.
+    // So the first draw (= the placeholder swap) is LATCHED behind both
+    // decode AND the film's stationary text beat (or a skip); the inline
+    // CSS placeholder — the same center frame — covers the whole wait,
+    // so the mask reveal always shows the robot. Once decoded, a 1x1
+    // offscreen draw during film downtime pre-warms the texture so the
+    // gated swap costs nothing. Plain loads (no film) draw on decode,
+    // exactly as before. (Andrew's ask, 2026-07-16.)
+    const docEl = document.documentElement;
+    let drawGate =
+      !docEl.hasAttribute("data-film") ||
+      docEl.classList.contains("film-text") ||
+      docEl.classList.contains("film-skip");
+    let decoded = false;
+    const tryStart = () => {
+      if (decoded && drawGate) start();
+    };
+    const openDrawGate = () => {
+      drawGate = true;
+      tryStart();
+    };
+    const warmTexture = () => {
+      if (started || !alive) return;
+      const oc = document.createElement("canvas");
+      oc.width = oc.height = 1;
+      oc.getContext("2d")?.drawImage(atlas, 0, 0, 1, 1, 0, 0, 1, 1);
+    };
+    const onDecoded = () => {
+      decoded = true;
+      if (!drawGate) {
+        if (typeof window.requestIdleCallback === "function") {
+          window.requestIdleCallback(warmTexture);
+        } else {
+          setTimeout(warmTexture, 200);
+        }
+      }
+      tryStart();
+    };
     atlas
       .decode()
-      .then(start)
+      .then(onDecoded)
       .catch(() => {
-        atlas.onload = start;
-        if (atlas.complete) start();
+        atlas.onload = onDecoded;
+        if (atlas.complete) onDecoded();
       });
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -122,9 +172,11 @@ export default function HeroGaze({ className }: { className?: string }) {
       window.addEventListener("touchmove", handleTouchMove, { passive: true });
     };
     const onFilmText = () => {
+      openDrawGate();
       followTimer = setTimeout(startFollowing, FOLLOW_AFTER_FILM_TEXT_MS);
     };
     const onFilmSkip = () => {
+      openDrawGate();
       clearTimeout(followTimer);
       startFollowing();
     };

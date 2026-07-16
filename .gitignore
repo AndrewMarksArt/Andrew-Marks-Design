@@ -42,3 +42,9 @@ next-env.d.ts
 
 # local browser-test artifacts
 .playwright-mcp/
+
+# personal Claude Code overrides
+.claude/settings.local.json
+# Real-ESRGAN portable tool (downloaded, not vendored)
+tools/
+__pycache__/
