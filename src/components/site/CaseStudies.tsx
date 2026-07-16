@@ -58,6 +58,7 @@ const CHATVET_CAT: PeekSprite = {
      tilt it rolls off as it rises */
   rest: "translate(-68.76%, 71.57%) rotate(17.73deg)",
   inner: "rotate(0.21deg)",
+  exit: "380ms", // travels ~327px vs Grogu's ~245px — velocity-matched to his exit
 };
 
 const CHATVET_DOG: PeekSprite = {
@@ -72,6 +73,7 @@ const CHATVET_DOG: PeekSprite = {
   rest: "translate(87.87%, 44.12%)",
   inner: "rotate(-179.42deg) scaleY(-1)", // = horizontal mirror + 0.58° tilt
   delay: "100ms", // arrives a beat after the cat
+  exit: "330ms", // travels ~288px — velocity-matched to Grogu's exit
 };
 
 /* Knowledge OS (6749:4690 → 6749:4687): the hero robot itself (identical

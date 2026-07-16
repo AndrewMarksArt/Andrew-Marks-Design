@@ -78,7 +78,7 @@ export function ResumeSection() {
               <TripleChevron className={styles.chevrons} />
             </div>
             {/* Dead link for now — the resume page lands later. */}
-            <a className={styles.button} href="/resume">
+            <a className={styles.button} href="/resume" data-text="See Full Resume →">
               See Full Resume{" "}
               <span className={styles.buttonArrow} aria-hidden="true">
                 {"→"}

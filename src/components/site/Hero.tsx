@@ -138,7 +138,7 @@ export default function Hero() {
             in the meta bar's exact utility style, with the site's `//`
             comment idiom — a wry boot-log aside under the subhead.
             Boot item 4: the container fades in, then the sentence types
-            itself (research spike 002; the 53-char sentence is typed, the
+            itself (research spike 002; the 55-glyph sentence is typed, the
             "// " prefix stays static). */}
         <p
           className={`${styles.subline} ${styles.bootItem}`}
@@ -146,7 +146,7 @@ export default function Hero() {
         >
           <span aria-hidden="true">{"// "}</span>
           <BootLine
-            text="Research & design for users wrangling electric sheep."
+            text="Research & design for users wrangling electric sheep. 🐑"
             caretClassName={styles.caret}
           />
         </p>

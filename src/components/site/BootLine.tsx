@@ -48,9 +48,14 @@ export default function BootLine({
     setShown("");
     setCaretVisible(true);
 
+    // Type by Unicode code point, not UTF-16 index: the sheep emoji is a
+    // surrogate pair (2 UTF-16 units) — slicing mid-pair would flash a
+    // broken half-surrogate for one frame and count it as two steps.
+    const units = Array.from(text);
+
     const typeFrom = (i: number) => {
       if (!alive) return;
-      if (i >= text.length) {
+      if (i >= units.length) {
         doneRef.current = true;
         // let the caret blink a few times, then rest (WCAG 2.2.2-friendly)
         timer = setTimeout(
@@ -59,9 +64,9 @@ export default function BootLine({
         );
         return;
       }
-      setShown(text.slice(0, i + 1));
+      setShown(units.slice(0, i + 1).join(""));
       const jitter = BASE_MS * (0.5 + Math.random());
-      const extra = text[i] === " " ? SPACE_EXTRA_MS : 0;
+      const extra = units[i] === " " ? SPACE_EXTRA_MS : 0;
       timer = setTimeout(() => typeFrom(i + 1), jitter + extra);
     };
 

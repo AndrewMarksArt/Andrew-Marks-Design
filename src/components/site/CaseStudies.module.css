@@ -159,13 +159,13 @@
 }
 
 /* Screenshot: 1073x750 frame at design width (1440x1080 source, cover-
-   cropped), 1px solid black border on ALL rows (ruling #4). */
+   cropped), borderless (the ruling-#4 1px black edge was removed,
+   Andrew 2026-07-16). */
 .screenshot {
   width: 100%;
   height: auto;
   aspect-ratio: 1073 / 750;
   object-fit: cover;
-  border: 1px solid var(--black);
 }
 
 /* Description: Geist, design 20 → 18 (reduced ladder), lh 145%, +2% tracking,
@@ -243,13 +243,12 @@
     18px 14px 48px var(--glow-end, rgba(134, 206, 178, 0.5));
 }
 
-/* Same frame contract as .screenshot, but clipping (border stays fixed) */
+/* Same frame contract as .screenshot, but clipping */
 .mediaFrame {
   position: relative;
   display: block;
   aspect-ratio: 1073 / 750;
   overflow: hidden;
-  border: 1px solid var(--black);
 }
 
 /* ==========================================================================
@@ -270,7 +269,7 @@
    glow) */
 .beamRing {
   position: absolute;
-  inset: -1px; /* sit exactly over the frame's 1px border line */
+  inset: 0; /* hug the frame edge (frame is now borderless) */
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.4s ease;
@@ -411,7 +410,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 250ms ease; /* hover-out */
+  /* Apple's easeInOutQuad — the same voice as the hero text ladder and the
+     boot film's sweep; generic `ease` read as laggy (Andrew, 2026-07-16) */
+  transition: transform 200ms cubic-bezier(0.455, 0.03, 0.515, 0.955); /* hover-out */
   will-change: transform;
 }
 
@@ -423,8 +424,10 @@
   position: absolute;
   transform: var(--peek-rest);
   transform-origin: 50% 50%;
-  transition: transform 350ms ease; /* hover-out — slower than the zoom's
-    250ms so the characters withdraw rather than snap away */
+  transition: transform var(--peek-exit, 280ms)
+    cubic-bezier(0.455, 0.03, 0.515, 0.955); /* hover-out (Apple ease) —
+    slower than the zoom's 200ms so the characters withdraw rather than
+    snap away; sprites with longer rest travel lengthen it via --peek-exit */
   will-change: transform;
 }
 
@@ -440,13 +443,13 @@
 @media (hover: hover) {
   .mediaLink:hover .mediaShot {
     transform: scale(1.05);
-    transition: transform 400ms ease;
+    transition: transform 320ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
   }
 
   .mediaLink:hover .peekSprite {
     transform: none;
     /* entrance stagger per sprite (--peek-delay); exit stays immediate */
-    transition: transform 350ms ease
+    transition: transform 280ms cubic-bezier(0.455, 0.03, 0.515, 0.955)
       var(--peek-delay, 0ms);
   }
 
@@ -470,13 +473,13 @@
 .mediaLink:focus-visible .mediaShot,
 .mediaLink[data-peek] .mediaShot {
   transform: scale(1.05);
-  transition: transform 400ms ease;
+  transition: transform 320ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
 
 .mediaLink:focus-visible .peekSprite,
 .mediaLink[data-peek] .peekSprite {
   transform: none;
-  transition: transform 350ms ease
+  transition: transform 280ms cubic-bezier(0.455, 0.03, 0.515, 0.955)
     var(--peek-delay, 0ms);
 }
 

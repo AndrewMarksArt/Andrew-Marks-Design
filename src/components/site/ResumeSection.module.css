@@ -214,6 +214,22 @@
     font-weight 200ms ease;
 }
 
+/* Bold-width reservation: zero-height hidden twin of the full label (text +
+   arrow, from data-text) at the hover weight. The inline-block's shrink-to-
+   fit width is the max of its line boxes, so the button is laid out at
+   500-weight width in both states and never widens on hover. (::before is
+   the shimmer band — ::after was free.) */
+.button::after {
+  content: attr(data-text);
+  display: block;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  font-weight: 500;
+  pointer-events: none;
+  user-select: none;
+}
+
 /* Darker-orange shimmer band, swept across once per hover (animation, not
    transition, so it never plays backwards on exit) */
 .button::before {
@@ -324,10 +340,10 @@
 }
 
 /* Date / institution line — own block (audit item 8): tight to the role
-   (8px), larger gap to the body (32px) so the date reads as the role's
+   (16px), larger gap to the body (32px) so the date reads as the role's
    attribute, not a peer line. NHG 65 Medium 16px. */
 .metaLine {
-  margin: 8px 0 32px;
+  margin: 16px 0 32px;
   font-family: var(--font-nhg);
   font-weight: 500;
   font-size: clamp(13px, 0.9259vw, 16px);
@@ -362,7 +378,7 @@
    alignment survives untrimmed (title/role gain near-equal leading). */
 @supports not (text-box-trim: trim-both) {
   .metaLine {
-    margin-top: 2px;
+    margin-top: 10px;
     margin-bottom: 22px;
   }
 }

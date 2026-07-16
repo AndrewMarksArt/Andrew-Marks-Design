@@ -201,6 +201,9 @@ a.link:focus-visible ~ .icon path:nth-of-type(3) {
   position: absolute;
   top: 40px;
   right: 16px;
+  /* decorative overlay; let hover/clicks fall through to the stretched
+     link's inset:0 ::after beneath (shimmer is driven by a.link:hover) */
+  pointer-events: none;
 }
 
 /* --- description (Geist Medium 16, lh 1.45, +2% tracking) ------------------ */
@@ -234,6 +237,7 @@ a.link:focus-visible ~ .icon path:nth-of-type(3) {
   position: absolute;
   top: 41px;
   right: 16px;
+  pointer-events: none; /* same interception as .icon: keep the stretched link hoverable/clickable under the hatch */
   width: min(362px, calc(100% - 440px));
   height: 211px;
   background-image: repeating-linear-gradient(
