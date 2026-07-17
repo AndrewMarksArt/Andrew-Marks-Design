@@ -81,12 +81,22 @@ export function ResumeSection() {
               </h2>
               <TripleChevron className={styles.chevrons} />
             </div>
-            {/* Dead link for now — the resume page lands later. */}
-            <a className={styles.button} href="/resume" data-text="See Full Resume →">
+            {/* Opens the served PDF in the browser's viewer (new tab) —
+                recruiters can read, download, or print from there. The
+                source-of-truth PDF lives in design/documents/; the copy in
+                public/documents/ is what ships. */}
+            <a
+              className={styles.button}
+              href="/documents/Andrew-Marks-Resume.pdf"
+              target="_blank"
+              rel="noreferrer"
+              data-text="See Full Resume →"
+            >
               See Full Resume{" "}
               <span className={styles.buttonArrow} aria-hidden="true">
                 {"→"}
               </span>
+              <span className="visually-hidden"> (PDF, opens in new tab)</span>
             </a>
           </header>
 

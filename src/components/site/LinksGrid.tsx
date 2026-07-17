@@ -1,5 +1,4 @@
 import type { ReactElement } from "react";
-import Link from "next/link";
 
 import { ArrowOutIcon, PlusMark } from "./motifs";
 import styles from "./LinksGrid.module.css";
@@ -113,9 +112,15 @@ export function LinksGrid() {
 
       <div className={styles.grid}>
         <div className={`${styles.cell} ${styles.cellResume}`}>
-          <Link href="/resume" className={styles.link}>
+          <a
+            href="/documents/Andrew-Marks-Resume.pdf"
+            target="_blank"
+            rel="noreferrer"
+            className={styles.link}
+          >
             01 resume
-          </Link>
+            <span className="visually-hidden"> (PDF, opens in new tab)</span>
+          </a>
           <ArrowOutIcon className={styles.icon} />
           <p className={styles.desc}>
             <strong>Product Designer engineering intuitive UX solutions</strong>{" "}
