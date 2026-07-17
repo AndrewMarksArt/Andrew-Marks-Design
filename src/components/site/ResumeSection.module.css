@@ -4,6 +4,14 @@
    pixel-verified against design/full-page/home-desktop.png y 3890-5030).
    ========================================================================== */
 
+/* Deep links to #resume land here — offset the jump so the sticky
+   identity bar (~62px + mark overhang) doesn't cover the section top.
+   (The navbar's RESUME link was dropped 2026-07-16; the anchor stays for
+   direct/#resume links.) */
+.section {
+  scroll-margin-top: 88px;
+}
+
 /* --------------------------------------------------------------------------
    Divider (cases → resume): full-bleed 32px band, 2px --rule at center,
    32px plus marks centered on the plate-edge rules (x=60/1668 at 1728).

@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <>
       <BootFilm />
-      <div className="page">
+      <div className="page" id="top">
       <main className="plateMain">
         <MetaBar />
         <NameMark />

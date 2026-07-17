@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <CaseShell>
+    <CaseShell current="knowledge-os">
       <KnowledgeOs />
     </CaseShell>
   );

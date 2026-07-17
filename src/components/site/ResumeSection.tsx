@@ -53,7 +53,11 @@ const ENTRIES: ResumeEntry[] = [
  */
 export function ResumeSection() {
   return (
-    <section aria-labelledby="resume-heading">
+    <section
+      id="resume"
+      className={styles.section}
+      aria-labelledby="resume-heading"
+    >
       {/* Divider (6727:3917): 1728x32, 2px center rule, 32px plus marks
           centered on the x=60/1668 vertical page rules. */}
       <div className={`fullBleed ${styles.divider}`} aria-hidden="true">

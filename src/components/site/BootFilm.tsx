@@ -62,6 +62,21 @@ export default function BootFilm() {
     const root = rootRef.current;
     if (!root || !docEl.hasAttribute("data-film")) return;
 
+    // Once the film has fully settled, drop its state from <html>: every
+    // film-gated rule's end state equals its base state, so removal is
+    // visually a no-op — but the attribute survives client-side
+    // navigation, where it retyped the navbar on case pages and replayed
+    // the whole film on returns home (closing UX audit F2).
+    const releaseFilmState = () => {
+      docEl.classList.remove(
+        "film-page",
+        "film-chrome",
+        "film-text",
+        "film-skip",
+      );
+      docEl.removeAttribute("data-film");
+    };
+
     const finishFilm = (viaSkip: boolean) => {
       if (finished) return;
       finished = true;
@@ -76,6 +91,11 @@ export default function BootFilm() {
         docEl.classList.add("film-page", "film-chrome", "film-text", "film-skip");
         window.dispatchEvent(new Event("am:film-skip"));
         root.style.display = "none";
+        // skip pins every final state instantly — release right away
+        releaseFilmState();
+      } else {
+        // natural finish: wait out NameMark's 750ms chrome rise
+        timers.push(setTimeout(releaseFilmState, 850));
       }
       skipEvents.forEach((t) => window.removeEventListener(t, onSkip));
     };

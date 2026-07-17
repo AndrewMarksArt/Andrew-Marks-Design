@@ -70,8 +70,18 @@ body {
 
 html {
   /* Full-bleed rows use 50vw math (which includes the scrollbar) and the
-     registration marks overhang tiny gutters — clip instead of h-scrolling */
+     registration marks overhang tiny gutters — clip instead of h-scrolling.
+     (clip, not hidden: hidden would create a scroll container and break the
+     sticky meta bar.) */
   overflow-x: clip;
+}
+
+/* Anchor jumps (the navbar's #top back-to-top, #resume deep links) glide
+   instead of jumping — motion-gated per house a11y canon. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {

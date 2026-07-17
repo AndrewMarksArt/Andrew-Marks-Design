@@ -5,6 +5,54 @@
 
 .metaBar {
   padding-top: 24px;
+  /* Sticky identity bar (Andrew, 2026-07-16): the utility line, both plus
+     marks, and the full-bleed rule pin to the viewport top so
+     "UID: Andrew Marks" stays visible after scrolling past the hero.
+     Background is plate-width white only — the fullBleed rule row keeps
+     overhanging into the gutters transparently, and the only thing that
+     ever lives there is the static hatch, so the stuck bar reads exactly
+     like the page-top arrangement. z 30: above all plate content, below
+     the boot film overlay (60). The plus marks' bottom halves overhang
+     the bar's box and content passes beneath them — same registration-
+     mark-straddling-the-rule look as at rest. */
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--plate);
+}
+
+/* The plate-edge vertical rules are painted by plateMain::before/::after
+   at z-index 3 — the bar's background would cover their first ~60px. Carry
+   matching segments through the strip so the rails read continuous both at
+   page top and while stuck (the real rules scroll beneath and take over
+   below the bar). */
+.metaBar::before,
+.metaBar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--rule);
+  pointer-events: none;
+}
+
+.metaBar::before {
+  left: -1px;
+}
+
+.metaBar::after {
+  right: -1px;
+}
+
+/* Identity readout left, terminal nav right — one row on desktop, the nav
+   wrapping under the readout only when it truly can't fit (mobile). */
+.bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  column-gap: 24px;
+  flex-wrap: wrap;
 }
 
 .line {
@@ -17,14 +65,53 @@
   line-height: 1;
   letter-spacing: -0.02em;
   color: var(--meta-gray);
-  /* pre-wrap keeps the literal double spaces between segments while
-     still allowing line wraps at them */
+  /* pre-wrap preserves the between-segment spaces (emitted as real text
+     nodes in the JSX) while keeping them as wrap points */
   white-space: pre-wrap;
 }
 
 /* Each `// ...` segment wraps as a whole — never mid-segment */
 .segment {
   white-space: nowrap;
+}
+
+/* Nav links: underlined at rest so they can never be mistaken for the
+   static readout (glyphs keep the line's gray — 7.05:1; the underline
+   carries the bright brand orange, legal for non-text). Hover/focus and
+   the active page flip glyphs to --accent-deep (6.54:1, AA at this size;
+   #EC4E09 itself is 3.71:1 and reserved for decoration) + semibold —
+   Geist Mono's advances are weight-invariant, so no reflow. All state
+   changes are instant (house canon: crisp, no soft eases). */
+.navLink {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 3px; /* clear of mono descenders at 12-14px */
+}
+
+.navLink:hover,
+.navLink:focus-visible {
+  color: var(--accent-deep);
+  font-weight: 600;
+}
+
+.navLink:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Active page (route-aware, set via aria-current so semantics and paint
+   can't drift): same deep-orange semibold as hover, distinguished from a
+   hovered link by the doubled underline weight; its own hover thickens
+   further so the back-to-top control still responds. */
+.navLink[aria-current="page"] {
+  color: var(--accent-deep);
+  font-weight: 600;
+  text-decoration-thickness: 2px;
+}
+
+.navLink[aria-current="page"]:hover {
+  text-decoration-thickness: 3px;
 }
 
 .ruleRow {
@@ -48,38 +135,77 @@
   right: calc(50% - 50cqw - 16px);
 }
 
-/* Below 1024 the line can wrap — open the leading so rows don't collide */
+/* Below 1024 the line can wrap — open the leading so rows don't collide;
+   the nav rows open further (audit: at 1.4 pitch adjacent wrapped links
+   sit ~17px apart — genuinely mis-tappable) */
 @media (max-width: 1023px) {
   .line {
     line-height: 1.4;
   }
+
+  .navLine {
+    line-height: 1.9;
+  }
 }
 
 /* At the smallest gutters (12px) the marks would overhang the viewport
-   and cause horizontal scroll — plate is effectively full-bleed here */
+   and cause horizontal scroll — plate is effectively full-bleed here.
+   The bar also sheds its desktop datum chrome (24px pad + 18px margin
+   exist only to land the rule on y=56 at desktop) so the sticky wrapped
+   bar costs ~60px of phone viewport instead of ~100px. */
 @media (max-width: 639px) {
   .plus {
     display: none;
   }
+
+  .metaBar {
+    padding-top: 8px;
+  }
+
+  .line {
+    margin-bottom: 8px;
+  }
 }
 
-/* --- boot film (BootFilm.tsx): the meta line types in at the chrome beat.
-   max-width steps over a nowrap line = terminal-burst typing; the film is
-   desktop-only (>=1024) so nowrap is safe. --- */
-:global([data-film]:not(.film-chrome)) .line {
+/* --- boot film (BootFilm.tsx): the identity line types in at the chrome
+   beat (max-width steps over a nowrap line = terminal-burst typing; the
+   film is desktop-only (>=1024) so nowrap is safe), and the nav fades in
+   just as the typing lands. Retuned for the 23ch line (audit: the old
+   steps(44) over a percentage width reduced it to two visible chunks). --- */
+:global([data-film]:not(.film-chrome)) .idLine {
   opacity: 0;
 }
 
-:global([data-film].film-chrome) .line {
+:global([data-film].film-chrome) .idLine {
   opacity: 1;
   overflow: hidden;
   white-space: nowrap;
-  animation: metaType 0.8s steps(44, end) both;
+  animation: metaType 0.45s steps(24, end) both;
 }
 
-:global([data-film].film-skip) .line {
+/* Release the typing constraints once the film's text beat lands (or on
+   skip): leaving overflow:hidden + the 1.0 line box in place clipped the
+   active name's underline (offset 3px paints below the line box) and
+   skewed the flex baseline of the two clusters (closing UX audit F1). */
+:global([data-film].film-text) .idLine,
+:global([data-film].film-skip) .idLine {
   animation: none;
   max-width: none;
+  overflow: visible;
+  white-space: inherit;
+}
+
+:global([data-film]) .navLine {
+  transition: opacity 300ms ease 450ms;
+}
+
+:global([data-film]:not(.film-chrome)) .navLine {
+  opacity: 0;
+  visibility: hidden; /* keep the invisible nav out of the tab order */
+}
+
+:global([data-film].film-skip) .navLine {
+  transition: none;
 }
 
 @keyframes metaType {
@@ -87,6 +213,8 @@
     max-width: 0;
   }
   to {
-    max-width: 100%;
+    /* the 23ch identity line + 1ch headroom — a % target resolves against
+       the whole flex row and would finish the reveal in the first steps */
+    max-width: 24ch;
   }
 }
