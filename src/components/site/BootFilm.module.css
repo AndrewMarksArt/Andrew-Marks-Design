@@ -11,6 +11,8 @@
   z-index: 60;
   pointer-events: none;
   overflow: hidden;
+  /* nothing in the film reads or affects layout outside the overlay */
+  contain: strict;
 }
 
 /* the overlay only shows during the film */
@@ -18,14 +20,18 @@
   display: none;
 }
 
-/* the registration mark — visible from first paint as an x (rotated plus);
-   JS animates it upright and onward. Sized like the site's plus marks. */
+/* the registration mark — an x (rotated plus) that FADES IN 300ms after
+   film start (Andrew's storyboard 2026-07-16: the first frame is pure
+   hatch stillness; the fade also spends the hydration tail on a frame
+   that can't stutter). JS fades it in, spins it upright, and sends it to
+   the corner. Sized like the site's plus marks. */
 .mark {
   position: absolute;
   left: 50%;
   top: 50%;
   width: 32px;
   height: 32px;
+  opacity: 0;
   transform: translate(-50%, -50%) rotate(45deg) scale(0.72);
 }
 
@@ -79,9 +85,13 @@
 }
 
 /* Reveal curtains: painted EXACTLY like the body hatch so they read as the
-   page background; retreating right/down unmasks the real page beneath.
-   Pre-JS they sit at translate(0) covering everything — that plus the x
-   mark IS the film's starting frame. Compositor-only (translate). */
+   page background (same recipe, phase-aligned at scroll 0); their clip-path
+   insets retreat right/down to unmask the real page beneath. Pre-JS they
+   sit unclipped covering everything — that plus the x mark IS the film's
+   starting frame. The elements never move, only the inset animates, so the
+   hatch is viewport-locked with a single static layer per curtain — and
+   film start promotes no full-viewport layers (the old translate model
+   promoted four at the hydration tail, stuttering the mark spin). */
 .curtainR,
 .curtainB {
   position: absolute;
@@ -89,20 +99,12 @@
   top: 0;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
-}
-
-/* The hatch pattern lives on an inner layer that JS counter-translates,
-   so the pattern stays viewport-locked while the curtain's clipping edge
-   moves (translating the pattern with the curtain read as the page
-   background being pushed by the sweep). Same recipe as the body hatch,
-   phase-aligned at scroll 0. */
-.curtainInner {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
+  /* Back of the overlay: every drafting element (center rules, mark,
+     structural lines) paints ABOVE the hatch, per the storyboard. The
+     rules sat BELOW the curtains in source order, so the beat-B draw was
+     invisible — a silent regression from the mask-wipe rebuild, caught by
+     Andrew 2026-07-16. */
+  z-index: -1;
   background-color: var(--gutter-base);
   background-image: repeating-linear-gradient(
     50.79deg,

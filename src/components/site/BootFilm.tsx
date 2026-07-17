@@ -37,21 +37,33 @@ import styles from "./BootFilm.module.css";
  */
 
 const EXPO = "cubic-bezier(0.19, 1, 0.22, 1)";
-const TRAVEL = "cubic-bezier(0.65, 0, 0.35, 1)";
 // Apple's easeInOutQuad (verified from their shipped easing table) — the
-// gentle voice for the reveal sweep and the post-reveal cadence
+// gentle voice for the reveal sweep, the post-reveal cadence, and (since
+// Andrew's fluidity pass 2026-07-16) the whole A-C opening: spin, rule
+// draw, and corner travel all ride this curve.
 const APPLE = "cubic-bezier(0.455, 0.03, 0.515, 0.955)";
 
-// beat schedule (ms from film start)
+// beat schedule (ms from film start). Opening rebuilt to Andrew's spoken
+// storyboard (2026-07-16): still hatch → the x FADES in → hold → rotate
+// into the plus → beat → the rules draw out of it → beat → glide to the
+// corner → reveal. The 300ms stillness + 350ms fade also spend the
+// hydration tail (fonts settling, the robot atlas decode kicking off) on
+// a frame that cannot visibly stutter — motion starts ~850ms in, when
+// the main thread has gone quiet. Everything from the sweep onward keeps
+// its internal rhythm, shifted by the longer opening.
 const T = {
-  spin: 0, //       A: x does a full spin, growing into the plus
-  rulesOut: 480, // B: rules to edges
-  travel: 1150, //  C: crosshair to anchor (lands 1580)
-  sweep: 1680, //   D/E: ONE continuous reveal wipe out of the anchor
-  sweepEnd: 2880,
-  handoff: 2940, // curtains gone; overlay crosshair fades
-  chrome: 3260, //  meta types, NameMark rises
-  text: 3860, //    hero text ladder (existing) + typewriter
+  fadeIn: 300, //   the x fades in over 350ms (start frame is pure hatch)
+  spin: 850, //     A: x does a full spin, growing into the plus (done 1470)
+  rulesOut: 1620, // B: rules draw to the edges after a 150ms beat (done 2160)
+  travel: 2240, //  C: crosshair to anchor after an 80ms beat (lands 2580)
+  sweep: 2680, //   D/E: ONE continuous reveal wipe out of the anchor
+  sweepEnd: 3880,
+  handoff: 3940, // curtains gone; overlay crosshair fades
+  chrome: 4260, //  meta types, NameMark rises
+  text: 4600, //    hero text ladder (existing) + typewriter — tightened
+  //                from chrome+600 to chrome+340 (Andrew: text arrived a
+  //                beat late; it now starts while the NameMark is still
+  //                rising, same overlap the pre-rebuild pacing had)
 };
 
 export default function BootFilm() {
@@ -61,6 +73,19 @@ export default function BootFilm() {
     const docEl = document.documentElement;
     const root = rootRef.current;
     if (!root || !docEl.hasAttribute("data-film")) return;
+
+    // One film per page load. StrictMode (dev) re-runs this effect on the
+    // SAME root mid-film — bail and leave the film alone (the cleanup
+    // below no-ops for the same reason), otherwise every animation is
+    // cancelled and rebuilt inside the film's first frame, which reads as
+    // a stutter on the mark spin. A FRESH root while the stamp persists
+    // must not replay — hide it and bail.
+    if (docEl.hasAttribute("data-film-started")) {
+      if (!root.hasAttribute("data-film-running")) root.style.display = "none";
+      return;
+    }
+    docEl.setAttribute("data-film-started", "");
+    root.setAttribute("data-film-running", "");
 
     // Once the film has fully settled, drop its state from <html>: every
     // film-gated rule's end state equals its base state, so removal is
@@ -75,6 +100,7 @@ export default function BootFilm() {
         "film-skip",
       );
       docEl.removeAttribute("data-film");
+      docEl.removeAttribute("data-film-started");
     };
 
     const finishFilm = (viaSkip: boolean) => {
@@ -106,9 +132,12 @@ export default function BootFilm() {
     const anims: Animation[] = [];
     const timers: ReturnType<typeof setTimeout>[] = [];
 
-    // A page restored mid-scroll shouldn't play a film pinned to the top
+    // A page restored mid-scroll shouldn't play a film pinned to the top.
+    // Dispatch the skip event too: listeners gated on the film (HeroGaze's
+    // draw latch) must wake even though the film never ran.
     if (window.scrollY > 4) {
       docEl.classList.add("film-page", "film-chrome", "film-text", "film-skip");
+      window.dispatchEvent(new Event("am:film-skip"));
       root.style.display = "none";
       finishFilm(false);
       return;
@@ -132,6 +161,7 @@ export default function BootFilm() {
     if (!plateEl || !heroCanvas) {
       // structure missing (shouldn't happen) — bail to the finished page
       docEl.classList.add("film-page", "film-chrome", "film-text", "film-skip");
+      window.dispatchEvent(new Event("am:film-skip"));
       root.style.display = "none";
       finishFilm(false);
       return;
@@ -175,29 +205,42 @@ export default function BootFilm() {
     const c0 = mark.getBoundingClientRect();
     const dx = anchor.x - (c0.left + c0.width / 2);
     const dy = anchor.y - (c0.top + c0.height / 2);
-    const SPAN = T.travel + 430; // 0 .. end of travel
+    const SPAN = 2580; // 0 .. end of travel (landing pinned — sweep depends on it)
     const at = (ms: number) => ms / SPAN;
 
-    // mark: full spin x -> + while growing (0..620), hold, travel to the
-    // anchor (1150..1580). Lands at scale(1) = exactly the real 32px
-    // corner mark it sits down on. 45deg -> 360deg reads as a full
-    // revolution for the 4-fold-symmetric mark.
+    // the x fades in out of the still hatch (its CSS base opacity is 0 —
+    // the film's first 300ms shows nothing but the page background)
+    run(mark, [{ opacity: 0 }, { opacity: 1 }], {
+      delay: T.fadeIn,
+      duration: 350,
+      easing: APPLE,
+    });
+
+    // mark: hold as the x while it fades in, full spin x -> + while
+    // growing (850..1470, Apple ease), hold while the rules draw, then
+    // glide to the anchor (2240..2580, Apple ease). Lands at scale(1) =
+    // exactly the real 32px corner mark it sits down on. 45deg -> 360deg
+    // reads as a full revolution for the 4-fold-symmetric mark.
     run(
       mark,
       [
         {
           offset: 0,
           transform: "translate(-50%, -50%) rotate(45deg) scale(0.72)",
-          easing: EXPO,
         },
         {
-          offset: at(620),
+          offset: at(T.spin),
+          transform: "translate(-50%, -50%) rotate(45deg) scale(0.72)",
+          easing: APPLE,
+        },
+        {
+          offset: at(1470),
           transform: "translate(-50%, -50%) rotate(360deg) scale(1)",
         },
         {
           offset: at(T.travel),
           transform: "translate(-50%, -50%) rotate(360deg) scale(1)",
-          easing: TRAVEL,
+          easing: APPLE,
         },
         {
           offset: 1,
@@ -207,14 +250,15 @@ export default function BootFilm() {
       { duration: SPAN },
     );
 
-    // rules: grow (480..1130), hold, travel (1150..1580)
+    // rules: draw out of the landed plus (1620..2160, Apple ease),
+    // breathe, travel with the mark (2240..2580)
     run(
       hRule,
       [
         { offset: 0, transform: "scaleX(0) translateY(0)" },
-        { offset: at(T.rulesOut), transform: "scaleX(0) translateY(0)", easing: EXPO },
-        { offset: at(1130), transform: "scaleX(1) translateY(0)" },
-        { offset: at(T.travel), transform: "scaleX(1) translateY(0)", easing: TRAVEL },
+        { offset: at(T.rulesOut), transform: "scaleX(0) translateY(0)", easing: APPLE },
+        { offset: at(2160), transform: "scaleX(1) translateY(0)" },
+        { offset: at(T.travel), transform: "scaleX(1) translateY(0)", easing: APPLE },
         { offset: 1, transform: `scaleX(1) translateY(${dy}px)` },
       ],
       { duration: SPAN },
@@ -223,9 +267,9 @@ export default function BootFilm() {
       vRule,
       [
         { offset: 0, transform: "scaleY(0) translateX(0)" },
-        { offset: at(T.rulesOut), transform: "scaleY(0) translateX(0)", easing: EXPO },
-        { offset: at(1130), transform: "scaleY(1) translateX(0)" },
-        { offset: at(T.travel), transform: "scaleY(1) translateX(0)", easing: TRAVEL },
+        { offset: at(T.rulesOut), transform: "scaleY(0) translateX(0)", easing: APPLE },
+        { offset: at(2160), transform: "scaleY(1) translateX(0)" },
+        { offset: at(T.travel), transform: "scaleY(1) translateX(0)", easing: APPLE },
         { offset: 1, transform: `scaleY(1) translateX(${dx}px)` },
       ],
       { duration: SPAN },
@@ -249,51 +293,48 @@ export default function BootFilm() {
     // far edge (a pinned mid-keyframe made the reveal read as two jerky
     // sections; Andrew's ruling: single sweep, Apple's gentle ease).
     const sAt = (ms: number) => ms / T.sweepEnd;
-    // each curtain's inner pattern layer counter-translates so the hatch
-    // stays viewport-locked while the clipping edge sweeps (the pattern
-    // riding the curtain read as the background being pushed)
-    const curtRI = $("cri");
-    const curtBI = $("cbi");
-    const sweepX = (el: HTMLElement, sign: 1 | -1) =>
+    // The curtains never move — only their clip-path inset animates. The
+    // hatch is viewport-locked by construction (no counter-translating
+    // inner layer), and film start promotes ZERO full-viewport layers —
+    // the old model promoted four at the hydration tail, landing a raster
+    // burst exactly on the mark spin (the beat-A stutter, perf audit).
+    // Trade-off: clip-path animation is main-thread-driven in every stable
+    // engine, but the sweep window is main-thread-quiet and this exact
+    // model passed Andrew's QA in the 2026-07-16 perf pass.
+    const sweep = (el: HTMLElement, side: "left" | "top", jump: number, max: number) => {
+      const inset = (px: number) =>
+        side === "left" ? `inset(0 0 0 ${px}px)` : `inset(${px}px 0 0 0)`;
       run(
         el,
         [
-          { offset: 0, transform: "translateX(0px)" },
-          { offset: sAt(T.sweep), transform: "translateX(0px)" },
-          {
-            offset: sAt(T.sweep + 16),
-            transform: `translateX(${sign * anchor.x}px)`,
-            easing: APPLE,
-          },
-          { offset: 1, transform: `translateX(${sign * vw}px)` },
+          { offset: 0, clipPath: inset(0) },
+          { offset: sAt(T.sweep), clipPath: inset(0) },
+          { offset: sAt(T.sweep + 16), clipPath: inset(jump), easing: APPLE },
+          { offset: 1, clipPath: inset(max) },
         ],
         { duration: T.sweepEnd },
       );
-    const sweepY = (el: HTMLElement, sign: 1 | -1) =>
-      run(
-        el,
-        [
-          { offset: 0, transform: "translateY(0px)" },
-          { offset: sAt(T.sweep), transform: "translateY(0px)" },
-          {
-            offset: sAt(T.sweep + 16),
-            transform: `translateY(${sign * anchor.y}px)`,
-            easing: APPLE,
-          },
-          { offset: 1, transform: `translateY(${sign * vh}px)` },
-        ],
-        { duration: T.sweepEnd },
-      );
-    sweepX(curtR, 1);
-    sweepX(curtRI, -1);
-    sweepY(curtB, 1);
-    sweepY(curtBI, -1);
+    };
+    sweep(curtR, "left", anchor.x, vw);
+    sweep(curtB, "top", anchor.y, vh);
 
-    // lines grow out of the anchor with the sweep
+    // The hero-section bottom rule + its plus mark appear WITH the wipe,
+    // not before it (Andrew, 2026-07-16: at a fixed sweep+100 delay they
+    // floated on the hatch ~800ms before the edge reached their row).
+    // Start each as curtB's Apple-eased edge passes it: APPLE is
+    // easeInOutQuad, which inverts analytically.
+    const invApple = (p: number) =>
+      p <= 0 ? 0 : p >= 1 ? 1 : p < 0.5 ? Math.sqrt(p / 2) : 1 - Math.sqrt((1 - p) / 2);
+    const glideStart = T.sweep + 16;
+    const glideDur = T.sweepEnd - glideStart;
+    const rowRevealAt = (y: number) =>
+      glideStart + glideDur * invApple((y - anchor.y) / (vh - anchor.y));
+    const heroLineAt = rowRevealAt(slot.bottom - 1);
     glHero.style.top = `${slot.bottom - 1}px`;
     run(glHero, [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], {
-      delay: T.sweep + 100,
-      duration: 700,
+      delay: heroLineAt,
+      // always lands before the handoff crossfade begins
+      duration: Math.max(140, Math.min(320, T.handoff - 40 - heroLineAt)),
       easing: EXPO,
     });
     // the right rule + far marks land as the (Apple-eased) edge reaches them
@@ -308,7 +349,8 @@ export default function BootFilm() {
     pmA.style.left = `${plate.right}px`;
     pmA.style.top = `${anchor.y}px`;
     [
-      { pm: pmB, at: T.sweep + 300 },
+      // pmB sits ON the hero bottom rule — it pops as that rule draws
+      { pm: pmB, at: heroLineAt + 60 },
       { pm: pmA, at: T.sweep + sweepDur * 0.8 },
     ].forEach(({ pm, at: when }) =>
       run(
@@ -345,6 +387,11 @@ export default function BootFilm() {
     );
 
     return () => {
+      // Mid-film this is StrictMode's simulated unmount (dev) — leave the
+      // film alone (cancelling rebuilds everything in the first frame). A
+      // real unmount can't arrive mid-film: navigating requires an input,
+      // and any input skips and finishes the film first.
+      if (!finished) return;
       timers.forEach(clearTimeout);
       anims.forEach((a) => a.cancel());
       skipEvents.forEach((t) => window.removeEventListener(t, onSkip));
@@ -353,19 +400,20 @@ export default function BootFilm() {
 
   return (
     <div ref={rootRef} className={styles.overlay} aria-hidden="true">
-      {/* horizontal + vertical viewport rules (grow from center, then travel) */}
+      {/* horizontal + vertical viewport rules (grow from center, then
+          travel). They paint ABOVE the hatch curtains — the curtains sit
+          at z -1 at the back of the overlay — so the beat-B draw is
+          actually visible (it regressed behind the curtains when the
+          reveal became a mask wipe). */}
       <span data-f="h" className={styles.hRule} />
       <span data-f="v" className={styles.vRule} />
-      {/* the reveal curtains: clipping covers that retreat right/down from
-          the anchor, unmasking the real page beneath. Their hatch pattern
-          lives on inner layers that counter-translate, staying viewport-
-          locked while the edges sweep. Cover everything until the sweep. */}
-      <div data-f="cr" className={styles.curtainR}>
-        <div data-f="cri" className={styles.curtainInner} />
-      </div>
-      <div data-f="cb" className={styles.curtainB}>
-        <div data-f="cbi" className={styles.curtainInner} />
-      </div>
+      {/* the reveal curtains: hatch-painted covers whose clip-path insets
+          retreat right/down from the anchor, unmasking the real page
+          beneath. The elements never move, so the hatch stays viewport-
+          locked with no counter-translating inner layer. Cover everything
+          until the sweep. */}
+      <div data-f="cr" className={styles.curtainR} />
+      <div data-f="cb" className={styles.curtainB} />
       {/* structural lines + marks growing out of the anchor (above the
           curtains — the drafting lines span the hatch, per the storyboard) */}
       <span data-f="glr" className={styles.glVert} />
