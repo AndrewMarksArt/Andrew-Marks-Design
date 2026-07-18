@@ -132,12 +132,16 @@ export function CenteredSection({
   paragraphs,
   emphasis,
   carousel = true,
+  children,
 }: {
   heading: string;
   paragraphs: ReactNode[];
   /** bolded closing line */
   emphasis?: ReactNode;
   carousel?: boolean;
+  /** evidence blocks below the copy (stat tiles, artifacts) — replaces
+   *  the carousel when a study pins its closing proof instead */
+  children?: ReactNode;
 }) {
   return (
     <section className={`content ${styles.centered}`}>
@@ -148,6 +152,7 @@ export function CenteredSection({
         </p>
       ))}
       {emphasis && <p className={styles.centeredEmphasis}>{emphasis}</p>}
+      {children}
       {carousel && (
         <div className={styles.carousel} aria-hidden="true">
           <div className={`${styles.carouselFade} ${styles.carouselFadeLeft}`} />

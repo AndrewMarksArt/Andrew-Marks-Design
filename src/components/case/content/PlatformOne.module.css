@@ -18,3 +18,165 @@
 .captionShort {
   width: 90.4167%; /* 434 / 480 */
 }
+
+/* Asymmetric media split (S1): the path diagram leads, the evidence
+   screenshot supports — findability is a journey, not a page. */
+.asymPair {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 1023px) {
+  .asymPair {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Single tight media unit (S3 close-up) — deliberately narrower than the
+   column so it reads as a detail crop, not another screenshot. */
+.singleMedia {
+  max-width: 62%;
+}
+
+@media (max-width: 1023px) {
+  .singleMedia {
+    max-width: 100%;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   CST-lead quote strip (S2) — the human cost in her own words. Light
+   band, distinct from the dark vignette that closes the section.
+   -------------------------------------------------------------------------- */
+
+.quoteStrip {
+  margin: 0 0 32px;
+  padding: clamp(24px, 2.3vw, 40px) clamp(24px, 2.7vw, 48px);
+  background: var(--plate-resume);
+  border-left: 2px solid var(--accent);
+}
+
+.quoteText {
+  margin: 0 0 16px;
+  max-width: 26em;
+  font-family: var(--font-nhg);
+  font-weight: 500;
+  font-size: clamp(20px, 1.6204vw, 28px);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--black);
+}
+
+.quoteAttribution {
+  margin: 0;
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 300;
+  font-size: clamp(12px, 0.8102vw, 14px);
+  letter-spacing: -0.02em;
+  color: var(--meta-gray);
+}
+
+/* --------------------------------------------------------------------------
+   Closer evidence: stat tiles + pinned artifacts (replace the carousel).
+   -------------------------------------------------------------------------- */
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 720px;
+  margin: 48px auto 0;
+  text-align: left;
+}
+
+.tile {
+  border-top: 2px solid var(--black);
+  padding-top: 16px;
+}
+
+.tileLabel {
+  margin: 0 0 8px;
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 300;
+  font-size: clamp(11px, 0.7523vw, 13px);
+  letter-spacing: -0.02em;
+  color: var(--meta-gray);
+}
+
+.tileValue {
+  margin: 0;
+  font-family: var(--font-nhg);
+  font-weight: 500;
+  font-size: clamp(28px, 2.3148vw, 40px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--black);
+}
+
+.tilesNote {
+  margin: 16px auto 0;
+  max-width: 720px;
+  text-align: left;
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 300;
+  font-size: clamp(11px, 0.7523vw, 13px);
+  letter-spacing: -0.02em;
+  color: var(--meta-gray);
+}
+
+.closerMedia {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 48px;
+}
+
+@media (max-width: 639px) {
+  .tiles {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Security-event vignette — the study's agitation peak, promoted from the
+   third text column into the full-width slot (case-study analysis 003):
+   a dark, quiet, typographic pull-quote card in the site's own voice.
+   -------------------------------------------------------------------------- */
+
+.vignette {
+  background: var(--ink);
+  padding: clamp(32px, 4.6vw, 80px) clamp(24px, 4.6vw, 80px);
+}
+
+.vignetteEyebrow {
+  margin: 0 0 20px;
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 300;
+  font-size: clamp(12px, 0.8102vw, 14px);
+  letter-spacing: -0.02em;
+  color: var(--accent-soft);
+}
+
+.vignetteQuote {
+  margin: 0 0 20px;
+  max-width: 22em;
+  font-family: var(--font-nhg);
+  font-weight: 500;
+  font-size: clamp(24px, 2.3148vw, 40px);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--plate);
+}
+
+.vignetteContext {
+  margin: 0;
+  max-width: 38em;
+  font-family: var(--font-geist), sans-serif;
+  font-size: clamp(14px, 0.9259vw, 16px);
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.72);
+}
