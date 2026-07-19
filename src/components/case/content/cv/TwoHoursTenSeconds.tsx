@@ -3,7 +3,7 @@ export default function TwoHoursTenSeconds() {
     <svg
       viewBox="0 0 979 240"
       role="img"
-      aria-label="Outcome callback: the two-hour manual verification is struck through, with an arrow pointing to ten seconds; users self-report about fifteen minutes saved per case, noted as self-reported with survey pending."
+      aria-label="Outcome callback: more than two hours of manual verification is struck through, with an arrow pointing to ten seconds; users self-report about fifteen minutes saved per case, noted as self-reported with survey pending."
       style={{
         width: "100%",
         height: "auto",
@@ -32,14 +32,14 @@ export default function TwoHoursTenSeconds() {
         {"// THE CALLBACK"}
       </text>
 
-      {/* Before: 2 HOURS (struck through) */}
+      {/* Before: 2+ HOURS (struck through) */}
       <text x={24} y={128} fontSize={60} fontWeight={300} fill="#5E5757">
-        2 HOURS
+        2+ HOURS
       </text>
       <line
         x1={16}
         y1={107}
-        x2={292}
+        x2={330}
         y2={107}
         stroke="rgba(0,0,0,0.25)"
         strokeWidth={2}
@@ -47,7 +47,7 @@ export default function TwoHoursTenSeconds() {
 
       {/* The accent: one long arrow */}
       <line
-        x1={312}
+        x1={350}
         y1={107}
         x2={555}
         y2={107}

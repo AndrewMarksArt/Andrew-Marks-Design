@@ -3,7 +3,7 @@ export default function CaptureBeforeAfter() {
     <svg
       viewBox="0 0 979 360"
       role="img"
-      aria-label="Before and after: a graveyard of bookmarks fading as they age, versus a capture chat where a shared link is summarized, scored, and embedded eleven seconds later."
+      aria-label="Before and after: a graveyard of bookmarks fading as they age, versus a capture chat where a shared link is summarized, scored, and embedded within seconds."
       style={{
         width: "100%",
         height: "auto",
@@ -84,7 +84,7 @@ export default function CaptureBeforeAfter() {
       <line x1={775} y1={139} x2={785} y2={139} stroke="#EC4E09" strokeWidth={1.5} />
       <line x1={775} y1={161} x2={785} y2={161} stroke="#EC4E09" strokeWidth={1.5} />
       <text x={766} y={154} textAnchor="end" fontSize={13} fontWeight={500} fill="#EC4E09">
-        11 SECONDS
+        IN SECONDS
       </text>
 
       {/* Reply bubble — pipeline output */}

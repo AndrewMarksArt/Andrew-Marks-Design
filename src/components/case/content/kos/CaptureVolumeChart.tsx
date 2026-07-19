@@ -3,7 +3,7 @@ export default function CaptureVolumeChart() {
     <svg
       viewBox="0 0 979 360"
       role="img"
-      aria-label="Bar chart from pipeline logs: sixteen weekly capture bars ranging from roughly 296 to 412 items tower over a deep-reading capacity line near 18 items per week; the faint orange band between the line and the bars marks everything that gets skimmed or dropped."
+      aria-label="Bar chart from pipeline logs: sixteen weekly capture bars ranging from roughly 296 to 412 items tower over a deep-reading capacity line labeled roughly fifteen to twenty items per week; the faint orange band between the line and the bars marks everything that gets skimmed or dropped."
       style={{
         width: "100%",
         height: "auto",
@@ -70,6 +70,9 @@ export default function CaptureVolumeChart() {
       <line x1={64} y1={290.1} x2={744} y2={290.1} stroke="#000000" strokeWidth={2} />
       <text x={756} y={294.5} fontSize={13} fontWeight={400} fill="#000000">
         DEEP-READING CAPACITY
+      </text>
+      <text x={756} y={310} fontSize={11} fontWeight={400} fill="#000000">
+        {"~15–20/WK"}
       </text>
 
       {/* Gap band label — beside the band, centered on its vertical span */}

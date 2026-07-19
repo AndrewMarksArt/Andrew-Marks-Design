@@ -213,6 +213,7 @@ export default function KnowledgeOs() {
             label="Four months, zero to compounding"
             aspect={979 / 300}
             naturalWidth={979}
+            caption="Four months from first Telegram message to a compounding system. The slope hasn't flattened."
           >
             <GrowthTimeline />
           </AssetFigure>

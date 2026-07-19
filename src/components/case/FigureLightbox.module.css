@@ -25,12 +25,14 @@
 
 .enlargeTag {
   position: absolute;
-  top: 6px;
-  right: 10px;
+  top: 4px;
+  right: 8px;
   padding: 1px 4px;
-  /* opaque: at 320px the hero mock's frame line rises into the tag's line
-     box and strikes through the text (responsive audit P2) */
+  /* opaque + bordered: the tag reads as a deliberate corner chip wherever
+     it lands — over a figure's frame line at 320px (audit 1) or the dark
+     panel's corner at 1440+ (audit 2) — instead of an accidental notch */
   background: var(--plate);
+  border: 1px solid var(--rule-soft);
   font-family: var(--font-geist-mono), monospace;
   font-weight: 300;
   font-size: 12px;

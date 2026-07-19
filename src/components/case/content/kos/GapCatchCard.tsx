@@ -3,7 +3,7 @@ export default function GapCatchCard() {
     <svg
       viewBox="0 0 640 300"
       role="img"
-      aria-label="A rendered gap-report card marked priority maximum: in security, five subtopics and eight cross-links were missed by manual reading, with subtopic names redacted."
+      aria-label="A representative render of a gap-report card marked priority maximum: in security, five subtopics and eight cross-links were missed by manual reading; subtopic names are withheld. The real report replaces this render on export."
       style={{
         width: "100%",
         height: "auto",
@@ -11,7 +11,7 @@ export default function GapCatchCard() {
         fontFamily: "var(--font-geist-mono), ui-monospace, monospace",
       }}
     >
-      <title>The gap the agents caught — rendered report card</title>
+      <title>The gap the agents caught — representative report card</title>
 
       {/* ---- Card plate ---- */}
       <rect x={110} y={24} width={420} height={252} fill="#FFFFFF" stroke="#000000" strokeWidth={1} />
@@ -74,9 +74,12 @@ export default function GapCatchCard() {
       </text>
 
       {/* Footnote rule + provenance line */}
-      <line x1={111} y1={246} x2={529} y2={246} stroke="rgba(0,0,0,0.25)" strokeWidth={1} />
-      <text x={122} y={264} fontSize={11} fontWeight={400} fill="#5E5757">
-        {"// AS THE SYSTEM RENDERED IT — LIGHTLY REDACTED"}
+      <line x1={111} y1={240} x2={529} y2={240} stroke="rgba(0,0,0,0.25)" strokeWidth={1} />
+      <text x={122} y={254} fontSize={11} fontWeight={400} fill="#5E5757">
+        {"// REPRESENTATIVE RENDER —"}
+      </text>
+      <text x={122} y={268} fontSize={11} fontWeight={400} fill="#5E5757">
+        {"// THE REAL REPORT REPLACES THIS ON EXPORT"}
       </text>
     </svg>
   );

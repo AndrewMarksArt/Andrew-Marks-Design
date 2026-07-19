@@ -133,6 +133,9 @@ export default function CaseStallTimeline() {
       </text>
 
       {/* THE accent element — the research surprise, floating off the map */}
+      <text x={90} y={207} fontSize={11} fontWeight={400} fill="#5E5757">
+        {"VETS ADDED THIS —"}
+      </text>
       <rect
         x={90}
         y={214}

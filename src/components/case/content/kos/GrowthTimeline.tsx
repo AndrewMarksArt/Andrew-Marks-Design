@@ -64,10 +64,10 @@ export default function GrowthTimeline() {
       <line x1={810} y1={70} x2={810} y2={59} stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
       <text x={810} y={53} fontSize={11} fontWeight={400} fill="#5E5757" textAnchor="middle">BRANCHING</text>
 
-      {/* Emphasized point — late May */}
-      <rect x={455.5} y={145.6} width={9} height={9} fill="#000000" />
-      <line x1={460} y1={156} x2={460} y2={182} stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={460} y={196} fontSize={12} fontWeight={500} fill="#000000" textAnchor="middle">
+      {/* Emphasized point — mid-May (x = MAY tick + half a month; y on the curve) */}
+      <rect x={383.5} y={160.5} width={9} height={9} fill="#000000" />
+      <line x1={388} y1={159} x2={388} y2={133} stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
+      <text x={388} y={125} fontSize={12} fontWeight={500} fill="#000000" textAnchor="middle">
         {"1,900 SOURCES · 3,400+ SIGNALS"}
       </text>
 

@@ -11,11 +11,11 @@ export default function SameQuestionCompare() {
         fontFamily: "var(--font-geist-mono), ui-monospace, monospace",
       }}
     >
-      <title>Same question, two answers — and the refusal state</title>
+      <title>One question, three behaviors — hedged, cited, refused</title>
 
       {/* Figure header */}
       <text x={16} y={30} fontSize={13} fontWeight={300} fill="#5E5757">
-        {"// SAME QUESTION, TWO ANSWERS"}
+        {"// ONE QUESTION, THREE BEHAVIORS"}
       </text>
       <line
         x1={16}

@@ -3,7 +3,7 @@ export default function GhostedEhrMap() {
     <svg
       viewBox="0 0 979 420"
       role="img"
-      aria-label="System map of the veterinary EHR scoped in discovery: seven ghosted regions — scheduling, patient records, billing, inventory, imaging, lab orders, and client comms — joined by hairline integration seams, with one orange-outlined region, the copilot wedge, holding the four features actually shipped: chat with citations, med calculator, lab interpreter, and templates."
+      aria-label="System map of the veterinary EHR scoped in discovery: seven ghosted regions — scheduling, patient records, billing, inventory, imaging, lab orders, and client comms — joined by hairline integration seams, with one orange-outlined region, the copilot wedge, holding the four features actually shipped: chat with citations, med calculator, lab interpreter, and templates. Dashed ties link the shipped tools back to the mapped regions they carve from."
       style={{
         width: "100%",
         height: "auto",
@@ -97,6 +97,35 @@ export default function GhostedEhrMap() {
         y2={216}
         stroke="rgba(0,0,0,0.375)"
         strokeWidth={1}
+      />
+
+      {/* Carve-out ties — dashed relationship lines from shipped wedge tools
+          back to the ghosted regions they carve from (no flow direction) */}
+      {/* LAB INTERPRETER → LAB ORDERS */}
+      <line
+        x1={790}
+        y1={188}
+        x2={656}
+        y2={188}
+        stroke="rgba(0,0,0,0.25)"
+        strokeWidth={1}
+        strokeDasharray="3 3"
+      />
+      {/* CHAT + CITATIONS → PATIENT RECORDS */}
+      <polyline
+        points="790,128 690,128 690,166 466,166"
+        fill="none"
+        stroke="rgba(0,0,0,0.25)"
+        strokeWidth={1}
+        strokeDasharray="3 3"
+      />
+      {/* TEMPLATES → CLIENT COMMS */}
+      <polyline
+        points="790,226 680,226 680,380 96,380 96,256"
+        fill="none"
+        stroke="rgba(0,0,0,0.25)"
+        strokeWidth={1}
+        strokeDasharray="3 3"
       />
 
       {/* Ghosted regions — mapped in discovery */}

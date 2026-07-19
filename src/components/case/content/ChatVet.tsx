@@ -160,10 +160,10 @@ export default function ChatVet() {
         ]}
         media={
           <AssetFigure
-            label="Same question, two answers"
+            label="One question, three behaviors"
             aspect={979 / 360}
             naturalWidth={979}
-            caption="Same question, two answers. In clinical software, the citation is what makes the answer usable — and the refusal is what makes it safe."
+            caption="One question, three behaviors — hedged, cited, refused. In clinical software, the citation is what makes the answer usable, and the refusal is what makes it safe."
           >
             <SameQuestionCompare />
           </AssetFigure>
