@@ -7,15 +7,12 @@ description: Defines the standard interactions, hover states, and animations for
 
 You are an AI coding assistant. Follow these rules when implementing dynamic UI states for this project.
 
-## 1. Current Status: Interactions are DEFERRED (2026-07-09)
+## 1. Current Status: Interactions ship via Andrew's review process (updated 2026-07-19)
 
-Andrew has interaction designs for the redesign but they are not yet shared. **Do not invent hover/pressed/expanded states.** The v1 build ships static. Until his designs land, the only permitted interactive affordances are:
+The 2026-07-09 blanket deferral is superseded — the site now ships Andrew-approved interactions (navbar hover/active grammar, case-card beams and peek sprites, the figure lightbox, the boot film, the Operating Record expanding ledger). The standing rule instead:
 
-- `cursor: pointer` on real links/buttons
-- `:focus-visible` outline (2px solid `var(--accent)`, offset 2px) — accessibility floor, non-negotiable
-- Default browser active states (do not suppress)
-
-When his interaction designs arrive, they replace this section.
+- **New interactive states go through Andrew's process**: initial plan → adversarial UX review → build → closing audit. Never invent hover/pressed/expanded states ad hoc — propose them through that pipeline, and treat Andrew's ratified patterns (draw-in underlines, `[+]`-chip affordances, Apple-curve motion, instant-close overlays) as the vocabulary to extend.
+- `cursor: pointer`/`zoom-in` on real controls, `:focus-visible` outline (2px solid `var(--accent)`, offset 2px), and default browser active states remain the non-negotiable floor everywhere.
 
 ## 2. Animation Conventions (carried forward — still canon)
 

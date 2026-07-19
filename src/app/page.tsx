@@ -5,6 +5,7 @@ import Hero from "../components/site/Hero";
 import BrandRow from "../components/site/BrandRow";
 import CaseStudyStatus from "../components/site/CaseStudyStatus";
 import CaseStudies from "../components/site/CaseStudies";
+import OperatingRecord from "../components/site/OperatingRecord";
 import ResumeSection from "../components/site/ResumeSection";
 import LinksGrid from "../components/site/LinksGrid";
 import Footer from "../components/site/Footer";
@@ -25,6 +26,7 @@ export default function Home() {
           <CaseStudyStatus />
           <CaseStudies />
         </div>
+        <OperatingRecord />
         <ResumeSection />
         <LinksGrid />
       </main>
