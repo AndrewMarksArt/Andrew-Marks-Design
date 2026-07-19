@@ -76,6 +76,8 @@
   line-height: 1.25;
   letter-spacing: -0.02em;
   color: var(--ink);
+  /* no single-word widows at any width (responsive audit: "have / to.") */
+  text-wrap: balance;
 }
 
 .intro p {

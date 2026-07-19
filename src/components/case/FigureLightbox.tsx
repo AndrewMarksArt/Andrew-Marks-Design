@@ -70,6 +70,15 @@ export default function ZoomableFigure({
     // children must exist in the DOM before showModal announces the dialog
     flushSync(() => setOpen(true));
     dlg.showModal();
+    // pan affordance: figures never render below natural width, so narrow
+    // viewports overflow — without a visible cue the clipped edge reads
+    // as broken, not pannable (responsive audit P2)
+    const region = dlg.querySelector("[data-fig-region]");
+    if (region && region.scrollWidth > region.clientWidth + 4) {
+      dlg.setAttribute("data-pan", "true");
+    } else {
+      dlg.removeAttribute("data-pan");
+    }
   };
 
   const handleClose = () => {
@@ -134,12 +143,16 @@ export default function ZoomableFigure({
             </div>
             <div
               className={styles.figRegion}
+              data-fig-region
               tabIndex={0}
               role="group"
               aria-label={`${label} — scrollable figure`}
             >
               <div className={styles.figSize}>{children}</div>
             </div>
+            <p className={styles.panHint} aria-hidden="true">
+              {"← DRAG TO PAN — FIGURE SHOWN AT FULL SIZE"}
+            </p>
             {caption && (
               <p id={captionId} className={styles.dialogCaption}>
                 {caption}
