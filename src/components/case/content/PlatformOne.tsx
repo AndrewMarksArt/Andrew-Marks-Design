@@ -1,12 +1,11 @@
-import type { ReactNode } from "react";
 import {
   CaseHero,
   StatsStrip,
   CaseSection,
   CenteredSection,
   UpNext,
-  PlaceholderBox,
 } from "../CaseSections";
+import { AssetFigure, CaptionedMedia } from "../CaseFigures";
 import BrandRow from "../../site/BrandRow";
 import ZoomableFigure from "../FigureLightbox";
 import styles from "../case.module.css";
@@ -29,69 +28,6 @@ import PhasedLaunchTimeline from "./p1/PhasedLaunchTimeline";
  * annotations (hero split-screen, role/timeframe/team strip, image
  * carousel).
  */
-
-/** Drafted-figure wrapper: framed, click-to-enlarge inline-SVG asset +
- *  real caption text (the two pending caption bars, made real). Figures
- *  with internal footnotes (closer charts) omit the caption; label/aspect/
- *  naturalWidth feed the lightbox (see FigureLightbox.tsx). */
-function AssetFigure({
-  children,
-  caption,
-  sub,
-  label,
-  aspect,
-  naturalWidth,
-}: {
-  children: ReactNode;
-  caption?: string;
-  sub?: ReactNode;
-  label: string;
-  aspect: number;
-  naturalWidth: number;
-}) {
-  return (
-    <figure className={local.figure}>
-      <ZoomableFigure
-        label={label}
-        aspect={aspect}
-        naturalWidth={naturalWidth}
-        caption={caption}
-      >
-        {children}
-      </ZoomableFigure>
-      {caption && (
-        <figcaption className={local.figureCaption}>
-          {caption}
-          {sub && <span className={local.figureSub}>{sub}</span>}
-        </figcaption>
-      )}
-    </figure>
-  );
-}
-
-/** Wireframe media unit: image placeholder + two caption strips
- *  (full-width 25px bar, then a 434/480 bar). Label names the planned
- *  visual from the shot list so the page doubles as the production
- *  checklist (.claude/P1-ASSET-CHECKLIST.md). */
-function CaptionedMedia({
-  label = "// IMG_PENDING",
-  aspect = "480 / 322",
-}: {
-  label?: string;
-  aspect?: string;
-}) {
-  return (
-    <div className={local.mediaUnit}>
-      <PlaceholderBox aspect={aspect} label={label} />
-      <div className={local.captions}>
-        <PlaceholderBox aspect="480 / 25" label="// CAPTION_PENDING" />
-        <div className={local.captionShort}>
-          <PlaceholderBox aspect="434 / 25" label="" />
-        </div>
-      </div>
-    </div>
-  );
-}
 
 /** The CST lead's own words — the human cost of the flood, in the light
  *  quote-strip treatment (distinct from the dark vignette below it).

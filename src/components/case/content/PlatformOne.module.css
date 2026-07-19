@@ -1,52 +1,6 @@
 /* PlatformOne case content — local layout the shared primitives can't
-   express: each wireframe media unit is a 480x322 image placeholder with
-   two caption strips beneath (Figma 6755:4845 et al.: 25px bars, the
-   second 434/480 wide). 8pt gaps. */
-
-.mediaUnit {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.captions {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.captionShort {
-  width: 90.4167%; /* 434 / 480 */
-}
-
-/* --------------------------------------------------------------------------
-   Drafted-figure wrapper: framed inline-SVG asset + real caption text
-   (replaces the two pending caption bars once a figure exists).
-   -------------------------------------------------------------------------- */
-
-.figure {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* frame + zoom trigger live in FigureLightbox.module.css */
-
-.figureCaption {
-  font-family: var(--font-geist-mono), monospace;
-  font-weight: 300;
-  font-size: clamp(12px, 0.8102vw, 14px);
-  letter-spacing: -0.02em;
-  line-height: 1.5;
-  color: var(--meta-gray);
-}
-
-.figureSub {
-  display: block;
-  margin-top: 4px;
-  opacity: 0.75;
-}
+   express. Figure/caption units live in CaseFigures.module.css; frame +
+   zoom trigger in FigureLightbox.module.css. */
 
 /* Asymmetric media split (S1): the path diagram leads, the evidence
    screenshot supports — findability is a journey, not a page. */
