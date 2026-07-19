@@ -97,6 +97,17 @@
   min-height: 320px;
 }
 
+/* Hero media slot holding a real (drafted) figure instead of the
+   placeholder: framed like the in-page figures, SVG centered against the
+   text column's height. */
+.heroMediaFig {
+  display: grid;
+  align-content: center;
+  background: var(--plate);
+  border: 1px solid var(--rule-soft);
+  padding: clamp(16px, 1.5vw, 24px);
+}
+
 /* --- placeholder box (wireframe media, terminal-labeled) ------------------ */
 
 .placeholder {

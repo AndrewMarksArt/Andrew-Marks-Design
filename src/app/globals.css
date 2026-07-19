@@ -193,6 +193,15 @@ svg {
   max-width: 100%;
 }
 
+/* Figure lightbox (FigureLightbox.tsx): scroll lock must live on the ROOT —
+   body-level overflow:hidden cannot propagate past html { overflow-x: clip }
+   above. --sb-comp (scrollbar compensation) is set by the component before
+   showModal() and removed on close. */
+html:has(dialog.figure-lightbox[open]) {
+  overflow: hidden;
+  padding-right: var(--sb-comp, 0px);
+}
+
 /* ==========================================================================
    Boot film (see BootFilm.tsx): the real page — server-rendered in its
    finished state — stays VISIBLE beneath the film's hatch curtains, which

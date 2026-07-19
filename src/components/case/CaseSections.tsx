@@ -37,10 +37,13 @@ export function CaseHero({
   eyebrow,
   title,
   intro,
+  media,
 }: {
   eyebrow: string;
   title: string;
   intro: ReactNode[];
+  /** real hero figure — replaces the wireframe placeholder when supplied */
+  media?: ReactNode;
 }) {
   return (
     <header className={`content ${styles.hero}`}>
@@ -53,10 +56,16 @@ export function CaseHero({
           ))}
         </div>
       </div>
-      <PlaceholderBox
-        className={styles.heroMedia}
-        label="// HERO_IMG_PENDING"
-      />
+      {media ? (
+        <div className={`${styles.heroMedia} ${styles.heroMediaFig}`}>
+          {media}
+        </div>
+      ) : (
+        <PlaceholderBox
+          className={styles.heroMedia}
+          label="// HERO_IMG_PENDING"
+        />
+      )}
     </header>
   );
 }

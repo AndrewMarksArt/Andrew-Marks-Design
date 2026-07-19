@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import {
   CaseHero,
   StatsStrip,
@@ -7,8 +8,19 @@ import {
   PlaceholderBox,
 } from "../CaseSections";
 import BrandRow from "../../site/BrandRow";
+import ZoomableFigure from "../FigureLightbox";
 import styles from "../case.module.css";
 import local from "./PlatformOne.module.css";
+import HeroAssistantMock from "./p1/HeroAssistantMock";
+import IaPathDiagram from "./p1/IaPathDiagram";
+import TwoTurnEscalationFlow from "./p1/TwoTurnEscalationFlow";
+import CitedAnswerCloseup from "./p1/CitedAnswerCloseup";
+import PostureWidget from "./p1/PostureWidget";
+import PostureDevFullscreen from "./p1/PostureDevFullscreen";
+import VuetifySpendMap from "./p1/VuetifySpendMap";
+import WidgetReskinBeforeAfter from "./p1/WidgetReskinBeforeAfter";
+import TicketTaxonomyChart from "./p1/TicketTaxonomyChart";
+import PhasedLaunchTimeline from "./p1/PhasedLaunchTimeline";
 
 /**
  * Platform One case study content (Figma "Platform One Case Study
@@ -17,6 +29,45 @@ import local from "./PlatformOne.module.css";
  * annotations (hero split-screen, role/timeframe/team strip, image
  * carousel).
  */
+
+/** Drafted-figure wrapper: framed, click-to-enlarge inline-SVG asset +
+ *  real caption text (the two pending caption bars, made real). Figures
+ *  with internal footnotes (closer charts) omit the caption; label/aspect/
+ *  naturalWidth feed the lightbox (see FigureLightbox.tsx). */
+function AssetFigure({
+  children,
+  caption,
+  sub,
+  label,
+  aspect,
+  naturalWidth,
+}: {
+  children: ReactNode;
+  caption?: string;
+  sub?: ReactNode;
+  label: string;
+  aspect: number;
+  naturalWidth: number;
+}) {
+  return (
+    <figure className={local.figure}>
+      <ZoomableFigure
+        label={label}
+        aspect={aspect}
+        naturalWidth={naturalWidth}
+        caption={caption}
+      >
+        {children}
+      </ZoomableFigure>
+      {caption && (
+        <figcaption className={local.figureCaption}>
+          {caption}
+          {sub && <span className={local.figureSub}>{sub}</span>}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
 
 /** Wireframe media unit: image placeholder + two caption strips
  *  (full-width 25px bar, then a 434/480 bar). Label names the planned
@@ -91,6 +142,16 @@ export default function PlatformOne() {
           "Platform One is the Air Force's $500M flagship software factory, supporting more than 60 Air Force and Joint programs valued at $650 billion.",
           "But after a rushed rebrand, users couldn't find the answers they needed on its website. Sometimes they couldn't even find how to ask for help. Emergency fixes piled on top of each other — and made things worse.",
         ]}
+        media={
+          <ZoomableFigure
+            label="The assistant in situ"
+            aspect={720 / 500}
+            naturalWidth={720}
+            unframed
+          >
+            <HeroAssistantMock />
+          </ZoomableFigure>
+        }
       />
 
       <StatsStrip
@@ -132,7 +193,15 @@ export default function PlatformOne() {
              screenshot can't show — the path diagram leads, one evidence
              screenshot supports. */
           <div className={local.asymPair}>
-            <CaptionedMedia label="// IA_PATH_DIAGRAM" aspect="16 / 10" />
+            <AssetFigure
+              label="Finding support, post-rebrand"
+              aspect={960 / 600}
+              naturalWidth={960}
+              caption="Mapped the post-rebrand path to support: five clicks and two dead ends to reach a lifeline."
+              sub={"// every one of these pages existed — reaching them was the failure"}
+            >
+              <IaPathDiagram />
+            </AssetFigure>
             <CaptionedMedia label="// BURIED_ANSWER_SCREENSHOT" />
           </div>
         }
@@ -181,12 +250,23 @@ export default function PlatformOne() {
              (citations + follow-up chips) is a tight detail crop, not
              another screenshot. */
           <>
-            <CaptionedMedia
-              label="// TWO_TURN_ESCALATION_FLOW"
-              aspect="979 / 300"
-            />
+            <AssetFigure
+              label="Two-turn escalation flow"
+              aspect={979 / 300}
+              naturalWidth={979}
+              caption="Designed the escalation logic: two turns, then a human — routed by question type, not by whoever answered the phone."
+            >
+              <TwoTurnEscalationFlow />
+            </AssetFigure>
             <div className={local.singleMedia}>
-              <CaptionedMedia label="// CITED_ANSWER_CLOSEUP" />
+              <AssetFigure
+                label="Cited answer close-up"
+                aspect={480 / 340}
+                naturalWidth={480}
+                caption="Every answer carries its receipts: inline citations, real sources, and a human path that never disappears."
+              >
+                <CitedAnswerCloseup />
+              </AssetFigure>
             </div>
           </>
         }
@@ -203,8 +283,22 @@ export default function PlatformOne() {
           /* The page's ONE true pair — the section's story IS a
              comparison (same question, both postures). */
           <div className={styles.mediaPair}>
-            <CaptionedMedia label="// POSTURE_WIDGET" />
-            <CaptionedMedia label="// POSTURE_DEV_FULLSCREEN" />
+            <AssetFigure
+              label="Posture A — general visitor widget"
+              aspect={480 / 322}
+              naturalWidth={480}
+              caption="The widget posture — quick answers at the point of confusion, sized for passers-by."
+            >
+              <PostureWidget />
+            </AssetFigure>
+            <AssetFigure
+              label="Posture B — developer mode"
+              aspect={480 / 322}
+              naturalWidth={480}
+              caption="The developer posture — the same question, expanded into a full-screen workspace with sources and code."
+            >
+              <PostureDevFullscreen />
+            </AssetFigure>
           </div>
         }
       />
@@ -219,8 +313,22 @@ export default function PlatformOne() {
         ]}
         media={
           <div className={styles.mediaPair}>
-            <CaptionedMedia label="// VUETIFY_SPEND_MAP" />
-            <CaptionedMedia label="// WIDGET_RESKIN_BEFORE_AFTER" />
+            <AssetFigure
+              label="Component spend map"
+              aspect={480 / 322}
+              naturalWidth={480}
+              caption="Audited every surface: stock components where they're free, custom spend concentrated where trust is won."
+            >
+              <VuetifySpendMap />
+            </AssetFigure>
+            <AssetFigure
+              label="Interim widget — gap audit and re-skin"
+              aspect={480 / 360}
+              naturalWidth={480}
+              caption="Documented the interim widget's gaps, then re-skinned it to the platform's language while the custom build ships."
+            >
+              <WidgetReskinBeforeAfter />
+            </AssetFigure>
           </div>
         }
       />
@@ -258,8 +366,21 @@ export default function PlatformOne() {
           {"// projections derived from the hand-coded ticket-sample audit"}
         </p>
         <div className={local.closerMedia}>
-          <PlaceholderBox aspect="979 / 360" label="// TICKET_TAXONOMY_CHART" />
-          <PlaceholderBox aspect="979 / 140" label="// PHASED_LAUNCH_TIMELINE" />
+          {/* self-captioned figures — their footnotes live inside the SVGs */}
+          <AssetFigure
+            label="Ticket taxonomy — hand-coded sample"
+            aspect={979 / 360}
+            naturalWidth={979}
+          >
+            <TicketTaxonomyChart />
+          </AssetFigure>
+          <AssetFigure
+            label="Phased launch sequence"
+            aspect={979 / 140}
+            naturalWidth={979}
+          >
+            <PhasedLaunchTimeline />
+          </AssetFigure>
         </div>
       </CenteredSection>
 
