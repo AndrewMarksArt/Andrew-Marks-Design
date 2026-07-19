@@ -1,25 +1,47 @@
-/* ChatVET case content — wireframe figure: media placeholder + gray
-   caption bars (Figma 480x322 box over two 25px bars, second 434px).
-   Bars snapped to the 8pt grid (24px); widths kept proportional. */
+/* ChatVET case content — local layout the shared primitives can't
+   express. Figure/caption units live in CaseFigures.module.css. */
 
-.figure {
+/* Narrow centered figure (S2 agitation peak: "single narrow centered
+   visual" per the shot list — the low point of the story). */
+.narrowFigure {
+  max-width: 640px;
+  margin: 48px auto 0;
+  text-align: left;
+}
+
+/* Closer evidence stack (typographic callback + testimonial + live shot). */
+.closerStack {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 32px;
+  margin-top: 48px;
+  text-align: left;
 }
 
-.figCaption {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+/* Pilot-user pull-quote (same grammar as PlatformOne's CST quote strip). */
+.quoteStrip {
+  margin: 0;
+  padding: clamp(24px, 2.3vw, 40px) clamp(24px, 2.7vw, 48px);
+  background: var(--plate-resume);
+  border-left: 2px solid var(--accent);
 }
 
-.figCaption span {
-  display: block;
-  height: 24px;
-  background: #d9d9d9;
+.quoteText {
+  margin: 0 0 16px;
+  max-width: 30em;
+  font-family: var(--font-nhg);
+  font-weight: 500;
+  font-size: clamp(18px, 1.3889vw, 24px);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--black);
 }
 
-.figCaption span:last-child {
-  width: 90%;
+.quoteAttribution {
+  margin: 0;
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 300;
+  font-size: clamp(12px, 0.8102vw, 14px);
+  letter-spacing: -0.02em;
+  color: var(--meta-gray);
 }
