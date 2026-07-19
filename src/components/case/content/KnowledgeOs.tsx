@@ -1,36 +1,38 @@
 import {
-  PlaceholderBox,
   CaseHero,
   StatsStrip,
   CaseSection,
   CenteredSection,
   UpNext,
 } from "../CaseSections";
+import { AssetFigure } from "../CaseFigures";
 import BrandRow from "../../site/BrandRow";
-import caseStyles from "../case.module.css";
 import styles from "./KnowledgeOs.module.css";
+import CaptureVolumeChart from "./kos/CaptureVolumeChart";
+import CaptureBeforeAfter from "./kos/CaptureBeforeAfter";
+import TrustRowCrop from "./kos/TrustRowCrop";
+import GapReportDecay from "./kos/GapReportDecay";
+import RagArchitecture from "./kos/RagArchitecture";
+import RefusalCrop from "./kos/RefusalCrop";
+import BranchGraphFigure from "./kos/BranchGraphFigure";
+import GrowthTimeline from "./kos/GrowthTimeline";
+import GapCatchCard from "./kos/GapCatchCard";
 
 /**
- * Knowledge OS case-study content (Figma "Knowledge OS case study
- * template", node 6759:5781). Copy transcribed verbatim from the
- * template; all media areas render as labeled wireframe placeholders
- * per the annotations until real imagery lands.
+ * Knowledge OS case-study content — audit-driven revision (career-
+ * strategy 005): stats strip filled with dated telemetry, numbers
+ * reconciled (mid-May anchor, "signal" defined, agents introduced in
+ * S4), the Solution turn extracted from S2 into its own beat, S6 trimmed
+ * from feature dump to branching + librarian clause, internet-research
+ * tool moved to S4 as the sanctioned exception, instrumentation-method
+ * sentence added, mic-drop grammar fixed.
+ *
+ * ⚠ FACTS PENDING FROM ANDREW (do not invent): capture-volume mechanism
+ * (feeds/newsletters vs hand-picked), grounding eval (spot-check n if
+ * one happened), score-calibration story, whether the security-gap
+ * priorities predated the agent run, the one judgment beat (what the
+ * first post-capture version got wrong / what branching cost).
  */
-
-/** 480x322 media box with the template's two caption bars beneath
- *  (Figma 6759:5940 figure pattern). */
-function MediaFigure() {
-  return (
-    <div className={styles.figure}>
-      <PlaceholderBox aspect="480 / 322" />
-      <div className={styles.captions}>
-        <PlaceholderBox aspect="480 / 25" label="// CAPTION_PENDING" />
-        <PlaceholderBox aspect="434 / 25" label="" />
-      </div>
-    </div>
-  );
-}
-
 export default function KnowledgeOs() {
   return (
     <>
@@ -38,27 +40,49 @@ export default function KnowledgeOs() {
         eyebrow="KNOWLEDGE HUB · PERSONAL KNOWLEDGE OS"
         title="Designing a personal AI that reads 300 sources a week, so I don't have to."
         intro={[
-          "In AI, new work outpaces anyone's reading speed. Knowledge Hub is a personal knowledge OS built solo and still shipping weekly",
-          "My capture pipeline ingests 300-400 sources a week into a vector corpus growing to over 4,000 links, and an AI chat interface that answers questions from that corpus with citations instead of confidence.",
+          "In AI, new work outpaces anyone's reading speed. Knowledge Hub is a personal knowledge OS, built solo and still shipping weekly.",
+          "A capture pipeline ingests 300–400 sources a week into a corpus past 4,000 sources; a chat interface answers from that corpus with citations instead of confidence.",
+          "I designed, researched, and built every layer — the trust decisions below are mine end to end.",
         ]}
       />
 
-      <StatsStrip />
+      <StatsStrip
+        items={[
+          { label: "ROLE:", value: "Design, research & engineering — solo" },
+          {
+            label: "TIMEFRAME:",
+            value: "4 months to production · shipping weekly",
+          },
+          {
+            label: "SYSTEM:",
+            value: "RAG + agents · corpus 4,000+ · 300–400 sources/wk",
+          },
+          {
+            label: "STATUS:",
+            value: "Live, in daily use — n=1 by design (as of July 2026)",
+          },
+        ]}
+      />
 
       <BrandRow />
 
       <CaseSection
         heading="The field moves faster than reading speed."
         lede={[
-          "Roughly 300-400 relevant sources arrive every week. A person can deeply read a fraction of that, and skimming drops the things that matter most: connections and contradictions between sources, the topics nobody's covering yet.",
+          "Roughly 300–400 relevant sources arrive every week, per the pipeline's own capture logs. A person can deeply read a fraction of that, and skimming drops the things that matter most: connections and contradictions between sources, the topics nobody's covering yet.",
+          "The system reads everything so I can deeply read the right ten.",
+          "And because I'm the only user, the research method is instrumentation — every number in this study comes from the system's own telemetry, not my recollection.",
         ]}
         media={
-          <div className={styles.quadRow}>
-            <PlaceholderBox aspect="230 / 209" />
-            <PlaceholderBox aspect="230 / 209" />
-            <PlaceholderBox aspect="230 / 209" />
-            <PlaceholderBox aspect="230 / 209" />
-          </div>
+          <AssetFigure
+            label="One week of intake vs reading speed"
+            aspect={979 / 360}
+            naturalWidth={979}
+            caption="Every week, 300–400 relevant sources. Deep reading covers the flat line at the bottom."
+            sub={"// from the pipeline's capture logs — draft render pending a fresh export"}
+          >
+            <CaptureVolumeChart />
+          </AssetFigure>
         }
       />
 
@@ -67,40 +91,62 @@ export default function KnowledgeOs() {
         lede={[
           "Capture tools make piles, and piles rot: you can't see what's gone stale, what contradicts what, or what's missing entirely.",
           "For a designer whose positioning depends on staying current in AI, working from stale knowledge is a professional risk.",
-          "The capture layer here is still the same Telegram bot the project started with, send it a URL and seconds later the source is summarized, scored, and embedded. What changed over the last four months is everything after capture.",
+        ]}
+      />
+
+      <CaseSection
+        heading="Send it a URL. Seconds later, it's knowledge."
+        lede={[
+          "The capture layer is still the same Telegram bot the project started with: send it a URL, and seconds later the source is summarized, scored, and embedded.",
+          "What changed over the four months since is everything after capture.",
         ]}
         media={
-          <div className={caseStyles.mediaPair}>
-            <MediaFigure />
-            <MediaFigure />
-          </div>
+          <AssetFigure
+            label="Piles rot; capture compounds"
+            aspect={979 / 360}
+            naturalWidth={979}
+            caption="Left: where every capture tool ends. Right: capture that compounds — summarized, scored, embedded in seconds. Everything in this study happens after this message."
+          >
+            <CaptureBeforeAfter />
+          </AssetFigure>
         }
       />
 
       <CaseSection
-        heading="Show the conclusion and how much to trust it"
+        heading="Every conclusion shows how much to trust it."
         lede={[
-          "Every extraction carries a score with an inline reason, a novelty score against everything already saved, a record of what the model failed to extract, all surfaced where you read, not in logs. A failed extraction shows up on the row it failed on, with a retry next to it.",
+          "Every extraction carries a score with an inline reason and a novelty score against everything already saved — surfaced where you read, not in logs.",
+          "A failed extraction shows up on the row it failed on, with a retry next to it.",
         ]}
         media={
-          <div className={caseStyles.mediaPair}>
-            <MediaFigure />
-            <MediaFigure />
-          </div>
+          <AssetFigure
+            label="Trust, surfaced on the row"
+            aspect={979 / 300}
+            naturalWidth={979}
+            caption="Every AI conclusion ships with its confidence, its reasoning, and its failures — on the row, not in a log."
+          >
+            <TrustRowCrop />
+          </AssetFigure>
         }
       />
 
       <CaseSection
         heading="A corpus that admits what it lacks."
         lede={[
-          "Every source carries a decay state (active, aging, stale), and an on-demand gap-analysis pass reports what the corpus is missing and where attention is shifting.",
+          "Every source carries a decay state (active, aging, stale), and an on-demand gap-analysis agent reports what the corpus is missing and where attention is shifting.",
           "The system doesn't just describe what it knows; it flags what it doesn't.",
+          "And when a genuine gap turns up, the one sanctioned path to the open internet is the research tool that goes and fills it — AI-suggested topics, new sources, back into the corpus.",
         ]}
         media={
-          <div className={caseStyles.mediaPair}>
-            <MediaFigure />
-            <MediaFigure />
-          </div>
+          <AssetFigure
+            label="The corpus reports its blind spots"
+            aspect={979 / 360}
+            naturalWidth={979}
+            caption="On demand, the corpus reports its own blind spots and where attention is shifting."
+            sub={"// report contents representative — the real gap run is the closer's evidence card"}
+          >
+            <GapReportDecay />
+          </AssetFigure>
         }
       />
 
@@ -108,52 +154,86 @@ export default function KnowledgeOs() {
         heading="Chat that answers from the library, not the internet."
         lede={[
           "The daily interface is a conversation with the corpus.",
-          "A question gets embedded, the system over-fetches 20 to 40 candidates from the vector store, a reranker re-scores them against the question, and the top ten go to the model with one standing rule: ground every claim in a named saved source, and say so when the corpus doesn't cover it.",
+          "A question gets embedded; the system over-fetches 20 to 40 candidates from the vector store — recall is cheap, and the reranker is the better judge of relevance — then the top ten go to the model with one standing rule: ground every claim in a named saved source, and say so when the corpus doesn't cover it.",
         ]}
         media={
-          <div className={caseStyles.mediaPair}>
-            <MediaFigure />
-            <MediaFigure />
-          </div>
+          <>
+            <AssetFigure
+              label="The machine, drawn"
+              aspect={979 / 380}
+              naturalWidth={979}
+              caption="Over-fetch wide, rerank hard, ground every claim in a named source — or say the corpus doesn't cover it."
+            >
+              <RagArchitecture />
+            </AssetFigure>
+            <div className={styles.narrowFigure}>
+              <AssetFigure
+                label="The refusal"
+                aspect={480 / 240}
+                naturalWidth={480}
+                caption="When the library is silent, the system says so — then offers to go fill the shelf."
+              >
+                <RefusalCrop />
+              </AssetFigure>
+            </div>
+          </>
         }
       />
 
       <CaseSection
         heading="Conversations are a graph, not a scroll."
         lede={[
-          "Editing a question or regenerating an answer never overwrites anything: it creates a sibling branch, with a version pager to walk the alternatives and a branch-from-here on any message.",
-          "Long chats get a table of contents, an outline rail with AI-generated topic labels, bookmarks, and find-in-conversation.",
-          "Folders organize chats, and an auto-sort reads every unfiled conversation and proposes a filing plan and the new-chat screen suggests the topics you actually ask about, extracted from your own question history.",
-          "And when there is a genuine gap in my saved links the research tool aided by AI topic suggestions searches the internet  for new content to fill those gaps.",
+          "Editing a question or regenerating an answer never overwrites anything: a sibling branch appears, with a version pager to walk the alternatives and branch-from-here on any message.",
+          "Plus the navigation a 200-message chat needs: an outline rail with AI-generated topic labels, bookmarks, folders, and an auto-sort that proposes a filing plan from your own question history.",
         ]}
         media={
-          <>
-            <div className={caseStyles.mediaPair}>
-              <MediaFigure />
-              <MediaFigure />
-            </div>
-            <div className={caseStyles.mediaPair}>
-              <MediaFigure />
-              <MediaFigure />
-            </div>
-          </>
+          <AssetFigure
+            label="A conversation, branched"
+            aspect={979 / 360}
+            naturalWidth={979}
+            caption="Edit or regenerate and nothing is lost — a sibling branch appears. The librarian layer keeps hundred-message chats navigable."
+          >
+            <BranchGraphFigure />
+          </AssetFigure>
         }
       />
 
       <CenteredSection
         heading="Production-deployed and compounding"
         paragraphs={[
-          "Knowledge Hub is live and in daily use: a corpus past 4,000 sources growing by 300-400 a week, a chat interface grounded in it, agents fired on demand.",
-          "By mid-May the agents had generated 3,400+ signals over 1,900 saved sources, nearly two machine observations per source, and the first gap they caught was one my own reading had missed  entirely: five security subtopics I'd rated maximum priority, eight links between them.",
+          "Knowledge Hub is live and in daily use: a corpus past 4,000 sources, growing 300–400 a week, with a chat interface grounded in it and agents that run on demand.",
+          "By mid-May — when the corpus stood at 1,900 sources — the agents had generated 3,400+ signals: machine-written observations (contradictions, cross-links, emerging gaps), nearly two per source. The first gap they caught was one my own reading had missed entirely: five security subtopics I'd rated maximum priority, with eight links between them my reading never surfaced.",
+          "It's the same rule I hold every AI product to — ground it or say you can't — applied to a system where I'm the only user it can fail.",
         ]}
-        emphasis="A year ago I could have designed this in Figma, getting any of it into production would have been just a dream. But today with all the new tools it shipped in four months, solo, and it's still shipping."
-      />
+        emphasis="A year ago I could have designed this in Figma — getting any of it into production would have been a dream. Built AI-natively, it shipped in four months, solo — and it's still shipping."
+        carousel={false}
+      >
+        <div className={styles.closerStack}>
+          <AssetFigure
+            label="Four months, zero to compounding"
+            aspect={979 / 300}
+            naturalWidth={979}
+          >
+            <GrowthTimeline />
+          </AssetFigure>
+          <div className={styles.narrowFigure}>
+            <AssetFigure
+              label="The gap the agents caught"
+              aspect={640 / 300}
+              naturalWidth={640}
+              caption="The first gap the agents caught was mine."
+            >
+              <GapCatchCard />
+            </AssetFigure>
+          </div>
+        </div>
+      </CenteredSection>
 
       {/* Figma's UP NEXT block was un-updated (stale ChatVET copy); named
           for the actual destination so link text matches. */}
       <UpNext
         title="Platform One AI Assistant & Chat Bot"
-        desc="Designing an AI assistant projected to cut support tickets by up to 40%"
+        desc="Designing an AI assistant projected to cut support tickets by roughly 40%"
         href="/case-studies/platform-one"
       />
     </>
