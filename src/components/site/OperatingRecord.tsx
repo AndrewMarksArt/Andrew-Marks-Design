@@ -1,15 +1,18 @@
-import { Fragment } from "react";
+import { Fragment, type ReactNode } from "react";
 import { PlusMark } from "./motifs";
 import OperatingRecordEnhance from "./OperatingRecordEnhance";
 import styles from "./OperatingRecord.module.css";
 
 /**
  * Operating Record — the non-visual, measured achievements as an
- * expanding ledger (native details/summary, exclusive-open). Spec:
- * .claude/OPS-SECTION-SPEC.md; adversarial pre-build review applied
- * (no scroll-compensation JS — native scroll anchoring owns that; print
- * open-all must drop the name attribute first; glyphs are layout-owned
- * and aria-hidden individually, provenance text stays exposed to AT).
+ * expanding ledger (native details/summary, exclusive-open). Visual
+ * system per the redesign panel ("Drafting Sheet" direction, synthesized
+ * spec in session record): outline-stroke display values in the case
+ * numerals' voice, case-band 98px row meter, mid vrule born at the
+ * ledger's opening separator (T-junction precedent), accent hatch as the
+ * single rest-state orange. At rest each row = value/LABEL/claim/src;
+ * scope + AI bridge live in the readout (skim defense: the claims carry
+ * breadth; src stays at rest as the honesty non-negotiable).
  *
  * ANDREW — HOW TO FILL THIS IN (the intake contract, per field):
  *   value    display digits only ("56,854", "10 → 7") — never brackets;
@@ -179,6 +182,31 @@ if (process.env.NODE_ENV !== "production") {
   }
 }
 
+/** 2px overhung rule with plus marks pinning the content-edge crossings
+ *  (CaseStudies separator pattern, replicated locally). */
+function Separator() {
+  return (
+    <div className={styles.separator} aria-hidden="true">
+      <PlusMark className={`${styles.sepMark} ${styles.sepMarkLeft}`} />
+      <PlusMark className={`${styles.sepMark} ${styles.sepMarkRight}`} />
+    </div>
+  );
+}
+
+/** Presentation-only split of arrow values ("10 → 7") so the glyph can
+ *  carry its own optical size; AT still reads the full data string. */
+function renderValue(v: string): ReactNode {
+  if (!v.includes("→")) return v;
+  const [before, after] = v.split(/\s*→\s*/);
+  return (
+    <>
+      {before}
+      <span className={styles.valueArrow}>→</span>
+      {after}
+    </>
+  );
+}
+
 /** mono readout block: label + body */
 function ReadoutBlock({ label, text }: { label: string; text: string }) {
   return (
@@ -205,48 +233,102 @@ export default function OperatingRecord() {
         />
       </div>
 
-      {/* band nests INSIDE .content (donor pattern) so the absolutely
-          positioned vrules resolve against the content column, not the
-          plate (closing-audit blocker) */}
+      {/* band nests INSIDE .content so the vrules resolve against the
+          content column; the header zone is interior-rule-free — the mid
+          vrule is born at the ledger's opening separator below */}
       <div className="content">
         <div className={styles.band}>
-        <span className={styles.vrule + " " + styles.vruleLeft} aria-hidden="true" />
-        <span className={styles.vrule + " " + styles.vruleMid} aria-hidden="true" />
-        <span className={styles.vrule + " " + styles.vruleRight} aria-hidden="true" />
+          <span
+            className={`${styles.vrule} ${styles.vruleLeft}`}
+            aria-hidden="true"
+          />
+          <span
+            className={`${styles.vrule} ${styles.vruleRight}`}
+            aria-hidden="true"
+          />
 
-        <h2 id="opsrec-title" className="visually-hidden">
-          Operating record — org-scale research operations
-        </h2>
-        <p className={styles.kicker} aria-hidden="true">
-          <span>OPERATING_RECORD</span>
-          <span>{`// ${String(RECORDS.length).padStart(2, "0")} RECORDS ON FILE`}</span>
-        </p>
-        <p className={styles.intro}>
-          Systems I built so teams could move — research operations, hiring,
-          and alignment machinery. The operating layer AI teams run on.
-        </p>
+          <h2 id="opsrec-title" className="visually-hidden">
+            Operating record — org-scale research operations
+          </h2>
 
-        <ol role="list" className={styles.list}>
-          {RECORDS.map((r, i) => (
-            <li key={r.id} className={styles.item}>
-              <details
-                id={r.id}
-                name="operating-record"
-                className={styles.record}
-              >
-                <summary className={styles.summary}>
-                  <span className={styles.summaryGrid}>
-                    <span className={styles.index} aria-hidden="true">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className={styles.valueCell}>
-                      <span className={styles.value}>{r.value}</span>
-                      {r.unit && <span className={styles.unit}>{r.unit}</span>}
-                    </span>
-                    <span className={styles.main}>
-                      <span className={styles.label}>{r.label}</span>
-                      <span className={styles.claim}>{r.claim}</span>
-                      <span className={styles.scope}>
+          <div className={styles.header}>
+            <p className={styles.kicker} aria-hidden="true">
+              <span className={styles.kickerLabel}>OPERATING_RECORD</span>
+              <span className={styles.kickerMeta}>
+                {`// ${String(RECORDS.length).padStart(2, "0")} RECORDS ON FILE`}
+              </span>
+            </p>
+            <div className={styles.introRow}>
+              <p className={styles.intro}>
+                Systems I built so teams could move — research operations,
+                hiring, and alignment machinery. The operating layer AI teams
+                run on.
+              </p>
+              <span className={styles.hatch} aria-hidden="true" />
+            </div>
+          </div>
+
+          <div className={styles.ledger}>
+            {/* born at the opening separator's T-junction, runs to the
+                resume divider (-40px is coupled to .band padding-bottom
+                (24) + divider rule top (15); retune together) */}
+            <span
+              className={`${styles.vrule} ${styles.vruleMid}`}
+              aria-hidden="true"
+            />
+            <Separator />
+            {/* the ONE mid-crossing pin — where the rule is born */}
+            <PlusMark
+              className={`${styles.sepMark} ${styles.sepMarkMid}`}
+              aria-hidden="true"
+            />
+            <ol role="list" className={styles.list}>
+              {RECORDS.map((r, i) => (
+                <li key={r.id} className={styles.item}>
+                  {i > 0 && <Separator />}
+                  <details
+                    id={r.id}
+                    name="operating-record"
+                    className={styles.record}
+                  >
+                    <summary className={styles.summary}>
+                      <span className={styles.summaryGrid}>
+                        <span className={styles.rail}>
+                          <span className={styles.index} aria-hidden="true">
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                          <span className={styles.value}>
+                            {renderValue(r.value)}
+                          </span>
+                          {r.unit && (
+                            <span className={styles.unit}>{r.unit}</span>
+                          )}
+                        </span>
+                        <span className={styles.main}>
+                          <span className={styles.label}>{r.label}</span>
+                          <span className={styles.claim}>{r.claim}</span>
+                          <span className={styles.src}>
+                            <span aria-hidden="true">{"// src: "}</span>
+                            <span className="visually-hidden">Source: </span>
+                            {r.src}
+                            {r.draft && (
+                              <span className={styles.draftTag}>
+                                <span aria-hidden="true">{" · "}</span>
+                                <span className="visually-hidden">, </span>
+                                DRAFT VALUES
+                              </span>
+                            )}
+                          </span>
+                        </span>
+                        <span className={styles.chip} aria-hidden="true">
+                          <span className={styles.chipClosed}>[+] RECORD</span>
+                          <span className={styles.chipOpen}>[−] CLOSE</span>
+                        </span>
+                      </span>
+                    </summary>
+                    <div className={styles.readout}>
+                      {/* readout line 1: the demoted breadth evidence */}
+                      <p className={styles.scope}>
                         <span aria-hidden="true">{"SCOPE: "}</span>
                         <span className="visually-hidden">Scope: </span>
                         {r.scope.map((seg, j) => (
@@ -260,8 +342,21 @@ export default function OperatingRecord() {
                             <span>{seg}</span>
                           </Fragment>
                         ))}
-                      </span>
-                      <span className={styles.bridge}>
+                      </p>
+                      <ReadoutBlock
+                        label="SITUATION"
+                        text={r.readout.situation}
+                      />
+                      <ReadoutBlock
+                        label="EXECUTION"
+                        text={r.readout.execution}
+                      />
+                      <ReadoutBlock
+                        label="MEASURED RESULT"
+                        text={r.readout.result}
+                      />
+                      {/* translation zone: bridge + FOR AI TEAMS read as one */}
+                      <p className={styles.bridge}>
                         <span className={styles.bridgeArrow} aria-hidden="true">
                           {"→ "}
                         </span>
@@ -269,47 +364,22 @@ export default function OperatingRecord() {
                           IN AI TERMS:
                         </span>{" "}
                         {r.bridge}
-                      </span>
-                      <span className={styles.src}>
-                        <span aria-hidden="true">{"// src: "}</span>
-                        <span className="visually-hidden">Source: </span>
-                        {r.src}
-                        {r.draft && (
-                          <span className={styles.draftTag}>
-                            <span aria-hidden="true">{" · "}</span>
-                            <span className="visually-hidden">, </span>
-                            DRAFT VALUES
-                          </span>
-                        )}
-                      </span>
-                    </span>
-                    <span className={styles.chip} aria-hidden="true">
-                      <span className={styles.chipClosed}>[+] RECORD</span>
-                      <span className={styles.chipOpen}>[−] CLOSE</span>
-                    </span>
-                  </span>
-                </summary>
-                <div className={styles.readout}>
-                  <ReadoutBlock label="SITUATION" text={r.readout.situation} />
-                  <ReadoutBlock label="EXECUTION" text={r.readout.execution} />
-                  <ReadoutBlock
-                    label="MEASURED RESULT"
-                    text={r.readout.result}
-                  />
-                  <div className={styles.forAi}>
-                    <p className={styles.forAiLabel}>
-                      <span aria-hidden="true">{"→ "}</span>FOR AI TEAMS
-                    </p>
-                    <p className={styles.forAiBody}>{r.readout.forAiTeams}</p>
-                  </div>
-                  <p className={styles.readoutProvenance}>
-                    {r.readout.provenance}
-                  </p>
-                </div>
-              </details>
-            </li>
-          ))}
-        </ol>
+                      </p>
+                      <div className={styles.forAi}>
+                        <p className={styles.forAiLabel}>
+                          <span aria-hidden="true">{"→ "}</span>FOR AI TEAMS
+                        </p>
+                        <p className={styles.forAiBody}>{r.readout.forAiTeams}</p>
+                      </div>
+                      <p className={styles.readoutProvenance}>
+                        {r.readout.provenance}
+                      </p>
+                    </div>
+                  </details>
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
       </div>
       <OperatingRecordEnhance />

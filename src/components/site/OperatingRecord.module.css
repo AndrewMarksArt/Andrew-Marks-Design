@@ -1,8 +1,8 @@
 /* ==========================================================================
-   Operating Record — expanding ledger between CaseStudies and ResumeSection.
-   Divider + vrule geometry copied from the donors (ResumeSection divider,
-   CaseStudies vrules) so the drafting system reads continuous; type recipes
-   borrowed from the P1 closer tiles. Spec: .claude/OPS-SECTION-SPEC.md.
+   Operating Record — "Drafting Sheet" system (redesign-panel spec).
+   Every number is a neighbor's number: divider = ResumeSection verbatim;
+   separators + registration + outline values = CaseStudies grammar; hatch
+   = LinksGrid gradient; row meter 48/2/48 = the case-band 98px pitch.
    ========================================================================== */
 
 .section {
@@ -43,17 +43,14 @@
   right: calc(50% - 50cqw - 16px);
 }
 
-/* --- band: content column, owns the 72px handoff to ResumeSection -------- */
+/* --- band: content column; 24 + last row's 48 = 72px handoff to resume --- */
 
 .band {
   position: relative;
-  padding-top: 48px;
-  /* ResumeSection's divider has margin-top:0 — this section owns the gap */
-  padding-bottom: 72px;
+  padding-top: 64px;
+  padding-bottom: 24px;
 }
 
-/* interior rules, CaseStudies geometry; -16px BOTH ends so they resume
-   from the preceding divider's center rule and land on the next one */
 .vrule {
   position: absolute;
   top: -16px;
@@ -71,8 +68,14 @@
   right: -1px;
 }
 
+/* born ON the ledger's opening separator (T-junction, CaseStudyStatus
+   precedent) — the header zone above is interior-rule-free. -40px is
+   coupled to .band padding-bottom (24) + divider rule top (15); retune
+   together. */
 .vruleMid {
   left: calc(24.324% - 1px);
+  top: 0;
+  bottom: -40px;
 }
 
 @media (max-width: 1449px) {
@@ -81,28 +84,48 @@
   }
 }
 
-@media (max-width: 1023px) {
-  .vrule {
-    display: none;
-  }
-}
+/* --- header zone --------------------------------------------------------- */
 
-/* --- header ---------------------------------------------------------------- */
+.header {
+  padding-inline: 16px;
+  margin-bottom: 64px;
+}
 
 .kicker {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
   gap: 16px;
   margin: 0 0 16px;
+}
+
+/* ResumeSection .label recipe verbatim */
+.kickerLabel {
   font-family: var(--font-geist-mono), monospace;
   font-weight: 300;
-  font-size: 13px;
+  font-size: clamp(18px, 1.3889vw, 24px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.kickerMeta {
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 300;
+  font-size: clamp(12px, 0.8102vw, 14px);
   letter-spacing: -0.02em;
   color: var(--meta-gray);
 }
 
+.introRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
 .intro {
-  margin: 0 0 40px;
+  margin: 0;
   max-width: 36.5em;
   font-family: var(--font-geist), sans-serif;
   font-size: clamp(15px, 1.0417vw, 18px);
@@ -112,16 +135,74 @@
   color: var(--text-body-90);
 }
 
-/* --- ledger ---------------------------------------------------------------- */
+/* LinksGrid hatch gradient verbatim — the section's ONLY rest-state orange */
+.hatch {
+  flex: none;
+  width: 264px;
+  height: 88px;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--accent) 0 2px,
+    transparent 2px 19.8px
+  );
+}
+
+@media (max-width: 1279px) {
+  .hatch {
+    display: none;
+  }
+}
+
+/* --- ledger structure & registration ------------------------------------- */
+
+.ledger {
+  position: relative;
+}
+
+/* CaseStudies separator verbatim; rows carry all air */
+.separator {
+  position: relative;
+  height: 2px;
+  margin-inline: calc(-1 * var(--content-inset));
+  background: var(--rule);
+}
+
+.sepMark {
+  position: absolute;
+  top: -15px;
+}
+
+.sepMarkLeft {
+  left: calc(var(--content-inset) - 16px);
+}
+
+.sepMarkRight {
+  right: calc(var(--content-inset) - 16px);
+}
+
+/* the ONE mid-crossing pin — child of .ledger so % is content-relative;
+   centers on the opening rule at ledger y 0–2 */
+.sepMarkMid {
+  left: calc(24.324% - 16px);
+}
+
+@media (max-width: 1449px) {
+  .sepMarkMid {
+    left: calc(32% - 16px);
+  }
+}
+
+@media (max-width: 1023px) {
+  .vrule,
+  .sepMark {
+    display: none;
+  }
+}
 
 .list {
   list-style: none;
   margin: 0;
   padding: 0;
-}
-
-.item + .item {
-  border-top: 1px solid var(--rule-soft);
 }
 
 .record {
@@ -132,58 +213,80 @@
 .summary {
   list-style: none;
   cursor: pointer;
+  /* stroked text inside a tap target, iOS */
+  -webkit-tap-highlight-color: transparent;
 }
 
 .summary::-webkit-details-marker {
   display: none; /* Safari < 18.4 */
 }
 
-/* grid lives on an inner span — display on summary itself is unreliable */
+/* --- row grid (at rest): rail | main | auto chip; 48/2/48 = 98px meter --- */
+
 .summaryGrid {
   display: grid;
-  grid-template-areas: "idx val main chip";
-  grid-template-columns: 64px calc(24.324% - 88px) 1fr 136px;
+  grid-template-areas: "rail main chip";
+  grid-template-columns: 24.324% minmax(0, 1fr) auto;
   gap: 24px;
   align-items: start;
-  padding-block: 32px;
+  padding-block: 48px;
 }
 
 @media (max-width: 1449px) {
   .summaryGrid {
-    grid-template-columns: 64px calc(32% - 88px) 1fr 136px;
+    grid-template-columns: 32% minmax(0, 1fr) auto;
   }
 }
 
+/* 48 = the case-numeral datum (16 row pad + 32 rail inset); 24 = mid-vrule
+   text clearance. The void below the unit is composed — the counterweight
+   to the main cell. */
+.rail {
+  grid-area: rail;
+  position: relative;
+  padding-left: 48px;
+  padding-right: 24px;
+}
+
 .index {
-  grid-area: idx;
+  position: absolute;
+  left: 16px;
+  top: 0;
   font-family: var(--font-geist-mono), monospace;
   font-weight: 300;
-  font-size: 14px;
+  font-size: clamp(12px, 0.8102vw, 14px);
+  line-height: 1;
   letter-spacing: -0.02em;
   color: var(--meta-gray);
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
 }
 
-.valueCell {
-  grid-area: val;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-/* P1 closer .tileValue recipe — deliberately below the case numerals */
+/* CaseStudies .numeral voice, one rank under the 200px ordinals */
 .value {
+  display: block;
   font-family: var(--font-nhg);
-  font-weight: 500;
-  font-size: clamp(28px, 2.3148vw, 40px);
-  line-height: 1;
-  letter-spacing: -0.01em;
-  color: var(--black);
+  font-weight: 700;
+  font-size: clamp(64px, 6.25vw, 108px);
+  line-height: 1.25;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--numeral-sage);
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.valueArrow {
+  font-size: 0.45em;
+  vertical-align: 0.18em;
+  margin-inline: 0.04em;
 }
 
 .unit {
+  display: block;
+  margin-top: 16px;
   font-family: var(--font-geist-mono), monospace;
   font-weight: 300;
-  font-size: 13px;
+  font-size: clamp(12px, 0.8102vw, 14px);
   letter-spacing: -0.02em;
   color: var(--meta-gray);
   overflow-wrap: break-word;
@@ -193,77 +296,54 @@
   grid-area: main;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
   min-width: 0;
 }
 
+/* cap-aligns with the value cap across the vrule */
 .label {
   font-family: var(--font-geist-mono), monospace;
   font-weight: 400;
-  font-size: 14px;
+  font-size: clamp(12px, 0.8102vw, 14px);
   letter-spacing: -0.02em;
   color: var(--green-gray);
   overflow-wrap: break-word;
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
 }
 
 .claim {
   font-family: var(--font-geist), sans-serif;
-  font-size: clamp(16px, 1.0417vw, 18px);
+  font-size: clamp(15px, 1.0417vw, 18px);
   font-weight: 400;
   line-height: 1.45;
   letter-spacing: 0.02em;
   color: var(--text-body-90);
-  max-width: 44em;
-}
-
-.scope {
-  font-family: var(--font-geist-mono), monospace;
-  font-weight: 300;
-  font-size: clamp(11px, 0.7523vw, 13px);
-  letter-spacing: -0.02em;
-  color: var(--meta-gray);
-  overflow-wrap: break-word;
-}
-
-.bridge {
-  font-family: var(--font-geist), sans-serif;
-  font-size: clamp(13px, 0.8102vw, 14px);
-  line-height: 1.45;
-  letter-spacing: 0.02em;
-  color: var(--text-body-80);
-  max-width: 44em;
-}
-
-.bridgeArrow {
-  color: var(--accent-deep);
-}
-
-.bridgePrefix {
-  font-family: var(--font-geist-mono), monospace;
-  font-weight: 400;
-  font-size: 12px;
-  letter-spacing: -0.02em;
-  color: var(--meta-gray);
+  max-width: 36.5em;
 }
 
 .src {
   font-family: var(--font-geist-mono), monospace;
   font-weight: 300;
-  font-size: clamp(11px, 0.7523vw, 13px);
+  font-size: clamp(12px, 0.8102vw, 14px);
   letter-spacing: -0.02em;
   color: var(--meta-gray);
   overflow-wrap: break-word;
 }
 
+/* accent never marks caveat; the weight step keeps it legible
+   (Andrew sign-off gate — rollback: color: var(--accent-deep)) */
 .draftTag {
-  color: var(--accent-deep);
+  color: var(--meta-gray);
   font-weight: 400;
 }
 
-/* [+] RECORD chip — FigureLightbox .enlargeTag grammar */
+/* [+] RECORD chip — FigureLightbox grammar + state polish */
 .chip {
   grid-area: chip;
+  align-self: start;
   justify-self: end;
+  margin-right: 16px;
   padding: 1px 4px;
   background: var(--plate);
   border: 1px solid var(--rule-soft);
@@ -273,6 +353,20 @@
   letter-spacing: -0.02em;
   color: var(--meta-gray);
   white-space: nowrap;
+  transition:
+    border-color 150ms ease,
+    color 150ms ease;
+}
+
+.summary:hover .chip,
+.summary:focus-visible .chip {
+  border-color: var(--rule);
+  color: var(--ink);
+}
+
+.record[open] .chip {
+  border-color: var(--ink);
+  color: var(--ink);
 }
 
 .chipOpen {
@@ -287,20 +381,23 @@
   display: inline;
 }
 
-/* --- readout (expanded) ---------------------------------------------------- */
+/* Firefox (no text-box-trim): donor fallback verbatim — tune ONLY these */
+@supports not (text-box-trim: trim-both) {
+  .value,
+  .index,
+  .label {
+    margin-block: -0.28em -0.26em;
+  }
+}
 
+/* --- readout (open state = register change: drawing → spec document) ----- */
+
+/* no top padding: the rest→readout beat is the summary's own 48px */
 .readout {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  /* left edge aligns with the summary's main column (clear of the mid
-     vrule): 64px index + 24px gap + value col + 24px gap = 24.324% + 24px */
-  padding: 0 136px 40px calc(24.324% + 24px);
+  padding: 0 16px 48px calc(24.324% + 24px);
   max-width: none;
-}
-
-.readout > * {
-  max-width: 44em;
 }
 
 @media (max-width: 1449px) {
@@ -309,25 +406,33 @@
   }
 }
 
-@media (max-width: 1023px) {
-  .readout {
-    padding-left: 88px;
-    /* no chip column to clear below the vrule breakpoint */
-    padding-right: 0;
-  }
+.readout > * {
+  max-width: 41em;
+}
+
+/* readout line 1 — the demoted breadth evidence */
+.scope {
+  margin: 0 0 24px;
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 300;
+  font-size: clamp(12px, 0.8102vw, 14px);
+  letter-spacing: -0.02em;
+  color: var(--meta-gray);
+  overflow-wrap: break-word;
 }
 
 .block {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
+  margin: 0 0 24px;
 }
 
 .blockLabel {
   margin: 0;
   font-family: var(--font-geist-mono), monospace;
   font-weight: 400;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: -0.02em;
   color: var(--meta-gray);
 }
@@ -341,14 +446,37 @@
   color: var(--text-body-80);
 }
 
-/* the section's only orange besides focus rings */
+/* bridge + FOR AI TEAMS bar = one translation zone (8 top, 16 to the bar) */
+.bridge {
+  margin: 8px 0 16px;
+  font-family: var(--font-geist), sans-serif;
+  font-size: clamp(13px, 0.8102vw, 14px);
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+  color: var(--text-body-80);
+}
+
+/* abuts the accent bar — the open state's single accent moment */
+.bridgeArrow {
+  color: var(--accent-deep);
+}
+
+.bridgePrefix {
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: -0.02em;
+  color: var(--meta-gray);
+}
+
 .forAi {
   border-left: 2px solid var(--accent);
   padding-left: 16px;
+  margin: 0 0 24px;
 }
 
 .forAiLabel {
-  margin: 0 0 4px;
+  margin: 0 0 8px;
   font-family: var(--font-geist-mono), monospace;
   font-weight: 400;
   font-size: 12px;
@@ -365,6 +493,7 @@
   color: var(--text-body-80);
 }
 
+/* closes the sheet; src is NOT repeated — it lives at rest */
 .readoutProvenance {
   margin: 0;
   font-family: var(--font-geist-mono), monospace;
@@ -396,28 +525,69 @@
   }
 }
 
-/* --- narrow: restack at 767 (the desktop grid's value/main tracks get
-   too cramped in the 640-767 band — closing-audit should-fix) ----------- */
+/* --- ≤1023: rail/chip row, then main full width --------------------------- */
 
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
+  .band {
+    padding-top: 48px;
+  }
+
+  .header {
+    padding-inline: 0;
+    margin-bottom: 48px;
+  }
+
   .summaryGrid {
     grid-template-areas:
-      "idx chip"
-      "val val"
+      "rail chip"
       "main main";
-    grid-template-columns: 1fr auto;
-    gap: 12px;
-    padding-block: 24px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 16px 24px;
+    padding-block: 48px;
+  }
+
+  .rail {
+    padding: 0;
+  }
+
+  .index {
+    position: static;
+    display: block;
+    margin: 0 0 8px;
+  }
+
+  .chip {
+    margin-right: 0;
   }
 
   .readout {
-    padding: 0 0 32px;
+    padding: 0 0 48px;
   }
 }
+
+/* --- ≤639: the compressed meter ------------------------------------------- */
 
 @media (max-width: 639px) {
   .band {
     padding-top: 32px;
+  }
+
+  .header {
+    margin-bottom: 40px;
+  }
+
+  .kicker {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .summaryGrid {
+    padding-block: 32px;
+  }
+
+  .readout {
+    padding-bottom: 32px;
   }
 }
 
