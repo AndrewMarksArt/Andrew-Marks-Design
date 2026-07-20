@@ -108,7 +108,10 @@ export default function OperatingRecordEnhance() {
       if (!tip) return;
       const t = e.target instanceof Element ? e.target : null;
       const details = t?.closest("details");
-      if (details && !details.open && section.contains(details)) {
+      if (details && section.contains(details)) {
+        // closed rows invite EXPAND; the whole open record closes on
+        // click, so it carries CLOSE
+        tip.textContent = details.open ? "CLOSE" : "EXPAND";
         tip.style.transform = `translate3d(${e.clientX + 16}px, ${e.clientY + 18}px, 0)`;
         tip.dataset.on = "1";
       } else {
