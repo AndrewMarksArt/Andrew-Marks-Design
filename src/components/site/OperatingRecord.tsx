@@ -266,9 +266,22 @@ export default function OperatingRecord() {
                         <span className={styles.main}>
                           <span className={styles.labelRow}>
                             <span className={styles.label}>{r.label}</span>
-                            <span className={styles.arrow} aria-hidden="true">
-                              →
-                            </span>
+                            {/* Andrew's chevron asset (Figma 6814:136),
+                                exported verbatim; open state is its exact
+                                vertical mirror */}
+                            <svg
+                              className={styles.chevron}
+                              aria-hidden="true"
+                              focusable="false"
+                              viewBox="0 0 23 10"
+                              width="23"
+                              height="10"
+                            >
+                              <path
+                                d="M11.3135 5.30331L16.9703 0L22.6272 0L11.3135 10L0 0L5.65662 0L11.3135 5.30331Z"
+                                fill="currentColor"
+                              />
+                            </svg>
                           </span>
                           <span className={styles.claim}>{r.claim}</span>
                         </span>

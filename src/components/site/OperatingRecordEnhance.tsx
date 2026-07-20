@@ -60,15 +60,31 @@ export default function OperatingRecordEnhance() {
         ?.focus({ preventScroll: true });
     };
 
-    // a click that ends a text selection inside the summary should not
-    // toggle the row — recruiters copy exactly this text
+    // (a) a click that ends a text selection inside the summary should not
+    // toggle the row — recruiters copy exactly this text; (b) the whole
+    // open record is click-to-close (Andrew's spec), same selection guard
     const onClick = (e: MouseEvent) => {
-      const sel = window.getSelection();
-      if (!sel || sel.isCollapsed) return;
       if (!(e.target instanceof Element)) return;
+      const sel = window.getSelection();
+      const selecting = sel && !sel.isCollapsed;
       const summary = e.target.closest("summary");
-      if (summary && sel.anchorNode && summary.contains(sel.anchorNode)) {
-        e.preventDefault();
+      if (summary) {
+        if (selecting && sel.anchorNode && summary.contains(sel.anchorNode)) {
+          e.preventDefault();
+        }
+        return; // native toggle handles summary clicks
+      }
+      const details = e.target.closest("details");
+      if (
+        details instanceof HTMLDetailsElement &&
+        details.open &&
+        section.contains(details)
+      ) {
+        if (selecting) return; // copying readout text must not close it
+        details.open = false;
+        details
+          .querySelector("summary")
+          ?.focus({ preventScroll: true });
       }
     };
 
