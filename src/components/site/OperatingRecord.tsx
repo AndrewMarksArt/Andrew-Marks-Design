@@ -183,14 +183,19 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 /** Presentation-only split of arrow values ("10 → 7") so the glyph can
- *  carry its own optical size; AT still reads the full data string. */
+ *  carry its own optical size. The visible arrow is aria-hidden with a
+ *  visually-hidden " to " twin — common SR punctuation levels drop "→",
+ *  which would read "10 7". */
 function renderValue(v: string): ReactNode {
   if (!v.includes("→")) return v;
   const [before, after] = v.split(/\s*→\s*/);
   return (
     <>
       {before}
-      <span className={styles.valueArrow}>→</span>
+      <span className={styles.valueArrow} aria-hidden="true">
+        →
+      </span>
+      <span className="visually-hidden"> to </span>
       {after}
     </>
   );

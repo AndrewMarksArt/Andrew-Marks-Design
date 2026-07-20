@@ -137,13 +137,24 @@
   border-top: 2px solid var(--rule);
 }
 
+/* tint lives on the BASE element so it fades BOTH directions (APPLE 150) */
 .record {
   scroll-margin-top: 88px;
-  transition: background-color 150ms ease;
+  transition: background-color 150ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
 
 /* Andrew's hover + open tint: #D9D9D9 at 33% across the record */
 .record[open] {
+  background: rgba(217, 217, 217, 0.33);
+}
+
+@media (hover: hover) {
+  .record:not([open]):has(> summary:hover) {
+    background: rgba(217, 217, 217, 0.33);
+  }
+}
+
+.record:not([open]):has(> summary:focus-visible) {
   background: rgba(217, 217, 217, 0.33);
 }
 
@@ -153,13 +164,9 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.summary:hover,
-.summary:focus-visible {
+/* pressed feedback (replaces the removed tap highlight) */
+.summary:active {
   background: rgba(217, 217, 217, 0.33);
-}
-
-.record[open] .summary:hover {
-  background: none;
 }
 
 .summary::-webkit-details-marker {
@@ -230,13 +237,14 @@
   overflow-wrap: break-word;
 }
 
-/* Andrew's chevron: points down at rest, mirrors up when open */
+/* Andrew's chevron: points down at rest, mirrors up when open;
+   affordance leads the 320ms drawer */
 .chevron {
   flex: none;
   /* optically centered against the label's 31px line box */
   margin-top: 11px;
   color: var(--accent);
-  transition: transform 200ms ease;
+  transition: transform 200ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
 
 .record[open] .chevron {
@@ -251,11 +259,6 @@
   letter-spacing: 0.02em;
   color: var(--text-body-90);
   max-width: 36.5em;
-}
-
-/* summary's rest bottom pad collapses when the readout follows */
-.record[open] .summaryGrid {
-  padding-bottom: 24px;
 }
 
 @supports not (text-box-trim: trim-both) {
@@ -275,6 +278,18 @@
   max-width: none;
   /* the whole open record closes on click (Enhance handler) */
   cursor: pointer;
+  /* open-state gap = closed pb 96 − 72 = 24px below the summary —
+     identical geometry to the old [open] padding-bottom swap, but
+     state-constant so the WAAPI keyframes animate the row's ENTIRE
+     height delta on this one element. PAIRED to .summaryGrid
+     padding-bottom per breakpoint (96/48/32) — re-derive if the Figma
+     padding ever changes. */
+  margin-block-start: -72px;
+}
+
+/* clip at the moving edge only while the controller drives height */
+.record[data-anim] .readout {
+  overflow: clip;
 }
 
 .readout > * {
@@ -371,8 +386,10 @@
   color: var(--meta-gray);
 }
 
-/* cursor-following tip over closed records ("EXPAND") — created by the
-   Enhance layer; chip grammar, decorative, never interactive */
+/* cursor-following tip over records — created by the Enhance layer;
+   chip grammar, decorative, never interactive. JS clamps it inside the
+   viewport; the rise rides the `translate` channel so it composes with
+   the inline transform carrying cursor position. */
 .tip {
   position: fixed;
   top: 0;
@@ -388,34 +405,20 @@
   letter-spacing: -0.02em;
   color: var(--ink);
   opacity: 0;
-  transition: opacity 120ms ease;
+  translate: 0 4px;
+  transition:
+    opacity 120ms cubic-bezier(0.455, 0.03, 0.515, 0.955),
+    translate 160ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
 
 .tip[data-on="1"] {
   opacity: 1;
+  translate: 0 0;
 }
 
-/* --- motion: Chromium-only unfold, canon-gated ----------------------------- */
-
-@supports (interpolate-size: allow-keywords) {
-  @media (prefers-reduced-motion: no-preference) {
-    .record {
-      interpolate-size: allow-keywords;
-    }
-
-    .record::details-content {
-      block-size: 0;
-      overflow: clip;
-      transition:
-        block-size 280ms cubic-bezier(0.87, 0, 0.13, 1),
-        content-visibility 280ms allow-discrete;
-    }
-
-    .record[open]::details-content {
-      block-size: auto;
-    }
-  }
-}
+/* NOTE: no CSS height animation here — the WAAPI controller in
+   OperatingRecordEnhance owns fold/unfold in BOTH directions, all
+   evergreen browsers, with a live prefers-reduced-motion gate. */
 
 /* --- ≤1023: value+unit share a row with the arrow; main goes full width ---- */
 
@@ -448,12 +451,9 @@
     padding-top: 8px;
   }
 
-  .record[open] .summaryGrid {
-    padding-bottom: 16px;
-  }
-
   .readout {
     padding: 0 24px 32px;
+    margin-block-start: -32px; /* closed pb 48 − 16 gap */
   }
 }
 
@@ -496,5 +496,6 @@
 
   .readout {
     padding: 0 16px 24px;
+    margin-block-start: -16px; /* closed pb 32 − 16 gap */
   }
 }
