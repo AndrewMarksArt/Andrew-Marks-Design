@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import styles from "./OperatingRecord.module.css";
 
 /**
  * Zero-UI enhancement for OperatingRecord. The section is fully
@@ -88,17 +89,53 @@ export default function OperatingRecordEnhance() {
       }
     };
 
+    // cursor-following "EXPAND" tip over closed records — fine pointers
+    // only; decorative (aria-hidden, no pointer events); hides the moment
+    // a record opens (Andrew's spec: tip only while the section is closed)
+    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+    let tip: HTMLDivElement | null = null;
+    if (finePointer.matches) {
+      tip = document.createElement("div");
+      tip.className = styles.tip;
+      tip.textContent = "EXPAND";
+      tip.setAttribute("aria-hidden", "true");
+      document.body.appendChild(tip);
+    }
+    const hideTip = () => {
+      if (tip) delete tip.dataset.on;
+    };
+    const onPointerMove = (e: PointerEvent) => {
+      if (!tip) return;
+      const t = e.target instanceof Element ? e.target : null;
+      const details = t?.closest("details");
+      if (details && !details.open && section.contains(details)) {
+        tip.style.transform = `translate3d(${e.clientX + 16}px, ${e.clientY + 18}px, 0)`;
+        tip.dataset.on = "1";
+      } else {
+        hideTip();
+      }
+    };
+    // 'toggle' doesn't bubble — capture catches it at the section
+    const onToggle = () => hideTip();
+
     window.addEventListener("hashchange", openFromHash);
     window.addEventListener("beforeprint", onBeforePrint);
     window.addEventListener("afterprint", onAfterPrint);
     document.addEventListener("keydown", onKeydown);
     section.addEventListener("click", onClick);
+    section.addEventListener("pointermove", onPointerMove);
+    section.addEventListener("pointerleave", hideTip);
+    section.addEventListener("toggle", onToggle, true);
     return () => {
       window.removeEventListener("hashchange", openFromHash);
       window.removeEventListener("beforeprint", onBeforePrint);
       window.removeEventListener("afterprint", onAfterPrint);
       document.removeEventListener("keydown", onKeydown);
       section.removeEventListener("click", onClick);
+      section.removeEventListener("pointermove", onPointerMove);
+      section.removeEventListener("pointerleave", hideTip);
+      section.removeEventListener("toggle", onToggle, true);
+      tip?.remove();
     };
   }, []);
 

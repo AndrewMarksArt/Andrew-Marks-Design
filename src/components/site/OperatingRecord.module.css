@@ -371,6 +371,30 @@
   color: var(--meta-gray);
 }
 
+/* cursor-following tip over closed records ("EXPAND") — created by the
+   Enhance layer; chip grammar, decorative, never interactive */
+.tip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40;
+  pointer-events: none;
+  padding: 3px 6px;
+  background: var(--plate);
+  border: 1px solid var(--rule-soft);
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.tip[data-on="1"] {
+  opacity: 1;
+}
+
 /* --- motion: Chromium-only unfold, canon-gated ----------------------------- */
 
 @supports (interpolate-size: allow-keywords) {
