@@ -43,27 +43,28 @@ const EXPO = "cubic-bezier(0.19, 1, 0.22, 1)";
 // draw, and corner travel all ride this curve.
 const APPLE = "cubic-bezier(0.455, 0.03, 0.515, 0.955)";
 
-// beat schedule (ms from film start). Opening rebuilt to Andrew's spoken
+// beat schedule (ms from film start). Opening per Andrew's spoken
 // storyboard (2026-07-16): still hatch → the x FADES in → hold → rotate
 // into the plus → beat → the rules draw out of it → beat → glide to the
-// corner → reveal. The 300ms stillness + 350ms fade also spend the
-// hydration tail (fonts settling, the robot atlas decode kicking off) on
-// a frame that cannot visibly stutter — motion starts ~850ms in, when
-// the main thread has gone quiet. Everything from the sweep onward keeps
-// its internal rhythm, shifted by the longer opening.
+// corner → reveal. RETIMED 2026-07-20 (Andrew: ~5s "feels a bit long"):
+// every beat kept, tempo tightened ~25% — text lands at 3450 (was 4600),
+// the reveal starts at 2050 (was 2680). The opening quiet (still + fade
+// + hold = 760ms before the spin) is compressed only mildly: it spends
+// the hydration tail (fonts settling, atlas decode) on frames that
+// cannot visibly stutter — the perf audit once caught a raster burst
+// landing exactly on the spin start; QA should watch that beat.
 const T = {
-  fadeIn: 300, //   the x fades in over 350ms (start frame is pure hatch)
-  spin: 850, //     A: x does a full spin, growing into the plus (done 1470)
-  rulesOut: 1620, // B: rules draw to the edges after a 150ms beat (done 2160)
-  travel: 2240, //  C: crosshair to anchor after an 80ms beat (lands 2580)
-  sweep: 2680, //   D/E: ONE continuous reveal wipe out of the anchor
-  sweepEnd: 3880,
-  handoff: 3940, // curtains gone; overlay crosshair fades
-  chrome: 4260, //  meta types, NameMark rises
-  text: 4600, //    hero text ladder (existing) + typewriter — tightened
-  //                from chrome+600 to chrome+340 (Andrew: text arrived a
-  //                beat late; it now starts while the NameMark is still
-  //                rising, same overlap the pre-rebuild pacing had)
+  fadeIn: 260, //   the x fades in over 300ms (start frame is pure hatch)
+  spin: 760, //     A: x does a full spin, growing into the plus (done 1200)
+  rulesOut: 1300, // B: rules draw to the edges after a 100ms beat (done 1660)
+  travel: 1720, //  C: crosshair to anchor after a 60ms beat (lands 1970)
+  sweep: 2050, //   D/E: ONE continuous reveal wipe out of the anchor
+  sweepEnd: 2890,
+  handoff: 2950, // curtains gone; overlay crosshair fades
+  chrome: 3200, //  meta types, NameMark rises
+  text: 3450, //    hero text ladder (existing) + typewriter (chrome+250 —
+  //                keeps the arrives-while-NameMark-rises overlap Andrew
+  //                ratified, proportionally tightened with the rest)
 };
 
 export default function BootFilm() {
@@ -205,20 +206,20 @@ export default function BootFilm() {
     const c0 = mark.getBoundingClientRect();
     const dx = anchor.x - (c0.left + c0.width / 2);
     const dy = anchor.y - (c0.top + c0.height / 2);
-    const SPAN = 2580; // 0 .. end of travel (landing pinned — sweep depends on it)
+    const SPAN = 1970; // 0 .. end of travel (landing pinned — sweep depends on it)
     const at = (ms: number) => ms / SPAN;
 
     // the x fades in out of the still hatch (its CSS base opacity is 0 —
-    // the film's first 300ms shows nothing but the page background)
+    // the film's first 260ms shows nothing but the page background)
     run(mark, [{ opacity: 0 }, { opacity: 1 }], {
       delay: T.fadeIn,
-      duration: 350,
+      duration: 300,
       easing: APPLE,
     });
 
     // mark: hold as the x while it fades in, full spin x -> + while
-    // growing (850..1470, Apple ease), hold while the rules draw, then
-    // glide to the anchor (2240..2580, Apple ease). Lands at scale(1) =
+    // growing (760..1200, Apple ease), hold while the rules draw, then
+    // glide to the anchor (1720..1970, Apple ease). Lands at scale(1) =
     // exactly the real 32px corner mark it sits down on. 45deg -> 360deg
     // reads as a full revolution for the 4-fold-symmetric mark.
     run(
@@ -234,7 +235,7 @@ export default function BootFilm() {
           easing: APPLE,
         },
         {
-          offset: at(1470),
+          offset: at(1200),
           transform: "translate(-50%, -50%) rotate(360deg) scale(1)",
         },
         {
@@ -250,14 +251,14 @@ export default function BootFilm() {
       { duration: SPAN },
     );
 
-    // rules: draw out of the landed plus (1620..2160, Apple ease),
-    // breathe, travel with the mark (2240..2580)
+    // rules: draw out of the landed plus (1300..1660, Apple ease),
+    // breathe, travel with the mark (1720..1970)
     run(
       hRule,
       [
         { offset: 0, transform: "scaleX(0) translateY(0)" },
         { offset: at(T.rulesOut), transform: "scaleX(0) translateY(0)", easing: APPLE },
-        { offset: at(2160), transform: "scaleX(1) translateY(0)" },
+        { offset: at(1660), transform: "scaleX(1) translateY(0)" },
         { offset: at(T.travel), transform: "scaleX(1) translateY(0)", easing: APPLE },
         { offset: 1, transform: `scaleX(1) translateY(${dy}px)` },
       ],
@@ -268,7 +269,7 @@ export default function BootFilm() {
       [
         { offset: 0, transform: "scaleY(0) translateX(0)" },
         { offset: at(T.rulesOut), transform: "scaleY(0) translateX(0)", easing: APPLE },
-        { offset: at(2160), transform: "scaleY(1) translateX(0)" },
+        { offset: at(1660), transform: "scaleY(1) translateX(0)" },
         { offset: at(T.travel), transform: "scaleY(1) translateX(0)", easing: APPLE },
         { offset: 1, transform: `scaleY(1) translateX(${dx}px)` },
       ],
