@@ -130,6 +130,11 @@
   list-style: none;
   margin: 0;
   padding: 0;
+  /* the Enhance controller pins the clicked row during exclusive
+     switches with measured instant scrollBy — native scroll anchoring
+     must not double-correct inside the ledger (audit A3 fallback pair:
+     these two ship together, never separately) */
+  overflow-anchor: none;
 }
 
 /* every item opens with an interior rule — the first one closes the header */

@@ -47,19 +47,62 @@ export default function OperatingRecordEnhance() {
     };
     const ZERO = { height: "0px", paddingBottom: "0px", marginTop: "0px" };
 
+    // pin: while a sibling ABOVE folds, scroll in lockstep so the clicked
+    // row (and its unfolding readout) stays stationary under the user's
+    // eyes — otherwise expanding a row below an open one slides the new
+    // content up by the folding readout's full height and the user has to
+    // chase it (Andrew's QA). Paired with .list { overflow-anchor: none }
+    // (audit A3 fallback: measured instant scrollBy + anchoring off, ship
+    // together). behavior:"instant" is required — bare scrollBy would
+    // glide under html{scroll-behavior:smooth}.
+    let pinCancel: (() => void) | null = null;
+    const startPin = (d: HTMLDetailsElement, sib: HTMLDetailsElement) => {
+      pinCancel?.();
+      const summary = d.querySelector("summary");
+      if (!summary) return;
+      const top0 = summary.getBoundingClientRect().top;
+      let raf = 0;
+      const tick = () => {
+        const dy = summary.getBoundingClientRect().top - top0;
+        if (dy) window.scrollBy({ top: dy, behavior: "instant" });
+        if (anims.has(sib)) {
+          raf = requestAnimationFrame(tick);
+        } else {
+          pinCancel = null;
+        }
+      };
+      raf = requestAnimationFrame(tick);
+      pinCancel = () => {
+        cancelAnimationFrame(raf);
+        pinCancel = null;
+      };
+    };
+
     const openRecord = (d: HTMLDetailsElement) => {
       // controller-owned exclusivity: fold any open sibling (260ms) while
       // this record unfolds (320ms) — one continuous motion, no snap.
-      // (Andrew's QA verdict on the native-snap variant: "feels broken".)
+      const summary0 = d.querySelector("summary");
+      const top0 = summary0?.getBoundingClientRect().top ?? 0;
+      let closedAbove: HTMLDetailsElement | null = null;
       for (const sib of all()) {
         if (sib !== d && sib.open && sib.dataset.anim !== "close") {
+          const above = !!(
+            sib.compareDocumentPosition(d) & Node.DOCUMENT_POSITION_FOLLOWING
+          );
           closeRecord(sib);
+          if (above) closedAbove = sib;
         }
       }
       const r = readoutOf(d);
       if (!r || prm.matches) {
         settle(d);
         d.open = true;
+        // PRM/instant path: one-shot position preservation (stability is
+        // not motion — reduced-motion users still shouldn't lose their place)
+        if (closedAbove && summary0) {
+          const dy = summary0.getBoundingClientRect().top - top0;
+          if (dy) window.scrollBy({ top: dy, behavior: "instant" });
+        }
         return;
       }
       // interrupt-safe: measure the mid-flight box BEFORE cancel
@@ -71,6 +114,7 @@ export default function OperatingRecordEnhance() {
       const a = r.animate([from, to], { duration: OPEN_MS, easing: APPLE });
       anims.set(d, a);
       a.onfinish = () => settle(d); // ends AT natural auto height — no snap, no inline styles left
+      if (closedAbove) startPin(d, closedAbove);
     };
 
     const closeRecord = (d: HTMLDetailsElement) => {
@@ -294,6 +338,7 @@ export default function OperatingRecordEnhance() {
       section.removeEventListener("pointerleave", hideTip);
       section.removeEventListener("toggle", onToggle, true);
       finePointer.removeEventListener("change", onFinePointerChange);
+      pinCancel?.();
       anims.forEach((a) => a.cancel());
       anims.clear();
       all().forEach((d) => delete d.dataset.anim);
