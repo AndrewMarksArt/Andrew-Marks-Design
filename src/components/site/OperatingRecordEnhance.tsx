@@ -48,6 +48,14 @@ export default function OperatingRecordEnhance() {
     const ZERO = { height: "0px", paddingBottom: "0px", marginTop: "0px" };
 
     const openRecord = (d: HTMLDetailsElement) => {
+      // controller-owned exclusivity: fold any open sibling (260ms) while
+      // this record unfolds (320ms) — one continuous motion, no snap.
+      // (Andrew's QA verdict on the native-snap variant: "feels broken".)
+      for (const sib of all()) {
+        if (sib !== d && sib.open && sib.dataset.anim !== "close") {
+          closeRecord(sib);
+        }
+      }
       const r = readoutOf(d);
       if (!r || prm.matches) {
         settle(d);
@@ -57,7 +65,7 @@ export default function OperatingRecordEnhance() {
       // interrupt-safe: measure the mid-flight box BEFORE cancel
       const from = d.dataset.anim === "close" ? boxOf(r) : ZERO;
       settle(d);
-      d.open = true; // name-exclusivity snaps the sibling shut HERE (instant by design)
+      d.open = true;
       const to = boxOf(r); // post-open natural box, same task — no paint between
       d.dataset.anim = "open"; // gates .record[data-anim] .readout overflow: clip
       const a = r.animate([from, to], { duration: OPEN_MS, easing: APPLE });
@@ -94,37 +102,40 @@ export default function OperatingRecordEnhance() {
 
     // deep-link: instant by design (the browser is simultaneously scrolling
     // to the anchor). settle() first — a mid-close fill:"forwards" would
-    // otherwise strand the readout at 0px height with open=true.
+    // otherwise strand the readout at 0px height with open=true. Exclusivity
+    // is controller-owned now, so close others instantly here too.
     const openFromHash = () => {
       const id = window.location.hash.slice(1);
       if (!id.startsWith("rec-")) return;
       const el = document.getElementById(id);
       if (el instanceof HTMLDetailsElement) {
+        for (const sib of all()) {
+          if (sib !== el && sib.open) {
+            settle(sib);
+            sib.open = false;
+          }
+        }
         settle(el);
         el.open = true;
       }
     };
     openFromHash();
 
-    // print: exclusive-open `name` makes "open all" impossible while set —
-    // drop the attribute, open, then restore open-state BEFORE re-adding the
-    // name. settle() everything first so no fill is mid-flight in the snapshot.
+    // print: no name-attr dance needed anymore (controller owns exclusivity)
+    // — settle everything so no fill is mid-flight, open all, restore after.
     let prior: boolean[] = [];
     const onBeforePrint = () => {
       const a = all();
       a.forEach((d) => settle(d));
       prior = a.map((d) => d.open);
       a.forEach((d) => {
-        d.removeAttribute("name");
         d.open = true;
       });
     };
     const onAfterPrint = () => {
-      const a = all();
-      a.forEach((d, i) => {
+      all().forEach((d, i) => {
         d.open = prior[i] ?? false;
       });
-      a.forEach((d) => d.setAttribute("name", "operating-record"));
     };
 
     // --- cursor tip: fine pointers only, decorative, viewport-clamped ----
@@ -191,11 +202,11 @@ export default function OperatingRecordEnhance() {
       }
     };
     // 'toggle' doesn't bubble — capture catches it at the section. Refresh
-    // the label in place (no EXPAND→gone→CLOSE blink) and settle a sibling
-    // force-closed by name-exclusivity mid-animation.
-    const onToggle = (e: Event) => {
-      const d = e.target;
-      if (d instanceof HTMLDetailsElement && !d.open) settle(d);
+    // the label in place (no EXPAND→gone→CLOSE blink). Do NOT settle
+    // closing records here: with controller-owned exclusivity, open=false
+    // only lands at the END of an animated fold (settling early would
+    // cancel the fill and flash the readout).
+    const onToggle = () => {
       if (!tip || !tip.dataset.on) return;
       const under = document.elementFromPoint(lastX, lastY);
       const det = under instanceof Element ? under.closest("details") : null;

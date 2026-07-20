@@ -257,11 +257,11 @@ export default function OperatingRecord() {
             <ol role="list" className={styles.list}>
               {RECORDS.map((r) => (
                 <li key={r.id} className={styles.item}>
-                  <details
-                    id={r.id}
-                    name="operating-record"
-                    className={styles.record}
-                  >
+                  {/* exclusivity lives in the Enhance controller (so the
+                      sibling's collapse can ANIMATE — native name-attr
+                      exclusivity snaps it shut in one frame); no-JS
+                      degrades to multi-open, which is harmless */}
+                  <details id={r.id} className={styles.record}>
                     <summary className={styles.summary}>
                       <span className={styles.summaryGrid}>
                         <span className={styles.value}>
