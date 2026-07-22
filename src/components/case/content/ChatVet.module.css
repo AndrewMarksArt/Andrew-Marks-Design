@@ -18,30 +18,41 @@
   text-align: left;
 }
 
-/* Pilot-user pull-quote (same grammar as PlatformOne's CST quote strip). */
+/* Pilot-user pull-quote — ported from PlatformOne's CstQuote (2026-07-21):
+   engineering grid-paper plate (~50px, 8% black) with a full brand-orange
+   border, Geist Medium quote, and the attribution pinned bottom-right. */
 .quoteStrip {
+  display: flex;
+  flex-direction: column;
+  min-height: 150px;
   margin: 0;
-  padding: clamp(24px, 2.3vw, 40px) clamp(24px, 2.7vw, 48px);
-  background: var(--plate-resume);
-  border-left: 2px solid var(--accent);
+  padding: 44px clamp(24px, 3vw, 43px) 24px clamp(28px, 5.5vw, 68px);
+  background-color: var(--plate);
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+  background-size: 50px 50px;
+  border: 2px solid var(--accent);
 }
 
 .quoteText {
-  margin: 0 0 16px;
-  max-width: 30em;
-  font-family: var(--font-nhg);
+  margin: 0;
+  max-width: 632px;
+  font-family: var(--font-geist), sans-serif;
   font-weight: 500;
-  font-size: clamp(18px, 1.3889vw, 24px);
-  line-height: 1.35;
-  letter-spacing: -0.01em;
+  font-size: clamp(17px, 1.3889vw, 20px);
+  line-height: 1.5;
+  letter-spacing: 0;
   color: var(--black);
 }
 
 .quoteAttribution {
-  margin: 0;
+  margin: auto 0 0;
+  align-self: flex-end;
   font-family: var(--font-geist-mono), monospace;
   font-weight: 300;
-  font-size: clamp(12px, 0.8102vw, 14px);
+  font-size: 10px;
   letter-spacing: -0.02em;
-  color: var(--meta-gray);
+  color: #302929;
+  text-align: right;
 }

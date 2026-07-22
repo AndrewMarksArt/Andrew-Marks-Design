@@ -216,6 +216,7 @@ export default function ChatVet() {
           "On average, users self-report saving about 15 minutes per case: the research slice, the protocol hunt, and the client write-up, together.",
           "Today the web app is live at chatvet.ai with 500 monthly users globally, multiple clinics piloting the business tier ahead of paid rollout, and growth running bottom-up as individual DVMs bring it into their practices. Everything is currently free.",
         ]}
+        carousel={false}
       >
         <div className={styles.closerStack}>
           <AssetFigure
