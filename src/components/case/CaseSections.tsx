@@ -70,9 +70,10 @@ export function CaseHero({
   );
 }
 
-/** Dashed meta strip (annotation: "place holder for role, timeframe,
- *  team, etc."). Values default to pending markers until Andrew supplies
- *  them. */
+/** Meta strip (Figma revision 2026-07-21: one accent-ruled plate with
+ *  square corner pins, dashed interior dividers, halftone dot fields
+ *  bleeding off the corners). Values split on " · " render as stacked
+ *  lines, matching the design's one-item-per-line columns. */
 export function StatsStrip({
   items = [
     { label: "ROLE:", value: "..." },
@@ -86,10 +87,20 @@ export function StatsStrip({
   return (
     <div className={`content ${styles.statsWrap}`}>
       <dl className={styles.stats}>
+        <i className={`${styles.statPin} ${styles.statPinTl}`} aria-hidden="true" />
+        <i className={`${styles.statPin} ${styles.statPinTr}`} aria-hidden="true" />
+        <i className={`${styles.statPin} ${styles.statPinBl}`} aria-hidden="true" />
+        <i className={`${styles.statPin} ${styles.statPinBr}`} aria-hidden="true" />
         {items.map((it) => (
           <div key={it.label} className={styles.statCell}>
             <dt>{it.label}</dt>
-            <dd>{it.value}</dd>
+            <dd>
+              {it.value.split(" · ").map((line, i) => (
+                <span key={i} className={styles.statLine}>
+                  {line}
+                </span>
+              ))}
+            </dd>
           </div>
         ))}
       </dl>

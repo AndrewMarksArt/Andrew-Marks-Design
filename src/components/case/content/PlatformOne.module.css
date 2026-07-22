@@ -2,31 +2,18 @@
    express. Figure/caption units live in CaseFigures.module.css; frame +
    zoom trigger in FigureLightbox.module.css. */
 
-/* Asymmetric media split (S1): the path diagram leads, the evidence
-   screenshot supports — findability is a journey, not a page. */
-.asymPair {
-  display: grid;
-  grid-template-columns: 3fr 2fr;
-  gap: 24px;
-  align-items: start;
+/* Real screenshot fill — matches the inline-SVG figures' box behaviour. */
+.shotImg {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
-@media (max-width: 1023px) {
-  .asymPair {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Single tight media unit (S3 close-up) — deliberately narrower than the
-   column so it reads as a detail crop, not another screenshot. */
-.singleMedia {
-  max-width: 62%;
-}
-
-@media (max-width: 1023px) {
-  .singleMedia {
-    max-width: 100%;
-  }
+/* S4 demo clip (Figma revision 2026-07-21: the posture pair became one
+   looping screen recording) — framed like the other figures. */
+/* Figma 2026-07-21: the demo clip renders bare — no plate, no border */
+.demoFigure {
+  margin: 0;
 }
 
 /* --------------------------------------------------------------------------
@@ -34,21 +21,31 @@
    band, distinct from the dark vignette that closes the section.
    -------------------------------------------------------------------------- */
 
+/* Figma revision 2026-07-21: engineering grid-paper plate, full accent
+   border (was a left-rule on gray). Grid drawn with layered gradients so
+   the cell size scales with the plate. */
 .quoteStrip {
-  margin: 0 0 32px;
-  padding: clamp(24px, 2.3vw, 40px) clamp(24px, 2.7vw, 48px);
-  background: var(--plate-resume);
-  border-left: 2px solid var(--accent);
+  /* stack gap (24) owns the spacing below */
+  margin: 0;
+  padding: clamp(20px, 1.6667vw, 24px) clamp(32px, 3.8889vw, 56px);
+  background-color: var(--plate);
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+  background-size: 93px 93px;
+  /* Figma 2026-07-21: copper rule, not accent */
+  border: 2px solid #c5896f;
 }
 
 .quoteText {
-  margin: 0 0 16px;
-  max-width: 26em;
-  font-family: var(--font-nhg);
+  margin: 0 0 12px;
+  max-width: 632px;
+  /* Figma 2026-07-21: Geist Medium 20/30, not NHG display */
+  font-family: var(--font-geist), sans-serif;
   font-weight: 500;
-  font-size: clamp(20px, 1.6204vw, 28px);
-  line-height: 1.3;
-  letter-spacing: -0.01em;
+  font-size: clamp(17px, 1.3889vw, 20px);
+  line-height: 1.5;
+  letter-spacing: 0;
   color: var(--black);
 }
 
@@ -56,55 +53,58 @@
   margin: 0;
   font-family: var(--font-geist-mono), monospace;
   font-weight: 300;
-  font-size: clamp(12px, 0.8102vw, 14px);
+  /* Figma 2026-07-21: 10px, right-aligned, near-black */
+  font-size: 10px;
   letter-spacing: -0.02em;
-  color: var(--meta-gray);
+  color: #302929;
+  text-align: right;
 }
 
 /* --------------------------------------------------------------------------
    Closer evidence: stat tiles + pinned artifacts (replace the carousel).
    -------------------------------------------------------------------------- */
 
+/* Figma 2026-07-21: tiles span the full content width, 48px gutters */
 .tiles {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  max-width: 720px;
-  margin: 48px auto 0;
+  gap: 48px;
+  width: 100%;
+  margin: 24px 0 0;
   text-align: left;
 }
 
 .tile {
-  border-top: 2px solid var(--black);
+  border-top: 2px solid var(--ink);
   padding-top: 16px;
 }
 
 .tileLabel {
-  margin: 0 0 8px;
+  margin: 0 0 10px;
   font-family: var(--font-geist-mono), monospace;
-  font-weight: 300;
-  font-size: clamp(11px, 0.7523vw, 13px);
+  font-weight: 400;
+  font-size: clamp(11px, 0.8333vw, 12px);
   letter-spacing: -0.02em;
-  color: var(--meta-gray);
+  color: var(--green-gray);
 }
 
 .tileValue {
   margin: 0;
-  font-family: var(--font-nhg);
-  font-weight: 500;
-  font-size: clamp(28px, 2.3148vw, 40px);
+  /* Figma 2026-07-21: Geist SemiBold 40 */
+  font-family: var(--font-geist), sans-serif;
+  font-weight: 600;
+  font-size: clamp(32px, 2.7778vw, 40px);
   line-height: 1;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   color: var(--black);
 }
 
 .tilesNote {
   margin: 16px auto 0;
-  max-width: 720px;
   text-align: left;
   font-family: var(--font-geist-mono), monospace;
   font-weight: 300;
-  font-size: clamp(11px, 0.7523vw, 13px);
+  font-size: clamp(11px, 0.8333vw, 12px);
   letter-spacing: -0.02em;
   color: var(--meta-gray);
 }
@@ -129,37 +129,39 @@
    a dark, quiet, typographic pull-quote card in the site's own voice.
    -------------------------------------------------------------------------- */
 
+/* Figma 2026-07-21: warm dark-gray plate, coral eyebrow, 64/56 inset */
 .vignette {
-  background: var(--ink);
-  padding: clamp(32px, 4.6vw, 80px) clamp(24px, 4.6vw, 80px);
+  background: #3c3b39;
+  padding: clamp(40px, 4.4445vw, 64px) clamp(32px, 3.8889vw, 56px);
 }
 
 .vignetteEyebrow {
-  margin: 0 0 20px;
+  margin: 0 0 8px;
   font-family: var(--font-geist-mono), monospace;
-  font-weight: 300;
-  font-size: clamp(12px, 0.8102vw, 14px);
+  font-weight: 400;
+  font-size: clamp(12px, 0.9028vw, 13px);
   letter-spacing: -0.02em;
-  color: var(--accent-soft);
+  color: #ef936b;
 }
 
 .vignetteQuote {
-  margin: 0 0 20px;
-  max-width: 22em;
-  font-family: var(--font-nhg);
-  font-weight: 500;
-  font-size: clamp(24px, 2.3148vw, 40px);
-  line-height: 1.2;
-  letter-spacing: -0.01em;
+  margin: 0 0 16px;
+  max-width: 632px;
+  /* Figma 2026-07-21: Geist SemiBold 28/36 */
+  font-family: var(--font-geist), sans-serif;
+  font-weight: 600;
+  font-size: clamp(22px, 1.9445vw, 28px);
+  line-height: 1.286;
+  letter-spacing: -0.02em;
   color: var(--plate);
 }
 
 .vignetteContext {
   margin: 0;
-  max-width: 38em;
+  max-width: 632px;
   font-family: var(--font-geist), sans-serif;
-  font-size: clamp(14px, 0.9259vw, 16px);
-  line-height: 1.45;
-  letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.72);
+  font-size: clamp(14px, 1.0417vw, 15px);
+  line-height: 1.534;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.85);
 }

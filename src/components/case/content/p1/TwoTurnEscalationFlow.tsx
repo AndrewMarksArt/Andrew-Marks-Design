@@ -3,7 +3,7 @@ export default function TwoTurnEscalationFlow() {
     <svg
       viewBox="0 0 979 300"
       role="img"
-      aria-label="Flow diagram of the two-turn escalation rule: a user question gets a sourced answer with inline citations, at most one follow-up turn, then a resolved check that either ends in self-service or routes through a soft call to action to the help desk or customer success."
+      aria-label="Flow diagram of the escalation rule: a user question gets a sourced answer with inline citations, then a resolved check that either ends in self-service or, after two turns, opens a soft call to action to the help desk or customer success — with a hard cap by turn six so no conversation loops."
       style={{ width: "100%", height: "auto", display: "block", fontFamily: "var(--font-geist-mono), ui-monospace, monospace" }}
     >
       <title>Two-turn escalation flow</title>
@@ -36,13 +36,13 @@ export default function TwoTurnEscalationFlow() {
       </defs>
 
       {/* Figure header */}
-      <text x={16} y={27} fontSize={13} fontWeight={300} fill="#5E5757">
+      <text x={16} y={27} fontSize={18} fontWeight={300} fill="#5E5757">
         {"// ESCALATION LOGIC — SELF-SERVICE BY DEFAULT, A HUMAN BY DESIGN"}
       </text>
 
       {/* Node: USER QUESTION */}
       <rect x={24} y={130} width={122} height={40} fill="#FFFFFF" stroke="#000000" strokeWidth={1} />
-      <text x={85} y={154.5} fontSize={13} fontWeight={400} fill="#231A09" textAnchor="middle">
+      <text x={85} y={154.5} fontSize={18} fontWeight={400} fill="#231A09" textAnchor="middle">
         USER QUESTION
       </text>
 
@@ -51,10 +51,10 @@ export default function TwoTurnEscalationFlow() {
 
       {/* Node: SOURCED ANSWER (with sub-label) */}
       <rect x={208} y={124} width={132} height={52} fill="#FFFFFF" stroke="#000000" strokeWidth={1} />
-      <text x={274} y={146} fontSize={13} fontWeight={400} fill="#231A09" textAnchor="middle">
+      <text x={274} y={146} fontSize={18} fontWeight={400} fill="#231A09" textAnchor="middle">
         SOURCED ANSWER
       </text>
-      <text x={274} y={164} fontSize={11} fontWeight={400} fill="#5E5757" textAnchor="middle">
+      <text x={274} y={164} fontSize={15} fontWeight={400} fill="#5E5757" textAnchor="middle">
         CITATIONS INLINE
       </text>
 
@@ -66,7 +66,7 @@ export default function TwoTurnEscalationFlow() {
         strokeWidth={1.25}
         markerEnd="url(#flow-arrow)"
       />
-      <text x={274} y={78} fontSize={13} fontWeight={400} fill="#231A09" textAnchor="middle">
+      <text x={274} y={78} fontSize={18} fontWeight={400} fill="#231A09" textAnchor="middle">
         TURN 2 - FOLLOW-UP
       </text>
 
@@ -80,13 +80,13 @@ export default function TwoTurnEscalationFlow() {
         stroke="#000000"
         strokeWidth={1}
       />
-      <text x={466} y={154.5} fontSize={13} fontWeight={400} fill="#231A09" textAnchor="middle">
+      <text x={466} y={154.5} fontSize={18} fontWeight={400} fill="#231A09" textAnchor="middle">
         RESOLVED?
       </text>
 
       {/* Annotation: the two-turn rule, with a dimension bracket over the diamond */}
-      <text x={466} y={96} fontSize={13} fontWeight={500} fill="#000000" textAnchor="middle">
-        MAX 2 TURNS BEFORE A HUMAN PATH
+      <text x={466} y={96} fontSize={18} fontWeight={500} fill="#000000" textAnchor="middle">
+        HUMAN PATH AT TURN 2 - HARD CAP BY TURN 6
       </text>
       <line x1={402} y1={104} x2={530} y2={104} stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
       <line x1={402} y1={104} x2={402} y2={110} stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
@@ -103,19 +103,19 @@ export default function TwoTurnEscalationFlow() {
         strokeWidth={1}
         markerEnd="url(#flow-arrow-muted)"
       />
-      <text x={476} y={200} fontSize={13} fontWeight={400} fill="#5E5757">
+      <text x={476} y={200} fontSize={18} fontWeight={400} fill="#5E5757">
         YES
       </text>
 
       {/* Node: DONE - SELF-SERVICE */}
       <rect x={381} y={216} width={170} height={36} fill="#FFFFFF" stroke="#000000" strokeWidth={1} />
-      <text x={466} y={238.5} fontSize={13} fontWeight={400} fill="#231A09" textAnchor="middle">
+      <text x={466} y={238.5} fontSize={18} fontWeight={400} fill="#231A09" textAnchor="middle">
         DONE - SELF-SERVICE
       </text>
 
       {/* NO branch: continues right to the designed human path */}
       <line x1={530} y1={150} x2={610} y2={150} stroke="#000000" strokeWidth={1.25} markerEnd="url(#flow-arrow)" />
-      <text x={570} y={142} fontSize={13} fontWeight={400} fill="#5E5757" textAnchor="middle">
+      <text x={570} y={142} fontSize={18} fontWeight={400} fill="#5E5757" textAnchor="middle">
         NO
       </text>
 
@@ -130,7 +130,7 @@ export default function TwoTurnEscalationFlow() {
         stroke="#EC4E09"
         strokeWidth={1.5}
       />
-      <text x={658} y={154.5} fontSize={13} fontWeight={400} fill="#231A09" textAnchor="middle">
+      <text x={658} y={154.5} fontSize={18} fontWeight={400} fill="#231A09" textAnchor="middle">
         SOFT CTA
       </text>
 
@@ -149,19 +149,19 @@ export default function TwoTurnEscalationFlow() {
         strokeWidth={1.25}
         markerEnd="url(#flow-arrow)"
       />
-      <text x={762} y={222} fontSize={13} fontWeight={400} fill="#5E5757" textAnchor="middle">
+      <text x={762} y={222} fontSize={18} fontWeight={400} fill="#5E5757" textAnchor="middle">
         ROUTED BY QUESTION TYPE
       </text>
 
       {/* Terminal node: HELP DESK */}
       <rect x={817} y={102} width={90} height={36} fill="#FFFFFF" stroke="#000000" strokeWidth={1} />
-      <text x={862} y={124.5} fontSize={13} fontWeight={400} fill="#231A09" textAnchor="middle">
+      <text x={862} y={124.5} fontSize={18} fontWeight={400} fill="#231A09" textAnchor="middle">
         HELP DESK
       </text>
 
       {/* Terminal node: CUSTOMER SUCCESS */}
       <rect x={817} y={162} width={146} height={36} fill="#FFFFFF" stroke="#000000" strokeWidth={1} />
-      <text x={890} y={184.5} fontSize={13} fontWeight={400} fill="#231A09" textAnchor="middle">
+      <text x={890} y={184.5} fontSize={18} fontWeight={400} fill="#231A09" textAnchor="middle">
         CUSTOMER SUCCESS
       </text>
     </svg>

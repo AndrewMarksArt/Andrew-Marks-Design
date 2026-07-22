@@ -45,7 +45,8 @@
 
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  /* Figma 2026-07-21: 560 text / 704 media at the 1312 content width */
+  grid-template-columns: minmax(0, 560fr) minmax(0, 704fr);
   gap: 48px;
   align-items: stretch;
   margin-top: 40px;
@@ -58,22 +59,24 @@
 }
 
 .eyebrow {
-  margin: 0 0 16px;
+  /* Figma 2026-07-21: accent eyebrow, 8px to the headline, 12px cap */
+  margin: 0 0 8px;
   font-family: var(--font-geist-mono), monospace;
-  font-size: clamp(12px, 0.8102vw, 14px);
+  font-size: clamp(11px, 0.8333vw, 12px);
   font-weight: 300;
   line-height: 1;
   letter-spacing: -0.02em;
-  color: var(--meta-gray);
+  color: var(--accent);
   text-transform: none;
 }
 
 .title {
   margin: 0 0 24px;
   font-family: var(--font-geist), sans-serif;
-  font-size: clamp(24px, 2.3148vw, 40px);
+  /* Figma 2026-07-21: 33/42 at 1440 (was 40 cap) */
+  font-size: clamp(24px, 2.2917vw, 33px);
   font-weight: 600;
-  line-height: 1.25;
+  line-height: 1.273;
   letter-spacing: -0.02em;
   color: var(--ink);
   /* no single-word widows at any width (responsive audit: "have / to.") */
@@ -81,14 +84,15 @@
 }
 
 .intro p {
-  margin: 0 0 16px;
+  /* Figma 2026-07-21: 15/22, 24px between paragraphs, 80% ink */
+  margin: 0 0 24px;
   max-width: 36.5em;
   font-family: var(--font-geist), sans-serif;
-  font-size: clamp(15px, 1.0417vw, 18px);
+  font-size: clamp(14px, 1.0417vw, 15px);
   font-weight: 400;
-  line-height: 1.45;
-  letter-spacing: 0.02em;
-  color: var(--text-body-90);
+  line-height: 1.467;
+  letter-spacing: 0;
+  color: rgba(35, 26, 9, 0.8);
 }
 
 .intro p:last-child {
@@ -107,7 +111,8 @@
   align-content: center;
   background: var(--plate);
   border: 1px solid var(--rule-soft);
-  padding: clamp(16px, 1.5vw, 24px);
+  /* Figma 2026-07-21: the shot fills the frame, no inset */
+  padding: 0;
 }
 
 /* --- placeholder box (wireframe media, terminal-labeled) ------------------ */
@@ -129,30 +134,142 @@
 
 /* --- stats strip (dashed, 4 cells) ---------------------------------------- */
 
+/* Status strip — exact copy of Figma node 6863:2796 ("status", 1312x261):
+   white plate 1240x173 inset 36/44 inside the content column, 1px accent
+   border, 8px accent pins centered on the plate corners, dashed cell
+   dividers, and two 230x242 halftone corner patches (2px dots, 12px pitch)
+   masked with the design's diagonal fade (alpha 1 -> 0.23 @ 36% -> 0).
+   The patches paint BEHIND the opaque plate, so only the corner spill
+   into the 44/36 margins is visible — as drawn. */
 .statsWrap {
-  margin-top: 48px;
+  position: relative;
+  margin-top: 24px;
+  padding: 44px 36px;
+}
+
+.statsWrap::before,
+.statsWrap::after {
+  content: "";
+  position: absolute;
+  width: 230px;
+  height: 242px;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle,
+    var(--dot-color) 1px,
+    transparent 1.3px
+  );
+  background-size: 12px 12px;
+}
+
+/* top-left: accent dots, dense at the section corner, fading down-right */
+.statsWrap::before {
+  --dot-color: #ec4e09;
+  top: 0;
+  left: 0;
+  -webkit-mask-image: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.23) 36%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.23) 36%,
+    transparent 100%
+  );
+}
+
+/* bottom-right: ink dots, dense at the section corner, fading up-left */
+.statsWrap::after {
+  --dot-color: #241b09;
+  bottom: 0;
+  right: 0;
+  -webkit-mask-image: linear-gradient(
+    315deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.23) 36%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    315deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.23) 36%,
+    transparent 100%
+  );
 }
 
 .stats {
+  position: relative;
+  /* sit above the corner patches, as the opaque plate does in Figma */
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   margin: 0;
-  border: 2px dashed var(--black);
+  background: var(--plate);
+  border: 1px solid var(--accent);
+}
+
+/* 8px pins centered on the plate corners (Figma: corner - 4px) */
+.statPin {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  z-index: 2;
+}
+
+.statPinTl {
+  top: -4px;
+  left: -4px;
+}
+
+.statPinTr {
+  top: -4px;
+  right: -4px;
+}
+
+.statPinBl {
+  bottom: -4px;
+  left: -4px;
+}
+
+.statPinBr {
+  bottom: -4px;
+  right: -4px;
 }
 
 .statCell {
+  position: relative;
   padding: 24px;
-  border-left: 2px dashed var(--black);
 }
 
-.statCell:first-child {
-  border-left: 0;
+/* Figma dividers are exactly 4-on/4-off at 1px — CSS dashed borders pick
+   their own rhythm, so the rule is drawn with a repeating gradient. */
+.statCell + .statCell::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--black) 0 4px,
+    transparent 4px 8px
+  );
+}
+
+.statLine {
+  display: block;
 }
 
 .statCell dt {
-  margin: 0 0 8px;
+  /* Figma 2026-07-21: 4px label-to-value, 12px cap */
+  margin: 0 0 4px;
   font-family: var(--font-geist-mono), monospace;
-  font-size: clamp(12px, 0.8102vw, 14px);
+  font-size: clamp(11px, 0.8333vw, 12px);
   font-weight: 400;
   letter-spacing: -0.02em;
   color: var(--green-gray);
@@ -161,8 +278,10 @@
 .statCell dd {
   margin: 0;
   font-family: var(--font-geist), sans-serif;
-  font-size: clamp(15px, 1.0417vw, 18px);
+  /* Figma 2026-07-21: Medium 14/21 */
+  font-size: clamp(13px, 0.9722vw, 14px);
   font-weight: 500;
+  line-height: 1.5;
   color: var(--black);
 }
 
@@ -174,12 +293,14 @@
 
 .sectionGrid {
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  /* Figma 2026-07-21: 520 text / 744 media at the 1312 content width */
+  grid-template-columns: minmax(0, 520fr) minmax(0, 744fr);
   gap: 48px;
 }
 
 .sectionHeading {
-  margin: 0 0 24px;
+  /* Figma 2026-07-21: 16px heading-to-body, matching the lede stack gap */
+  margin: 0 0 16px;
   font-family: var(--font-geist), sans-serif;
   font-size: clamp(20px, 1.6204vw, 28px);
   font-weight: 600;
@@ -192,11 +313,12 @@
   margin: 0 0 16px;
   max-width: 36.5em;
   font-family: var(--font-geist), sans-serif;
-  font-size: clamp(14px, 0.9259vw, 16px);
+  /* Figma 2026-07-21: 15/22, no tracking, 80% ink */
+  font-size: clamp(14px, 1.0417vw, 15px);
   font-weight: 400;
-  line-height: 1.45;
-  letter-spacing: 0.02em;
-  color: var(--text-body-80);
+  line-height: 1.467;
+  letter-spacing: 0;
+  color: rgba(35, 26, 9, 0.8);
 }
 
 .sectionRight {
@@ -362,16 +484,31 @@
     min-height: 240px;
   }
 
+  .statsWrap {
+    padding: 32px 0;
+  }
+
   .stats {
     grid-template-columns: 1fr 1fr;
   }
 
-  .statCell:nth-child(3) {
-    border-left: 0;
+  /* pins are <i> siblings before the cells, so index by type not child */
+  .statCell:nth-of-type(3)::before {
+    display: none;
   }
 
-  .statCell:nth-child(n + 3) {
-    border-top: 2px dashed var(--black);
+  .statCell:nth-of-type(n + 3)::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-image: repeating-linear-gradient(
+      to right,
+      var(--black) 0 4px,
+      transparent 4px 8px
+    );
   }
 
   .section,
@@ -405,13 +542,25 @@
   }
 
   .statCell {
-    border-left: 0;
-    border-top: 2px dashed var(--black);
     padding: 16px;
   }
 
-  .statCell:first-child {
-    border-top: 0;
+  .statCell::before {
+    display: none;
+  }
+
+  .statCell + .statCell::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-image: repeating-linear-gradient(
+      to right,
+      var(--black) 0 4px,
+      transparent 4px 8px
+    );
   }
 
   .mediaPair {

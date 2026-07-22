@@ -5,19 +5,13 @@ import {
   CenteredSection,
   UpNext,
 } from "../CaseSections";
-import { AssetFigure, CaptionedMedia } from "../CaseFigures";
+import { AssetFigure } from "../CaseFigures";
 import BrandRow from "../../site/BrandRow";
 import ZoomableFigure from "../FigureLightbox";
 import styles from "../case.module.css";
 import local from "./PlatformOne.module.css";
-import HeroAssistantMock from "./p1/HeroAssistantMock";
 import IaPathDiagram from "./p1/IaPathDiagram";
 import TwoTurnEscalationFlow from "./p1/TwoTurnEscalationFlow";
-import CitedAnswerCloseup from "./p1/CitedAnswerCloseup";
-import PostureWidget from "./p1/PostureWidget";
-import PostureDevFullscreen from "./p1/PostureDevFullscreen";
-import VuetifySpendMap from "./p1/VuetifySpendMap";
-import WidgetReskinBeforeAfter from "./p1/WidgetReskinBeforeAfter";
 import TicketTaxonomyChart from "./p1/TicketTaxonomyChart";
 import PhasedLaunchTimeline from "./p1/PhasedLaunchTimeline";
 
@@ -34,13 +28,16 @@ import PhasedLaunchTimeline from "./p1/PhasedLaunchTimeline";
  *  ⚠ Typeset as attributed dialogue: the wording must match what she
  *  actually said — Andrew to verify/correct the exact phrasing. */
 function CstQuote() {
+  /* Figma revision 2026-07-21: grid-paper plate with accent border; wording
+     updated by Andrew (source typo "hav eto" corrected to "have to"). */
   return (
     <figure className={local.quoteStrip}>
       <blockquote className={local.quoteText}>
-        &ldquo;If you could fix this, I would cry tears of joy.&rdquo;
+        &ldquo;If I didn&rsquo;t have to deal with these tickets anymore, I
+        would be so happy I could cry.&rdquo;
       </blockquote>
       <figcaption className={local.quoteAttribution}>
-        {"// CUSTOMER SUCCESS LEAD · PLATFORM ONE — discovery interview"}
+        {"// CUSTOMER SUCCESS TEAM MEMBER | PLATFORM ONE | discovery interview"}
       </figcaption>
     </figure>
   );
@@ -60,9 +57,11 @@ function SecurityVignette() {
         most.
       </blockquote>
       <figcaption className={local.vignetteContext}>
+        {/* Figma revision 2026-07-21 (source typos "could find" / "need"
+            corrected to "couldn't find" / "needed"). */}
         A senior Air Force leader needed proof the platform already defended
-        against the threat — by design. The answer was on the site. The
-        breaking point wasn&rsquo;t a missing page; it was findability.
+        against the threat by design. The answer was in the docs but he
+        couldn&rsquo;t find it when it mattered and needed the answer fast.
       </figcaption>
     </figure>
   );
@@ -76,16 +75,20 @@ export default function PlatformOne() {
         title="Designing an AI assistant projected to cut support tickets by roughly 40%"
         intro={[
           "Platform One is the Air Force's $500M flagship software factory, supporting more than 60 Air Force and Joint programs valued at $650 billion.",
-          "But after a rushed rebrand, users couldn't find the answers they needed on its website. Sometimes they couldn't even find how to ask for help. Emergency fixes piled on top of each other — and made things worse.",
+          "But after a rushed rebrand, users couldn't find the answers they needed on its website. Sometimes they couldn't even find how to ask for help. Emergency fixes piled on top of each other — and while they helped in some ways, in others they made things worse.",
         ]}
         media={
           <ZoomableFigure
-            label="The assistant in situ"
-            aspect={720 / 500}
-            naturalWidth={720}
+            label="The assistant, live on Platform One's site"
+            aspect={1408 / 932}
+            naturalWidth={1408}
             unframed
           >
-            <HeroAssistantMock />
+            <img
+              src="/case-studies/platform-one/p1-hero-insitu.webp"
+              alt="Platform One's homepage with the P1 Assistant widget open in the corner, answering 'I need to access Iron Bank' with steps, a Create-account button, a cited source, and a did-this-help prompt."
+              className={local.shotImg}
+            />
           </ZoomableFigure>
         }
       />
@@ -99,12 +102,13 @@ export default function PlatformOne() {
           { label: "TIMEFRAME:", value: "2025 · 6 months" },
           {
             label: "TEAM:",
-            value: "1 designer · 2 developers · tech writer · security",
+            value:
+              "1 Designer · 2 Developers · Security approver · Project Manager",
           },
           {
             label: "SCOPE:",
             value:
-              "Conversational UX flows · Component & state library · Escalation & routing logic · Expanded developer mode · Interim widget re-skin · Full app design",
+              "Conversational UX flows · Component & state library · Escalation & routing logic flows · Interim widget re-skin · Full app design",
           },
         ]}
       />
@@ -125,46 +129,42 @@ export default function PlatformOne() {
           "So users defaulted to the only visible option, asking a human (and sometimes they couldn’t find that option).",
         ]}
         media={
-          /* Asymmetric per shot list: the story is findability, which a
-             screenshot can't show — the path diagram leads, one evidence
-             screenshot supports. */
-          <div className={local.asymPair}>
-            <AssetFigure
-              label="Finding support, post-rebrand"
-              aspect={960 / 600}
-              naturalWidth={960}
-              caption="Mapped the post-rebrand path to support: five clicks and two dead ends to reach a lifeline."
-              sub={"// every one of these pages existed — reaching them was the failure"}
-            >
-              <IaPathDiagram />
-            </AssetFigure>
-            <CaptionedMedia label="// BURIED_ANSWER_SCREENSHOT" />
-          </div>
+          /* The traced-flow diagram carries the whole findability story —
+             the ghost nodes ARE the buried-answer evidence, so no companion
+             screenshot. */
+          <AssetFigure
+            label="Two questions, traced on the live site"
+            aspect={960 / 600}
+            naturalWidth={960}
+            caption="Two user questions, traced on the live site (July 2026): both journeys end at the same intake form — while the public answers sit just off-path, unlinked or mislabeled."
+            sub={"// every answer on this map is public — reaching it was the failure"}
+          >
+            <IaPathDiagram />
+          </AssetFigure>
         }
       />
 
       <CaseSection
         heading={'Our "stop the bleeding" fix worked. It also flooded the wrong team.'}
+        lede={[
+          "A new Contact Us CTA gave stuck users a lifeline, and tickets exploded. A Customer Success team built for sales and relationships became full-time human routers: fielding password resets, forwarding emails between product teams, and working a CRM that couldn't talk to Jira.",
+          "The responses were full of PII, so automated analysis was off the table. I pulled random samples — about 150 responses — and coded them by hand: nearly half were simple help-desk asks or information already on the site, and most of the rest belonged to other teams entirely.",
+          "The Customer Success lead put 40–60% of her day into triaging the flood; her three teammates each gave another 10–20%. Roughly a full role, spent on tickets the team was never meant to own.",
+        ]}
         media={<SecurityVignette />}
       >
+        {/* Right column is the evidence stack — the lead's voice, then the
+            hand-coded sample the lede narrates (self-captioned SVG), then
+            the security vignette. The old three-column band predates the
+            section having any imagery. */}
         <CstQuote />
-        <div className={styles.threeCol}>
-          <p>
-            {
-              "A new Contact Us CTA gave stuck users a lifeline, and tickets exploded. A Customer Success team built for sales and relationships became full-time human routers: fielding password resets, forwarding emails between product teams, and working a CRM that couldn't talk to Jira."
-            }
-          </p>
-          <p>
-            {
-              "The responses were full of PII, so automated analysis was off the table. I pulled random samples — about 150 responses — and coded them by hand: nearly half were simple help-desk asks or information already on the site, and most of the rest belonged to other teams entirely."
-            }
-          </p>
-          <p>
-            {
-              "The Customer Success lead put 40–60% of her day into triaging the flood; her three teammates each gave another 10–20%. Roughly a full role, spent on tickets the team was never meant to own."
-            }
-          </p>
-        </div>
+        <AssetFigure
+          label="Ticket taxonomy — hand-coded sample"
+          aspect={979 / 360}
+          naturalWidth={979}
+        >
+          <TicketTaxonomyChart />
+        </AssetFigure>
       </CaseSection>
 
       <CaseSection
@@ -178,7 +178,7 @@ export default function PlatformOne() {
         lede={[
           "Most of those tickets should never have existed — in the sample audit, nearly half were answers already on the site. The assistant answers at the point of confusion, surfacing sources and suggesting follow-ups.",
           "Why an assistant instead of just fixing the navigation? Deeper IA work was underway — but on a much longer timeline, and earlier band-aid fixes had made things worse. The assistant was the bridge that could ship in months, and the wedge that unlocked budget and infrastructure for the platform's next AI projects.",
-          "If a question isn't resolved within two turns, a soft CTA routes the user to the help desk or Customer Success based on question type.",
+          "After two turns without a resolution, a soft CTA offers the help desk or Customer Success — routed by question type — and a hard cap at six turns (usually four or five) means no one loops.",
           "The routing burden moved from people to design.",
         ]}
         media={
@@ -190,20 +190,24 @@ export default function PlatformOne() {
               label="Two-turn escalation flow"
               aspect={979 / 300}
               naturalWidth={979}
-              caption="Designed the escalation logic: two turns, then a human — routed by question type, not by whoever answered the phone."
+              caption="Designed the escalation logic: two turns, then a human — routed by question type."
             >
               <TwoTurnEscalationFlow />
             </AssetFigure>
-            <div className={local.singleMedia}>
-              <AssetFigure
-                label="Cited answer close-up"
-                aspect={480 / 340}
-                naturalWidth={480}
-                caption="Every answer carries its receipts: inline citations, real sources, and a human path that never disappears."
-              >
-                <CitedAnswerCloseup />
-              </AssetFigure>
-            </div>
+            {/* Figma 2026-07-21: the chats plate carries its own frame —
+                rendered unframed, no caption */}
+            <ZoomableFigure
+              label="The escalation path, in the real product"
+              aspect={1488 / 985}
+              naturalWidth={1488}
+              unframed
+            >
+              <img
+                src="/case-studies/platform-one/p1-example-chats.webp"
+                alt="Three real assistant screens in sequence: an Iron Bank answer with cited source and did-this-solve-your-issue buttons; a follow-up offering summaries, walkthrough steps, or key commands with Talk to Support; and a rate-your-experience closer."
+                className={local.shotImg}
+              />
+            </ZoomableFigure>
           </>
         }
       />
@@ -216,26 +220,17 @@ export default function PlatformOne() {
           "One system, tuned to two very different jobs.",
         ]}
         media={
-          /* The page's ONE true pair — the section's story IS a
-             comparison (same question, both postures). */
-          <div className={styles.mediaPair}>
-            <AssetFigure
-              label="Posture A — general visitor widget"
-              aspect={480 / 322}
-              naturalWidth={480}
-              caption="The widget posture — quick answers at the point of confusion, sized for passers-by."
-            >
-              <PostureWidget />
-            </AssetFigure>
-            <AssetFigure
-              label="Posture B — developer mode"
-              aspect={480 / 322}
-              naturalWidth={480}
-              caption="The developer posture — the same question, expanded into a full-screen workspace with sources and code."
-            >
-              <PostureDevFullscreen />
-            </AssetFigure>
-          </div>
+          /* Figma revision 2026-07-21: the pair of stills became Andrew's
+             looping GIF — the expand/collapse motion IS the story. Rendered
+             bare per the design (no plate, no border). */
+          <figure className={local.demoFigure}>
+            <img
+              src="/case-studies/platform-one/p1-assistant-demo.gif"
+              alt="Screen recording on a loop: the assistant launcher on Platform One's homepage opens into the compact widget, then expands to the full-view workspace and back."
+              className={local.shotImg}
+              loading="lazy"
+            />
+          </figure>
         }
       />
 
@@ -248,24 +243,20 @@ export default function PlatformOne() {
           "When a partner-provided chat widget was chosen as the interim launch vehicle for speed, I recommended against it, documented the UX gaps, and partnered with engineering to re-skin it to our brand while the custom experience is built.",
         ]}
         media={
-          <div className={styles.mediaPair}>
-            <AssetFigure
-              label="Component spend map"
-              aspect={480 / 322}
-              naturalWidth={480}
-              caption="Audited every surface: stock components where they're free, custom spend concentrated where trust is won."
-            >
-              <VuetifySpendMap />
-            </AssetFigure>
-            <AssetFigure
-              label="Interim widget — gap audit and re-skin"
-              aspect={480 / 360}
-              naturalWidth={480}
-              caption="Documented the interim widget's gaps, then re-skinned it to the platform's language while the custom build ships."
-            >
-              <WidgetReskinBeforeAfter />
-            </AssetFigure>
-          </div>
+          /* Figma revision 2026-07-21: the real design-system board, rendered
+             bare (its dark plate is its own frame), no caption. */
+          <ZoomableFigure
+            label="Vuetify, overridden to the brand"
+            aspect={2000 / 1214}
+            naturalWidth={2000}
+            unframed
+          >
+            <img
+              src="/case-studies/platform-one/p1-vuetify-overrides.webp"
+              alt="Dark design-system board titled Vuetify Overridden: teal, grey, and copper color ramps with hex values, beside primary and secondary button variants, inputs, and skeleton loaders built on Vuetify defaults."
+              className={local.shotImg}
+            />
+          </ZoomableFigure>
         }
       />
 
@@ -281,9 +272,10 @@ export default function PlatformOne() {
       >
         {/* Pinned closing evidence replaces the carousel (a carousel of
             leftovers is how endings fizzle — analysis 003): stat tiles
-            restate the payoff for bottom-first skimmers, the taxonomy
-            chart is the 40%'s derivation, the timeline turns the caveat
-            sentences into a visible plan. */}
+            restate the payoff for bottom-first skimmers, the timeline
+            turns the caveat sentences into a visible plan. The taxonomy
+            chart (the 40%'s derivation) lives up in the flood section,
+            beside the audit narrative. */}
         <dl className={local.tiles}>
           <div className={local.tile}>
             <dt className={local.tileLabel}>PROJECTED TICKET CUT</dt>
@@ -294,7 +286,7 @@ export default function PlatformOne() {
             <dd className={local.tileValue}>~1 FTE</dd>
           </div>
           <div className={local.tile}>
-            <dt className={local.tileLabel}>THEN A HUMAN, BY DESIGN</dt>
+            <dt className={local.tileLabel}>HUMAN PATH OPENS</dt>
             <dd className={local.tileValue}>2 turns</dd>
           </div>
         </dl>
@@ -302,14 +294,7 @@ export default function PlatformOne() {
           {"// projections derived from the hand-coded ticket-sample audit"}
         </p>
         <div className={local.closerMedia}>
-          {/* self-captioned figures — their footnotes live inside the SVGs */}
-          <AssetFigure
-            label="Ticket taxonomy — hand-coded sample"
-            aspect={979 / 360}
-            naturalWidth={979}
-          >
-            <TicketTaxonomyChart />
-          </AssetFigure>
+          {/* self-captioned figure — its footnotes live inside the SVG */}
           <AssetFigure
             label="Phased launch sequence"
             aspect={979 / 140}
