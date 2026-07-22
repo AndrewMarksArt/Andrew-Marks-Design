@@ -2,7 +2,6 @@ import {
   CaseHero,
   StatsStrip,
   CaseSection,
-  CenteredSection,
   UpNext,
 } from "../CaseSections";
 import { AssetFigure } from "../CaseFigures";
@@ -10,10 +9,7 @@ import BrandRow from "../../site/BrandRow";
 import ZoomableFigure from "../FigureLightbox";
 import styles from "../case.module.css";
 import local from "./PlatformOne.module.css";
-import IaPathDiagram from "./p1/IaPathDiagram";
-import TwoTurnEscalationFlow from "./p1/TwoTurnEscalationFlow";
 import TicketTaxonomyChart from "./p1/TicketTaxonomyChart";
-import PhasedLaunchTimeline from "./p1/PhasedLaunchTimeline";
 
 /**
  * Platform One case study content (Figma "Platform One Case Study
@@ -124,23 +120,27 @@ export default function PlatformOne() {
           </>
         }
         lede={[
-          "The documentation, the contact paths, the product information: all of it was there.",
+          "The documentation, the product information, the answers: all of it was there.",
           "The rebrand had buried it.",
-          "So users defaulted to the only visible option, asking a human (and sometimes they couldn’t find that option).",
+          "And when users gave up searching, there was nowhere to turn. The site didn’t even have a Contact Us form.",
+          "Adding one was the first fix, and users needed it. But it crushed the Customer Success team, taking their time away from where it was needed most.",
         ]}
         media={
-          /* The traced-flow diagram carries the whole findability story —
-             the ghost nodes ARE the buried-answer evidence, so no companion
-             screenshot. */
-          <AssetFigure
-            label="Two questions, traced on the live site"
-            aspect={960 / 600}
-            naturalWidth={960}
-            caption="Two user questions, traced on the live site (July 2026): both journeys end at the same intake form — while the public answers sit just off-path, unlinked or mislabeled."
-            sub={"// every answer on this map is public — reaching it was the failure"}
+          /* Figma revision 2026-07-22 (node 6871:3238): Andrew's simplified
+             two-example flow replaces the drafting-sheet trace. The design
+             self-captions (terminal-prompt header + numbered questions), so
+             no figcaption; framed since the plate is white-on-white. */
+          <ZoomableFigure
+            label="Two simplified examples of users giving up"
+            aspect={1076 / 918}
+            naturalWidth={1076}
           >
-            <IaPathDiagram />
-          </AssetFigure>
+            <img
+              src="/case-studies/platform-one/p1-simplified-flow.webp"
+              alt="Flow diagram of two example questions — how much does Party Bus cost, and how does Iron Bank secure containers. From the p1.dso.mil home page users reach P1 solutions, then /party-bus (high level, no pricing or technical information) or /iron-bank (catalog and images behind SSO login), loop back, and most end up at the Contact Us form. A note marks where most answers actually live: three to four clicks deep and mostly hidden behind login, with broken links and no hierarchy on solutions pages."
+              className={local.shotImg}
+            />
+          </ZoomableFigure>
         }
       />
 
@@ -178,7 +178,7 @@ export default function PlatformOne() {
         lede={[
           "Most of those tickets should never have existed — in the sample audit, nearly half were answers already on the site. The assistant answers at the point of confusion, surfacing sources and suggesting follow-ups.",
           "Why an assistant instead of just fixing the navigation? Deeper IA work was underway — but on a much longer timeline, and earlier band-aid fixes had made things worse. The assistant was the bridge that could ship in months, and the wedge that unlocked budget and infrastructure for the platform's next AI projects.",
-          "After two turns without a resolution, a soft CTA offers the help desk or Customer Success — routed by question type — and a hard cap at six turns (usually four or five) means no one loops.",
+          "After two turns without a resolution, a soft CTA offers the help desk or Customer Success, routed by question type. After turn four the CTA becomes a hard one, so no conversation loops.",
           "The routing burden moved from people to design.",
         ]}
         media={
@@ -186,14 +186,20 @@ export default function PlatformOne() {
              (citations + follow-up chips) is a tight detail crop, not
              another screenshot. */
           <>
-            <AssetFigure
-              label="Two-turn escalation flow"
-              aspect={979 / 300}
-              naturalWidth={979}
-              caption="Designed the escalation logic: two turns, then a human — routed by question type."
+            {/* Figma revision 2026-07-22 (node 6873:3333): Andrew's escalation
+                flow replaces the drawn version. Self-captioned header, so no
+                figcaption; framed since the plate is white-on-white. */}
+            <ZoomableFigure
+              label="Escalation flow — self-service with a human path"
+              aspect={1346 / 973}
+              naturalWidth={1346}
             >
-              <TwoTurnEscalationFlow />
-            </AssetFigure>
+              <img
+                src="/case-studies/platform-one/p1-escalation-flow.webp"
+                alt="Flow diagram of the escalation logic. A user question gets a sourced answer with citations inline and follow-up suggestions. If the question is answered: done, self-service. If not, the user follows up, and after more than two turns a sourced answer arrives with a soft support CTA; after more than four turns a hard support CTA routes by context to the helpdesk or Customer Success. Notes: self-service by default but keeping humans in the loop; soft CTA after 2 turns, hard CTA after turn 4."
+                className={local.shotImg}
+              />
+            </ZoomableFigure>
             {/* Figma 2026-07-21: the chats plate carries its own frame —
                 rendered unframed, no caption */}
             <ZoomableFigure
@@ -225,7 +231,7 @@ export default function PlatformOne() {
              bare per the design (no plate, no border). */
           <figure className={local.demoFigure}>
             <img
-              src="/case-studies/platform-one/p1-assistant-demo.gif"
+              src="/case-studies/platform-one/p1-assistant-demo-fast.gif"
               alt="Screen recording on a loop: the assistant launcher on Platform One's homepage opens into the compact widget, then expands to the full-view workspace and back."
               className={local.shotImg}
               loading="lazy"
@@ -260,50 +266,54 @@ export default function PlatformOne() {
         }
       />
 
-      <CenteredSection
+      {/* Figma revision 2026-07-22 (node 6878:223): the closer left its
+          centered layout for the standard section split — copy left, two
+          drafting-style stat cards right (pre-rendered in Figma). The
+          third tile and the projections footnote left the design. */}
+      <CaseSection
         heading="Projected impact and the honest road to launch"
-        paragraphs={[
+        lede={[
           "The assistant is in staging, projected to cut support tickets by roughly 40% — the share of sampled tickets it answers outright — and to return a full role's worth of Customer Success capacity to the work that team was built for.",
           "And the next time a leader needs proof the platform is secure by design, the answer is one question away.",
           "Launch is phased — behind SSO first while the public site completes its Certificate to Field — with the custom front-end replacing the interim widget on the roadmap.",
+          <strong key="retro">
+            If I ran this again, I&rsquo;d bring security into launch planning
+            from day one; the SSO constraint reshaped our rollout late.
+          </strong>,
         ]}
-        emphasis="If I ran this again, I'd bring security into launch planning from day one; the SSO constraint reshaped our rollout late."
-        carousel={false}
-      >
-        {/* Pinned closing evidence replaces the carousel (a carousel of
-            leftovers is how endings fizzle — analysis 003): stat tiles
-            restate the payoff for bottom-first skimmers, the timeline
-            turns the caveat sentences into a visible plan. The taxonomy
-            chart (the 40%'s derivation) lives up in the flood section,
-            beside the audit narrative. */}
-        <dl className={local.tiles}>
-          <div className={local.tile}>
-            <dt className={local.tileLabel}>PROJECTED TICKET CUT</dt>
-            <dd className={local.tileValue}>&minus;40%</dd>
+        media={
+          <div className={local.statCards}>
+            <img
+              src="/case-studies/platform-one/p1-stat-ticket-cut.webp"
+              alt="Stat card: projected ticket cut, minus 40 percent."
+              className={local.statCard}
+            />
+            <img
+              src="/case-studies/platform-one/p1-stat-fte.webp"
+              alt="Stat card: CST capacity returned, about one full-time role."
+              className={local.statCard}
+            />
           </div>
-          <div className={local.tile}>
-            <dt className={local.tileLabel}>CS CAPACITY RETURNED</dt>
-            <dd className={local.tileValue}>~1 FTE</dd>
-          </div>
-          <div className={local.tile}>
-            <dt className={local.tileLabel}>HUMAN PATH OPENS</dt>
-            <dd className={local.tileValue}>2 turns</dd>
-          </div>
-        </dl>
-        <p className={local.tilesNote}>
-          {"// projections derived from the hand-coded ticket-sample audit"}
-        </p>
-        <div className={local.closerMedia}>
-          {/* self-captioned figure — its footnotes live inside the SVG */}
-          <AssetFigure
-            label="Phased launch sequence"
-            aspect={979 / 140}
-            naturalWidth={979}
-          >
-            <PhasedLaunchTimeline />
-          </AssetFigure>
-        </div>
-      </CenteredSection>
+        }
+      />
+
+      <section className={`content ${styles.section}`}>
+        {/* Figma revision 2026-07-22 (node 6881:1164): Andrew's launch
+            sequence replaces the drawn timeline. Self-framed (dashed corner
+            brackets in the image), so rendered unframed with no caption. */}
+        <ZoomableFigure
+          label="Launch sequence, intentionally undated"
+          aspect={1312 / 215}
+          naturalWidth={1312}
+          unframed
+        >
+          <img
+            src="/case-studies/platform-one/p1-launch-sequence.webp"
+            alt="Launch sequence timeline, intentionally undated while waiting on Certificate to Field. Staging is done (solid line, filled marker); Behind SSO with the interim widget is the current stop (orange marker); Certificate to Field, Public Launch, and Custom Front-End remain ahead on a dashed line with hollow markers."
+            className={local.shotImg}
+          />
+        </ZoomableFigure>
+      </section>
 
       <UpNext
         title="ChatVET an AI Copilot for Veterinary Medicine"

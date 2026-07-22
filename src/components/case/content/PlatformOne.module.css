@@ -71,62 +71,30 @@
    Closer evidence: stat tiles + pinned artifacts (replace the carousel).
    -------------------------------------------------------------------------- */
 
-/* Figma 2026-07-21: tiles span the full content width, 48px gutters */
-.tiles {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 48px;
-  width: 100%;
-  margin: 24px 0 0;
-  text-align: left;
-}
-
-.tile {
-  border-top: 2px solid var(--ink);
-  padding-top: 16px;
-}
-
-.tileLabel {
-  margin: 0 0 10px;
-  font-family: var(--font-geist-mono), monospace;
-  font-weight: 400;
-  font-size: clamp(11px, 0.8333vw, 12px);
-  letter-spacing: -0.02em;
-  color: var(--green-gray);
-}
-
-.tileValue {
-  margin: 0;
-  /* Figma 2026-07-21: Geist SemiBold 40 */
-  font-family: var(--font-geist), sans-serif;
-  font-weight: 600;
-  font-size: clamp(32px, 2.7778vw, 40px);
-  line-height: 1;
-  letter-spacing: 0;
-  color: var(--black);
-}
-
-.tilesNote {
-  margin: 16px auto 0;
-  text-align: left;
-  font-family: var(--font-geist-mono), monospace;
-  font-weight: 300;
-  font-size: clamp(11px, 0.8333vw, 12px);
-  letter-spacing: -0.02em;
-  color: var(--meta-gray);
-}
-
-.closerMedia {
+/* Figma 2026-07-22 (node 6878:223): two pre-rendered drafting-style stat
+   cards, side by side, dropped ~48px from the column top like the design. */
+.statCards {
   display: flex;
-  flex-direction: column;
   gap: 24px;
-  margin-top: 48px;
+  padding-top: 48px;
+}
+
+.statCard {
+  width: calc(50% - 12px);
+  min-width: 0;
+  height: auto;
+  display: block;
 }
 
 @media (max-width: 639px) {
-  .tiles {
-    grid-template-columns: 1fr;
-    gap: 16px;
+  .statCards {
+    flex-direction: column;
+    padding-top: 0;
+  }
+
+  .statCard {
+    width: 100%;
+    max-width: 360px;
   }
 }
 

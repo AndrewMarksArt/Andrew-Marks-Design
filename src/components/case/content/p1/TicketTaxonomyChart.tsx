@@ -29,7 +29,7 @@ export default function TicketTaxonomyChart() {
       </text>
 
       {/* Row 2 — BELONGED TO ANOTHER TEAM */}
-      <text x={16} y={125.5} fontSize={14} fontWeight={400} fill="#231A09">BELONGED TO ANOTHER TEAM</text>
+      <text x={16} y={125.5} fontSize={14} fontWeight={400} fill="#231A09">Belonged to another team</text>
       <rect x={240} y={108} width={572} height={26} fill="#D9D9D9" stroke="rgba(0,0,0,0.25)" strokeWidth={1} />
       <text x={820} y={125.5} fontSize={16.5} fill="#231A09">
         <tspan fontWeight={500}>55</tspan>
@@ -37,7 +37,7 @@ export default function TicketTaxonomyChart() {
       </text>
 
       {/* Row 3 — TRUE CUSTOMER-SUCCESS WORK */}
-      <text x={16} y={169.5} fontSize={14} fontWeight={400} fill="#231A09">TRUE CUSTOMER-SUCCESS WORK</text>
+      <text x={16} y={169.5} fontSize={14} fontWeight={400} fill="#231A09">True customer-success work</text>
       <rect x={240} y={152} width={145.6} height={26} fill="#D9D9D9" stroke="rgba(0,0,0,0.25)" strokeWidth={1} />
       <text x={393.6} y={169.5} fontSize={16.5} fill="#231A09">
         <tspan fontWeight={500}>14</tspan>
@@ -45,7 +45,7 @@ export default function TicketTaxonomyChart() {
       </text>
 
       {/* Row 4 — SIMPLE HELP-DESK RESETS */}
-      <text x={16} y={213.5} fontSize={14} fontWeight={400} fill="#231A09">SIMPLE HELP-DESK RESETS</text>
+      <text x={16} y={213.5} fontSize={14} fontWeight={400} fill="#231A09">Simple help-desk resets</text>
       <rect x={240} y={196} width={124.8} height={26} fill="#D9D9D9" stroke="rgba(0,0,0,0.25)" strokeWidth={1} />
       <text x={372.8} y={213.5} fontSize={16.5} fill="#231A09">
         <tspan fontWeight={500}>12</tspan>
@@ -53,7 +53,7 @@ export default function TicketTaxonomyChart() {
       </text>
 
       {/* Row 5 — UNCLEAR / OTHER */}
-      <text x={16} y={257.5} fontSize={14} fontWeight={400} fill="#231A09">UNCLEAR / OTHER</text>
+      <text x={16} y={257.5} fontSize={14} fontWeight={400} fill="#231A09">Unclear / other</text>
       <rect x={240} y={240} width={93.6} height={26} fill="#D9D9D9" stroke="rgba(0,0,0,0.25)" strokeWidth={1} />
       <text x={341.6} y={257.5} fontSize={16.5} fill="#231A09">
         <tspan fontWeight={500}>9</tspan>

@@ -1,7 +1,7 @@
 import { Fragment, type ReactNode } from "react";
-import Image from "next/image";
 import { PlusMark } from "./motifs";
-import CaseStudyMedia, { type PeekSprite } from "./CaseStudyMedia";
+import CaseStudyMedia from "./CaseStudyMedia";
+import { CASE_MEDIA } from "./caseMedia";
 import styles from "./CaseStudies.module.css";
 
 /**
@@ -16,98 +16,19 @@ import styles from "./CaseStudies.module.css";
 type CaseStudy = {
   num: string;
   title: string;
-  img: string;
-  alt: string;
+  href: string;
   desc: ReactNode;
-  /** Rows with hover interactions render CaseStudyMedia */
-  href?: string;
-  sprites?: PeekSprite[];
-  /** Per-case beam tuning: the hover glow starts site-orange everywhere
-      and journeys to THIS case's brand color (hue-rotate delta from
-      orange hue 18°), with a matching light under-glow tint. maxO caps
-      peak opacity (dim a beam that pops too hard against its card);
-      bright lifts luminosity toward the journey's end (make a beam
-      outshine a card whose palette it matches). */
-  beam?: { hueEnd: string; glowEnd: string; maxO?: number; bright?: number };
 };
 
-/* Sprite geometry measured from the Figma hover frames (values are the
-   engaged position; `rest` tucks the character outside the clipped frame).
-   Platform One: 6739:4672 → 6739:4669. ChatVET: 6745:4681 → 6745:4677. */
-const GROGU: PeekSprite = {
-  src: "/case-studies/grogu-peek.webp",
-  width: 720,
-  height: 335,
-  left: "5.41%", // 58 / 1073
-  top: "0%",
-  spriteWidth: "48.09%", // 516 / 1073
-  aspect: "516 / 240",
-  rest: "translateY(-102%) rotate(-3.33deg)", // Figma 176.67° vs 180°
-  inner: "rotate(180deg)", // hangs upside down
-};
-
-const CHATVET_CAT: PeekSprite = {
-  src: "/case-studies/chatvet-peek-cat.webp",
-  width: 840,
-  height: 1115,
-  left: "0.12%", // 1.33 / 1073
-  top: "68.67%", // 515 / 750
-  spriteWidth: "26.02%", // 279.22 / 1073
-  aspect: "279.222 / 370.727",
-  /* rest center Δ (−192px, +265.3px) as % of the sprite box + the 17.94°
-     tilt it rolls off as it rises */
-  rest: "translate(-68.76%, 71.57%) rotate(17.73deg)",
-  inner: "rotate(0.21deg)",
-  exit: "380ms", // travels ~327px vs Grogu's ~245px — velocity-matched to his exit
-};
-
-const CHATVET_DOG: PeekSprite = {
-  src: "/case-studies/chatvet-peek-dog.webp",
-  width: 1024,
-  height: 1024,
-  left: "78.94%", // ≈847 / 1073
-  top: "51.5%", // ≈386.3 / 750
-  spriteWidth: "25.45%", // 273.14 / 1073
-  aspect: "273.138 / 362.65",
-  /* rest Δ (+240px, +160px) — slides in diagonally from off the right edge */
-  rest: "translate(87.87%, 44.12%)",
-  inner: "rotate(-179.42deg) scaleY(-1)", // = horizontal mirror + 0.58° tilt
-  delay: "100ms", // arrives a beat after the cat
-  exit: "330ms", // travels ~288px — velocity-matched to Grogu's exit
-};
-
-/* Knowledge OS (6749:4690 → 6749:4687): the hero robot itself (identical
-   asset, reused from /hero/) peeks from the bottom-left — mirrored + tilted
-   12.82° (scaleY(-1) rotate(-167.18°)), rising diagonally up-right. */
-const KNOWLEDGE_ROBOT: PeekSprite = {
-  src: "/hero/robot.webp",
-  width: 1200,
-  height: 2101,
-  left: "-3.06%", // inner box top-left -32.85 / 1073
-  top: "44.25%", // 331.87 / 750
-  spriteWidth: "41.65%", // 446.87 / 1073
-  aspect: "446.872 / 619.312",
-  rest: "translate(-48.34%, 68.46%)", // Δ(-216px, +424px) from engaged
-  inner: "rotate(-167.18deg) scaleY(-1)",
-  objectPosition: "top", // bottom ~26% cropped, matching the hero band
-};
-
+/* Card media (screenshot + peek sprites + beam) lives in the shared
+   caseMedia registry, keyed by href, so the home grid and the case-study
+   UP NEXT cross-link render identical cards. Only the num/title/desc — the
+   home-grid-specific copy — stays here. */
 const CASES: CaseStudy[] = [
   {
     num: "1",
     title: "Platform One AI Assistant & Chat Bot",
-    img: "/case-studies/platform-one.png",
-    alt: "Platform One website with the P1 Assistant chat panel open, offering answers and quick links for account questions",
     href: "/case-studies/platform-one",
-    sprites: [GROGU],
-    // P1 assistant mint (hue ~156, sampled from the card); the card's own
-    // imagery is mint/dark-green, so the beam gains luminosity through the
-    // journey to outshine it instead of dissolving into it
-    beam: {
-      hueEnd: "138deg",
-      glowEnd: "rgba(134, 206, 178, 0.5)",
-      bright: 1.35,
-    },
     desc: (
       <>
         An AI assistant projected to{" "}
@@ -119,18 +40,7 @@ const CASES: CaseStudy[] = [
   {
     num: "2",
     title: "Chat VET an AI Suite for Veterinary Medicine",
-    img: "/case-studies/chat-vet.png",
-    alt: "chatVET app home screen: clinical search bar and VetMed prompt templates for veterinary professionals",
     href: "/case-studies/chat-vet",
-    sprites: [CHATVET_CAT, CHATVET_DOG],
-    // chatVET navy/royal blue (hue ~230, sampled) — negative rotation
-    // travels orange -> violet -> blue instead of through green; dimmed,
-    // saturated violets pop hard against the white card
-    beam: {
-      hueEnd: "-148deg",
-      glowEnd: "rgba(152, 172, 235, 0.5)",
-      maxO: 0.72,
-    },
     desc: (
       <>
         An AI copilot that <strong>saves veterinarians 15 minutes per case</strong>
@@ -141,18 +51,7 @@ const CASES: CaseStudy[] = [
   {
     num: "3",
     title: "AI Powered Personal Knowledge OS",
-    img: "/case-studies/knowledge-os.png",
-    alt: "Arclight knowledge dashboard listing captured links with sources, categories, scores, and agent navigation",
     href: "/case-studies/knowledge-os",
-    sprites: [KNOWLEDGE_ROBOT],
-    // Arclight's palette is warm coral/amber (hue ~3, sampled) — the beam
-    // stays in the warm family, deepening from orange to coral; dimmed to
-    // sit against the card's light neutrals
-    beam: {
-      hueEnd: "-15deg",
-      glowEnd: "rgba(240, 168, 152, 0.5)",
-      maxO: 0.72,
-    },
     desc: (
       <>
         A <strong>multi-agent system that reads 1,000&apos;s of sources</strong>{" "}
@@ -187,41 +86,34 @@ export default function CaseStudies() {
       {/* Separator above row 1 (design y=1062) */}
       <Separator className={styles.separatorTop} />
 
-      {CASES.map((cs, i) => (
-        <Fragment key={cs.num}>
-          {/* Mid-gap separators (design y=1991/2952) */}
-          {i > 0 && <Separator className={styles.separatorMid} />}
-          <article className={styles.row}>
-            <div className={styles.rail} aria-hidden="true">
-              <span className={styles.numeral}>{cs.num}</span>
-            </div>
-            <div className={styles.card}>
-              <h3 className={styles.title}>{cs.title}</h3>
-              {cs.sprites && cs.href ? (
-                <CaseStudyMedia
-                  img={cs.img}
-                  alt={cs.alt}
-                  href={cs.href}
-                  sprites={cs.sprites}
-                  priority={i === 0}
-                  beam={cs.beam}
-                />
-              ) : (
-                <Image
-                  className={styles.screenshot}
-                  src={cs.img}
-                  alt={cs.alt}
-                  width={1440}
-                  height={1080}
-                  sizes="(max-width: 1023px) 94vw, 62vw"
-                  priority={i === 0}
-                />
-              )}
-              <p className={styles.desc}>{cs.desc}</p>
-            </div>
-          </article>
-        </Fragment>
-      ))}
+      {CASES.map((cs, i) => {
+        const media = CASE_MEDIA[cs.href];
+        return (
+          <Fragment key={cs.num}>
+            {/* Mid-gap separators (design y=1991/2952) */}
+            {i > 0 && <Separator className={styles.separatorMid} />}
+            <article className={styles.row}>
+              <div className={styles.rail} aria-hidden="true">
+                <span className={styles.numeral}>{cs.num}</span>
+              </div>
+              <div className={styles.card}>
+                <h3 className={styles.title}>{cs.title}</h3>
+                {media ? (
+                  <CaseStudyMedia
+                    img={media.img}
+                    alt={media.alt}
+                    href={cs.href}
+                    sprites={media.sprites}
+                    priority={i === 0}
+                    beam={media.beam}
+                  />
+                ) : null}
+                <p className={styles.desc}>{cs.desc}</p>
+              </div>
+            </article>
+          </Fragment>
+        );
+      })}
     </section>
   );
 }

@@ -145,7 +145,11 @@
 .statsWrap {
   position: relative;
   margin-top: 24px;
-  padding: 44px 36px;
+  /* clearance so the bottom-right dot patch doesn't sit on the divider */
+  margin-bottom: 40px;
+  /* vertical only — keep .content's padding-inline so the strip lines up
+     with the hero column; the 36px box inset lives on .stats below */
+  padding-block: 44px;
 }
 
 .statsWrap::before,
@@ -163,11 +167,13 @@
   background-size: 12px 12px;
 }
 
-/* top-left: accent dots, dense at the section corner, fading down-right */
+/* top-left: accent dots, dense at the section corner, fading down-right.
+   Offset by --content-inset so the patch starts at the hero text's left
+   edge, not the container edge. */
 .statsWrap::before {
   --dot-color: #ec4e09;
   top: 0;
-  left: 0;
+  left: var(--content-inset);
   -webkit-mask-image: linear-gradient(
     135deg,
     rgba(0, 0, 0, 1) 0%,
@@ -182,11 +188,13 @@
   );
 }
 
-/* bottom-right: ink dots, dense at the section corner, fading up-left */
+/* bottom-right: ink dots, dense at the section corner, fading up-left.
+   Offset by --content-inset so the patch ends at the hero image's right
+   edge, not the container edge. */
 .statsWrap::after {
   --dot-color: #241b09;
   bottom: 0;
-  right: 0;
+  right: var(--content-inset);
   -webkit-mask-image: linear-gradient(
     315deg,
     rgba(0, 0, 0, 1) 0%,
@@ -207,7 +215,8 @@
   z-index: 1;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  margin: 0;
+  /* Figma: the orange plate is inset 36px inside the section (hero) column */
+  margin: 0 36px;
   background: var(--plate);
   border: 1px solid var(--accent);
 }
@@ -416,8 +425,56 @@
 
 /* --- up next --------------------------------------------------------------- */
 
-.upNext {
+.upNextSection {
   margin-top: 96px;
+}
+
+/* Full-bleed divider (Figma 6881:1177): 2px rule + plus marks pinned to the
+   plate edges. Mirrors the resume-band divider; .plateMain is the container
+   query context, so 50cqw resolves to half the plate. */
+.upNextDivider {
+  position: relative;
+  height: 32px;
+  overflow: hidden;
+}
+
+.upNextDivider::before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--rule);
+}
+
+.upNextDividerMark {
+  position: absolute;
+  top: 0;
+  z-index: 4;
+}
+
+.upNextDividerMarkLeft {
+  left: calc(50% - 50cqw - 16px);
+}
+
+.upNextDividerMarkRight {
+  right: calc(50% - 50cqw - 16px);
+}
+
+/* Hero-style split: text column left, the home-page interactive card right.
+   Top-aligned so the heading sits level with the card's top edge. */
+.upNext {
+  display: grid;
+  grid-template-columns: minmax(0, 520fr) minmax(0, 744fr);
+  gap: 48px;
+  align-items: start;
+  margin-top: 40px;
+}
+
+.upNextText {
+  display: flex;
+  flex-direction: column;
 }
 
 .upNextLabel {
@@ -429,27 +486,9 @@
   color: var(--meta-gray);
 }
 
-.upNextLink {
-  text-decoration: none;
-  /* draw-in underline, same grammar as the link cells */
-  display: inline-block;
-  padding-bottom: 6px;
-  background-image: linear-gradient(var(--accent), var(--accent));
-  background-repeat: no-repeat;
-  background-position: 100% 100%;
-  background-size: 0% 2px;
-  transition: background-size 250ms ease;
-}
-
-.upNextLink:hover,
-.upNextLink:focus-visible {
-  background-position: 0% 100%;
-  background-size: 100% 2px;
-  transition: background-size 300ms ease;
-}
-
 .upNextTitle {
-  margin: 0;
+  /* small gap under the UP NEXT label */
+  margin: 4px 0 0;
   font-family: var(--font-geist), sans-serif;
   font-size: clamp(20px, 1.6204vw, 28px);
   font-weight: 600;
@@ -459,7 +498,8 @@
 }
 
 .upNextDesc {
-  margin: 8px 0 32px;
+  /* media sits beside now, not below — no bottom gutter */
+  margin: 8px 0 0;
   max-width: 36.5em;
   font-family: var(--font-geist), sans-serif;
   font-size: clamp(14px, 0.9259vw, 16px);
@@ -476,7 +516,8 @@
 /* --- responsive ------------------------------------------------------------ */
 
 @media (max-width: 1023px) {
-  .hero {
+  .hero,
+  .upNext {
     grid-template-columns: 1fr;
     gap: 32px;
   }
@@ -486,11 +527,13 @@
   }
 
   .statsWrap {
-    padding: 32px 0;
+    padding-block: 32px;
   }
 
   .stats {
     grid-template-columns: 1fr 1fr;
+    /* full content width on narrow screens — the stacked cells need the room */
+    margin-inline: 0;
   }
 
   /* pins are <i> siblings before the cells, so index by type not child */
