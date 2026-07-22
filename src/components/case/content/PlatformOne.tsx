@@ -247,12 +247,12 @@ export default function PlatformOne() {
              bare (its dark plate is its own frame), no caption. */
           <ZoomableFigure
             label="Vuetify, overridden to the brand"
-            aspect={2000 / 1214}
-            naturalWidth={2000}
+            aspect={1488 / 904}
+            naturalWidth={1488}
             unframed
           >
             <img
-              src="/case-studies/platform-one/p1-vuetify-overrides.webp"
+              src="/case-studies/platform-one/p1-vuetify-overrides-2.webp"
               alt="Dark design-system board titled Vuetify Overridden: teal, grey, and copper color ramps with hex values, beside primary and secondary button variants, inputs, and skeleton loaders built on Vuetify defaults."
               className={local.shotImg}
             />

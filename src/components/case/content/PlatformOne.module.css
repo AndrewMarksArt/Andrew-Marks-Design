@@ -24,23 +24,28 @@
 /* Figma revision 2026-07-21: engineering grid-paper plate, full accent
    border (was a left-rule on gray). Grid drawn with layered gradients so
    the cell size scales with the plate. */
+/* Figma node 6863:2819: 743x150 copper-ruled plate over a ~50px engineering
+   grid (8% black, lines every 49.5px across / 50px down → three bands), quote
+   top-left inset 68/44, attribution pinned bottom-right. Flex column +
+   min-height + auto top margin reproduces the fixed-height layout. */
 .quoteStrip {
-  /* stack gap (24) owns the spacing below */
+  display: flex;
+  flex-direction: column;
+  min-height: 150px;
   margin: 0;
-  padding: clamp(20px, 1.6667vw, 24px) clamp(32px, 3.8889vw, 56px);
+  padding: 44px clamp(24px, 3vw, 43px) 24px clamp(28px, 5.5vw, 68px);
   background-color: var(--plate);
   background-image:
     linear-gradient(to right, rgba(0, 0, 0, 0.08) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
-  background-size: 93px 93px;
-  /* Figma 2026-07-21: copper rule, not accent */
-  border: 2px solid #c5896f;
+  background-size: 50px 50px;
+  border: 2px solid var(--accent);
 }
 
 .quoteText {
-  margin: 0 0 12px;
+  margin: 0;
   max-width: 632px;
-  /* Figma 2026-07-21: Geist Medium 20/30, not NHG display */
+  /* Figma: Geist Medium 20/30, not NHG display */
   font-family: var(--font-geist), sans-serif;
   font-weight: 500;
   font-size: clamp(17px, 1.3889vw, 20px);
@@ -50,10 +55,12 @@
 }
 
 .quoteAttribution {
-  margin: 0;
+  /* auto top margin pins it to the plate's bottom edge, right-aligned */
+  margin: auto 0 0;
+  align-self: flex-end;
   font-family: var(--font-geist-mono), monospace;
   font-weight: 300;
-  /* Figma 2026-07-21: 10px, right-aligned, near-black */
+  /* Figma: 10px, right-aligned, near-black */
   font-size: 10px;
   letter-spacing: -0.02em;
   color: #302929;
@@ -129,8 +136,11 @@
    a dark, quiet, typographic pull-quote card in the site's own voice.
    -------------------------------------------------------------------------- */
 
-/* Figma 2026-07-21: warm dark-gray plate, coral eyebrow, 64/56 inset */
+/* Figma 2026-07-21: warm dark-gray plate, coral eyebrow, 64/56 inset.
+   margin:0 resets the UA <figure> 40px side margin so the plate is the full
+   744 column width — same as the chat/chart/quote around it. */
 .vignette {
+  margin: 0;
   background: #3c3b39;
   padding: clamp(40px, 4.4445vw, 64px) clamp(32px, 3.8889vw, 56px);
 }

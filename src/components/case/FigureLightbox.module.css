@@ -1,7 +1,7 @@
 /* Zoomable figure: framed trigger overlay + native <dialog> lightbox.
-   Sizing model: dialog width fits BOTH viewport axes at the figure's
-   aspect; inside, the figure never renders below its natural viewBox
-   width (mobile pans instead of shrinking — the whole point is detail). */
+   Sizing model: the dialog is sized to the figure's aspect within both
+   viewport axes (leaving room for the header chrome), and the figure scales
+   to fill it — the whole image shows at once, no pan/scroll. */
 
 .zoomWrap {
   position: relative;
@@ -59,7 +59,10 @@
 .lightbox[open] {
   display: flex;
   flex-direction: column;
-  width: min(94vw, calc(84svh * var(--fig-aspect)));
+  /* subtract the dialog chrome (header ~45 + region padding ~48 + caption
+     bar ~44 = ~150px) from the height budget so the figure fits fully on the
+     vertical axis without scrolling, even for captioned figures */
+  width: min(94vw, calc((94svh - 150px) * var(--fig-aspect)));
   max-width: none;
   max-height: 94svh;
 }
@@ -116,13 +119,20 @@
 .figRegion {
   flex: 1;
   min-height: 0;
-  overflow: auto;
+  /* the figure is sized to fit, so nothing should overflow */
+  overflow: hidden;
   overscroll-behavior: contain;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: clamp(16px, 1.5vw, 24px);
 }
 
+/* Fit the whole figure inside the region on both axes (was: natural width +
+   pan). The child img/svg carries width:100%;height:auto inline, so its
+   height follows the region width and the aspect-sized dialog makes it fit. */
 .figSize {
-  width: max(100%, var(--fig-natural));
+  width: 100%;
 }
 
 /* pan affordance strip — rendered only when the open figure actually

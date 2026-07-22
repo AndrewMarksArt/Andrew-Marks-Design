@@ -45,8 +45,9 @@
 
 .hero {
   display: grid;
-  /* Figma 2026-07-21: 560 text / 704 media at the 1312 content width */
-  grid-template-columns: minmax(0, 560fr) minmax(0, 704fr);
+  /* Matches the section grid (520/744) so the hero image lines up with every
+     other case-study figure — consistency over the Figma hero's 560/704. */
+  grid-template-columns: minmax(0, 520fr) minmax(0, 744fr);
   gap: 48px;
   align-items: stretch;
   margin-top: 40px;
