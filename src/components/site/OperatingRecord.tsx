@@ -1,215 +1,99 @@
-import { Fragment, type ReactNode } from "react";
 import { PlusMark } from "./motifs";
 import OperatingRecordEnhance from "./OperatingRecordEnhance";
 import styles from "./OperatingRecord.module.css";
 
 /**
- * Operating Record — the non-visual, measured achievements as an
- * expanding ledger (native details/summary, exclusive-open). Visual
- * system per the redesign panel ("Drafting Sheet" direction, synthesized
- * spec in session record): outline-stroke display values in the case
- * numerals' voice, case-band 98px row meter, mid vrule born at the
- * ledger's opening separator (T-junction precedent), accent hatch as the
- * single rest-state orange. At rest each row = value/LABEL/claim/src;
- * scope + AI bridge live in the readout (skim defense: the claims carry
- * breadth; src stays at rest as the honesty non-negotiable).
+ * Operating Record — through-others achievements as a skimmable ledger
+ * (2026-07-23 reframe, revised to restore the column layout + stat callouts).
+ * Each row: a bold callout (a real number where one exists, a short outcome
+ * phrase where it doesn't) + a one-line unit, beside a facet tag + headline.
+ * On expand the readout is a few short bullets, not a wall of prose. The
+ * expand/collapse (native details + OperatingRecordEnhance's WAAPI
+ * controller) and its geometry are unchanged.
  *
- * ANDREW — HOW TO FILL THIS IN (the intake contract, per field):
- *   value    display digits only ("56,854", "10 → 7") — never brackets;
- *            a best-guess value MUST keep draft: true until it's real.
- *   claim    <=160 chars, survives alone as a resume-grade bullet.
- *   scope    1-3 CAPS segments proving BREADTH (studies / teams / years)
- *            — this is the multiplication evidence, keep it honest.
- *   bridge   one plain-English sentence a generalist recruiter gets.
- *   src      the artifact you could produce in a phone screen
- *            (CRM export, study logs, hiring tracker, resume PDF).
- *   readout.execution MUST name the through-others mechanism: who you
- *            enabled and what they could do without you afterward.
- *   Every number here must match the resume PDF exactly — three
- *   surfaces (row, readout, PDF) are never allowed to drift.
+ * OPSEC: every provider, platform, and org-name is generalized on purpose
+ * (Andrew's call, 2026-07-23). Do not re-specify. Every number here is real
+ * and must match the resume PDF; nothing is a placeholder.
  */
 
-type OpRecord = {
-  /** stable deep-link id — changing it breaks shared links */
+type Beat = {
+  /** stable deep-link id — MUST start with "rec-" (the Enhance controller
+   *  only opens rec-* on hashchange); changing it breaks shared links */
   id: `rec-${string}`;
-  value: string;
-  unit?: string;
-  /** SCREAMING_SNAKE, cap ~24 chars */
-  label: string;
-  claim: string;
-  scope: string[];
-  bridge: string;
-  src: string;
-  readout: {
-    situation: string;
-    execution: string;
-    result: string;
-    forAiTeams: string;
-    /** real-text closing sentence — exposed to screen readers */
-    provenance: string;
-  };
-  /** renders a visible DRAFT tag; remove only when the number is real */
-  draft?: true;
+  /** small lowercase mono category tag */
+  facet: string;
+  /** the bold callout: a real number, or a short outcome phrase */
+  callout: string;
+  /** true → callout is a phrase, styled smaller than a numeric callout */
+  isPhrase?: boolean;
+  /** one-line context under the callout (rendered uppercase) */
+  calloutUnit: string;
+  /** the at-rest headline sentence */
+  headline: string;
+  /** the readout, broken into short scannable bullets */
+  chunks: string[];
+  /** optional emphasized closing stat/line */
+  proof?: string;
 };
 
-const RECORDS: OpRecord[] = [
+const SUBHEAD =
+  "I run user research for a large federal software platform. The work I'm proudest of wasn't a screen. It was a handful of judgment calls — about what AI tools the org could get its hands on, how research data actually moves, and getting two teams that wouldn't work together to build together — all made from a seat with no authority to mandate any of it. Systems I built so teams could move.";
+
+const BEATS: Beat[] = [
   {
-    id: "rec-user-sourcing",
-    // TODO(andrew): real totals — participants sourced, studies served,
-    // teams drawing from the pool, years; src = panel CRM / study logs.
-    value: "500+",
-    unit: "PARTICIPANTS SOURCED",
-    label: "USER_SOURCING",
-    claim:
-      "Built the participant-sourcing pipeline that kept every study staffed — screened, consented, and on tap instead of scrambled for.",
-    scope: ["20+ STUDIES SERVED", "4 TEAMS DRAWING FROM IT", "2023–2025"],
-    bridge:
-      "a standing pool of consented, screened humans — the raw material of evals and human-feedback loops.",
-    src: "DRAFT — replace with panel CRM export / study-log counts",
-    readout: {
-      situation:
-        "Every study opened with a two-week scramble for participants; recruiting rate-limited the whole research program.",
-      execution:
-        "I built the pipeline — screeners, consent flows, a panel CRM — and trained PMs and designers to self-serve recruits from it, so studies stopped waiting on me.",
-      result:
-        "Time-to-first-session fell from weeks to days; twenty-plus studies ran on the pool without a recruiting scramble.",
-      forAiTeams:
-        "Evals and human-feedback loops die without exactly this machinery — consented, screened humans reachable this week. I build that pipeline as a design deliverable.",
-      provenance:
-        "Draft figures — best-guess placeholders until the panel CRM export lands; treat as shape, not fact.",
-    },
-    draft: true,
+    id: "rec-access",
+    facet: "access",
+    callout: "2×",
+    calloutUnit: "held through budget cuts",
+    headline:
+      "I recommended against the AI tool I brought in myself — the better model won.",
+    chunks: [
+      "I sourced the AI providers, ran the evaluation, sat on the recommending committee, and sized what we'd need.",
+      "I'd personally brought in one of the government options — and still recommended a commercial provider over it, because its models were the better fit for the work.",
+      "Then I opened the door for everyone else: coding assistants and LLMs in higher-security environments that had been blocked, my own team unblocked for synthesis, two other teams walked through the request.",
+    ],
+    proof:
+      "The org doubled our access and spend on it — even through org-wide budget cuts.",
   },
   {
-    id: "rec-okr-alignment",
-    // TODO(andrew): real team + quarter counts; src = planning docs?
-    value: "6",
-    unit: "TEAMS ALIGNED",
-    label: "OKR_ALIGNMENT",
-    claim:
-      "Ran the shared evidence base that aligned six product teams' quarterly OKRs — one research-backed picture instead of six competing opinions.",
-    scope: ["ORG-WIDE PLANNING CYCLE", "MULTIPLE QUARTERS", "LEADERSHIP + ICS"],
-    bridge:
-      "the alignment machinery that keeps product, research, and model teams pointed at one target.",
-    src: "DRAFT — replace with planning-doc references + real counts",
-    readout: {
-      situation:
-        "Quarterly planning ran on the loudest voice in the room; teams optimized locally and collided quarterly.",
-      execution:
-        "I brought research into the planning cycle — synthesized findings into a shared evidence base and worked with team leads until they could cite it in planning without me in the room.",
-      result:
-        "Six teams' OKRs traced to shared evidence across consecutive planning cycles.",
-      forAiTeams:
-        "AI roadmaps drift fastest; alignment machinery is how model work stays pointed at user problems.",
-      provenance:
-        "Draft figures — best-guess placeholders until the planning-cycle records are pulled; treat as shape, not fact.",
-    },
-    draft: true,
+    id: "rec-relationships",
+    facet: "relationships",
+    callout: "rivals → allies",
+    isPhrase: true,
+    calloutUnit: "one 5-year roadmap validated",
+    headline: "Two teams whose leaders wouldn't share a room now build together.",
+    chunks: [
+      "Two teams whose leadership genuinely didn't get along — scrum masters wouldn't coordinate, and every problem turned into finger-pointing. I was tasked with helping the other team.",
+      "Instead of forcing the leaders into a room, I built trust at the PM and PO level first — narrow-scope working groups with report-backs, deliberately routed around the friction.",
+      "That credibility reconnected the leaderships on bigger work — and produced the data-lake integration behind real user sourcing, a validated five-year roadmap the other team now defends to leadership, and an org-wide initiative the two teams build together now.",
+    ],
   },
   {
-    id: "rec-startup-hiring",
-    // TODO(andrew): real candidate/hire counts + roles; src = hiring tracker.
-    value: "3",
-    unit: "HIRES SHIPPED",
-    label: "STARTUP_HIRING",
-    claim:
-      "Designed the hiring loop for an early-stage team — screens, work samples, structured debriefs — and helped make the hires who shipped.",
-    scope: ["40+ CANDIDATES SCREENED", "EARLY-STAGE AI STARTUP"],
-    bridge:
-      "team-building judgment — the filter that decides who ships your product.",
-    src: "DRAFT — replace with hiring-tracker counts + roles",
-    readout: {
-      situation:
-        "An early-stage team hiring on founder gut, with no repeatable way to compare candidates.",
-      execution:
-        "I designed the loop — role definitions, screens, work-sample exercises, structured debriefs — and ran interviews alongside the founders until the loop ran without me.",
-      result:
-        "Hires made through the loop shipped; screening scaled past founder bandwidth.",
-      forAiTeams:
-        "Small AI teams live or die on the third hire — process beats gut at exactly that moment.",
-      provenance:
-        "Draft figures — best-guess placeholders until the hiring tracker is pulled; treat as shape, not fact.",
-    },
-    draft: true,
+    id: "rec-infrastructure",
+    facet: "infrastructure",
+    callout: "2 wks",
+    calloutUnit: "from 4–5 · 10% response",
+    headline: "I built the pipeline that finds the right users in two weeks, not five.",
+    chunks: [
+      "With that model access and the data-lake integration, I built user-sourcing workflows that target the exact users a campaign needs — and I own the pipeline end to end.",
+      "It reset the baseline: studies fielded in about two weeks instead of four to five, and response rates around 10 percent — up from a historical 1 to 3 — held across the campaigns since.",
+      "On a recent merge of two front-ends into one, the interviews caught what the design had missed — power-user filters and collapsible sections — and reshaped the feature before it shipped. Those changes are recent, so I'm not claiming a downstream number yet.",
+    ],
   },
   {
-    id: "rec-onboarding-ramp",
-    // REAL numbers — from the resume (Northrop onboarding site, 10 -> 7 days).
-    value: "10 → 7",
-    unit: "DAYS TO RAMP",
-    label: "ONBOARDING_RAMP",
-    claim:
-      "Built the onboarding system for payload & ground-systems engineers that cut new-hire ramp from ten days to seven.",
-    scope: ["NORTHROP GRUMMAN", "PAYLOAD & GROUND SYSTEMS", "2021–2023"],
-    bridge:
-      "tribal knowledge turned into a system people ramp on — the same discipline behind my Knowledge OS.",
-    src: "measured ramp delta — matches the resume PDF",
-    readout: {
-      situation:
-        "New engineers ramped by shoulder-tap — ten days to productive, longer when the right shoulder was busy.",
-      execution:
-        "I built the onboarding site around the workflows and first-week paths engineers actually needed, structured so leads could keep it current without me.",
-      result:
-        "Ramp fell from ten days to seven — a thirty percent cut across incoming cohorts.",
-      forAiTeams:
-        "The same capture-and-structure discipline that powers a RAG corpus — knowledge nobody has to re-ask for.",
-      provenance:
-        "Source: measured ramp delta across incoming cohorts; matches the resume PDF. Figures are counts, not estimates.",
-    },
+    id: "rec-teaching",
+    facet: "teaching",
+    callout: "runs without me",
+    isPhrase: true,
+    calloutUnit: "prompts + pipeline others use",
+    headline: "I built it so it wouldn't need me — other researchers run it now.",
+    chunks: [
+      "Owning the pipeline was never the point — other people running it was.",
+      "I wrote the custom system prompts our researchers work from, taught the team to use them and to use the access efficiently, and onboarded and leveled up teammates with the org knowledge that makes their initiatives land.",
+      "The through-line: not that I can run the research function, but that the systems can — and the people around me run them without me in the loop.",
+    ],
   },
-  // ALTERNATE (real numbers, swap in if one of the drafts gets cut):
-  // {
-  //   id: "rec-identity-unification",
-  //   value: "56,854", unit: "IDENTITIES UNIFIED", label: "IDENTITY_UNIFICATION",
-  //   claim: "Led the behavioral-analytics build that unified 56,854 user identities across six data sources into one coherent picture of the user.",
-  //   scope: ["METRONOME", "6 DATA SOURCES", "2024–PRESENT"],
-  //   bridge: "the ground-truth user data personalization and eval sets are built from.",
-  //   src: "matches the resume PDF",
-  //   readout: { ... },
-  // },
 ];
-
-if (process.env.NODE_ENV !== "production") {
-  for (const r of RECORDS) {
-    if (r.draft)
-      console.warn(
-        `[OperatingRecord] "${r.label}" carries DRAFT values — replace before launch.`,
-      );
-    if (!r.src)
-      console.warn(
-        `[OperatingRecord] "${r.label}" has no src — provenance is a required field; the record must not ship.`,
-      );
-  }
-}
-
-/** Presentation-only split of arrow values ("10 → 7") so the glyph can
- *  carry its own optical size. The visible arrow is aria-hidden with a
- *  visually-hidden " to " twin — common SR punctuation levels drop "→",
- *  which would read "10 7". */
-function renderValue(v: string): ReactNode {
-  if (!v.includes("→")) return v;
-  const [before, after] = v.split(/\s*→\s*/);
-  return (
-    <>
-      {before}
-      <span className={styles.valueArrow} aria-hidden="true">
-        →
-      </span>
-      <span className="visually-hidden"> to </span>
-      {after}
-    </>
-  );
-}
-
-/** mono readout block: label + body */
-function ReadoutBlock({ label, text }: { label: string; text: string }) {
-  return (
-    <div className={styles.block}>
-      <p className={styles.blockLabel}>{label}</p>
-      <p className={styles.blockBody}>{text}</p>
-    </div>
-  );
-}
 
 export default function OperatingRecord() {
   return (
@@ -227,53 +111,46 @@ export default function OperatingRecord() {
         />
       </div>
 
-      {/* band nests INSIDE .content; Andrew's 6815:336 revision — the
-          ledger is a bordered box that CONTAINS the header; separators
-          are interior rules; the expand affordance is the accent arrow */}
       <div className="content">
         <div className={styles.band}>
-          <h2 id="opsrec-title" className="visually-hidden">
-            Operating record — org-scale research operations
-          </h2>
-
           <div className={styles.box}>
             <div className={styles.boxHeader}>
-              <p className={styles.kicker} aria-hidden="true">
-                <span className={styles.kickerLabel}>OPERATING_RECORD</span>
-                <span className={styles.kickerMeta}>
-                  {`// ${String(RECORDS.length).padStart(2, "0")} RECORDS ON FILE`}
-                </span>
-              </p>
+              <h2 id="opsrec-title" className={styles.title}>
+                Moving the org without owning it
+              </h2>
               <div className={styles.introRow}>
-                <p className={styles.intro}>
-                  Systems I built so teams could move — research operations,
-                  hiring, and alignment machinery. The operating layer AI teams
-                  run on.
-                </p>
+                <p className={styles.intro}>{SUBHEAD}</p>
                 <span className={styles.hatch} aria-hidden="true" />
               </div>
             </div>
 
             <ol role="list" className={styles.list}>
-              {RECORDS.map((r) => (
-                <li key={r.id} className={styles.item}>
+              {BEATS.map((b) => (
+                <li key={b.id} className={styles.item}>
                   {/* exclusivity lives in the Enhance controller (so the
-                      sibling's collapse can ANIMATE — native name-attr
-                      exclusivity snaps it shut in one frame); no-JS
-                      degrades to multi-open, which is harmless */}
-                  <details id={r.id} className={styles.record}>
+                      sibling's collapse can ANIMATE); no-JS degrades to
+                      multi-open, which is harmless */}
+                  <details id={b.id} className={styles.record}>
                     <summary className={styles.summary}>
-                      <span className={styles.summaryGrid}>
-                        <span className={styles.value}>
-                          {renderValue(r.value)}
+                      <span className={styles.summaryRow}>
+                        <span className={styles.callout}>
+                          <span
+                            className={`${styles.calloutValue} ${
+                              b.isPhrase ? styles.calloutPhrase : ""
+                            }`}
+                          >
+                            {b.callout}
+                          </span>
+                          <span className={styles.calloutUnit}>
+                            {b.calloutUnit}
+                          </span>
                         </span>
-                        {r.unit && <span className={styles.unit}>{r.unit}</span>}
                         <span className={styles.main}>
-                          <span className={styles.labelRow}>
-                            <span className={styles.label}>{r.label}</span>
-                            {/* Andrew's chevron asset (Figma 6814:136),
-                                exported verbatim; open state is its exact
-                                vertical mirror */}
+                          <span className={styles.facet}>{b.facet}</span>
+                          <span className={styles.headlineRow}>
+                            <span className={styles.headline}>{b.headline}</span>
+                            {/* Andrew's chevron asset (Figma 6814:136); open
+                                state is its exact vertical mirror */}
                             <svg
                               className={styles.chevron}
                               aria-hidden="true"
@@ -288,58 +165,18 @@ export default function OperatingRecord() {
                               />
                             </svg>
                           </span>
-                          <span className={styles.claim}>{r.claim}</span>
                         </span>
                       </span>
                     </summary>
                     <div className={styles.readout}>
-                      {/* readout line 1: the demoted breadth evidence */}
-                      <p className={styles.scope}>
-                        <span aria-hidden="true">{"SCOPE: "}</span>
-                        <span className="visually-hidden">Scope: </span>
-                        {r.scope.map((seg, j) => (
-                          <Fragment key={j}>
-                            {j > 0 && (
-                              <>
-                                <span aria-hidden="true">{" // "}</span>
-                                <span className="visually-hidden">, </span>
-                              </>
-                            )}
-                            <span>{seg}</span>
-                          </Fragment>
+                      <ul className={styles.chunks}>
+                        {b.chunks.map((c, i) => (
+                          <li key={i} className={styles.chunk}>
+                            {c}
+                          </li>
                         ))}
-                      </p>
-                      <ReadoutBlock
-                        label="SITUATION"
-                        text={r.readout.situation}
-                      />
-                      <ReadoutBlock
-                        label="EXECUTION"
-                        text={r.readout.execution}
-                      />
-                      <ReadoutBlock
-                        label="MEASURED RESULT"
-                        text={r.readout.result}
-                      />
-                      {/* translation zone: bridge + FOR AI TEAMS read as one */}
-                      <p className={styles.bridge}>
-                        <span className={styles.bridgeArrow} aria-hidden="true">
-                          {"→ "}
-                        </span>
-                        <span className={styles.bridgePrefix}>
-                          IN AI TERMS:
-                        </span>{" "}
-                        {r.bridge}
-                      </p>
-                      <div className={styles.forAi}>
-                        <p className={styles.forAiLabel}>
-                          <span aria-hidden="true">{"→ "}</span>FOR AI TEAMS
-                        </p>
-                        <p className={styles.forAiBody}>{r.readout.forAiTeams}</p>
-                      </div>
-                      <p className={styles.readoutProvenance}>
-                        {r.readout.provenance}
-                      </p>
+                      </ul>
+                      {b.proof && <p className={styles.proof}>{b.proof}</p>}
                     </div>
                   </details>
                 </li>

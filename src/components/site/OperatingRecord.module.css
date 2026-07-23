@@ -1,10 +1,13 @@
 /* ==========================================================================
-   Operating Record — Andrew's revision (Figma 6815:336, 2026-07-20).
-   The ledger is a 2px-ruled BOX that contains the header; rows are one
-   line each (solid ink value | mono-bold unit | bold label + claim) with
-   the accent arrow as the expand affordance; row hover + open state tint
-   the record; the readout lives in the main column.
-   Box geometry at 1480: pad 48 · value col 392 · unit col 363 · main 628.
+   Operating Record — skimmable reframe (2026-07-23, revised).
+   A 2px-ruled box holds a visible title + subhead, then one row per beat:
+   a bold callout (real number or short outcome phrase) + a mono unit line,
+   beside a facet tag + sentence headline with the accent chevron. On click
+   the readout is a few short bullets (+ an optional emphasized proof line).
+   The expand/collapse geometry (summary padding-bottom ↔ readout negative
+   margin-block-start, 52/-28 · 40/-24 · 32/-16, open gap 24/16/16) is what
+   the WAAPI controller in OperatingRecordEnhance drives — keep the two
+   paired if either changes.
    ========================================================================== */
 
 .section {
@@ -44,14 +47,14 @@
   right: calc(50% - 50cqw - 16px);
 }
 
-/* --- band: 104 above the box, 120 handoff to the resume divider ---------- */
+/* --- band ------------------------------------------------------------------ */
 
 .band {
   padding-top: 104px;
   padding-bottom: 120px;
 }
 
-/* --- the ledger box -------------------------------------------------------- */
+/* --- the box --------------------------------------------------------------- */
 
 .box {
   border: 2px solid var(--rule);
@@ -62,29 +65,15 @@
   padding: 48px 48px 0;
 }
 
-.kicker {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 16px;
-  margin: 0 0 8px;
-}
-
-.kickerLabel {
-  font-family: var(--font-geist-mono), monospace;
-  font-weight: 700;
-  font-size: clamp(18px, 1.3889vw, 24px);
-  line-height: 1.3;
+.title {
+  margin: 0 0 16px;
+  font-family: var(--font-geist), sans-serif;
+  font-weight: 600;
+  font-size: clamp(22px, 1.9444vw, 28px);
+  line-height: 1.25;
   letter-spacing: -0.02em;
   color: var(--ink);
-}
-
-.kickerMeta {
-  font-family: var(--font-geist-mono), monospace;
-  font-weight: 300;
-  font-size: clamp(11px, 0.6944vw, 12px);
-  letter-spacing: -0.02em;
-  color: var(--meta-gray);
+  text-wrap: balance;
 }
 
 .introRow {
@@ -97,16 +86,17 @@
 
 .intro {
   margin: 0;
-  max-width: 36.5em;
+  max-width: 44em;
   font-family: var(--font-geist), sans-serif;
   font-size: clamp(15px, 1.0417vw, 18px);
   font-weight: 400;
-  line-height: 1.45;
-  letter-spacing: 0.02em;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
   color: var(--text-body-90);
 }
 
-/* LinksGrid hatch gradient verbatim — the header's rest-state orange */
+/* LinksGrid hatch gradient verbatim — a site-wide brand motif, kept as the
+   header's one restrained accent */
 .hatch {
   flex: none;
   width: 264px;
@@ -130,10 +120,9 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  /* the Enhance controller pins the clicked row during exclusive
-     switches with measured instant scrollBy — native scroll anchoring
-     must not double-correct inside the ledger (audit A3 fallback pair:
-     these two ship together, never separately) */
+  /* the Enhance controller pins the clicked row during exclusive switches
+     with measured instant scrollBy — native scroll anchoring must not
+     double-correct inside the ledger (audit A3 fallback pair) */
   overflow-anchor: none;
 }
 
@@ -148,7 +137,6 @@
   transition: background-color 150ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
 
-/* Andrew's hover + open tint: #D9D9D9 at 33% across the record */
 .record[open] {
   background: rgba(217, 217, 217, 0.33);
 }
@@ -169,7 +157,6 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* pressed feedback (replaces the removed tap highlight) */
 .summary:active {
   background: rgba(217, 217, 217, 0.33);
 }
@@ -178,75 +165,91 @@
   display: none; /* Safari < 18.4 */
 }
 
-/* one line per row: value | unit | label+claim (drawn 392/363/628 of 1480
-   inner 1384 → 28.3% / 26.2% / 1fr) */
-.summaryGrid {
+/* two columns: callout | main. padding-bottom 52 is PAIRED to .readout
+   margin-block-start -28 (open-state gap 24) — change both, and re-derive the
+   responsive pairs below. */
+.summaryRow {
   display: grid;
-  grid-template-areas: "value unit main";
-  grid-template-columns: 28.3% 26.2% minmax(0, 1fr);
+  grid-template-columns: minmax(0, 30%) minmax(0, 1fr);
+  gap: 48px;
   align-items: start;
-  padding: 48px 48px 96px;
+  padding: 48px 48px 52px;
 }
 
-.value {
-  grid-area: value;
-  font-family: var(--font-nhg);
+/* --- callout column -------------------------------------------------------- */
+
+.callout {
+  display: flex;
+  flex-direction: column;
+}
+
+.calloutValue {
+  font-family: var(--font-nhg), sans-serif;
   font-weight: 700;
-  font-size: clamp(56px, 5.5556vw, 96px);
-  line-height: 1.25;
+  font-size: clamp(34px, 3.4722vw, 54px);
+  line-height: 1.1;
   letter-spacing: -0.01em;
   color: var(--black);
-  text-box-trim: trim-both;
-  text-box-edge: cap alphabetic;
+  text-wrap: balance;
 }
 
-.valueArrow {
-  font-size: 0.5em;
-  vertical-align: 0.14em;
-  margin-inline: 0.06em;
+/* phrase callouts (no clean number) read bold but a notch smaller than the
+   numeric ones, so the real stats still pop hardest */
+.calloutPhrase {
+  font-size: clamp(20px, 1.8056vw, 28px);
+  line-height: 1.2;
 }
 
-.unit {
-  grid-area: unit;
-  padding-top: 2px;
+.calloutUnit {
+  margin-top: 12px;
   font-family: var(--font-geist-mono), monospace;
-  font-weight: 700;
-  font-size: clamp(12px, 0.8102vw, 14px);
+  font-weight: 400;
+  font-size: clamp(11px, 0.8102vw, 13px);
+  line-height: 1.4;
   letter-spacing: -0.02em;
+  text-transform: uppercase;
   color: var(--meta-gray);
   overflow-wrap: break-word;
 }
 
+/* --- main column ----------------------------------------------------------- */
+
 .main {
-  grid-area: main;
   display: flex;
   flex-direction: column;
-  gap: 16px;
   min-width: 0;
 }
 
-.labelRow {
+.facet {
+  margin: 0 0 12px;
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 400;
+  font-size: clamp(12px, 0.8102vw, 13px);
+  letter-spacing: 0.02em;
+  color: var(--accent-deep);
+}
+
+.headlineRow {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 16px;
+  gap: 24px;
 }
 
-.label {
-  font-family: var(--font-geist-mono), monospace;
-  font-weight: 700;
-  font-size: clamp(18px, 1.3889vw, 24px);
-  line-height: 1.3;
-  letter-spacing: -0.02em;
-  color: var(--black);
-  overflow-wrap: break-word;
+.headline {
+  font-family: var(--font-geist), sans-serif;
+  font-weight: 500;
+  font-size: clamp(19px, 1.5278vw, 24px);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  max-width: 26em;
+  text-wrap: pretty;
 }
 
-/* Andrew's chevron: points down at rest, mirrors up when open;
-   affordance leads the 320ms drawer */
+/* Andrew's chevron: points down at rest, mirrors up when open */
 .chevron {
   flex: none;
-  /* optically centered against the label's 31px line box */
   margin-top: 11px;
   color: var(--accent);
   transition: transform 200ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
@@ -256,40 +259,15 @@
   transform: scaleY(-1);
 }
 
-.claim {
-  font-family: var(--font-geist), sans-serif;
-  font-size: clamp(15px, 1.0417vw, 18px);
-  font-weight: 400;
-  line-height: 1.45;
-  letter-spacing: 0.02em;
-  color: var(--text-body-90);
-  max-width: 36.5em;
-}
-
-@supports not (text-box-trim: trim-both) {
-  .value {
-    margin-block: -0.28em -0.26em;
-  }
-}
-
-/* --- readout (open state) — lives in the main column ----------------------- */
+/* --- readout (open state) — short bullets + optional proof line ------------ */
 
 .readout {
   display: flex;
   flex-direction: column;
-  /* left edge = the summary grid's main column: grid %s resolve against
-     its padded content box (100% - 96px), padding %s against this box */
-  padding: 0 48px 40px calc(48px + (100% - 96px) * 0.545);
-  max-width: none;
-  /* the whole open record closes on click (Enhance handler) */
-  cursor: pointer;
-  /* open-state gap = closed pb 96 − 72 = 24px below the summary —
-     identical geometry to the old [open] padding-bottom swap, but
-     state-constant so the WAAPI keyframes animate the row's ENTIRE
-     height delta on this one element. PAIRED to .summaryGrid
-     padding-bottom per breakpoint (96/48/32) — re-derive if the Figma
-     padding ever changes. */
-  margin-block-start: -72px;
+  padding: 0 48px 40px;
+  cursor: pointer; /* the whole open record closes on click (Enhance handler) */
+  margin-block-start: -28px; /* closed pb 52 − 24 gap; state-constant so the
+                                WAAPI keyframes animate the whole height delta */
 }
 
 /* clip at the moving edge only while the controller drives height */
@@ -297,104 +275,48 @@
   overflow: clip;
 }
 
-.readout > * {
-  max-width: 38.5em;
-}
-
-.scope {
-  margin: 0 0 24px;
-  font-family: var(--font-geist-mono), monospace;
-  font-weight: 300;
-  font-size: clamp(12px, 0.8102vw, 14px);
-  letter-spacing: -0.02em;
-  color: var(--meta-gray);
-  overflow-wrap: break-word;
-}
-
-.block {
+.chunks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin: 0 0 24px;
+  gap: 14px;
+  max-width: 44em;
 }
 
-.blockLabel {
-  margin: 0;
-  font-family: var(--font-geist-mono), monospace;
+.chunk {
+  position: relative;
+  padding-left: 22px;
+  font-family: var(--font-geist), sans-serif;
+  font-size: clamp(14px, 0.9722vw, 16px);
   font-weight: 400;
-  font-size: 12px;
-  letter-spacing: -0.02em;
-  color: var(--meta-gray);
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+  color: var(--text-body-90);
 }
 
-.blockBody {
-  margin: 0;
-  font-family: var(--font-geist), sans-serif;
-  font-size: clamp(14px, 0.9259vw, 16px);
-  line-height: 1.45;
-  letter-spacing: 0.02em;
-  color: var(--text-body-80);
-}
-
-/* bridge + FOR AI TEAMS bar = one translation zone */
-.bridge {
-  margin: 8px 0 16px;
-  font-family: var(--font-geist), sans-serif;
-  font-size: clamp(13px, 0.8102vw, 14px);
-  line-height: 1.45;
-  letter-spacing: 0.02em;
-  color: var(--text-body-80);
-}
-
-.bridgeArrow {
+.chunk::before {
+  content: "—";
+  position: absolute;
+  left: 0;
   color: var(--accent-deep);
 }
 
-.bridgePrefix {
-  font-family: var(--font-geist-mono), monospace;
-  font-weight: 400;
-  font-size: 12px;
-  letter-spacing: -0.02em;
-  color: var(--meta-gray);
-}
-
-.forAi {
-  border-left: 2px solid var(--accent);
-  padding-left: 16px;
-  margin: 0 0 12px;
-}
-
-.forAiLabel {
-  margin: 0 0 8px;
-  font-family: var(--font-geist-mono), monospace;
-  font-weight: 400;
-  font-size: 12px;
-  letter-spacing: -0.02em;
-  color: var(--accent-deep);
-}
-
-.forAiBody {
-  margin: 0;
+.proof {
+  margin: 20px 0 0;
+  padding-left: 22px;
+  max-width: 44em;
   font-family: var(--font-geist), sans-serif;
-  font-size: clamp(14px, 0.9259vw, 16px);
-  line-height: 1.45;
-  letter-spacing: 0.02em;
-  color: var(--text-body-80);
-}
-
-.readoutProvenance {
-  margin: 0;
-  font-family: var(--font-geist-mono), monospace;
-  font-weight: 300;
-  font-size: 12px;
-  letter-spacing: -0.02em;
-  color: var(--meta-gray);
+  font-weight: 600;
+  font-size: clamp(14px, 0.9722vw, 16px);
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--black);
 }
 
 /* cursor-following tip over records — created by the Enhance layer;
-   chip grammar, decorative, never interactive. JS clamps it inside the
-   viewport; the rise rides the `translate` channel so it composes with
-   the inline transform carrying cursor position. */
+   chip grammar, decorative, never interactive. */
 .tip {
   position: fixed;
   top: 0;
@@ -422,10 +344,9 @@
 }
 
 /* NOTE: no CSS height animation here — the WAAPI controller in
-   OperatingRecordEnhance owns fold/unfold in BOTH directions, all
-   evergreen browsers, with a live prefers-reduced-motion gate. */
+   OperatingRecordEnhance owns fold/unfold in BOTH directions. */
 
-/* --- ≤1023: value+unit share a row with the arrow; main goes full width ---- */
+/* --- ≤1023: callout stacks above the headline ----------------------------- */
 
 @media (max-width: 1023px) {
   .band {
@@ -441,54 +362,32 @@
     padding-bottom: 32px;
   }
 
-  .summaryGrid {
-    grid-template-areas:
-      "value unit"
-      "main main";
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 16px 24px;
-    padding: 32px 24px 48px;
+  .summaryRow {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 32px 24px 40px;
   }
 
-  .unit {
-    justify-self: end;
-    text-align: right;
-    padding-top: 8px;
+  .calloutValue {
+    font-size: clamp(30px, 5vw, 40px);
+  }
+
+  .calloutPhrase {
+    font-size: clamp(20px, 3.2vw, 26px);
   }
 
   .readout {
     padding: 0 24px 32px;
-    margin-block-start: -32px; /* closed pb 48 − 16 gap */
+    margin-block-start: -24px; /* closed pb 40 − 16 gap */
   }
 }
 
-/* --- ≤639: the compressed meter ------------------------------------------- */
+/* --- ≤639 ------------------------------------------------------------------ */
 
 @media (max-width: 639px) {
   .band {
     padding-top: 32px;
     padding-bottom: 48px;
-  }
-
-  .kicker {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .summaryGrid {
-    grid-template-areas:
-      "value value"
-      "unit unit"
-      "main main";
-    gap: 8px;
-    padding: 24px 16px 32px;
-  }
-
-  .unit {
-    justify-self: start;
-    text-align: left;
-    padding-top: 0;
   }
 
   .boxHeader {
@@ -497,6 +396,15 @@
 
   .introRow {
     padding-bottom: 24px;
+  }
+
+  .summaryRow {
+    padding: 24px 16px 32px;
+    gap: 16px;
+  }
+
+  .headlineRow {
+    gap: 16px;
   }
 
   .readout {
