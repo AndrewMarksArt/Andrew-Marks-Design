@@ -43,7 +43,7 @@ const CASES: CaseStudy[] = [
     href: "/case-studies/chat-vet",
     desc: (
       <>
-        An AI copilot that <strong>saves veterinarians 15 minutes per case</strong>
+        An AI copilot that <strong>saves veterinarians about 15 minutes per case (self-reported)</strong>
         , answering from Merck Veterinary Manual instead of the open web.
       </>
     ),
@@ -54,8 +54,8 @@ const CASES: CaseStudy[] = [
     href: "/case-studies/knowledge-os",
     desc: (
       <>
-        A <strong>multi-agent system that reads 1,000&apos;s of sources</strong>{" "}
-        building a living corpus I can leverage to build and explore with.
+        A <strong>multi-agent system that reads 300–400 sources a week</strong>{" "}
+        into a 4,000+ source living corpus — built solo, in production.
       </>
     ),
   },

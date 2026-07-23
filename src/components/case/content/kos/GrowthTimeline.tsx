@@ -80,7 +80,7 @@ export default function GrowthTimeline() {
 
       {/* Footnote — draft placement */}
       <text x={963} y={281} fontSize={11} fontWeight={400} fill="#A43B0D" textAnchor="end">
-        {"// MILESTONE PLACEMENT APPROXIMATE — PENDING COMMIT-HISTORY RENDER"}
+        {"// MILESTONE PLACEMENT APPROXIMATE"}
       </text>
     </svg>
   );

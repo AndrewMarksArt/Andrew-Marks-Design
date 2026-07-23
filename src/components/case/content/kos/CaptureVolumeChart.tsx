@@ -3,7 +3,7 @@ export default function CaptureVolumeChart() {
     <svg
       viewBox="0 0 979 360"
       role="img"
-      aria-label="Bar chart from pipeline logs: sixteen weekly capture bars ranging from roughly 296 to 412 items tower over a deep-reading capacity line labeled roughly fifteen to twenty items per week; the faint orange band between the line and the bars marks everything that gets skimmed or dropped."
+      aria-label="Representative bar chart (draft placeholder values pending a fresh log export): sixteen weekly capture bars ranging from roughly 296 to 412 items tower over a deep-reading capacity line labeled roughly fifteen to twenty items per week; the faint orange band between the line and the bars marks everything that gets skimmed or dropped."
       style={{
         width: "100%",
         height: "auto",

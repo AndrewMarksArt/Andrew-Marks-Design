@@ -56,8 +56,8 @@ function SecurityVignette() {
         {/* Figma revision 2026-07-21 (source typos "could find" / "need"
             corrected to "couldn't find" / "needed"). */}
         A senior Air Force leader needed proof the platform already defended
-        against the threat by design. The answer was in the docs but he
-        couldn&rsquo;t find it when it mattered and needed the answer fast.
+        against the threat by design. The answer was in the docs — but when it
+        mattered, he couldn&rsquo;t find it fast enough.
       </figcaption>
     </figure>
   );
@@ -67,7 +67,7 @@ export default function PlatformOne() {
   return (
     <>
       <CaseHero
-        eyebrow="U.S. Air Force - Platform One"
+        eyebrow="U.S. Air Force — Platform One"
         title="Designing an AI assistant projected to cut support tickets by roughly 40%"
         intro={[
           "Platform One is the Air Force's $500M flagship software factory, supporting more than 60 Air Force and Joint programs valued at $650 billion.",
@@ -275,7 +275,7 @@ export default function PlatformOne() {
         lede={[
           "The assistant is in staging, projected to cut support tickets by roughly 40% — the share of sampled tickets it answers outright — and to return a full role's worth of Customer Success capacity to the work that team was built for.",
           "And the next time a leader needs proof the platform is secure by design, the answer is one question away.",
-          "Launch is phased — behind SSO first while the public site completes its Certificate to Field — with the custom front-end replacing the interim widget on the roadmap.",
+          "Launch is phased — behind SSO first while the public site completes its Certificate to Field (DoD security authorization) — with the custom front-end replacing the interim widget on the roadmap.",
           <strong key="retro">
             If I ran this again, I&rsquo;d bring security into launch planning
             from day one; the SSO constraint reshaped our rollout late.
@@ -317,7 +317,7 @@ export default function PlatformOne() {
 
       <UpNext
         title="ChatVET — an AI Copilot for Veterinary Medicine"
-        desc="Designing an AI copilot that saves veterinarians 15 minutes per case"
+        desc="Designing an AI copilot that saves veterinarians about 15 minutes per case (self-reported)"
         href="/case-studies/chat-vet"
       />
     </>

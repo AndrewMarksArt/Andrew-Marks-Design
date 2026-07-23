@@ -41,12 +41,15 @@ export function CaseHero({
   title,
   intro,
   media,
+  placeholderLabel,
 }: {
   eyebrow: string;
   title: string;
   intro: ReactNode[];
   /** real hero figure — replaces the wireframe placeholder when supplied */
   media?: ReactNode;
+  /** override the placeholder label when no media is supplied */
+  placeholderLabel?: string;
 }) {
   return (
     <header className={`content ${styles.hero}`}>
@@ -66,7 +69,7 @@ export function CaseHero({
       ) : (
         <PlaceholderBox
           className={styles.heroMedia}
-          label="// HERO_IMG_PENDING"
+          label={placeholderLabel ?? "// HERO_IMG_PENDING"}
         />
       )}
     </header>

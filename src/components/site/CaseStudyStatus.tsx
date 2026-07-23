@@ -28,7 +28,7 @@ export default function CaseStudyStatus() {
 
       <div className={styles.block}>
         <h2 id="case-study-status-title" className={styles.title}>
-          {"Case Study Status: "}
+          {"Case Study Status"}
         </h2>
 
         <div className={styles.terminal}>
@@ -37,14 +37,14 @@ export default function CaseStudyStatus() {
               text — formally decoration (UX audit item 5). */}
           <p className={styles.initLine} aria-hidden="true">
             <span className={styles.slashes}>{"//"}</span>
-            <span>{" INITIALIZING..."}</span>
+            <span>{" 03 CASE STUDIES LIVE"}</span>
           </p>
           <p className={styles.statusRow}>
             <span className={styles.statusLabel}>{"STATUS: "}</span>
-            <span className={styles.statusValue}>...High level complete</span>
+            <span className={styles.statusValue}>...3 studies live</span>
           </p>
           <p className={styles.statusRow}>
-            <span className={styles.statusValue}>...Deeper dive pending</span>
+            <span className={styles.statusValue}>...Deeper technical appendices in progress</span>
           </p>
         </div>
       </div>

@@ -44,7 +44,7 @@ const BEATS: Beat[] = [
     id: "rec-access",
     facet: "access",
     callout: "2×",
-    calloutUnit: "held through budget cuts",
+    calloutUnit: "AI access & spend — held through budget cuts",
     headline:
       "I recommended against the AI tool I brought in myself — the better model won.",
     chunks: [
@@ -72,7 +72,7 @@ const BEATS: Beat[] = [
     id: "rec-infrastructure",
     facet: "infrastructure",
     callout: "2 wks",
-    calloutUnit: "from 4–5 · 10% response",
+    calloutUnit: "recruit time, was 4–5 wks · 10% response (was 1–3%)",
     headline: "I built the pipeline that finds the right users in two weeks, not five.",
     chunks: [
       "With that model access and the data-lake integration, I built user-sourcing workflows that target the exact users a campaign needs — and I own the pipeline end to end.",

@@ -8,7 +8,7 @@ export default function Typewriter({ start = true }: { start?: boolean }) {
     useEffect(() => {
         if (!start) return;
 
-        const fullText = "// INITIALIZING...";
+        const fullText = "// 03 CASE STUDIES LIVE";
         let twIdx = 0;
         let twIsDeleting = false;
         let twLastTime = 0;

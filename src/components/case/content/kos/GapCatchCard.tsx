@@ -3,7 +3,7 @@ export default function GapCatchCard() {
     <svg
       viewBox="0 0 640 300"
       role="img"
-      aria-label="A representative render of a gap-report card marked priority maximum: in security, five subtopics and eight cross-links were missed by manual reading; subtopic names are withheld. The real report replaces this render on export."
+      aria-label="A representative render of a gap-report card marked priority maximum: in security, five subtopics and eight cross-links were missed by manual reading; subtopic names are withheld."
       style={{
         width: "100%",
         height: "auto",
@@ -79,7 +79,7 @@ export default function GapCatchCard() {
         {"// REPRESENTATIVE RENDER —"}
       </text>
       <text x={122} y={268} fontSize={11} fontWeight={400} fill="#5E5757">
-        {"// THE REAL REPORT REPLACES THIS ON EXPORT"}
+        {"// A REAL GAP-ANALYSIS RUN REPLACES THIS SHORTLY"}
       </text>
     </svg>
   );

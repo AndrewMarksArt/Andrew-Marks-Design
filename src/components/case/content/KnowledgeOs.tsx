@@ -38,12 +38,13 @@ export default function KnowledgeOs() {
     <>
       <CaseHero
         eyebrow="KNOWLEDGE HUB · PERSONAL KNOWLEDGE OS"
-        title="Designing a personal AI that reads 300 sources a week, so I don't have to."
+        title="Designing a personal AI that reads 300–400 sources a week, so I don't have to."
         intro={[
           "In AI, new work outpaces anyone's reading speed. Knowledge Hub is a personal knowledge OS, built solo and still shipping weekly.",
           "A capture pipeline ingests 300–400 sources a week into a corpus past 4,000 sources; a chat interface answers from that corpus with citations instead of confidence.",
           "I designed, researched, and built every layer — the trust decisions below are mine end to end.",
         ]}
+        placeholderLabel="// hero render in progress — the system diagrams below are current"
       />
 
       <StatsStrip
@@ -71,7 +72,7 @@ export default function KnowledgeOs() {
         lede={[
           "Roughly 300–400 relevant sources arrive every week, per the pipeline's own capture logs. A person can deeply read a fraction of that, and skimming drops the things that matter most: connections and contradictions between sources, the topics nobody's covering yet.",
           "The system reads everything so I can deeply read the right ten.",
-          "And because I'm the only user, the research method is instrumentation — every number in this study comes from the system's own telemetry, not my recollection.",
+          "And because I'm the only user, the research method is instrumentation — the numbers here come from the system's own logs, not my recollection; the figures still awaiting a fresh export say so on their face.",
         ]}
         media={
           <AssetFigure
@@ -143,7 +144,7 @@ export default function KnowledgeOs() {
             aspect={979 / 360}
             naturalWidth={979}
             caption="On demand, the corpus reports its own blind spots and where attention is shifting."
-            sub={"// report contents representative — the real gap run is the closer's evidence card"}
+            sub={"// report contents representative — a real gap-analysis run appears in the closing section"}
           >
             <GapReportDecay />
           </AssetFigure>

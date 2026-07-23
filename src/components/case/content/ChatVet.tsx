@@ -5,7 +5,7 @@ import {
   StatsStrip,
   UpNext,
 } from "../CaseSections";
-import { AssetFigure, CaptionedMedia } from "../CaseFigures";
+import { AssetFigure } from "../CaseFigures";
 import BrandRow from "../../site/BrandRow";
 import ZoomableFigure from "../FigureLightbox";
 import caseStyles from "../case.module.css";
@@ -44,7 +44,7 @@ function VetTestimonial() {
         think.&rdquo;
       </blockquote>
       <figcaption className={styles.quoteAttribution}>
-        {"// DVM PILOT USER · VETERINARY CLINIC — attribution upgrade pending permission"}
+        {"// DVM PILOT USER · VETERINARY CLINIC — name withheld pending permission"}
       </figcaption>
     </figure>
   );
@@ -83,8 +83,8 @@ export default function ChatVet() {
             label: "ROLE:",
             value: "Product Designer & UX Researcher",
           },
-          { label: "TEAM:", value: "Startup founders · engineering · me" },
           { label: "TIMEFRAME:", value: "Months, not years (dates pending)" },
+          { label: "TEAM:", value: "Startup Founders · Engineering · Me" },
           {
             label: "STATUS:",
             value: "Live at chatvet.ai · 500 monthly users",
@@ -107,14 +107,9 @@ export default function ChatVet() {
               aspect={979 / 300}
               naturalWidth={979}
               caption="Mapped where the minutes leak: four recurring stalls across one appointment — and the most-requested tool wasn't on the map until vets put it there."
-              sub={"// stall points from case walkthroughs — per-stall minute costs pending the session notes"}
             >
               <CaseStallTimeline />
             </AssetFigure>
-            <CaptionedMedia
-              label="// VET_QUOTE — attributed discovery quote pending"
-              aspect="979 / 142"
-            />
           </>
         }
       />
@@ -149,7 +144,7 @@ export default function ChatVet() {
         }
         lede={[
           "The original vision was a complete EHR replacement.",
-          "When development constraints ruled out the full build, I scoped the copilot wedge with the founders — the same wedge playbook I ran at Platform One.",
+          "When development constraints ruled out the full build, I scoped the copilot wedge with the founders — the same wedge logic behind my Platform One assistant.",
           "The highest-leverage minutes of a case, shipped in months instead of years, earning their way into clinics one vet at a time.",
         ]}
         media={
@@ -161,7 +156,7 @@ export default function ChatVet() {
               label="The Paw AI EHR we designed"
               aspect={1597 / 1269}
               naturalWidth={1597}
-              caption="The full EHR from discovery: patient workspace, medical history, medications, and the Paw AI assistant in a sidebar."
+              caption="The full EHR from discovery: patient workspace, medical history, medications, and the assistant — then named Paw AI — in a sidebar."
             >
               <img
                 src="/case-studies/chat-vet/cv-ehr-paw-ai.webp"
@@ -198,7 +193,7 @@ export default function ChatVet() {
             label="One question, three behaviors"
             aspect={979 / 360}
             naturalWidth={979}
-            caption="One question, three behaviors — hedged, cited, refused. In clinical software, the citation is what makes the answer usable, and the refusal is what makes it safe."
+            caption="In clinical software, the citation is what makes the answer usable, and the refusal is what makes it safe."
           >
             <SameQuestionCompare />
           </AssetFigure>
@@ -210,7 +205,7 @@ export default function ChatVet() {
         lede={[
           "Instead of a blank chat box, ChatVET ships tools where the bottlenecks are: medication calculation, a drag-and-drop lab interpreter with differentials, and a template library organized by clinical job (SOAP notes, discharge instructions, differentials, client emails).",
           "Vets fill in species, age, and symptoms; the system does the rest.",
-          "One click turns any chat into a client-ready handout or email, and business-tier clinics get custom templates built for their workflows.",
+          "One click turns any chat into a client-ready handout or email, and clinics piloting the business tier get custom templates built for their workflows.",
         ]}
         media={
           <>
@@ -272,7 +267,7 @@ export default function ChatVet() {
             aspect={1440 / 1269}
             naturalWidth={1440}
             caption="The consult view answering a real differential-diagnosis question — grouped possibilities, recommended next steps, and a response time under two seconds. The prior consultations stay one panel away."
-            sub={"// design-era build (Paw AI v0.0.0) — live chatvet.ai capture with sources visible pending"}
+            sub={"// design-era build, when the assistant was still named Paw AI — live chatvet.ai capture with sources visible pending"}
           >
             <img
               src="/case-studies/chat-vet/cv-consult-chat.webp"
@@ -287,7 +282,7 @@ export default function ChatVet() {
           copy); named for the actual destination so link text matches. */}
       <UpNext
         title="AI Powered Personal Knowledge OS"
-        desc="A multi-agent system that reads thousands of sources, building a living corpus"
+        desc="A personal AI that reads 300–400 sources a week and answers with citations instead of confidence."
         href="/case-studies/knowledge-os"
       />
     </>
