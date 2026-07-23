@@ -627,4 +627,11 @@
   .upNext {
     margin-top: 48px;
   }
+
+  /* long centered paragraphs double-rag at phone widths — left-align the
+     body/emphasis, keep the headings centered (audit M3) */
+  .centeredBody,
+  .centeredEmphasis {
+    text-align: left;
+  }
 }
