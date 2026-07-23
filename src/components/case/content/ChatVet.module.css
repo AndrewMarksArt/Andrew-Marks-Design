@@ -1,6 +1,15 @@
 /* ChatVET case content — local layout the shared primitives can't
    express. Figure/caption units live in CaseFigures.module.css. */
 
+/* Real-screen figure image (self-plated Figma exports: hero, EHR pair,
+   consult view). Fills its figure region; the plate is the screenshot's
+   own chrome, so no extra frame. Mirrors PlatformOne's .shotImg. */
+.shotImg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 /* Narrow centered figure (S2 agitation peak: "single narrow centered
    visual" per the shot list — the low point of the story). */
 .narrowFigure {

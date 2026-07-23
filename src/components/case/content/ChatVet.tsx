@@ -7,11 +7,11 @@ import {
 } from "../CaseSections";
 import { AssetFigure, CaptionedMedia } from "../CaseFigures";
 import BrandRow from "../../site/BrandRow";
+import ZoomableFigure from "../FigureLightbox";
 import caseStyles from "../case.module.css";
 import styles from "./ChatVet.module.css";
 import CaseStallTimeline from "./cv/CaseStallTimeline";
 import TwoHourSearchTrail from "./cv/TwoHourSearchTrail";
-import GhostedEhrMap from "./cv/GhostedEhrMap";
 import SameQuestionCompare from "./cv/SameQuestionCompare";
 import LabInterpreterFilmstrip from "./cv/LabInterpreterFilmstrip";
 import MedCalcCrop from "./cv/MedCalcCrop";
@@ -61,6 +61,20 @@ export default function ChatVet() {
           "The answers exist in trusted references like the Merck Veterinary Manual; reaching them mid-case is the problem.",
           "ChatVET is an AI copilot, powered by the Merck Veterinary Manual and leading journals, that puts those answers seconds away.",
         ]}
+        media={
+          <ZoomableFigure
+            label="The shipped ChatVET home"
+            aspect={1440 / 953}
+            naturalWidth={1440}
+            unframed
+          >
+            <img
+              src="/case-studies/chat-vet/cv-hero-home.webp"
+              alt="ChatVET home for a verified veterinary user: the AI Suite for VetMed brand card with a clinical search bar, above VetMed Prompt Templates grouped by clinical job."
+              className={styles.shotImg}
+            />
+          </ZoomableFigure>
+        }
       />
 
       <StatsStrip
@@ -139,14 +153,35 @@ export default function ChatVet() {
           "The highest-leverage minutes of a case, shipped in months instead of years, earning its way into clinics one vet at a time.",
         ]}
         media={
-          <AssetFigure
-            label="The EHR we mapped, the wedge we shipped"
-            aspect={979 / 420}
-            naturalWidth={979}
-            caption="The EHR we mapped in discovery (gray) and the copilot slice we shipped (highlighted). The rest earns its way in one clinic at a time."
-          >
-            <GhostedEhrMap />
-          </AssetFigure>
+          /* The real design artifacts (Figma, Paw AI era): the full EHR we
+             designed, beside the chat-focused revision that became the
+             shipped wedge. Replaces the drawn GhostedEhrMap. */
+          <div className={caseStyles.mediaPair}>
+            <AssetFigure
+              label="The Paw AI EHR we designed"
+              aspect={1597 / 1269}
+              naturalWidth={1597}
+              caption="The full EHR from discovery: patient workspace, medical history, medications, and the Paw AI assistant in a sidebar."
+            >
+              <img
+                src="/case-studies/chat-vet/cv-ehr-paw-ai.webp"
+                alt="Paw AI EHR design: a patient dashboard for a German Shepherd with profile, medications, conditions, recent medical history, alerts, and the Paw AI assistant panel answering with suggested diagnostics."
+                className={styles.shotImg}
+              />
+            </AssetFigure>
+            <AssetFigure
+              label="The chat-focused pivot"
+              aspect={1597 / 1269}
+              naturalWidth={1597}
+              caption="The pivot that became the wedge: the assistant takes the whole screen; the EHR shrinks to context panels around it."
+            >
+              <img
+                src="/case-studies/chat-vet/cv-chat-focus.webp"
+                alt="Chat-focused Paw AI design: a new-consultation view centered on the medical assistant chat, with patient information, lab results, and imaging collapsed into side panels."
+                className={styles.shotImg}
+              />
+            </AssetFigure>
+          </div>
         }
       />
 
@@ -228,10 +263,23 @@ export default function ChatVet() {
             <TwoHoursTenSeconds />
           </AssetFigure>
           <VetTestimonial />
-          <CaptionedMedia
-            label="// LIVE_ANSWER_SHOT — the Ireland protocol answer at chatvet.ai, URL visible"
-            aspect="979 / 420"
-          />
+          {/* Design-era consult view (Figma, Paw AI branding, v0.0.0 — shows
+              response time, not citations). Stands in for the outcome shot; a
+              live capture of the Ireland answer at chatvet.ai (URL + sources
+              visible) is the intended upgrade. */}
+          <AssetFigure
+            label="The consultation, answered in seconds"
+            aspect={1440 / 1269}
+            naturalWidth={1440}
+            caption="The consult view answering a real differential-diagnosis question — grouped possibilities, recommended next steps, and a response time under two seconds. The prior consultations stay one panel away."
+            sub={"// design-era build (Paw AI v0.0.0) — live chatvet.ai capture with sources visible pending"}
+          >
+            <img
+              src="/case-studies/chat-vet/cv-consult-chat.webp"
+              alt="A veterinary AI consultation answering a differential-diagnosis question about a dog's lethargy, decreased appetite, and mild fever — returning grouped possibilities (infectious, inflammatory, systemic) with recommended next steps and a 1.2-second response time, alongside previous and recent consultations."
+              className={styles.shotImg}
+            />
+          </AssetFigure>
         </div>
       </CenteredSection>
 
