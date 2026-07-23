@@ -44,6 +44,7 @@ export type PeekSprite = {
 export default function CaseStudyMedia({
   img,
   alt,
+  title,
   href,
   sprites,
   priority,
@@ -51,6 +52,7 @@ export default function CaseStudyMedia({
 }: {
   img: string;
   alt: string;
+  title: string;
   href: string;
   sprites: PeekSprite[];
   priority?: boolean;
@@ -80,7 +82,7 @@ export default function CaseStudyMedia({
       className={styles.mediaLink}
       data-peek={peeked || undefined}
       onClick={handleClick}
-      aria-label={`${alt} — view case study`}
+      aria-label={`${title} — view case study`}
       style={
         beam
           ? ({
@@ -96,7 +98,7 @@ export default function CaseStudyMedia({
         <Image
           className={styles.mediaShot}
           src={img}
-          alt=""
+          alt={alt}
           width={1440}
           height={1080}
           priority={priority}

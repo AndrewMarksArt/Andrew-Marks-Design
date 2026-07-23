@@ -70,7 +70,7 @@ export default function ChatVet() {
           >
             <img
               src="/case-studies/chat-vet/cv-hero-home.webp"
-              alt="ChatVET home for a verified veterinary user: the AI Suite for VetMed brand card with a clinical search bar, above VetMed Prompt Templates grouped by clinical job."
+              alt="ChatVET home for a verified veterinary user: the brand card with a clinical search bar, above VetMed Prompt Templates grouped by clinical job."
               className={styles.shotImg}
             />
           </ZoomableFigure>
@@ -150,7 +150,7 @@ export default function ChatVet() {
         lede={[
           "The original vision was a complete EHR replacement.",
           "When development constraints ruled out the full build, I scoped the copilot wedge with the founders — the same wedge playbook I ran at Platform One.",
-          "The highest-leverage minutes of a case, shipped in months instead of years, earning its way into clinics one vet at a time.",
+          "The highest-leverage minutes of a case, shipped in months instead of years, earning their way into clinics one vet at a time.",
         ]}
         media={
           /* The real design artifacts (Figma, Paw AI era): the full EHR we

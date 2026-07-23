@@ -316,7 +316,7 @@ export default function PlatformOne() {
       </section>
 
       <UpNext
-        title="ChatVET an AI Copilot for Veterinary Medicine"
+        title="ChatVET — an AI Copilot for Veterinary Medicine"
         desc="Designing an AI copilot that saves veterinarians 15 minutes per case"
         href="/case-studies/chat-vet"
       />

@@ -101,9 +101,9 @@ export const CASE_MEDIA: Record<string, CaseMedia> = {
   },
   "/case-studies/knowledge-os": {
     img: "/case-studies/knowledge-os.png",
-    alt: "Arclight knowledge dashboard listing captured links with sources, categories, scores, and agent navigation",
+    alt: "Knowledge OS dashboard listing captured links with sources, categories, scores, and agent navigation",
     sprites: [KNOWLEDGE_ROBOT],
-    // Arclight's palette is warm coral/amber (hue ~3) — the beam stays warm,
+    // the KOS card's palette is warm coral/amber (hue ~3) — the beam stays warm,
     // deepening orange to coral; dimmed to sit against the card's light neutrals
     beam: { hueEnd: "-15deg", glowEnd: "rgba(240, 168, 152, 0.5)", maxO: 0.72 },
   },

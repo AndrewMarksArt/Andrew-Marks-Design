@@ -233,6 +233,7 @@ export function UpNext({
             <CaseStudyMedia
               img={media.img}
               alt={media.alt}
+              title={title}
               href={href}
               sprites={media.sprites}
               beam={media.beam}

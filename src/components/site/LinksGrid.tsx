@@ -130,7 +130,7 @@ export function LinksGrid() {
 
         <div className={`${styles.cell} ${styles.cellXcom}`}>
           <a
-            href="https://x.com/andrwemarksart"
+            href="https://x.com/andrewmarksart"
             target="_blank"
             rel="noreferrer"
             className={styles.link}
@@ -140,14 +140,14 @@ export function LinksGrid() {
           </a>
           <ArrowOutIcon className={styles.icon} />
           <p className={styles.desc}>
-            <strong>Follow @andrwemarksart</strong> for design, vibe coding,
+            <strong>Follow @andrewmarksart</strong> for design, vibe coding,
             the latest AI news, and things I think are cool or interesting.
           </p>
         </div>
 
         <div className={`${styles.cell} ${styles.cellLinkedIn}`}>
           <a
-            href="https://www.linkedin.com/in/andrwemarksart/"
+            href="https://www.linkedin.com/in/andrewmarksart/"
             target="_blank"
             rel="noreferrer"
             className={styles.link}
@@ -158,7 +158,7 @@ export function LinksGrid() {
           <ArrowOutIcon className={styles.icon} />
           <span className={styles.hatch} aria-hidden="true" />
           <p className={styles.desc}>
-            <strong>Connect with me on LinkedIn</strong> /in/andrwemarksart/ as
+            <strong>Connect with me on LinkedIn</strong> /in/andrewmarksart/ as
             I build-in-public projects on AI agents & the future of UX.
           </p>
         </div>

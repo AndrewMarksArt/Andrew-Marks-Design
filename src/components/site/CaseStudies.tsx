@@ -32,14 +32,14 @@ const CASES: CaseStudy[] = [
     desc: (
       <>
         An AI assistant projected to{" "}
-        <strong>cut support tickets up to 40%</strong> inside the Air
+        <strong>cut support tickets by roughly 40%</strong> inside the Air
         Force&apos;s flagship software factory.
       </>
     ),
   },
   {
     num: "2",
-    title: "Chat VET an AI Suite for Veterinary Medicine",
+    title: "ChatVET — an AI Copilot for Veterinary Medicine",
     href: "/case-studies/chat-vet",
     desc: (
       <>
@@ -102,6 +102,7 @@ export default function CaseStudies() {
                   <CaseStudyMedia
                     img={media.img}
                     alt={media.alt}
+                    title={cs.title}
                     href={cs.href}
                     sprites={media.sprites}
                     priority={i === 0}

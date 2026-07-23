@@ -249,6 +249,9 @@
   display: block;
   aspect-ratio: 1073 / 750;
   overflow: hidden;
+  /* plate-gray placeholder so a lazy-loading card never flashes bare white
+     before the screenshot paints (audit A7) */
+  background: #e9e9e9;
 }
 
 /* ==========================================================================
@@ -270,6 +273,9 @@
 .beamRing {
   position: absolute;
   inset: 0; /* hug the frame edge (frame is now borderless) */
+  /* contain the 1500px traveler spans so they don't inflate document
+     scrollWidth (audit L1) */
+  overflow: clip;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.4s ease;

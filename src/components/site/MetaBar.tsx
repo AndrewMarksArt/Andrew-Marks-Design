@@ -35,7 +35,7 @@ const CASE_LINKS: { slug: CaseSlug; label: string; href: string }[] = [
   },
   {
     slug: "chat-vet",
-    label: "ChatVET AI Co-pilot",
+    label: "ChatVET AI Copilot",
     href: "/case-studies/chat-vet",
   },
   {

@@ -311,6 +311,7 @@
 .sectionHeading {
   /* Figma 2026-07-21: 16px heading-to-body, matching the lede stack gap */
   margin: 0 0 16px;
+  text-wrap: balance;
   font-family: var(--font-geist), sans-serif;
   font-size: clamp(20px, 1.6204vw, 28px);
   font-weight: 600;
@@ -370,6 +371,7 @@
 
 .centeredHeading {
   margin: 0 0 24px;
+  text-wrap: balance;
   font-family: var(--font-geist), sans-serif;
   font-size: clamp(20px, 1.6204vw, 28px);
   font-weight: 600;

@@ -17,7 +17,7 @@ const ENTRIES: ResumeEntry[] = [
     company: "Metronome",
     role: "UX Researcher",
     meta: "12/’24 – Present",
-    body: "I led a behavioral analytics tool that unified 56,854 user identities across six data sources, and designed the conversational UX for Platform One’s AI Assistant, projected to cut support tickets up to 40%.",
+    body: "I led the build of a behavioral-analytics tool that unified 56,854 user identities across six data sources, and designed the conversational UX for Platform One’s AI Assistant, projected to cut support tickets by roughly 40%.",
   },
   {
     company: "Freelance",
@@ -29,10 +29,10 @@ const ENTRIES: ResumeEntry[] = [
     company: "Northrop Grumman",
     role: "UI/UX Engineer, Payload & Ground Systems",
     meta: "07/’21 – 8/’23",
-    body: "UI development for payload and ground systems, integrating real-time telemetry and mission-critical data, and built an onboarding site that cut new-hire ramp from 10 to 7 days.",
+    body: "Led UI development for payload and ground systems, integrating real-time telemetry and mission-critical data, and built an onboarding site that cut new-hire ramp from 10 to 7 days.",
   },
   {
-    company: "Masters Degree",
+    company: "Master’s Degree",
     role: "Information Systems Technology",
     meta: "Claremont Graduate University",
     body: "M.S. in Information Systems Technology with an emphasis in data science, plus an MA in Art Business adding a creative and business dimension.",
