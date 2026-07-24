@@ -264,7 +264,14 @@
 .readout {
   display: flex;
   flex-direction: column;
-  padding: 0 48px 40px;
+  /* left pad aligns the readout with the summaryRow MAIN column (Andrew's
+     Figma "spacing fixed", node 6944:7161): the callout stat sits alone on the
+     left, the bullets + proof live in the content column. Left inset =
+     48 (row pad) + 30%×(row content) callout + 48 (gap). 30% here resolves
+     against the same box width the grid uses, so left = calc(30% + 67.2px)
+     where 67.2 = 48 + 48 − 0.30×96 — the content-box then equals the main col
+     exactly. ≤1023/≤639 reset this to full-width (callout stacks above there). */
+  padding: 0 48px 40px calc(30% + 67.2px);
   cursor: pointer; /* the whole open record closes on click (Enhance handler) */
   margin-block-start: -28px; /* closed pb 52 − 24 gap; state-constant so the
                                 WAAPI keyframes animate the whole height delta */
