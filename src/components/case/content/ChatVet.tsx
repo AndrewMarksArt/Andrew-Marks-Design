@@ -11,6 +11,7 @@ import ZoomableFigure from "../FigureLightbox";
 import caseStyles from "../case.module.css";
 import styles from "./ChatVet.module.css";
 import CaseStallTimeline from "./cv/CaseStallTimeline";
+import PainOverlap from "./cv/PainOverlap";
 import TwoHourSearchTrail from "./cv/TwoHourSearchTrail";
 import SameQuestionCompare from "./cv/SameQuestionCompare";
 import LabInterpreterFilmstrip from "./cv/LabInterpreterFilmstrip";
@@ -19,17 +20,22 @@ import HandoutBeforeAfter from "./cv/HandoutBeforeAfter";
 import TwoHoursTenSeconds from "./cv/TwoHoursTenSeconds";
 
 /**
- * ChatVET case-study content — audit-driven revision (career-strategy
- * 004): section order now runs Problem → Agitate → TURN (EHR→copilot,
- * moved up) → Solution (trust, workflows) → Outcome; S1 reframed as the
- * research beat; number-provenance clauses added where facts exist.
+ * ChatVET case-study content — rebuilt 2026-07-25 around Andrew's
+ * "Where an average case stalls" diagram (Figma 6956:7164).
  *
- * ⚠ FACTS PENDING FROM ANDREW (do not invent): timeframe/dates, team
- * shape + "sole designer" confirmation, interview/walkthrough n-counts,
- * self-report survey n, testimonial attribution (name/clinic or concrete
- * anonymity), clinical-accuracy validation sentence (what actually
- * happened pre-launch), Merck licensing status, user population
- * ("500 monthly users" — professionals?).
+ * What changed: the case-stall map now carries published figures and a
+ * sixth phase after the client leaves, so the study's spine is the map
+ * rather than a feature list. A new beat (S3) states the thesis the map
+ * exposes — every stall has a second victim, and the artifact that
+ * unblocks the vet is the same artifact the client needed — and the
+ * scoping, trust, and tool sections all now argue from it. Section order
+ * still runs Problem → Agitate → Overlap → TURN → Solution → Outcome.
+ *
+ * ⚠ FACTS PENDING FROM ANDREW (do not invent): walkthrough n-count (the
+ * stall map renders "n = __ PENDING"), timeframe/dates, team shape +
+ * "sole designer" confirmation, self-report survey n, testimonial
+ * attribution, clinical-accuracy validation sentence, Merck licensing
+ * status, user population ("500 monthly users" — professionals?).
  */
 
 /** Pilot-user testimonial as a proper pull-quote (was a TESTIMONIAL:-
@@ -57,9 +63,9 @@ export default function ChatVet() {
         eyebrow="CHATVET · AI COPILOT FOR VETERINARY MEDICINE"
         title="Shipping an AI copilot that saves veterinarians about 15 minutes per case"
         intro={[
-          "Veterinarians are out of time. Lab analysis and case research alone add 5 to 10 minutes per patient — before protocol hunting, note-writing, and client communication stack on top.",
-          "The answers exist in trusted references like the Merck Veterinary Manual; reaching them mid-case is the problem.",
-          "ChatVET is an AI copilot, powered by the Merck Veterinary Manual and leading journals, that puts those answers seconds away.",
+          "A veterinary appointment doesn't end when the client leaves. It ends at a keyboard, with the visit re-typed from memory — the one stall nobody has put a number on, and the one no client ever sees.",
+          "We mapped one appointment and found four places it stalls: protocol search, dose math, client translation, and documentation. Every one of them has a second person standing on the other side of it — the client, who is already forgetting most of what was just said.",
+          "ChatVET is an AI copilot sourced to the Merck Veterinary Manual and leading journals. It answers at each stall, and every answer it produces is one the vet can hand straight to the client.",
         ]}
         media={
           <ZoomableFigure
@@ -95,32 +101,36 @@ export default function ChatVet() {
       <BrandRow />
 
       <CaseSection
-        heading="Four bottlenecks, one surprise: medication math."
+        heading={
+          <>
+            One appointment. Four stalls. <br />
+            The biggest one happens after the client leaves.
+          </>
+        }
         lede={[
-          "I led the case mapping: across interviews and case walkthroughs with practicing DVMs and techs, we charted where an average case actually stalls — searching protocols between patients, second-guessing abnormal bloodwork, retyping the same questions, translating clinical notes into pet-owner language.",
-          "And the single most common request in our research wasn't any of those. It was medication calculation.",
+          "I led the case mapping: across interviews and case walkthroughs with practicing DVMs and techs, we charted where an average case actually stalls — hunting protocols between patients, running dose math under time pressure, compressing clinical findings into pet-owner language, then re-entering the whole visit once the room is empty.",
+          "Three findings changed the product. The deepest leak sits outside the appointment entirely, after the client has gone — and nobody has measured it: the profession's own time study clocked a median consult at 9 minutes 49 seconds and left the note-writing out of the stopwatch. The single most-requested tool was one nobody had named as a bottleneck: medication calculation. And every dose in the building traces back to one number typed at check-in, the patient's weight.",
+          "The figures on the map are published studies, not our sessions, and each card carries its citation and its population. Three of the four are veterinary. The fourth — how long a clinical question takes to answer — has no veterinary equivalent, so human primary care stands in and the card says so.",
         ]}
         media={
-          <>
-            <AssetFigure
-              label="Where an average case stalls"
-              aspect={979 / 300}
-              naturalWidth={979}
-              caption="Mapped where the minutes leak: four recurring stalls across one appointment — and the most-requested tool wasn't on the map until vets put it there."
-            >
-              <CaseStallTimeline />
-            </AssetFigure>
-          </>
+          <AssetFigure
+            label="Where an average case stalls"
+            aspect={979 / 450}
+            naturalWidth={979}
+            caption="Four stalls across one appointment — and the deepest one sits outside it, after the room is empty. The riskiest calculation in the visit depends on a number typed at minute one."
+          >
+            <CaseStallTimeline />
+          </AssetFigure>
         }
       />
 
       <CenteredSection
-        heading="Every question competes with the next patient"
+        heading="The client asked a simple question. The answer took two hours."
         paragraphs={[
-          "The cost shows up everywhere: appointment time burned on research, clinical confidence eroded by second-guessing, evenings spent rewriting notes for pet owners.",
-          "In one real case, a veterinarian in Alabama spent more than two hours searching government sites and asking colleagues for international travel protocols for a single canine patient headed to Ireland.",
+          "A veterinarian in Alabama had a client whose dog was moving to Ireland, and one question: what does she need? Answering it took more than two hours across government sites and calls to colleagues.",
+          "That is the first stall at full size. Most days it doesn't look like two hours — it looks like a question quietly deferred, one of the 64% that don't get pursued during the visit. Either way, the client goes home without the answer.",
         ]}
-        emphasis="The information existed the whole time, but knowing where and how to find it was the challenge."
+        emphasis="The information existed the whole time. Knowing where to find it — fast enough to still be in the room — was the problem."
         carousel={false}
       >
         <div className={styles.narrowFigure}>
@@ -136,6 +146,26 @@ export default function ChatVet() {
       </CenteredSection>
 
       <CaseSection
+        heading="Every stall has someone standing on the other side of it"
+        lede={[
+          "Mapping the vet's side made the second half obvious. The minutes a vet loses to a stall are the same minutes a client spends not being told something.",
+          "The literature is blunt about it. The dose calculated under time pressure is the dose an owner measures out in a kitchen — and 47% of owners report that nobody ever showed them how. The findings compressed into two minutes at the end of a visit are the findings an owner half-loses on the drive home: clients reproduce about two-thirds of their discharge instructions, and only 29% of what they were told about side effects. The visit re-typed at 8pm is the summary the client never receives.",
+          "So we stopped designing two products. Every artifact ChatVET generates is written once and read twice — once by the person who ordered it, once by the person who has to carry it out.",
+          "That reframed the build. The client-facing half isn't a courtesy feature; it's how the vet's own problem finishes getting solved. Instructions that survive the drive home are the ones that don't come back as tomorrow's phone call.",
+        ]}
+        media={
+          <AssetFigure
+            label="One stall, two people"
+            aspect={979 / 400}
+            naturalWidth={979}
+            caption="The same four stalls read from the other side of the exam table — and the single artifact that answers both readers at once."
+          >
+            <PainOverlap />
+          </AssetFigure>
+        }
+      />
+
+      <CaseSection
         heading={
           <>
             We designed a full EHR. <br />
@@ -145,12 +175,13 @@ export default function ChatVet() {
         lede={[
           "The original vision was a complete EHR replacement.",
           "When development constraints ruled out the full build, I scoped the copilot wedge with the founders — the same wedge logic behind my Platform One assistant.",
+          "The map made the cut line legible: keep the stalls where a single build serves both readers, defer everything that only moves data around.",
           "The highest-leverage minutes of a case, shipped in months instead of years, earning their way into clinics one vet at a time.",
         ]}
         media={
           /* The real design artifacts (Figma, Paw AI era): the full EHR we
              designed, beside the chat-focused revision that became the
-             shipped wedge. Replaces the drawn GhostedEhrMap. */
+             shipped wedge. */
           <div className={caseStyles.mediaPair}>
             <AssetFigure
               label="The Paw AI EHR we designed"
@@ -185,8 +216,8 @@ export default function ChatVet() {
         lede={[
           "ChatVET answers from the Merck Veterinary Manual and leading journals, not the open web.",
           "I designed the source-first answer pattern: sources stack above the answer, and one click lands on the original passage.",
+          "Provenance carries double weight here, because these answers don't stay in the building. An answer that becomes a client handout gets read by someone with no way to check it — so the citation has to be attached before it leaves, not available on request.",
           "When the literature doesn't cover a question, ChatVET says so rather than improvising — in medicine, a confident wrong answer is worse than no answer.",
-          "In clinical software, provenance isn't polish; it's what makes an answer usable.",
         ]}
         media={
           <AssetFigure
@@ -201,11 +232,12 @@ export default function ChatVet() {
       />
 
       <CaseSection
-        heading="Vets shouldn't have to learn prompting, so the interface learned their workflows"
+        heading="Vets shouldn't have to learn prompting, so the interface learned the map"
         lede={[
-          "Instead of a blank chat box, ChatVET ships tools where the bottlenecks are: medication calculation, a drag-and-drop lab interpreter with differentials, and a template library organized by clinical job (SOAP notes, discharge instructions, differentials, client emails).",
-          "Vets fill in species, age, and symptoms; the system does the rest.",
-          "One click turns any chat into a client-ready handout or email, and clinics piloting the business tier get custom templates built for their workflows.",
+          "Instead of a blank chat box, ChatVET ships a tool at each stall: sourced clinical search and a template library organized by clinical job (SOAP notes, discharge instructions, differentials, client emails) for the protocol hunt, a medication calculator for the dose math, and one-click handout generation for everything that has to leave with the client.",
+          "The calculator opens on species and weight — the number the map showed everything downstream depends on — and attaches the dosing table it used to the result.",
+          "A drag-and-drop lab interpreter sits alongside them: drop the bloodwork, get flagged values and differentials. It wasn't one of the four stalls; it came out of the same interviews, as the thing vets wanted next.",
+          "Clinics piloting the business tier get templates built for their own workflows.",
         ]}
         media={
           <>
@@ -222,7 +254,7 @@ export default function ChatVet() {
                 label="Medication calculator"
                 aspect={480 / 340}
                 naturalWidth={480}
-                caption="The most-requested tool from research, shipped: dose math with the source attached."
+                caption="The most-requested tool from research, shipped. Weight first, dose second, and the table it came from attached — so the number is still checkable when it goes home with the owner."
               >
                 <MedCalcCrop />
               </AssetFigure>
@@ -230,7 +262,7 @@ export default function ChatVet() {
                 label="Chat to client handout"
                 aspect={480 / 340}
                 naturalWidth={480}
-                caption="From clinical shorthand to pet-owner language in one click — the evenings-of-rewriting problem, deleted."
+                caption="Aimed squarely at the 29%: one click turns the clinical exchange into what the client actually takes home — without the evening spent writing it."
               >
                 <HandoutBeforeAfter />
               </AssetFigure>
@@ -243,8 +275,9 @@ export default function ChatVet() {
         heading="From two hours to ten seconds"
         paragraphs={[
           "That Alabama vet tried ChatVET on the same question and had the answer — sourced to the governing protocol — in ten seconds.",
-          "On average, users self-report saving about 15 minutes per case: the research slice, the protocol hunt, and the client write-up, together.",
+          "On average, users self-report saving about 15 minutes per case: the research slice, the dose math, and the client write-up, together.",
           "Today the web app is live at chatvet.ai with 500 monthly users globally, multiple clinics piloting the business tier ahead of paid rollout, and growth running bottom-up as individual DVMs bring it into their practices. Everything is currently free.",
+          "The half we haven't measured is the one on the other side of the exam table: whether the handouts change what happens after the client leaves. That is the study I'd run next, and the one that would prove the thesis rather than argue it.",
         ]}
         carousel={false}
       >
