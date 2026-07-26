@@ -14,37 +14,41 @@ import styles from "./ChatVet.module.css";
 import TwoHoursTenSeconds from "./cv/TwoHoursTenSeconds";
 
 /**
- * ChatVET case-study content.
+ * ChatVET case study — simplified spine, 2026-07-26 (Andrew's brief).
  *
- * 2026-07-26 — REPLACED WHOLESALE from Andrew's Figma section 6967:7428
- * ("ChatVET Case Study — updated") at his explicit instruction. The Figma
- * is the content spec: its section list, headings, body copy, captions
- * and figure set, in its order. Do not re-merge earlier drafts into this.
+ * Five beats, in his order:
+ *   1. research → where the time sinks are
+ *   2. mocked a full EHR → scaled down to fit the dev team
+ *   3. pilot in a real clinic → named the three tools in demand
+ *   4. vets couldn't write prompts → template library, for speed AND for
+ *      consistent output
+ *   5. print + discharge generator using chat context → client-facing
+ *      documents at no extra post-visit cost to the staff
  *
- * FIGURES COME FROM FIGMA AS IMAGES. The stall flow is Andrew's own
- * diagram exported from the Figma section — do NOT re-draw it as an SVG
- * component. Every drawn stand-in this study used to carry has been
- * deleted; they are in git history at commit ea6b220 if ever needed.
- * Only TwoHoursTenSeconds is still a component, because the Figma builds
- * that one from live text rather than an image.
+ * Headlines carry the PAS arc; section bodies are deliberately plain —
+ * short declaratives, no narrative build. Do not re-narrativise them.
  *
- * ⚠ PROVENANCE CONFLICT — the stall diagram's figures contradict
- * .claude/research/003-chatvet-stat-provenance.md on four counts: the
- * deferred-search multiplier (a range across 73 studies split into an
- * invented before/after), "not pursued at all" (Ely measured "not
- * immediately pursued"), "80% of medication errors" (Pinho's 80% is of
- * the 63% that were wrong-dose, ~50% of reported errors), and the 10-min
- * documentation figure (unattested). Andrew has been told; the decision
- * is his. Read the ledger before defending any number on this page.
+ * FIGURES ARE ANDREW'S IMAGES. Every figure here is an export from the
+ * Figma or a product capture. Do not redraw any of them as SVG
+ * components; the drawn stand-ins were deleted at ea6b220.
  *
- * ⚠ FACTS PENDING FROM ANDREW (do not invent): timeframe/dates, "sole
- * designer" confirmation, self-report survey n, the S1 discovery quote
- * (renders as a placeholder), testimonial attribution, the
- * clinical-accuracy validation sentence, and the window/denominator
- * behind the "#1 question users were asking" claim.
+ * TWO CAPTURES STILL MISSING (rendered as labelled placeholders so the
+ * page doubles as the shot list): the generated/printed discharge
+ * document — the payoff of beat 5, currently the one thing the story
+ * promises and never shows — and the lab interpreter, named as one of
+ * the three pilot tools but visible only as a menu item.
+ *
+ * ⚠ PROVENANCE — the stall diagram's figures contradict
+ * .claude/research/003-chatvet-stat-provenance.md on four counts (the
+ * deferred-search multiplier, "not pursued at all", "80% of medication
+ * errors", the 10-min documentation figure). Andrew has been told; the
+ * decision is his. Read the ledger before defending any number here.
+ *
+ * ⚠ PENDING FACTS (do not invent): timeframe/dates, survey n, the pilot
+ * clinic's name or a concrete anonymisation, testimonial attribution,
+ * and the denominator behind "the most-asked question".
  */
 
-/** Pilot-user testimonial, the closer's social proof. */
 function VetTestimonial() {
   return (
     <figure className={styles.quoteStrip}>
@@ -55,7 +59,7 @@ function VetTestimonial() {
         think.&rdquo;
       </blockquote>
       <figcaption className={styles.quoteAttribution}>
-        {"// DVM PILOT USER · VETERINARY CLINIC — attribution upgrade pending permission"}
+        {"// DVM PILOT USER · VETERINARY CLINIC — attribution pending permission"}
       </figcaption>
     </figure>
   );
@@ -68,8 +72,8 @@ export default function ChatVet() {
         eyebrow="CHATVET · AI COPILOT FOR VETERINARY MEDICINE"
         title="Shipping an AI copilot that saves veterinarians about 15 minutes per case"
         intro={[
-          "Veterinarians are out of time. Lab analysis and case research alone add 5 to 10 minutes per patient — before protocol hunting, note-writing, and client communication stack on top.",
-          "The answers exist in trusted references like the Merck Veterinary Manual; reaching them mid-case is the problem.",
+          "Veterinarians are out of time. Research, protocol hunting, note-writing and client communication stack up on every case.",
+          "The answers exist in trusted references like the Merck Veterinary Manual. Reaching them mid-case is the problem.",
           "ChatVET is an AI copilot, powered by the Merck Veterinary Manual and leading journals, that puts those answers seconds away.",
         ]}
         media={
@@ -95,8 +99,6 @@ export default function ChatVet() {
           { label: "TIMEFRAME:", value: "Months, not years (dates pending)" },
           {
             label: "STATUS:",
-            /* The only claim in the portfolio a reader can verify in four
-               seconds — so it has to be clickable, not retypeable. */
             value: (
               <>
                 <span className={caseStyles.statLine}>
@@ -118,40 +120,37 @@ export default function ChatVet() {
 
       <BrandRow />
 
+      {/* ---------- 1 · PROBLEM ---------- */}
       <CaseSection
-        heading="Four bottlenecks, one surprise: medication math."
+        heading="One appointment, four stalls. The biggest one happens after the client leaves."
         lede={[
-          "I led the case mapping: across interviews and case walkthroughs with practicing DVMs and techs, we charted where an average case actually stalls — searching protocols between patients, second-guessing abnormal bloodwork, retyping the same questions, translating clinical notes into pet-owner language.",
-          "And the single most common request in our research wasn't any of those. It was medication calculation.",
+          "I led the research: interviews and case walkthroughs with practicing DVMs and techs.",
+          "We mapped where an average visit actually stalls. Four places: searching protocols, calculating doses, explaining the plan to the client, and re-entering the history once the room is empty.",
+          "The last one sits outside the appointment entirely. It is also the largest.",
         ]}
         media={
-          <>
-            <AssetFigure
-              label="Average vet visit flow and where cases stall"
-              aspect={2232 / 783}
-              naturalWidth={2232}
-              caption="One appointment, four stalls — and the biggest one happens after the client leaves. The riskiest calculation in the visit depends on a number typed at check-in."
-            >
-              <img
-                src="/case-studies/chat-vet/cv-stall-flow.webp"
-                alt="Average vet visit flow and where cases stall. Six phases run left to right — check-in and intake, exam, diagnosis, treatment plan, client debrief, and a sixth phase after the client leaves. Four stall cards hang above the phases they interrupt: protocol search, 5 minutes in room, 30 plus minutes if questions get deferred and up to 60 percent aren't pursued at all; dose calculation, 80 percent of medication errors are miscalculations and this was the number-one question users were asking; client communication, up to 75 percent of what the doctor says is lost immediately, and written instructions lift the correct treatment rate but are time consuming; history re-entered, 10 minutes per patient after the visit against up to 2 hours of desk work per hour of face time. A dashed line runs from check-in to the treatment plan noting that weight captured there is the only input to dose calculation, and that a risk of it not being captured at check-in causes delays."
-                className={styles.shotImg}
-              />
-            </AssetFigure>
-            <PlaceholderBox
-              aspect="744 / 108"
-              label="// VET_QUOTE — attributed discovery quote pending"
+          <AssetFigure
+            label="Average vet visit flow and where cases stall"
+            aspect={2232 / 783}
+            naturalWidth={2232}
+            caption="Six phases of a visit, with the four stalls hung above the phase each one interrupts. Weight captured at check-in is the only input to the dose calculation downstream."
+          >
+            <img
+              src="/case-studies/chat-vet/cv-stall-flow.webp"
+              alt="Average vet visit flow and where cases stall. Six phases run left to right — check-in and intake, exam, diagnosis, treatment plan, client debrief, and a sixth phase after the client leaves. Four stall cards hang above the phases they interrupt: protocol search, 5 minutes in room and 30 plus minutes if questions get deferred, with up to 60 percent not pursued at all; dose calculation, 80 percent of medication errors are miscalculations and this was the number-one question users were asking; client communication, up to 75 percent of what the doctor says is lost immediately, and written instructions lift the correct treatment rate but are time consuming; history re-entered, 10 minutes per patient after the visit against up to 2 hours of desk work per hour of face time. A dashed line runs from check-in to the treatment plan noting that weight captured there is the only input to dose calculation, and that not capturing it causes delays."
+              className={styles.shotImg}
             />
-          </>
+          </AssetFigure>
         }
       />
 
+      {/* ---------- 2 · AGITATE — the constraint ---------- */}
       <CaseSection
-        heading="We started with a full EHR system and tried to tackle all stages of the flow, but with the current team this wasn't a viable path forward."
+        heading="We designed the whole record system. We could only build a slice of it."
         lede={[
-          "The original vision was a complete EHR replacement. And using an old design system we mocked up some dashboards and UI layouts.",
-          "When development constraints ruled out the full build, I pitched a simple chat interface based on the assistant designs we mocked up.",
-          "We knew we could tackle the protocol search problem while building trust with vets, and then based on feedback and usage we could build a roadmap of features users actually wanted.",
+          "The first plan was a full EHR replacement, mocked up on an older design system: patient workspace, medical history, medications, and an assistant.",
+          "The dev team could not take that on.",
+          "So we cut to the one piece that did not need a records migration to be useful — the assistant — and shipped that on its own.",
         ]}
         media={
           <div className={caseStyles.mediaPair}>
@@ -159,7 +158,7 @@ export default function ChatVet() {
               label="The Paw AI EHR we designed"
               aspect={3194 / 2538}
               naturalWidth={3194}
-              caption="The full EHR from discovery: patient workspace, medical history, medications, and the Paw AI assistant."
+              caption="The full EHR from discovery: patient profile and medications down the left, history and alerts across the top, and the assistant holding the main panel."
             >
               <img
                 src="/case-studies/chat-vet/cv-ehr-paw-ai.webp"
@@ -168,10 +167,10 @@ export default function ChatVet() {
               />
             </AssetFigure>
             <AssetFigure
-              label="The EHR's assistant view"
+              label="The assistant view we kept"
               aspect={3194 / 2538}
               naturalWidth={3194}
-              caption="The EHR had an assistant view for when the doctors were seeing patients — pulling past visit notes, lab results, file uploads, and more into the conversation."
+              caption="The view built for use during an appointment, pulling past notes, lab results and uploads into the conversation. This is the slice that became the product."
             >
               <img
                 src="/case-studies/chat-vet/cv-chat-focus.webp"
@@ -183,37 +182,14 @@ export default function ChatVet() {
         }
       />
 
+      {/* ---------- 3 · SOLUTION — the pilot names the tools ---------- */}
       <CaseSection
-        heading="“I tried using ChatGPT and could never trust the results. I’m very wary of answers I can’t trace directly to trusted sources.”"
+        heading="A pilot in a working clinic told us which tools to build."
         lede={[
-          "ChatVET answers from the Merck Veterinary Manual and leading journals, not the open web.",
-          "I designed the source-first answer pattern: sources stack above the answer, and one click lands on the original passage.",
-          "When the literature doesn't cover a question, ChatVET says so rather than improvising — in medicine, a confident wrong answer is worse than no answer.",
-          "In clinical software, provenance isn't polish; it's what makes an answer usable.",
-        ]}
-        media={
-          <AssetFigure
-            label="The corpus, named on the product"
-            aspect={2880 / 1542}
-            naturalWidth={2880}
-            caption="The partnership announcement in the product, above the sourcing strip. Naming the corpus is the claim; the logo row is what lets a vet audit it before they trust an answer."
-          >
-            <img
-              src="/case-studies/chat-vet/cv-msd-partnership2.webp"
-              alt="ChatVET announcement banner reading 'chatVET now Powered by MSD Veterinary Manual', above a sourcing strip captioned 'data sourced from leading veterinary journals and companies' with logos for the Journal of Veterinary Internal Medicine, VPN Plus, Cornell University, WSAVA, Plumb's, AAHA, Banfield Pet Hospital and the Merck Veterinary Manual — the first and last clipped at the edges of the capture."
-              className={styles.shotImg}
-            />
-          </AssetFigure>
-        }
-      />
-
-      <CaseSection
-        heading="After testing with pilot users, the most common questions asked were about medications and proper dosing."
-        lede={[
-          "A known pain point, and a known source of medication errors.",
-          "By far the most asked question — roughly 64% of all user prompts.",
-          "So we built a quick tool that lets vets get the answer in seconds.",
-          "This pattern also revealed the need for a lab interpreter and a discharge generator. All of them are available from a new chat, or from the middle of one where that context can be used.",
+          "We ran ChatVET inside a real veterinary practice and watched what people actually asked for.",
+          "Three tools came back in demand: a medication dose calculator, a discharge generator, and a lab interpreter. Dosing was the most-asked question by a wide margin.",
+          "All three open from a new chat or from the middle of one, so the case already on screen carries into them.",
+          "Answers come from the Merck Veterinary Manual and leading journals, not the open web. That is what made vets willing to keep using it.",
         ]}
         media={
           <>
@@ -221,7 +197,7 @@ export default function ChatVet() {
               label="Three tools, one click from the chat"
               aspect={2880 / 1633}
               naturalWidth={2880}
-              caption="Dose calculator, lab interpreter, discharge generator — opened from a new chat or mid-conversation, so nothing has to be re-typed to use them."
+              caption="Dose calculator, lab interpreter and discharge generator, opened from the chat so nothing has to be re-typed."
             >
               <img
                 src="/case-studies/chat-vet/cv-tools-menu.webp"
@@ -234,7 +210,7 @@ export default function ChatVet() {
                 label="Medication dose calculator"
                 aspect={2880 / 1622}
                 naturalWidth={2880}
-                caption="Species and weight first — the intake number the whole calculation hangs on — then medication and indication."
+                caption="Species and weight first — the intake number the calculation depends on — then medication and indication."
               >
                 <img
                   src="/case-studies/chat-vet/cv-dose-calculator.webp"
@@ -242,28 +218,20 @@ export default function ChatVet() {
                   className={styles.shotImg}
                 />
               </AssetFigure>
-              <AssetFigure
-                label="Discharge generator, step one"
-                aspect={2880 / 1503}
-                naturalWidth={2880}
-                caption="It reads the consultation back to the vet: several medications came up — which of them should go home with the client?"
-              >
-                <img
-                  src="/case-studies/chat-vet/cv-discharge-step1.webp"
-                  alt="The Discharge Generator dialog asking which of the medications discussed should be included in the discharge instructions, listing maropitant, capromorelin, and IV crystalloid fluids."
-                  className={styles.shotImg}
-                />
-              </AssetFigure>
+              <PlaceholderBox
+                aspect="2880 / 1622"
+                label="// LAB_INTERPRETER — capture pending"
+              />
             </div>
             <AssetFigure
-              label="Discharge generator, step two"
-              aspect={2880 / 1488}
+              label="Where the answers come from"
+              aspect={2880 / 1542}
               naturalWidth={2880}
-              caption="The second step is the client's document, not the vet's: patient, condition, prescribed medications, and the restrictions an owner actually has to follow at home."
+              caption="The corpus named in the product, above the sourcing strip — what lets a vet audit an answer before trusting it."
             >
               <img
-                src="/case-studies/chat-vet/cv-discharge-step2.webp"
-                alt="The Discharge Generator second step with fields for patient name, procedure or condition, medications prescribed, and diet and activity restrictions, above a Generate Instructions button."
+                src="/case-studies/chat-vet/cv-msd-partnership2.webp"
+                alt="ChatVET announcement banner reading 'chatVET now Powered by MSD Veterinary Manual', above a sourcing strip captioned 'data sourced from leading veterinary journals and companies' with logos for the Journal of Veterinary Internal Medicine, VPN Plus, Cornell University, WSAVA, Plumb's, AAHA, Banfield Pet Hospital and the Merck Veterinary Manual — the first and last clipped at the edges of the capture."
                 className={styles.shotImg}
               />
             </AssetFigure>
@@ -271,19 +239,21 @@ export default function ChatVet() {
         }
       />
 
+      {/* ---------- 4 · SOLUTION — prompting is not the vet's job ---------- */}
       <CaseSection
-        heading="Vets shouldn't have to learn prompting, so based on early usage we built prebuilt templates to save them time."
+        heading="Vets shouldn't have to be prompt engineers."
         lede={[
-          "Instead of a blank chat box, ChatVET ships tools where the bottlenecks are: medication calculation, a drag-and-drop lab interpreter with differentials, and a template library organized by clinical job (SOAP notes, discharge instructions, differentials, client emails).",
-          "Vets fill in species, age, and symptoms; the system does the rest.",
-          "One click turns any chat into a client-ready handout or email, and business-tier clinics get custom templates built for their workflows.",
+          "In the pilot we watched vets write prompts that did not work, and get different answers to the same clinical question.",
+          "So we built a template library, organised by clinical job: SOAP notes, discharge instructions, differentials, client emails.",
+          "Vets replace the highlighted details and hit enter. A few fields instead of a paragraph.",
+          "It saves time, and it makes the output consistent — the same question returns the same shape of answer, whoever asks it.",
         ]}
         media={
           <AssetFigure
             label="The VetMed prompt library"
             aspect={2880 / 1780}
             naturalWidth={2880}
-            caption="Prebuilt prompts based on common questions, designed to get the right answers fast. Vets replace the highlighted placeholder details and hit enter — a few details instead of a long prompt, saving minutes each case."
+            caption="Templates built from the questions vets were already asking, grouped by clinical job and tagged for their reader — clinician or client."
           >
             <img
               src="/case-studies/chat-vet/cv-prompt-library.webp"
@@ -294,11 +264,55 @@ export default function ChatVet() {
         }
       />
 
+      {/* ---------- 5 · SOLUTION — the payoff, for the owner ---------- */}
+      <CaseSection
+        heading="The pet owner leaves with instructions. The vet doesn't stay late writing them."
+        lede={[
+          "We added print, and rebuilt the discharge generator to use the chat context.",
+          "It reads the consultation back, asks which of the medications discussed should go home, and fills the client's document from the conversation that already happened.",
+          "The owner gets something they can follow. The staff spend no extra time after the visit producing it.",
+        ]}
+        media={
+          <>
+            <div className={caseStyles.mediaPair}>
+              <AssetFigure
+                label="Discharge generator, step one"
+                aspect={2880 / 1503}
+                naturalWidth={2880}
+                caption="It reads the consultation back: several medications came up — which should go home with the client?"
+              >
+                <img
+                  src="/case-studies/chat-vet/cv-discharge-step1.webp"
+                  alt="The Discharge Generator dialog asking which of the medications discussed should be included in the discharge instructions, listing maropitant, capromorelin, and IV crystalloid fluids."
+                  className={styles.shotImg}
+                />
+              </AssetFigure>
+              <AssetFigure
+                label="Discharge generator, step two"
+                aspect={2880 / 1488}
+                naturalWidth={2880}
+                caption="Patient, condition, medications and the restrictions an owner has to follow — most of it already filled from the chat."
+              >
+                <img
+                  src="/case-studies/chat-vet/cv-discharge-step2.webp"
+                  alt="The Discharge Generator second step with fields for patient name, procedure or condition, medications prescribed, and diet and activity restrictions, above a Generate Instructions button."
+                  className={styles.shotImg}
+                />
+              </AssetFigure>
+            </div>
+            <PlaceholderBox
+              aspect="2880 / 1780"
+              label="// DISCHARGE_DOCUMENT — the printed client handout, capture pending"
+            />
+          </>
+        }
+      />
+
       <CenteredSection
         heading="From two hours to ten seconds"
         paragraphs={[
           "That Alabama vet tried ChatVET on the same question and had the answer — sourced to the governing protocol — in ten seconds.",
-          "On average, users self-report saving about 15 minutes per case: the research slice, the protocol hunt, and the client write-up, together.",
+          "On average, users self-report saving about 15 minutes per case.",
           "Today the web app is live at chatvet.ai with 500 monthly users globally, multiple clinics piloting the business tier ahead of paid rollout, and growth running bottom-up as individual DVMs bring it into their practices. Everything is currently free.",
         ]}
         carousel={false}
