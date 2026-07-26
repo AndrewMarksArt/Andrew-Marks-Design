@@ -11,7 +11,6 @@ import BrandRow from "../../site/BrandRow";
 import ZoomableFigure from "../FigureLightbox";
 import caseStyles from "../case.module.css";
 import styles from "./ChatVet.module.css";
-import CaseStallTimeline from "./cv/CaseStallTimeline";
 import TwoHoursTenSeconds from "./cv/TwoHoursTenSeconds";
 
 /**
@@ -22,19 +21,21 @@ import TwoHoursTenSeconds from "./cv/TwoHoursTenSeconds";
  * is the content spec: its section list, headings, body copy, captions
  * and figure set, in its order. Do not re-merge earlier drafts into this.
  *
- * What that replacement removed, so nobody hunts for it: the "one
- * generation, two readers" overlap thesis and its PainOverlap figure, the
- * two-hour-search agitation beat and TwoHourSearchTrail, and the
- * SameQuestionCompare trust figure. All three are still in git history
- * (branch chatvet-case-study-v2, commit ea6b220) if they are ever wanted
- * back. The stall map was rebuilt to the Figma's revised diagram.
+ * FIGURES COME FROM FIGMA AS IMAGES. The stall flow is Andrew's own
+ * diagram exported from the Figma section — do NOT re-draw it as an SVG
+ * component. Every drawn stand-in this study used to carry has been
+ * deleted; they are in git history at commit ea6b220 if ever needed.
+ * Only TwoHoursTenSeconds is still a component, because the Figma builds
+ * that one from live text rather than an image.
  *
- * ⚠ PROVENANCE CONFLICT — the stall map's figures in this revision
- * contradict .claude/research/003-chatvet-stat-provenance.md on four
- * counts (the deferred-search multiplier, "not pursued at all", "80% of
- * medication errors", and the 10-min documentation figure). The header
- * comment in cv/CaseStallTimeline.tsx spells out each one. Read that
- * before defending any number on this page.
+ * ⚠ PROVENANCE CONFLICT — the stall diagram's figures contradict
+ * .claude/research/003-chatvet-stat-provenance.md on four counts: the
+ * deferred-search multiplier (a range across 73 studies split into an
+ * invented before/after), "not pursued at all" (Ely measured "not
+ * immediately pursued"), "80% of medication errors" (Pinho's 80% is of
+ * the 63% that were wrong-dose, ~50% of reported errors), and the 10-min
+ * documentation figure (unattested). Andrew has been told; the decision
+ * is his. Read the ledger before defending any number on this page.
  *
  * ⚠ FACTS PENDING FROM ANDREW (do not invent): timeframe/dates, "sole
  * designer" confirmation, self-report survey n, the S1 discovery quote
@@ -127,11 +128,15 @@ export default function ChatVet() {
           <>
             <AssetFigure
               label="Average vet visit flow and where cases stall"
-              aspect={979 / 470}
-              naturalWidth={979}
+              aspect={2232 / 783}
+              naturalWidth={2232}
               caption="One appointment, four stalls — and the biggest one happens after the client leaves. The riskiest calculation in the visit depends on a number typed at check-in."
             >
-              <CaseStallTimeline />
+              <img
+                src="/case-studies/chat-vet/cv-stall-flow.webp"
+                alt="Average vet visit flow and where cases stall. Six phases run left to right — check-in and intake, exam, diagnosis, treatment plan, client debrief, and a sixth phase after the client leaves. Four stall cards hang above the phases they interrupt: protocol search, 5 minutes in room, 30 plus minutes if questions get deferred and up to 60 percent aren't pursued at all; dose calculation, 80 percent of medication errors are miscalculations and this was the number-one question users were asking; client communication, up to 75 percent of what the doctor says is lost immediately, and written instructions lift the correct treatment rate but are time consuming; history re-entered, 10 minutes per patient after the visit against up to 2 hours of desk work per hour of face time. A dashed line runs from check-in to the treatment plan noting that weight captured there is the only input to dose calculation, and that a risk of it not being captured at check-in causes delays."
+                className={styles.shotImg}
+              />
             </AssetFigure>
             <PlaceholderBox
               aspect="744 / 108"
