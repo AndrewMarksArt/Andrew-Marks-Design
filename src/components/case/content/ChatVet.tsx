@@ -94,8 +94,18 @@ export default function ChatVet() {
 
       <StatsStrip
         items={[
-          { label: "ROLE:", value: "Product Designer & UX Researcher" },
-          { label: "TEAM:", value: "Startup founders · engineering · me" },
+          {
+            label: "ROLE:",
+            value: "Product Designer & UX Researcher · Consulting engagement",
+          },
+          {
+            /* "Mostly" and "at most" are ceilings on purpose — weaker claims
+               than the truth, so nothing here can be caught out. "Mostly" also
+               stops the capacity line reading as Andrew's own hours, since the
+               cell ends in "me". */
+            label: "TEAM:",
+            value: "Startup founders · engineering · me · Mostly part-time, ~10 hrs/week",
+          },
           { label: "TIMEFRAME:", value: "Months, not years (dates pending)" },
           {
             label: "STATUS:",
@@ -149,8 +159,14 @@ export default function ChatVet() {
         heading="We designed the whole record system. We could only build a slice of it."
         lede={[
           "The first plan was a full EHR replacement, mocked up on an older design system: patient workspace, medical history, medications, and an assistant.",
+          /* Capacity BEFORE the limit: the reader gets the premise, so "the dev
+             team could not take that on" reads as a consequence rather than a
+             verdict — and the disclosure never sits after it, where it would
+             read as an alibi. */
+          "I was consulting on this, and most of the team was part-time — ten hours a week at most.",
           "The dev team could not take that on.",
-          "So we cut to the one piece that did not need a records migration to be useful — the assistant — and shipped that on its own.",
+          "So I cut the scope to the one piece that did not need a records migration to be useful — the assistant — and that is what shipped.",
+          "We built it on design systems I already had, and kept every pattern as simple as it could be.",
         ]}
         media={
           <div className={caseStyles.mediaPair}>
@@ -186,7 +202,7 @@ export default function ChatVet() {
       <CaseSection
         heading="A pilot in a working clinic told us which tools to build."
         lede={[
-          "We ran ChatVET inside a real veterinary practice and watched what people actually asked for.",
+          "We ran ChatVET inside a real veterinary practice; I logged what people actually asked for.",
           "Three tools came back in demand: a medication dose calculator, a discharge generator, and a lab interpreter. Dosing was the most-asked question by a wide margin.",
           "All three open from a new chat or from the middle of one, so the case already on screen carries into them.",
           "Answers come from the Merck Veterinary Manual and leading journals, not the open web. That is what made vets willing to keep using it.",
@@ -244,7 +260,7 @@ export default function ChatVet() {
         heading="Vets shouldn't have to be prompt engineers."
         lede={[
           "In the pilot we watched vets write prompts that did not work, and get different answers to the same clinical question.",
-          "So we built a template library, organised by clinical job: SOAP notes, discharge instructions, differentials, client emails.",
+          "So I designed a template library, organised by clinical job: SOAP notes, discharge instructions, differentials, client emails.",
           "Vets replace the highlighted details and hit enter. A few fields instead of a paragraph.",
           "It saves time, and it makes the output consistent — the same question returns the same shape of answer, whoever asks it.",
         ]}
@@ -268,7 +284,7 @@ export default function ChatVet() {
       <CaseSection
         heading="The pet owner leaves with instructions. The vet doesn't stay late writing them."
         lede={[
-          "We added print, and rebuilt the discharge generator to use the chat context.",
+          "I designed the print output, and reworked the discharge generator around the chat context.",
           "It reads the consultation back, asks which of the medications discussed should go home, and fills the client's document from the conversation that already happened.",
           "The owner gets something they can follow. The staff spend no extra time after the visit producing it.",
         ]}
@@ -311,7 +327,11 @@ export default function ChatVet() {
       <CenteredSection
         heading="From two hours to ten seconds"
         paragraphs={[
-          "That Alabama vet tried ChatVET on the same question and had the answer — sourced to the governing protocol — in ten seconds.",
+          /* Self-contained on purpose: the two-hour setup used to live in an
+             agitation beat that the simplification cut, so this paragraph has
+             to introduce its own referent. "One ... in the pilot" introduces
+             rather than presupposes. */
+          "One Alabama DVM in the pilot had spent more than two hours running down a single protocol question. He ran it through ChatVET and had the answer — sourced to the Merck Veterinary Manual — in ten seconds.",
           "On average, users self-report saving about 15 minutes per case.",
           "Today the web app is live at chatvet.ai with 500 monthly users globally, multiple clinics piloting the business tier ahead of paid rollout, and growth running bottom-up as individual DVMs bring it into their practices. Everything is currently free.",
         ]}

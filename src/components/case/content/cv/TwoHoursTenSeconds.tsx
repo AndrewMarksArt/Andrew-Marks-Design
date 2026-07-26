@@ -29,7 +29,10 @@ export default function TwoHoursTenSeconds() {
 
       {/* Figure header */}
       <text x={16} y={32} fontSize={13} fontWeight={300} fill="#5E5757">
-        {"// THE CALLBACK"}
+        {/* was "// THE CALLBACK" — the passage it called back to was cut in
+            the 2026-07-26 simplification, so the label now describes what the
+            figure actually is: one documented case, restated beside it. */}
+        {"// ONE DOCUMENTED CASE"}
       </text>
 
       {/* Before: 2+ HOURS (struck through) */}
