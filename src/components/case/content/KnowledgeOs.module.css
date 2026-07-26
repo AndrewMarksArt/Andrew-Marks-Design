@@ -24,3 +24,13 @@
 .closerStack > :first-child {
   width: 100%;
 }
+
+/* Closer figures, now that the closer itself uses the P1 split layout:
+   the growth timeline and gap card sit full-width beneath it, mirroring
+   how P1 hangs its launch sequence below its stat-card section. */
+.closerFigures {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-top: 48px;
+}

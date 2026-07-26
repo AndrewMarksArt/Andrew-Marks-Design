@@ -1,12 +1,11 @@
 import {
   CaseHero,
   CaseSection,
-  CenteredSection,
   PlaceholderBox,
   StatsStrip,
   UpNext,
 } from "../CaseSections";
-import { AssetFigure } from "../CaseFigures";
+import { AssetFigure, StatCard, StatCards } from "../CaseFigures";
 import BrandRow from "../../site/BrandRow";
 import ZoomableFigure from "../FigureLightbox";
 import caseStyles from "../case.module.css";
@@ -329,21 +328,33 @@ export default function ChatVet() {
         }
       />
 
-      {/* CLOSER, rebuilt 2026-07-26. The old one was "From two hours to ten
-          seconds", built on a 2h→10s figure Andrew has since confirmed was a
-          user EXAGGERATING, not a documented case — so the headline, the
-          paragraph and the TwoHoursTenSeconds graphic all went. Do not
-          reinstate any of them. What is left is what can be substantiated. */}
-      <CenteredSection
+      {/* CLOSER — Platform One's closer layout (PlatformOne.tsx:243-303):
+          standard section split, copy left with a bolded retro line last, two
+          drafting-grid stat cards right. Was a CenteredSection built on the
+          2h→10s figure Andrew has since confirmed was a user EXAGGERATING,
+          not a documented case; that headline, paragraph and graphic are gone
+          and should not come back. */}
+      <CaseSection
         heading="Vets kept using it, and brought it into their own practices."
-        paragraphs={[
+        lede={[
           "The web app went live with 500 monthly users globally, multiple clinics piloting the business tier ahead of paid rollout, and growth running bottom-up rather than through a sales motion.",
           "Users self-report saving about 15 minutes per case. That is their estimate, not a measurement.",
           /* Inoculation, not blame — and the last sentence is what stops
              "wound down" reading as a falling-out. */
           "The screens in this study are the version I designed and shipped. The product has continued to change since my engagement wound down. I still work with the founder on investor and marketing material.",
+          <strong key="retro">
+            If I ran this again, I&rsquo;d instrument the discharge flow before
+            shipping it. The one number that would prove the thesis — whether
+            those handouts change anything after the client leaves — is the one
+            we never captured.
+          </strong>,
         ]}
-        carousel={false}
+        media={
+          <StatCards>
+            <StatCard label="Monthly users" value="500" />
+            <StatCard label="Self-reported, per case" value="~15 min" />
+          </StatCards>
+        }
       />
 
       <UpNext

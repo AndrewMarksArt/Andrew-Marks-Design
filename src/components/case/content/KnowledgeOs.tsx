@@ -2,10 +2,9 @@ import {
   CaseHero,
   StatsStrip,
   CaseSection,
-  CenteredSection,
   UpNext,
 } from "../CaseSections";
-import { AssetFigure } from "../CaseFigures";
+import { AssetFigure, StatCard, StatCards } from "../CaseFigures";
 import BrandRow from "../../site/BrandRow";
 import styles from "./KnowledgeOs.module.css";
 import CaptureVolumeChart from "./kos/CaptureVolumeChart";
@@ -199,37 +198,51 @@ export default function KnowledgeOs() {
         }
       />
 
-      <CenteredSection
+      {/* CLOSER — Platform One's closer layout (PlatformOne.tsx:243-303):
+          standard section split, copy left with a bolded retro line last, two
+          drafting-grid stat cards right. Was a CenteredSection with a stacked
+          growth timeline + gap card; those two figures move below, so the
+          closer reads at the same altitude as P1's and ChatVET's. */}
+      <CaseSection
         heading="Production-deployed and compounding"
-        paragraphs={[
+        lede={[
           "Knowledge Hub is live and in daily use: a corpus past 4,000 sources, growing 300–400 a week, with a chat interface grounded in it and agents that run on demand.",
           "By mid-May — when the corpus stood at 1,900 sources — the agents had generated 3,400+ signals: machine-written observations (contradictions, cross-links, emerging gaps), nearly two per source. The first gap they caught was one my own reading had missed entirely: five security subtopics I'd rated maximum priority, with eight links between them my reading never surfaced.",
           "It's the same rule I hold every AI product to — ground it or say you can't — applied to a system where I'm the only user it can fail.",
+          <strong key="retro">
+            A year ago I could have designed this in Figma — getting any of it
+            into production would have been a dream. Built AI-natively, it
+            shipped in four months, solo, and it&rsquo;s still shipping.
+          </strong>,
         ]}
-        emphasis="A year ago I could have designed this in Figma — getting any of it into production would have been a dream. Built AI-natively, it shipped in four months, solo — and it's still shipping."
-        carousel={false}
-      >
-        <div className={styles.closerStack}>
+        media={
+          <StatCards>
+            <StatCard label="Sources in the corpus" value="4,000+" />
+            <StatCard label="Agent signals generated" value="3,400+" />
+          </StatCards>
+        }
+      />
+
+      <section className={`content ${styles.closerFigures}`}>
+        <AssetFigure
+          label="Four months, zero to compounding"
+          aspect={979 / 300}
+          naturalWidth={979}
+          caption="Four months from first Telegram message to a compounding system. The slope hasn't flattened."
+        >
+          <GrowthTimeline />
+        </AssetFigure>
+        <div className={styles.narrowFigure}>
           <AssetFigure
-            label="Four months, zero to compounding"
-            aspect={979 / 300}
-            naturalWidth={979}
-            caption="Four months from first Telegram message to a compounding system. The slope hasn't flattened."
+            label="The gap the agents caught"
+            aspect={640 / 300}
+            naturalWidth={640}
+            caption="The first gap the agents caught was mine."
           >
-            <GrowthTimeline />
+            <GapCatchCard />
           </AssetFigure>
-          <div className={styles.narrowFigure}>
-            <AssetFigure
-              label="The gap the agents caught"
-              aspect={640 / 300}
-              naturalWidth={640}
-              caption="The first gap the agents caught was mine."
-            >
-              <GapCatchCard />
-            </AssetFigure>
-          </div>
         </div>
-      </CenteredSection>
+      </section>
 
       {/* Figma's UP NEXT block was un-updated (stale ChatVET copy); named
           for the actual destination so link text matches. */}

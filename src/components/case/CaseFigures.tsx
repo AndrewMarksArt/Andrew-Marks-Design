@@ -46,6 +46,53 @@ export function AssetFigure({
   );
 }
 
+/** One drafting-grid stat card, the Platform One closer pattern.
+ *  P1 itself ships these as Figma exports; this is the same card rebuilt
+ *  from design-system motifs for the studies that have no export. To swap
+ *  in an export later, replace <StatCard> with
+ *  <img className={styles.statCard} …/> — the row styling is identical. */
+export function StatCard({ label, value }: { label: string; value: string }) {
+  // 3 x 3 registration crosses, positioned to frame the label bar
+  const xs = [12.9, 50, 87.1];
+  const ys = [13.3, 28, 84.8];
+  return (
+    <div className={styles.statCard}>
+      {ys.map((y) =>
+        xs.map((x) => (
+          <i
+            key={`${x}-${y}`}
+            className={styles.statCardMark}
+            style={{ left: `${x}%`, top: `${y}%` }}
+            aria-hidden="true"
+          />
+        ))
+      )}
+      <span className={styles.statCardLabel}>{label}</span>
+      {/* P1's exports are all short ("-40%", "~1 FTE"); longer values like
+          "~15 min" wrap and run past the plate, so the numeral steps down a
+          tier by length and never wraps. */}
+      <span
+        className={styles.statCardValue}
+        style={{
+          fontSize:
+            value.length > 6
+              ? "clamp(26px, 4.05vw, 58px)"
+              : value.length > 4
+                ? "clamp(32px, 5vw, 72px)"
+                : undefined,
+        }}
+      >
+        {value}
+      </span>
+    </div>
+  );
+}
+
+/** The closer's two-card row (P1 `.statCards`). */
+export function StatCards({ children }: { children: ReactNode }) {
+  return <div className={styles.statCards}>{children}</div>;
+}
+
 /** Wireframe media unit: labeled image placeholder + two caption strips
  *  (Figma 480x322-over-25px-bars idiom). Label names the planned visual
  *  so the page doubles as the production checklist. */

@@ -39,3 +39,111 @@
   width: 90.4167%; /* 434 / 480 */
 }
 
+
+/* ==========================================================================
+   Stat cards — the Platform One closer pattern, generalised (2026-07-26).
+   P1 ships these as pre-rendered Figma exports (p1-stat-*.webp) inside a
+   .statCards flex row. ChatVET and Knowledge OS have no such exports, so
+   the card is rebuilt here from the design-system motifs: drafting-grid
+   plate, accent-soft label bar, registration crosses, giant numeral.
+   Swapping any of these for a Figma export later is a one-line change —
+   drop an <img className={styles.statCard}> in place of <StatCard>.
+   ========================================================================== */
+
+.statCards {
+  display: flex;
+  gap: 24px;
+  padding-top: 48px;
+}
+
+.statCard {
+  position: relative;
+  width: calc(50% - 12px);
+  min-width: 0;
+  aspect-ratio: 644 / 564;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--black);
+  background-color: var(--plate);
+  /* drafting grid: 5 columns x 7 rows, matching the P1 export */
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+  background-size: 20% 14.2%;
+  overflow: hidden;
+}
+
+.statCardLabel {
+  position: absolute;
+  left: 12.9%;
+  right: 12.9%;
+  top: 18.6%;
+  padding: 6px 8px;
+  background: var(--accent-soft);
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 400;
+  font-size: clamp(10px, 0.9722vw, 14px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--black);
+  text-align: center;
+}
+
+.statCardValue {
+  position: absolute;
+  left: 12.9%;
+  right: 8%;
+  top: 42%;
+  font-family: var(--font-geist), sans-serif;
+  font-weight: 900;
+  font-size: clamp(40px, 6.6vw, 96px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--black);
+  white-space: nowrap;
+}
+
+/* registration crosses on the grid — 3 x 3, framing the label bar */
+.statCardMark {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  pointer-events: none;
+}
+
+.statCardMark::before,
+.statCardMark::after {
+  content: "";
+  position: absolute;
+  background: var(--black);
+}
+
+.statCardMark::before {
+  left: 50%;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  margin-left: -1px;
+}
+
+.statCardMark::after {
+  top: 50%;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  margin-top: -1px;
+}
+
+@media (max-width: 639px) {
+  .statCards {
+    flex-direction: column;
+    padding-top: 0;
+  }
+
+  .statCard {
+    width: 100%;
+    max-width: 360px;
+  }
+}
