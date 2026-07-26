@@ -65,6 +65,18 @@
   padding: 48px 48px 0;
 }
 
+/* section eyebrow above the title — same mono/accent grammar as a row facet
+   (Andrew's Figma pass 2026-07-25, node 6967:7299) */
+.eyebrow {
+  margin: 0 0 16px;
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 400;
+  font-size: clamp(12px, 0.8102vw, 13px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--accent-deep);
+}
+
 .title {
   margin: 0 0 16px;
   font-family: var(--font-geist), sans-serif;
@@ -310,9 +322,12 @@
   color: var(--accent-deep);
 }
 
-.proof {
-  margin: 20px 0 0;
-  padding-left: 22px;
+/* the readout LEADS with this bold framing line, then the bullets (Andrew's
+   Figma pass 2026-07-25). It sits flush with the bullet MARKERS, not the
+   bullet text — no 22px indent — which is why it reads as a lede and not a
+   fifth bullet. Was `.proof`, a payoff line below the list. */
+.lede {
+  margin: 0 0 20px;
   max-width: 44em;
   font-family: var(--font-geist), sans-serif;
   font-weight: 600;
