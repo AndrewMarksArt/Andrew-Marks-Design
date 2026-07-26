@@ -74,11 +74,13 @@ export function StatCard({ label, value }: { label: string; value: string }) {
       <span
         className={styles.statCardValue}
         style={{
+          // tiers are the P1 numeral (108px at the shipped card width)
+          // scaled 1 / 0.75 / 0.60, mirrored in the Figma component
           fontSize:
             value.length > 6
-              ? "clamp(26px, 4.05vw, 58px)"
+              ? "clamp(26px, 3.78vw, 65px)"
               : value.length > 4
-                ? "clamp(32px, 5vw, 72px)"
+                ? "clamp(32px, 4.70vw, 81px)"
                 : undefined,
         }}
       >
