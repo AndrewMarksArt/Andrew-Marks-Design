@@ -10,6 +10,23 @@
   display: block;
 }
 
+/* The live-product link in the STATUS cell. An unstyled anchor inside a mono
+   metadata plate is easy to skim past, and skimming past it is exactly what
+   this fix exists to prevent — so it carries the accent underline. */
+.liveLink {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  transition: color 150ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+.liveLink:hover,
+.liveLink:focus-visible {
+  color: var(--accent-deep);
+}
+
 /* Narrow centered figure (S2 agitation peak: "single narrow centered
    visual" per the shot list — the low point of the story). */
 .narrowFigure {

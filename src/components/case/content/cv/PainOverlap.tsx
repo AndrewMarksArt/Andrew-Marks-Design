@@ -37,7 +37,10 @@ type Column = {
 const COLUMNS: Column[] = [
   {
     stall: "PROTOCOL SEARCH",
-    vet: ["The question competes with", "the next patient. 64% aren't", "pursued during the visit."],
+    // digits deliberately absent: the exact 64% lives ONLY on the stall-map
+    // card that cites Ely 1999 and labels it a human proxy, so it cannot be
+    // confused with ChatVET's own ~64% prompt-mix analytics elsewhere on the page
+    vet: ["The question competes with", "the next patient. Most aren't", "pursued during the visit."],
     client: ["Asks the question, gets “let me", "look into that” — and often", "no answer."],
     ships: ["Sourced answer,", "in the room"],
   },
@@ -74,7 +77,7 @@ export default function PainOverlap() {
     <svg
       viewBox="0 0 979 400"
       role="img"
-      aria-label="An overlap map with four columns, one per stall. For each stall the figure states what it costs the veterinarian, names the stall, states what the same stall costs the client, and names the single artifact ChatVET produces that answers both. Protocol search: the question competes with the next patient and 64 percent are not pursued during the visit, while the client asks and often never receives an answer — ChatVET ships a sourced answer in the room. Dose calculation: math at the point of highest consequence for the vet, while the client gives the dose at home and 47 percent say nobody showed them how — ChatVET ships the dose with at-home instructions. Client translation: the vet repeats it three times and still gets the callback, while the client recalls only 29 percent of what they were told about the medication's side effects — ChatVET ships a plain-language handout. History re-entry: the vet re-types the visit from memory after hours, while the client leaves with nothing written down — ChatVET ships a visit summary that is both filed and handed over."
+      aria-label="An overlap map with four columns, one per stall. For each stall the figure states what it costs the veterinarian, names the stall, states what the same stall costs the client, and names the single artifact ChatVET produces that answers both. Protocol search: the question competes with the next patient and most are not pursued during the visit, while the client asks and often never receives an answer — ChatVET ships a sourced answer in the room. Dose calculation: math at the point of highest consequence for the vet, while the client gives the dose at home and 47 percent say nobody showed them how — ChatVET ships the dose with at-home instructions. Client translation: the vet repeats it three times and still gets the callback, while the client recalls only 29 percent of what they were told about the medication's side effects — ChatVET ships a plain-language handout. History re-entry: the vet re-types the visit from memory after hours, while the client leaves with nothing written down — ChatVET ships a visit summary that is both filed and handed over."
       style={{
         width: "100%",
         height: "auto",

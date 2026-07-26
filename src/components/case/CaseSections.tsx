@@ -88,7 +88,10 @@ export function StatsStrip({
     { label: "STATUS:", value: "..." },
   ],
 }: {
-  items?: { label: string; value: string }[];
+  /** `value` accepts a node so a cell can carry a link (ChatVET's live URL).
+   *  Plain strings keep the " · " → stacked-lines behaviour; the typeof guard
+   *  below is what lets PlatformOne/KnowledgeOs stay unchanged. */
+  items?: { label: string; value: React.ReactNode }[];
 }) {
   return (
     <div className={`content ${styles.statsWrap}`}>
@@ -101,11 +104,13 @@ export function StatsStrip({
           <div key={it.label} className={styles.statCell}>
             <dt>{it.label}</dt>
             <dd>
-              {it.value.split(" · ").map((line, i) => (
-                <span key={i} className={styles.statLine}>
-                  {line}
-                </span>
-              ))}
+              {typeof it.value === "string"
+                ? it.value.split(" · ").map((line, i) => (
+                    <span key={i} className={styles.statLine}>
+                      {line}
+                    </span>
+                  ))
+                : it.value}
             </dd>
           </div>
         ))}

@@ -14,32 +14,60 @@ import CaseStallTimeline from "./cv/CaseStallTimeline";
 import PainOverlap from "./cv/PainOverlap";
 import TwoHourSearchTrail from "./cv/TwoHourSearchTrail";
 import SameQuestionCompare from "./cv/SameQuestionCompare";
-import LabInterpreterFilmstrip from "./cv/LabInterpreterFilmstrip";
-import MedCalcCrop from "./cv/MedCalcCrop";
-import HandoutBeforeAfter from "./cv/HandoutBeforeAfter";
 import TwoHoursTenSeconds from "./cv/TwoHoursTenSeconds";
 
 /**
- * ChatVET case-study content — rebuilt 2026-07-25 around Andrew's
- * "Where an average case stalls" diagram (Figma 6956:7164).
+ * ChatVET case-study content.
  *
- * What changed: the case-stall map now carries published figures and a
- * sixth phase after the client leaves, so the study's spine is the map
- * rather than a feature list. A new beat (S3) states the thesis the map
- * exposes — every stall has a second victim, and the artifact that
- * unblocks the vet is the same artifact the client needed — and the
- * scoping, trust, and tool sections all now argue from it. Section order
- * still runs Problem → Agitate → Overlap → TURN → Solution → Outcome.
+ * 2026-07-25 (v2) — folded in Andrew's Figma section 6967:7428 ("ChatVET
+ * Case Study — updated"). The headline change is EVIDENCE: six real
+ * product captures replace the drawn placeholder SVGs, which closes the
+ * standing audit P1 ("zero authentic pixels behind the portfolio's only
+ * live product"). MedCalcCrop, HandoutBeforeAfter and
+ * LabInterpreterFilmstrip are retired — superseded by real screens.
+ * SameQuestionCompare survives because no capture proves the refusal
+ * behaviour yet.
+ *
+ * Also from the Figma: the corpus question is finally settled on-page —
+ * the product ships an announced MSD Veterinary Manual partnership (MSD
+ * is Merck's name outside North America), so the licensing hedge the
+ * earlier audit flagged can go. And the "#1 request" claim upgrades from
+ * interview recall to product analytics: ~64% of all user prompts.
+ *
+ * ⚠ TWO DIFFERENT 64%s, RESOLVED BY ASYMMETRY — do not undo this. Ely
+ * 1999 (clinical questions not pursued during a visit, human primary
+ * care) and ChatVET's own prompt mix are unrelated numbers that happen
+ * to share two digits. The DIGITS now appear in exactly two places: the
+ * stall-map card that cites Ely and labels it a human proxy, and the
+ * measured analytics sentence below. Everywhere else the borrowed figure
+ * is prose — "nearly two-thirds", "most aren't pursued". Do not
+ * reintroduce "64%" into body copy or into PainOverlap.
  *
  * ⚠ FACTS PENDING FROM ANDREW (do not invent): walkthrough n-count (the
- * stall map renders "n = __ PENDING"), timeframe/dates, team shape +
- * "sole designer" confirmation, self-report survey n, testimonial
- * attribution, clinical-accuracy validation sentence, Merck licensing
- * status, user population ("500 monthly users" — professionals?).
+ * stall map renders "n = __ PENDING"), timeframe/dates, "sole designer"
+ * confirmation, self-report survey n, attribution for BOTH pull-quotes,
+ * clinical-accuracy validation sentence, user population ("500 monthly
+ * users" — professionals?), and the date/denominator behind the ~64%.
  */
 
-/** Pilot-user testimonial as a proper pull-quote (was a TESTIMONIAL:-
- *  prefixed emphasis line — template scaffolding, per the audit). */
+/** Discovery quote — why vets distrust general-purpose AI. Motivates the
+ *  whole trust section, so it sits at the top of its media column. */
+function TrustQuote() {
+  return (
+    <figure className={styles.quoteStrip}>
+      <blockquote className={styles.quoteText}>
+        &ldquo;I tried using ChatGPT and could never trust the results. I&rsquo;m
+        very wary of answers I can&rsquo;t trace directly to trusted
+        sources.&rdquo;
+      </blockquote>
+      <figcaption className={styles.quoteAttribution}>
+        {"// DVM PILOT USER — attribution pending permission"}
+      </figcaption>
+    </figure>
+  );
+}
+
+/** Pilot-user testimonial, the closer's social proof. */
 function VetTestimonial() {
   return (
     <figure className={styles.quoteStrip}>
@@ -64,14 +92,14 @@ export default function ChatVet() {
         title="Shipping an AI copilot that saves veterinarians about 15 minutes per case"
         intro={[
           "A veterinary appointment doesn't end when the client leaves. It ends at a keyboard, with the visit re-typed from memory — the one stall nobody has put a number on, and the one no client ever sees.",
-          "We mapped one appointment and found four places it stalls: protocol search, dose math, client translation, and documentation. Every one of them has a second person standing on the other side of it — the client, who is already forgetting most of what was just said.",
-          "ChatVET is an AI copilot sourced to the Merck Veterinary Manual and leading journals. It answers at each stall, and every answer it produces is one the vet can hand straight to the client.",
+          "We mapped one appointment and found four places it stalls: protocol search, dose math, client translation, and documentation. Every one of them has a second person standing on the other side of it — the client, who will lose about a third of the instructions they were given, and most of what they were told about side effects.",
+          "ChatVET is an AI copilot sourced to the MSD Veterinary Manual and leading journals. It answers at each stall, and every answer it produces is one the vet can hand straight to the client.",
         ]}
         media={
           <ZoomableFigure
             label="The shipped ChatVET home"
-            aspect={1440 / 953}
-            naturalWidth={1440}
+            aspect={2880 / 1906}
+            naturalWidth={2880}
             unframed
           >
             <img
@@ -85,15 +113,28 @@ export default function ChatVet() {
 
       <StatsStrip
         items={[
-          {
-            label: "ROLE:",
-            value: "Product Designer & UX Researcher",
-          },
+          { label: "ROLE:", value: "Product Designer & UX Researcher" },
           { label: "TIMEFRAME:", value: "Months, not years (dates pending)" },
           { label: "TEAM:", value: "Startup Founders · Engineering · Me" },
           {
             label: "STATUS:",
-            value: "Live at chatvet.ai · 500 monthly users",
+            /* The only claim in the portfolio a reader can verify in four
+               seconds — so it has to be clickable, not retypeable. */
+            value: (
+              <>
+                <span className={caseStyles.statLine}>
+                  <a
+                    href="https://www.chatvet.ai"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.liveLink}
+                  >
+                    Live at chatvet.ai
+                  </a>
+                </span>
+                <span className={caseStyles.statLine}>500 monthly users</span>
+              </>
+            ),
           },
         ]}
       />
@@ -128,7 +169,7 @@ export default function ChatVet() {
         heading="The client asked a simple question. The answer took two hours."
         paragraphs={[
           "A veterinarian in Alabama had a client whose dog was moving to Ireland, and one question: what does she need? Answering it took more than two hours across government sites and calls to colleagues.",
-          "That is the first stall at full size. Most days it doesn't look like two hours — it looks like a question quietly deferred, one of the 64% that don't get pursued during the visit. Either way, the client goes home without the answer.",
+          "That is the first stall at full size. Most days it doesn't look like two hours — it looks like a question quietly deferred, and in human primary care nearly two-thirds of those aren't pursued during the visit. Either way, the client goes home without the answer.",
         ]}
         emphasis="The information existed the whole time. Knowing where to find it — fast enough to still be in the room — was the problem."
         carousel={false}
@@ -173,33 +214,30 @@ export default function ChatVet() {
           </>
         }
         lede={[
-          "The original vision was a complete EHR replacement.",
-          "When development constraints ruled out the full build, I scoped the copilot wedge with the founders — the same wedge logic behind my Platform One assistant.",
-          "The map made the cut line legible: keep the stalls where a single build serves both readers, defer everything that only moves data around.",
-          "The highest-leverage minutes of a case, shipped in months instead of years, earning their way into clinics one vet at a time.",
+          "We started with a full EHR and tried to take on every stage of the flow. With the team we had, that was not a viable path.",
+          "The original vision was a complete records replacement, and on an older design system we mocked up the dashboards and workspace layouts to prove it out.",
+          "When development constraints ruled out the full build, I pitched a simple chat interface built from the assistant designs we had already drawn — the one piece of the EHR that didn't need the records migration to be useful.",
+          "We could take on the protocol-search problem while earning trust with vets, then let feedback and usage decide the roadmap instead of guessing at it.",
         ]}
         media={
-          /* The real design artifacts (Figma, Paw AI era): the full EHR we
-             designed, beside the chat-focused revision that became the
-             shipped wedge. */
           <div className={caseStyles.mediaPair}>
             <AssetFigure
               label="The Paw AI EHR we designed"
-              aspect={1597 / 1269}
-              naturalWidth={1597}
-              caption="The full EHR from discovery: patient workspace, medical history, medications, and the assistant — then named Paw AI — in a sidebar."
+              aspect={3194 / 2538}
+              naturalWidth={3194}
+              caption="The full EHR from discovery: patient profile and medications down the left rail, recent history and alerts across the top, and the Paw AI assistant holding the main panel."
             >
               <img
                 src="/case-studies/chat-vet/cv-ehr-paw-ai.webp"
-                alt="Paw AI EHR design: a patient dashboard for a German Shepherd with profile, medications, conditions, recent medical history, alerts, and the Paw AI assistant panel answering with suggested diagnostics."
+                alt="Paw AI EHR design: a patient dashboard for a German Shepherd with profile, medications, conditions, recent medical history and alerts, and the Paw AI assistant in the main panel composing a case question — signalment, symptoms, tests run, and the questions to ask — above a row of previous assistant chats."
                 className={styles.shotImg}
               />
             </AssetFigure>
             <AssetFigure
-              label="The chat-focused pivot"
-              aspect={1597 / 1269}
-              naturalWidth={1597}
-              caption="The pivot that became the wedge: the assistant takes the whole screen; the EHR shrinks to context panels around it."
+              label="The assistant view inside the EHR"
+              aspect={3194 / 2538}
+              naturalWidth={3194}
+              caption="The view built for use during an appointment — pulling past visit notes, lab results, and file uploads into the conversation. This panel is what we cut loose and shipped on its own."
             >
               <img
                 src="/case-studies/chat-vet/cv-chat-focus.webp"
@@ -214,60 +252,123 @@ export default function ChatVet() {
       <CaseSection
         heading="Trust is a design feature"
         lede={[
-          "ChatVET answers from the Merck Veterinary Manual and leading journals, not the open web.",
+          "ChatVET answers from the MSD Veterinary Manual — announced as a partnership, not scraped — and from leading veterinary journals. Not the open web.",
           "I designed the source-first answer pattern: sources stack above the answer, and one click lands on the original passage.",
           "Provenance carries double weight here, because these answers don't stay in the building. An answer that becomes a client handout gets read by someone with no way to check it — so the citation has to be attached before it leaves, not available on request.",
           "When the literature doesn't cover a question, ChatVET says so rather than improvising — in medicine, a confident wrong answer is worse than no answer.",
         ]}
         media={
-          <AssetFigure
-            label="One question, three behaviors"
-            aspect={979 / 360}
-            naturalWidth={979}
-            caption="In clinical software, the citation is what makes the answer usable, and the refusal is what makes it safe."
-          >
-            <SameQuestionCompare />
-          </AssetFigure>
+          <div className={styles.closerStack}>
+            <TrustQuote />
+            <AssetFigure
+              label="The corpus, named on the product"
+              aspect={2880 / 1542}
+              naturalWidth={2880}
+              caption="The partnership announcement in the product, above the sourcing strip. Naming the corpus is the claim; the logo row is what lets a vet audit it before they trust an answer."
+            >
+              <img
+                src="/case-studies/chat-vet/cv-msd-partnership2.webp"
+                alt="ChatVET announcement banner reading 'chatVET now Powered by MSD Veterinary Manual', above a sourcing strip captioned 'data sourced from leading veterinary journals and companies' with logos for the Journal of Veterinary Internal Medicine, VPN Plus, Cornell University, WSAVA, Plumb's, AAHA, Banfield Pet Hospital and the Merck Veterinary Manual — the first and last clipped at the edges of the capture."
+                className={styles.shotImg}
+              />
+            </AssetFigure>
+            <AssetFigure
+              label="One question, three behaviors"
+              aspect={979 / 360}
+              naturalWidth={979}
+              caption="In clinical software, the citation is what makes the answer usable, and the refusal is what makes it safe."
+              sub={"// drawn — no capture of the answer or refusal states yet"}
+            >
+              <SameQuestionCompare />
+            </AssetFigure>
+          </div>
         }
       />
 
       <CaseSection
-        heading="Vets shouldn't have to learn prompting, so the interface learned the map"
+        heading="Then usage answered a question research had only guessed at"
         lede={[
-          "Instead of a blank chat box, ChatVET ships a tool at each stall: sourced clinical search and a template library organized by clinical job (SOAP notes, discharge instructions, differentials, client emails) for the protocol hunt, a medication calculator for the dose math, and one-click handout generation for everything that has to leave with the client.",
-          "The calculator opens on species and weight — the number the map showed everything downstream depends on — and attaches the dosing table it used to the result.",
-          "A drag-and-drop lab interpreter sits alongside them: drop the bloodwork, get flagged values and differentials. It wasn't one of the four stalls; it came out of the same interviews, as the thing vets wanted next.",
-          "Clinics piloting the business tier get templates built for their own workflows.",
+          "Medication error is a known pain point in practice, and dose math had already surfaced in the walkthroughs as the tool vets most wanted. Once ChatVET was in their hands, the prompt log settled it: medication and dosing questions were roughly 64% of all prompts logged.",
+          "So we built the tool that answers it in seconds — reachable from a new chat or from the middle of one, so the case context already on screen carries into it.",
+          "The same pattern surfaced two more: a lab interpreter, and a discharge generator that turns the consultation into the instructions the client takes home. That last one is the overlap made literal — one pass over the conversation, two documents out of it.",
         ]}
         media={
           <>
             <AssetFigure
-              label="Lab interpreter, three frames"
-              aspect={979 / 260}
-              naturalWidth={979}
-              caption="No prompt engineering: drop the lab work, get flagged values and differentials."
+              label="Three tools, one click from the chat"
+              aspect={2880 / 1633}
+              naturalWidth={2880}
+              caption="Dose calculator, lab interpreter, discharge generator — opened from a new chat or mid-conversation, so nothing has to be re-typed to use them."
             >
-              <LabInterpreterFilmstrip />
+              <img
+                src="/case-studies/chat-vet/cv-tools-menu.webp"
+                alt="The ChatVET home for a verified veterinary user with the Tools menu open, listing Medication Dose Calc, Lab Interpreter, and Discharge Generator above the VetMed Prompt Templates panel."
+                className={styles.shotImg}
+              />
             </AssetFigure>
             <div className={caseStyles.mediaPair}>
               <AssetFigure
-                label="Medication calculator"
-                aspect={480 / 340}
-                naturalWidth={480}
-                caption="The most-requested tool from research, shipped. Weight first, dose second, and the table it came from attached — so the number is still checkable when it goes home with the owner."
+                label="Medication dose calculator"
+                aspect={2880 / 1622}
+                naturalWidth={2880}
+                caption="Species and weight first — the intake number the whole calculation hangs on — then medication and indication."
               >
-                <MedCalcCrop />
+                <img
+                  src="/case-studies/chat-vet/cv-dose-calculator.webp"
+                  alt="The Medication Dose Calculator dialog with fields for species, breed, weight, medication, and diagnosis or indication, and a Calculate button."
+                  className={styles.shotImg}
+                />
               </AssetFigure>
               <AssetFigure
-                label="Chat to client handout"
-                aspect={480 / 340}
-                naturalWidth={480}
-                caption="Aimed squarely at the 29%: one click turns the clinical exchange into what the client actually takes home — without the evening spent writing it."
+                label="Discharge generator, step one"
+                aspect={2880 / 1503}
+                naturalWidth={2880}
+                caption="It reads the consultation back to the vet: several medications came up — which of them should go home with the client?"
               >
-                <HandoutBeforeAfter />
+                <img
+                  src="/case-studies/chat-vet/cv-discharge-step1.webp"
+                  alt="The Discharge Generator dialog asking which of the medications discussed should be included in the discharge instructions, listing maropitant, capromorelin, and IV crystalloid fluids."
+                  className={styles.shotImg}
+                />
               </AssetFigure>
             </div>
+            <AssetFigure
+              label="Discharge generator, step two"
+              aspect={2880 / 1488}
+              naturalWidth={2880}
+              caption="The second step is the client's document, not the vet's: patient, condition, prescribed medications, and the restrictions an owner actually has to follow at home."
+            >
+              <img
+                src="/case-studies/chat-vet/cv-discharge-step2.webp"
+                alt="The Discharge Generator second step with fields for patient name, procedure or condition, medications prescribed, and diet and activity restrictions, above a Generate Instructions button."
+                className={styles.shotImg}
+              />
+            </AssetFigure>
           </>
+        }
+      />
+
+      <CaseSection
+        heading="Vets shouldn't have to learn prompting, so the templates learned the questions"
+        lede={[
+          "Early usage showed us the shape of what vets were asking, so instead of a blank chat box ChatVET ships a prompt library organized by clinical job: SOAP notes, discharge instructions, differentials, client emails.",
+          "Vets replace the highlighted placeholders with species, age, and symptoms, then hit enter — a few details instead of a paragraph of prompt engineering.",
+          "The library is tagged by who the output is for, which is the overlap thesis turned into information architecture. Clinician templates stay in the record. Client templates — discharge instructions, results emails, prevention handouts — are the ones that leave with the owner.",
+          "Clinics piloting the business tier get templates built for their own workflows.",
+        ]}
+        media={
+          <AssetFigure
+            label="The VetMed prompt library"
+            aspect={2880 / 1780}
+            naturalWidth={2880}
+            caption="Templates built from the questions vets actually asked, grouped by clinical job and tagged for their reader — Clinician or Client. Fill the highlighted placeholders, hit enter."
+          >
+            <img
+              src="/case-studies/chat-vet/cv-prompt-library.webp"
+              alt="The VetMed prompt library: template group filters for clinical documentation, client communication, diagnostics, practice management, and learning, above eight template cards including SOAP Note Generation, Discharge Instructions, Differential Diagnosis, and Client Email Results, each tagged Clinician or Client."
+              className={styles.shotImg}
+            />
+          </AssetFigure>
         }
       />
 
@@ -291,31 +392,12 @@ export default function ChatVet() {
             <TwoHoursTenSeconds />
           </AssetFigure>
           <VetTestimonial />
-          {/* Design-era consult view (Figma, Paw AI branding, v0.0.0 — shows
-              response time, not citations). Stands in for the outcome shot; a
-              live capture of the Ireland answer at chatvet.ai (URL + sources
-              visible) is the intended upgrade. */}
-          <AssetFigure
-            label="The consultation, answered in seconds"
-            aspect={1440 / 1269}
-            naturalWidth={1440}
-            caption="The consult view answering a real differential-diagnosis question — grouped possibilities, recommended next steps, and a response time under two seconds. The prior consultations stay one panel away."
-            sub={"// design-era build, when the assistant was still named Paw AI — live chatvet.ai capture with sources visible pending"}
-          >
-            <img
-              src="/case-studies/chat-vet/cv-consult-chat.webp"
-              alt="A veterinary AI consultation answering a differential-diagnosis question about a dog's lethargy, decreased appetite, and mild fever — returning grouped possibilities (infectious, inflammatory, systemic) with recommended next steps and a 1.2-second response time, alongside previous and recent consultations."
-              className={styles.shotImg}
-            />
-          </AssetFigure>
         </div>
       </CenteredSection>
 
-      {/* Figma's UP NEXT block was un-updated (self-referential ChatVET
-          copy); named for the actual destination so link text matches. */}
       <UpNext
         title="AI Powered Personal Knowledge OS"
-        desc="A personal AI that reads 300–400 sources a week and answers with citations instead of confidence."
+        desc="A multi-agent system that reads thousands of sources, building a living corpus."
         href="/case-studies/knowledge-os"
       />
     </>
