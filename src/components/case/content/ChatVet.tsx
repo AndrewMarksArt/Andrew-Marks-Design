@@ -11,7 +11,6 @@ import BrandRow from "../../site/BrandRow";
 import ZoomableFigure from "../FigureLightbox";
 import caseStyles from "../case.module.css";
 import styles from "./ChatVet.module.css";
-import TwoHoursTenSeconds from "./cv/TwoHoursTenSeconds";
 
 /**
  * ChatVET case study — simplified spine, 2026-07-26 (Andrew's brief).
@@ -56,6 +55,9 @@ import TwoHoursTenSeconds from "./cv/TwoHoursTenSeconds";
  * what happened to the product, and it should not start.
  */
 
+/** Pilot-user quote. Lives in beat 3 beside the corpus figure — it is a
+ *  claim about trusting the source, not about outcomes, so it does not
+ *  belong in the closer. */
 function VetTestimonial() {
   return (
     <figure className={styles.quoteStrip}>
@@ -251,6 +253,9 @@ export default function ChatVet() {
                 className={styles.shotImg}
               />
             </AssetFigure>
+            {/* The quote belongs here, not in the closer: it is about
+                trusting the source, which is the claim this section makes. */}
+            <VetTestimonial />
           </>
         }
       />
@@ -324,38 +329,22 @@ export default function ChatVet() {
         }
       />
 
+      {/* CLOSER, rebuilt 2026-07-26. The old one was "From two hours to ten
+          seconds", built on a 2h→10s figure Andrew has since confirmed was a
+          user EXAGGERATING, not a documented case — so the headline, the
+          paragraph and the TwoHoursTenSeconds graphic all went. Do not
+          reinstate any of them. What is left is what can be substantiated. */}
       <CenteredSection
-        heading="From two hours to ten seconds"
+        heading="Vets kept using it, and brought it into their own practices."
         paragraphs={[
-          /* Self-contained on purpose: the two-hour setup used to live in an
-             agitation beat that the simplification cut, so this paragraph has
-             to introduce its own referent. "One ... in the pilot" introduces
-             rather than presupposes. */
-          "One Alabama DVM in the pilot had spent more than two hours running down a single protocol question. He ran it through ChatVET and had the answer — sourced to the Merck Veterinary Manual — in ten seconds.",
-          "On average, users self-report saving about 15 minutes per case.",
-          "The web app went live with 500 monthly users globally, multiple clinics piloting the business tier ahead of paid rollout, and growth running bottom-up as individual DVMs brought it into their practices.",
-          /* Inoculation, not blame. Anyone can find the product in three
-             seconds; this line means the screens here can't be mistaken for a
-             claim about the current surface. Says nothing about why. */
-          /* Three facts, one breath: what's his, what changed, relationship
-             intact. The last sentence is what stops "wound down" reading as a
-             falling-out. */
+          "The web app went live with 500 monthly users globally, multiple clinics piloting the business tier ahead of paid rollout, and growth running bottom-up rather than through a sales motion.",
+          "Users self-report saving about 15 minutes per case. That is their estimate, not a measurement.",
+          /* Inoculation, not blame — and the last sentence is what stops
+             "wound down" reading as a falling-out. */
           "The screens in this study are the version I designed and shipped. The product has continued to change since my engagement wound down. I still work with the founder on investor and marketing material.",
         ]}
         carousel={false}
-      >
-        <div className={styles.closerStack}>
-          <AssetFigure
-            label="Two hours to ten seconds"
-            aspect={979 / 240}
-            naturalWidth={979}
-            caption="Same vet, same question, ten seconds — one documented case, not a benchmark."
-          >
-            <TwoHoursTenSeconds />
-          </AssetFigure>
-          <VetTestimonial />
-        </div>
-      </CenteredSection>
+      />
 
       <UpNext
         title="AI Powered Personal Knowledge OS"
