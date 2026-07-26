@@ -276,6 +276,14 @@
   /* contain the 1500px traveler spans so they don't inflate document
      scrollWidth (audit L1) */
   overflow: clip;
+  /* ...but the clip edge defaults to the PADDING box, which is exactly the
+     region the ring mask below EXCLUDES. Disjoint regions = the beam can
+     never paint, which is how 11a22de fixed the scrollWidth and silently
+     killed the animation. Push the clip edge out to the border box so the
+     annulus is inside it again; the travelers stay contained either way.
+     Length first (wider support), keyword second (tracks the border). */
+  overflow-clip-margin: 4px; /* = the transparent border set below */
+  overflow-clip-margin: border-box;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.4s ease;
