@@ -47,6 +47,13 @@ import TwoHoursTenSeconds from "./cv/TwoHoursTenSeconds";
  * ⚠ PENDING FACTS (do not invent): timeframe/dates, survey n, the pilot
  * clinic's name or a concrete anonymisation, testimonial attribution,
  * and the denominator behind "the most-asked question".
+ *
+ * ⚠ DO NOT RE-ADD THE LIVE LINK without asking. As of 2026-07-26 the
+ * engagement has wound down, the founder has shipped his own changes, and
+ * the live UI no longer matches these screens. Linking would send a
+ * screener to work that isn't Andrew's. The page states that the screens
+ * are the version he shipped and stops there — it does NOT characterise
+ * what happened to the product, and it should not start.
  */
 
 function VetTestimonial() {
@@ -108,22 +115,15 @@ export default function ChatVet() {
           },
           { label: "TIMEFRAME:", value: "Months, not years (dates pending)" },
           {
+            /* Deliberately NOT a link, and the domain is deliberately absent.
+               The founder has continued building since the engagement wound
+               down and the UI no longer matches these screens, so sending a
+               screener to the live app would show them someone else's work.
+               The shipped-ness claim survives; only the four-second
+               verification is gone. Re-link if the surface ever comes back
+               into line — .liveLink is still in ChatVet.module.css. */
             label: "STATUS:",
-            value: (
-              <>
-                <span className={caseStyles.statLine}>
-                  <a
-                    href="https://www.chatvet.ai"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.liveLink}
-                  >
-                    Live at chatvet.ai
-                  </a>
-                </span>
-                <span className={caseStyles.statLine}>500 monthly users</span>
-              </>
-            ),
+            value: "Shipped and live · 500 monthly users",
           },
         ]}
       />
@@ -333,7 +333,11 @@ export default function ChatVet() {
              rather than presupposes. */
           "One Alabama DVM in the pilot had spent more than two hours running down a single protocol question. He ran it through ChatVET and had the answer — sourced to the Merck Veterinary Manual — in ten seconds.",
           "On average, users self-report saving about 15 minutes per case.",
-          "Today the web app is live at chatvet.ai with 500 monthly users globally, multiple clinics piloting the business tier ahead of paid rollout, and growth running bottom-up as individual DVMs bring it into their practices. Everything is currently free.",
+          "The web app went live with 500 monthly users globally, multiple clinics piloting the business tier ahead of paid rollout, and growth running bottom-up as individual DVMs brought it into their practices.",
+          /* Inoculation, not blame. Anyone can find the product in three
+             seconds; this line means the screens here can't be mistaken for a
+             claim about the current surface. Says nothing about why. */
+          "The screens in this study are the version I designed and shipped. The product has continued to change since my engagement wound down.",
         ]}
         carousel={false}
       >
