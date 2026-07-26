@@ -337,7 +337,10 @@ export default function ChatVet() {
           /* Inoculation, not blame. Anyone can find the product in three
              seconds; this line means the screens here can't be mistaken for a
              claim about the current surface. Says nothing about why. */
-          "The screens in this study are the version I designed and shipped. The product has continued to change since my engagement wound down.",
+          /* Three facts, one breath: what's his, what changed, relationship
+             intact. The last sentence is what stops "wound down" reading as a
+             falling-out. */
+          "The screens in this study are the version I designed and shipped. The product has continued to change since my engagement wound down. I still work with the founder on investor and marketing material.",
         ]}
         carousel={false}
       >
