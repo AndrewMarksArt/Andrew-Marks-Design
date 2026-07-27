@@ -9,6 +9,7 @@ import BrandRow from "../../site/BrandRow";
 import styles from "./KnowledgeOs.module.css";
 import CaptureVolumeChart from "./kos/CaptureVolumeChart";
 import CaptureBeforeAfter from "./kos/CaptureBeforeAfter";
+import TechStackMap from "./kos/TechStackMap";
 import TrustRowCrop from "./kos/TrustRowCrop";
 import GapCatchCard from "./kos/GapCatchCard";
 import SystemMap from "./kos/SystemMap";
@@ -110,6 +111,25 @@ export default function KnowledgeOs() {
             caption="Left: where every capture tool ends. Right: capture that compounds — the bot's real two-step reply: instant ack, then the graded save. Everything in this study happens after this message."
           >
             <CaptureBeforeAfter />
+          </AssetFigure>
+        }
+      />
+
+      <CaseSection
+        heading="Built for a web that fights back."
+        lede={[
+          "Almost none of the pipeline's external tools are the ones it started with. Extraction is adversarial — platforms wall off content, public APIs grow challenge screens, managed builders quietly drop your system dependencies. Surviving that took an architecture decision: routing lives in a database table, not in code.",
+          "Every platform gets a chain of extractors that ends at the same universal fallback, so a failed tool degrades a save — it never drops one. When YouTube's bot wall broke the media downloader, yt-dlp swapped in behind one registry row. When the public cobalt API added a Turnstile wall, a self-hosted instance on Fly took over. When two managed builders silently dropped yt-dlp and ffmpeg from the deploy, the build moved to a raw Dockerfile.",
+          "The AI layer tiers the same way the tools do: Haiku where volume lives, Sonnet where judgment lives, Voyage for embedding and reranking, Exa as the one sanctioned search. And every tool call is logged with its duration and cost — the stack is instrumented like the corpus.",
+        ]}
+        media={
+          <AssetFigure
+            label="The full stack, and why it's swappable"
+            aspect={979 / 560}
+            naturalWidth={979}
+            caption="Fourteen registry tools across six layers, with the swaps dated on the right. The registry is why a platform fighting back never dropped a link."
+          >
+            <TechStackMap />
           </AssetFigure>
         }
       />

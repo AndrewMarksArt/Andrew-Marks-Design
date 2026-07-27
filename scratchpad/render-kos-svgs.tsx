@@ -8,6 +8,7 @@ import CaptureVolumeChart from "../src/components/case/content/kos/CaptureVolume
 import CaptureBeforeAfter from "../src/components/case/content/kos/CaptureBeforeAfter";
 import TrustRowCrop from "../src/components/case/content/kos/TrustRowCrop";
 import SystemMap from "../src/components/case/content/kos/SystemMap";
+import TechStackMap from "../src/components/case/content/kos/TechStackMap";
 import AgentFleet from "../src/components/case/content/kos/AgentFleet";
 import RagArchitecture from "../src/components/case/content/kos/RagArchitecture";
 import RefusalCrop from "../src/components/case/content/kos/RefusalCrop";
@@ -18,7 +19,7 @@ import GapCatchCard from "../src/components/case/content/kos/GapCatchCard";
 
 const comps: Record<string, React.ComponentType> = {
   CaptureVolumeChart, CaptureBeforeAfter, TrustRowCrop,
-  SystemMap, AgentFleet, RagArchitecture, RefusalCrop, BranchGraphFigure,
+  SystemMap, TechStackMap, AgentFleet, RagArchitecture, RefusalCrop, BranchGraphFigure,
   ScoringRecal, SystemEvolution, GapCatchCard,
 };
 
