@@ -3,7 +3,7 @@ export default function GapCatchCard() {
     <svg
       viewBox="0 0 640 300"
       role="img"
-      aria-label="A representative render of a gap-report card marked priority maximum: in security, five subtopics and eight cross-links were missed by manual reading; subtopic names are withheld."
+      aria-label="The gap report card from the agent's first run on March 30, at 627 sources: five security subtopics — agent, API, server, data safety, safety architecture — drawn as nodes ringed in orange, all sitting at the corpus-maximum 0.85 priority, with only eight saved links of coverage between them drawn as sparse dots. The scoring said it mattered; the reading hadn't noticed."
       style={{
         width: "100%",
         height: "auto",
@@ -11,7 +11,7 @@ export default function GapCatchCard() {
         fontFamily: "var(--font-geist-mono), ui-monospace, monospace",
       }}
     >
-      <title>The gap the agents caught — representative report card</title>
+      <title>The gap the agent caught first — max priority, near-zero coverage</title>
 
       {/* ---- Card plate ---- */}
       <rect x={110} y={24} width={420} height={252} fill="#FFFFFF" stroke="#000000" strokeWidth={1} />
@@ -21,36 +21,30 @@ export default function GapCatchCard() {
       <line x1={110} y1={51} x2={530} y2={51} stroke="#000000" strokeWidth={1} />
       <text x={122} y={42} fontSize={12} fill="#231A09">
         <tspan fontWeight={400}>{"GAP REPORT — "}</tspan>
-        <tspan fontWeight={500}>{"PRIORITY: MAXIMUM"}</tspan>
+        <tspan fontWeight={500}>{"FIRST RUN · MAR 30 · 627 SOURCES"}</tspan>
       </text>
 
-      {/* Line 1 — the subtopic count */}
-      <text
-        x={320}
-        y={74}
-        fontSize={13}
-        fontWeight={500}
-        fill="#231A09"
-        textAnchor="middle"
-      >
-        {"SECURITY — 5 SUBTOPICS MY READING MISSED"}
+      {/* Line 1 — the finding */}
+      <text x={320} y={74} fontSize={13} fontWeight={500} fill="#231A09" textAnchor="middle">
+        {"SECURITY — 5 SUBTOPICS AT THE CORPUS-MAX PRIORITY"}
       </text>
 
-      {/* Redaction bar — subtopic names withheld */}
-      <rect x={180} y={85} width={280} height={11} fill="#D9D9D9" />
+      {/* The five subtopics, named — they're public in the repo's own write-up */}
+      <text x={320} y={92} fontSize={11} fontWeight={400} fill="#5E5757" textAnchor="middle">
+        {"AGENT · API · SERVER · DATA SAFETY · SAFETY ARCHITECTURE"}
+      </text>
 
-      {/* ---- Node cluster: 5 subtopics, 8 cross-links ---- */}
-      {/* THE accent: the 8 links the machine surfaced (drawn under the nodes) */}
-      <g stroke="#EC4E09" strokeWidth={1.5}>
-        <line x1={252} y1={132} x2={330} y2={118} />
-        <line x1={330} y1={118} x2={396} y2={144} />
-        <line x1={396} y1={144} x2={362} y2={184} />
-        <line x1={362} y1={184} x2={284} y2={178} />
-        <line x1={284} y1={178} x2={252} y2={132} />
-        <line x1={252} y1={132} x2={396} y2={144} />
-        <line x1={330} y1={118} x2={362} y2={184} />
-        <line x1={330} y1={118} x2={284} y2={178} />
-      </g>
+      {/* THE accent: the priority ring — all five at the corpus maximum */}
+      <ellipse
+        cx={324}
+        cy={151}
+        rx={112}
+        ry={52}
+        fill="none"
+        stroke="#EC4E09"
+        strokeWidth={1.5}
+        strokeDasharray="5 4"
+      />
 
       {/* The 5 subtopic nodes */}
       <g fill="#FFFFFF" stroke="#000000" strokeWidth={1}>
@@ -61,25 +55,34 @@ export default function GapCatchCard() {
         <circle cx={362} cy={184} r={7} />
       </g>
 
-      {/* Line 2 — the cross-link count */}
-      <text
-        x={320}
-        y={214}
-        fontSize={12}
-        fontWeight={400}
-        fill="#231A09"
-        textAnchor="middle"
-      >
-        {"8 CROSS-LINKS MY READING NEVER SURFACED"}
+      {/* The 8 saved links — sparse coverage dots, not connections */}
+      <g fill="#5E5757">
+        <rect x={236} y={116} width={5} height={5} />
+        <rect x={264} y={114} width={5} height={5} />
+        <rect x={316} y={100} width={5} height={5} />
+        <rect x={342} y={102} width={5} height={5} />
+        <rect x={408} y={130} width={5} height={5} />
+        <rect x={410} y={150} width={5} height={5} />
+        <rect x={268} y={188} width={5} height={5} />
+        <rect x={374} y={194} width={5} height={5} />
+      </g>
+
+      {/* Ring label */}
+      <text x={324} y={216} fontSize={11} fontWeight={500} fill="#A43B0D" textAnchor="middle">
+        {"ALL FIVE AT 0.85 — THE CORPUS MAXIMUM"}
       </text>
 
-      {/* Footnote rule + provenance line */}
-      <line x1={111} y1={240} x2={529} y2={240} stroke="rgba(0,0,0,0.25)" strokeWidth={1} />
-      <text x={122} y={254} fontSize={11} fontWeight={400} fill="#5E5757">
-        {"// REPRESENTATIVE RENDER —"}
+      {/* Line 2 — the coverage count, as recorded */}
+      <text x={320} y={238} fontSize={12} fontWeight={500} fill="#231A09" textAnchor="middle">
+        {"ONLY 8 SAVED LINKS ACROSS ALL FIVE"}
       </text>
-      <text x={122} y={268} fontSize={11} fontWeight={400} fill="#5E5757">
-        {"// A REAL GAP-ANALYSIS RUN REPLACES THIS SHORTLY"}
+      <text x={320} y={256} fontSize={11} fontWeight={400} fill="#231A09" textAnchor="middle">
+        {"THE SCORING SAID IT MATTERED. MY READING HADN'T NOTICED."}
+      </text>
+
+      {/* Provenance footnote */}
+      <text x={110} y={294} fontSize={11} fontWeight={400} fill="#A43B0D">
+        {"// REAL RUN, DATED IN THE REPO — THE HEADLINE OF 16 GAPS FOUND"}
       </text>
     </svg>
   );

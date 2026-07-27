@@ -3,7 +3,7 @@ export default function RagArchitecture() {
     <svg
       viewBox="0 0 979 380"
       role="img"
-      aria-label="One-page architecture of Knowledge OS: a question is embedded, over-fetched from a corpus of four thousand plus sources, reranked to the top ten passages, and passed to a model stamped with the rule to ground every claim in a named source or say the corpus doesn't cover it; gap-analysis and decay agents loop over the corpus."
+      aria-label="One-page architecture of Knowledge OS: a question is embedded, over-fetched from the corpus, reranked to the top ten sources, and passed to a model stamped with the rule to ground every claim in a named source or say the corpus doesn't cover it; the gap-analysis agent and a decay review loop over the corpus, where every source is embedded and scored."
       style={{
         width: "100%",
         height: "auto",
@@ -54,7 +54,7 @@ export default function RagArchitecture() {
 
       {/* Figure header */}
       <text x={16} y={32} fontSize={13} fontWeight={400} fill="#5E5757">
-        {"// THE MACHINE, DRAWN — BUILT SOLO, 4 MONTHS"}
+        {"// THE MACHINE, DRAWN — BUILT SOLO, IN PRODUCTION FROM WEEK ONE"}
       </text>
 
       {/* The grounding-rule stamp (THE accent element), bound to MODEL */}
@@ -131,7 +131,7 @@ export default function RagArchitecture() {
         strokeWidth={1}
       />
       <text x={490} y={314.5} textAnchor="middle" fontSize={13} fontWeight={400} fill="#231A09">
-        {"THE CORPUS — 4,000+ SOURCES"}
+        {"THE CORPUS — EVERY SOURCE EMBEDDED + SCORED"}
       </text>
 
       {/* Corpus feeds the over-fetch */}
@@ -167,7 +167,7 @@ export default function RagArchitecture() {
         markerEnd="url(#kosrag-arrow-gray)"
       />
       <text x={760} y={220} textAnchor="middle" fontSize={11} fontWeight={400} fill="#5E5757">
-        {"DECAY AGENT"}
+        {"DECAY REVIEW"}
       </text>
     </svg>
   );

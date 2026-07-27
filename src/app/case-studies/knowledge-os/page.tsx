@@ -4,7 +4,7 @@ import KnowledgeOs from "../../../components/case/content/KnowledgeOs";
 
 export const metadata: Metadata = {
   title: "AI Powered Personal Knowledge OS — Andrew Marks",
-  description: "A multi-agent system that reads 300–400 sources a week into a 4,000+ source living corpus — built solo, in production.",
+  description: "A multi-agent system that reads hundreds of sources a week into a living corpus of thousands — built solo, in production since week one.",
 };
 
 export default function Page() {

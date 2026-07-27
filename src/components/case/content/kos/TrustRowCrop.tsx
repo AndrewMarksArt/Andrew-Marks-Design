@@ -3,7 +3,7 @@ export default function TrustRowCrop() {
     <svg
       viewBox="0 0 979 300"
       role="img"
-      aria-label="One Knowledge OS source row shown at double size: a favicon, title bar, confidence and novelty score chips with their reasons, and an orange extraction-failed chip with an inline retry button, annotated with leader lines."
+      aria-label="One Knowledge OS source row at double size, drawn as the live app renders it: a favicon, a title bar, and a single 0-to-100 value badge; an opened hover tooltip beneath shows the score's written breakdown — priority with its reason, novelty within the link's Space, percentile rank. To the right, an orange extraction-failed chip shows the failure saved on the row, with recovery one click away."
       style={{
         width: "100%",
         height: "auto",
@@ -11,7 +11,7 @@ export default function TrustRowCrop() {
         fontFamily: "var(--font-geist-mono), ui-monospace, monospace",
       }}
     >
-      <title>Trust on the row</title>
+      <title>Trust on the row — the badge, the reason on hover, the failure kept</title>
 
       <defs>
         <marker
@@ -42,29 +42,17 @@ export default function TrustRowCrop() {
         {"SOURCE ROW — 2X"}
       </text>
 
-      {/* Callout annotations above the row */}
-      <text x={110} y={78} fontSize={13} fontWeight={400} fill="#5E5757">
-        {"CONFIDENCE, WITH ITS REASON"}
-      </text>
-      <text x={420} y={78} fontSize={13} fontWeight={400} fill="#5E5757">
-        {"NOVELTY VS EVERYTHING SAVED"}
+      {/* Callout annotation above the badge */}
+      <text x={62} y={72} fontSize={13} fontWeight={400} fill="#5E5757">
+        {"ONE 0–100 VALUE BADGE — THE WHY, ONE HOVER AWAY"}
       </text>
 
-      {/* Leader lines pointing down at chip 1 and chip 2 */}
+      {/* Leader pointing down at the badge */}
       <line
-        x1={270}
-        y1={89}
-        x2={270}
-        y2={114}
-        stroke="rgba(0,0,0,0.375)"
-        strokeWidth={1}
-        markerEnd="url(#kostrust-arrow)"
-      />
-      <line
-        x1={539}
-        y1={89}
-        x2={539}
-        y2={114}
+        x1={160}
+        y1={82}
+        x2={160}
+        y2={106}
         stroke="rgba(0,0,0,0.375)"
         strokeWidth={1}
         markerEnd="url(#kostrust-arrow)"
@@ -73,63 +61,59 @@ export default function TrustRowCrop() {
       {/* The source row, at 2x */}
       <rect
         x={16}
-        y={118}
+        y={110}
         width={947}
-        height={64}
+        height={56}
         fill="#FFFFFF"
         stroke="#000000"
         strokeWidth={1}
       />
 
       {/* Favicon square (abstract) */}
-      <rect
-        x={28}
-        y={137}
-        width={26}
-        height={26}
-        fill="#EDEDED"
-        stroke="#000000"
-        strokeWidth={1}
-      />
-      <rect x={36} y={145} width={10} height={10} fill="#D9D9D9" />
+      <rect x={28} y={125} width={26} height={26} fill="#EDEDED" stroke="#000000" strokeWidth={1} />
+      <rect x={36} y={133} width={10} height={10} fill="#D9D9D9" />
 
       {/* Title text-bar (abstract) */}
-      <rect x={62} y={146} width={58} height={8} fill="#D9D9D9" />
+      <rect x={62} y={134} width={70} height={8} fill="#D9D9D9" />
 
-      {/* Chip 1 — confidence score */}
-      <rect
-        x={130}
-        y={139}
-        width={280}
-        height={22}
-        rx={2}
-        fill="#FFFFFF"
-        stroke="rgba(0,0,0,0.25)"
-        strokeWidth={1}
-      />
-      <text x={137} y={154} fontSize={11} fontWeight={400} fill="#231A09">
-        {"SCORE 7.8 — CITES PRIMARY DATA, SMALL N"}
+      {/* The value badge — dot + composite 0–100, as the live table renders it */}
+      <circle cx={152} cy={138} r={5} fill="#5E5757" />
+      <text x={164} y={143} fontSize={13} fontWeight={500} fill="#231A09">
+        {"78"}
       </text>
 
-      {/* Chip 2 — novelty score */}
-      <rect
-        x={420}
-        y={139}
-        width={239}
-        height={22}
-        rx={2}
-        fill="#FFFFFF"
-        stroke="rgba(0,0,0,0.25)"
+      {/* The opened hover tooltip — priority + reason, novelty, percentile */}
+      <line
+        x1={160}
+        y1={166}
+        x2={160}
+        y2={186}
+        stroke="rgba(0,0,0,0.375)"
         strokeWidth={1}
       />
-      <text x={427} y={154} fontSize={11} fontWeight={400} fill="#231A09">
-        {"NOVELTY 9.1 — FIRST ON THIS TOPIC"}
+      <rect
+        x={62}
+        y={188}
+        width={340}
+        height={76}
+        fill="#FFFFFF"
+        stroke="rgba(0,0,0,0.375)"
+        strokeWidth={1}
+      />
+      <text x={76} y={210} fontSize={11} fontWeight={400} fill="#231A09">
+        {"PRIORITY 74 — CITES PRIMARY DATA, SMALL N"}
+      </text>
+      <text x={76} y={230} fontSize={11} fontWeight={400} fill="#231A09">
+        {"NOVELTY 62 — FRESH WITHIN ITS SPACE"}
+      </text>
+      <text x={76} y={250} fontSize={11} fontWeight={400} fill="#231A09">
+        {"PERCENTILE 81 — RANK IN ITS TOPIC"}
       </text>
 
-      {/* Chip 3 — THE accent element: the failure, shown where you read */}
+      {/* Chip — THE accent element: the failure, kept where you read */}
       <rect
-        x={669}
-        y={139}
+        x={620}
+        y={127}
         width={226}
         height={22}
         rx={2}
@@ -138,58 +122,45 @@ export default function TrustRowCrop() {
         stroke="#EC4E09"
         strokeWidth={1.5}
       />
-      <text x={676} y={154} fontSize={11} fontWeight={400} fill="#A43B0D">
+      <text x={627} y={142} fontSize={11} fontWeight={400} fill="#A43B0D">
         {"EXTRACTION FAILED — PDF PAYWALL"}
       </text>
 
-      {/* Retry button chip, part of the failure/recovery cluster */}
+      {/* Re-ingest chip */}
       <rect
-        x={903}
-        y={139}
-        width={48}
+        x={856}
+        y={127}
+        width={92}
         height={22}
         rx={2}
         fill="#FFFFFF"
         stroke="#EC4E09"
         strokeWidth={1.5}
       />
-      <text
-        x={927}
-        y={154}
-        fontSize={11}
-        fontWeight={400}
-        fill="#A43B0D"
-        textAnchor="middle"
-      >
-        {"RETRY"}
+      <text x={902} y={142} fontSize={11} fontWeight={400} fill="#A43B0D" textAnchor="middle">
+        {"RE-INGEST"}
       </text>
 
-      {/* Leader line pointing up at the failed chip */}
+      {/* Leader + the senior annotation under the failure cluster */}
       <line
         x1={782}
-        y1={212}
+        y1={196}
         x2={782}
-        y2={186}
+        y2={172}
         stroke="rgba(0,0,0,0.375)"
         strokeWidth={1}
         markerEnd="url(#kostrust-arrow)"
       />
-
-      {/* Largest annotation — the senior detail */}
-      <text
-        x={782}
-        y={232}
-        fontSize={13}
-        fontWeight={500}
-        fill="#000000"
-        textAnchor="middle"
-      >
-        {"FAILURE + RECOVERY, IN PLACE"}
+      <text x={782} y={216} fontSize={13} fontWeight={500} fill="#000000" textAnchor="middle">
+        {"SAVED, NEVER DROPPED —"}
+      </text>
+      <text x={782} y={234} fontSize={13} fontWeight={500} fill="#000000" textAnchor="middle">
+        {"RECOVERY ONE CLICK AWAY, OR /RETRY IN TELEGRAM"}
       </text>
 
       {/* Footnote */}
-      <text x={16} y={280} fontSize={11} fontWeight={400} fill="#A43B0D">
-        {"// REPRESENTATIVE ROW — SCORES AS THE SYSTEM RENDERS THEM"}
+      <text x={16} y={286} fontSize={11} fontWeight={400} fill="#A43B0D">
+        {"// MIRRORS THE LIVE KNOWLEDGE TABLE — 0–100 VALUE BADGE, WRITTEN REASON ON HOVER"}
       </text>
     </svg>
   );

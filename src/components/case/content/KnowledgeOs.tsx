@@ -10,37 +10,47 @@ import styles from "./KnowledgeOs.module.css";
 import CaptureVolumeChart from "./kos/CaptureVolumeChart";
 import CaptureBeforeAfter from "./kos/CaptureBeforeAfter";
 import TrustRowCrop from "./kos/TrustRowCrop";
-import GapReportDecay from "./kos/GapReportDecay";
+import GapCatchCard from "./kos/GapCatchCard";
+import SystemMap from "./kos/SystemMap";
+import AgentFleet from "./kos/AgentFleet";
 import RagArchitecture from "./kos/RagArchitecture";
 import RefusalCrop from "./kos/RefusalCrop";
 import BranchGraphFigure from "./kos/BranchGraphFigure";
-import GrowthTimeline from "./kos/GrowthTimeline";
-import GapCatchCard from "./kos/GapCatchCard";
+import ScoringRecal from "./kos/ScoringRecal";
+import SystemEvolution from "./kos/SystemEvolution";
 
 /**
- * Knowledge OS case-study content — audit-driven revision (career-
- * strategy 005): stats strip filled with dated telemetry, numbers
- * reconciled (mid-May anchor, "signal" defined, agents introduced in
- * S4), the Solution turn extracted from S2 into its own beat, S6 trimmed
- * from feature dump to branching + librarian clause, internet-research
- * tool moved to S4 as the sanctioned exception, instrumentation-method
- * sentence added, mic-drop grammar fixed.
+ * Knowledge OS case-study content — repo-audit revision (2026-07-26) +
+ * the judge panel's second-tier pass (same day). Fact ledger:
+ * .claude/research/004-kos-repo-audit-provenance.md — READ IT before
+ * touching any number here.
  *
- * ⚠ FACTS PENDING FROM ANDREW (do not invent): capture-volume mechanism
- * (feeds/newsletters vs hand-picked), grounding eval (spot-check n if
- * one happened), score-calibration story, whether the security-gap
- * priorities predated the agent run, the one judgment beat (what the
- * first post-capture version got wrong / what branching cost).
+ * Second-tier pass (6-judge panel, mean ~6.8): effort metrics
+ * (865 commits · 249 PRs) pulled from the stats strip — closer stat
+ * card only; the two problem sections merged into one; per-figure
+ * provenance hedges consolidated into a single methods note in S1;
+ * GapCatchCard promoted from the footer into "A corpus that admits
+ * what it lacks" (GapReportDecay retired — the real run replaces the
+ * representative report; recoverable in git); aphorism cadence thinned
+ * ("restraint is a design decision", "honest failure is the point"
+ * cut; "piles rot" and "a fix you can't measure" kept); "compounding"
+ * capped to the closer heading; RagArchitecture's corpus band no
+ * longer repeats the 3,241 count (SystemMap owns it).
+ *
+ * ⚠ STILL PENDING FROM ANDREW: real product screenshots (every
+ * judge's #1 fix — hero, trust row, refusal, branch pager), fresh DB
+ * export (corpus total, weekly volume, signals total), one
+ * deep-reading-capacity number, "in daily use" as of now.
  */
 export default function KnowledgeOs() {
   return (
     <>
       <CaseHero
         eyebrow="KNOWLEDGE HUB · PERSONAL KNOWLEDGE OS"
-        title="Designing a personal AI that reads 300–400 sources a week, so I don't have to."
+        title="Designing a personal AI that reads hundreds of sources a week, so I don't have to."
         intro={[
-          "In AI, new work outpaces anyone's reading speed. Knowledge Hub is a personal knowledge OS, built solo and still shipping weekly.",
-          "A capture pipeline ingests 300–400 sources a week into a corpus past 4,000 sources; a chat interface answers from that corpus with citations instead of confidence.",
+          "In AI, new work outpaces anyone's reading speed. Knowledge Hub is a personal knowledge OS — built solo, deployed in its first week, grown in production ever since.",
+          "A capture pipeline ingests hundreds of sources a week into a corpus measured at 3,241 by mid-June; a chat interface answers from that corpus with citations instead of confidence.",
           "I designed, researched, and built every layer — the trust decisions below are mine end to end.",
         ]}
         placeholderLabel="// hero render in progress — the system diagrams below are current"
@@ -51,15 +61,15 @@ export default function KnowledgeOs() {
           { label: "ROLE:", value: "Design, research & engineering — solo" },
           {
             label: "TIMEFRAME:",
-            value: "4 months to production · shipping weekly",
+            value: "Deployed in week one · 4½ months shipping",
           },
           {
             label: "SYSTEM:",
-            value: "RAG + agents · corpus 4,000+ · 300–400 sources/wk",
+            value: "RAG + 12 agents · every answer cited",
           },
           {
             label: "STATUS:",
-            value: "Live, in daily use — n=1 by design (as of July 2026)",
+            value: "Live, single-user by design (as of July 2026)",
           },
         ]}
       />
@@ -69,17 +79,17 @@ export default function KnowledgeOs() {
       <CaseSection
         heading="The field moves faster than reading speed."
         lede={[
-          "Roughly 300–400 relevant sources arrive every week, per the pipeline's own capture logs. A person can deeply read a fraction of that, and skimming drops the things that matter most: connections and contradictions between sources, the topics nobody's covering yet.",
+          "Hundreds of relevant sources arrive every week — the corpus grew at roughly 260 a week through spring, per its own dated snapshots. A person can deeply read a fraction of that, and skimming drops the things that matter most: connections and contradictions between sources, the topics nobody's covering yet.",
+          "Capture tools don't solve it — they make piles, and piles rot: you can't see what's gone stale, what contradicts what, or what's missing entirely. For a designer whose positioning depends on staying current in AI, that's a professional risk.",
           "The system reads everything so I can deeply read the right ten.",
-          "And because I'm the only user, the research method is instrumentation — the numbers here come from the system's own logs, not my recollection; the figures still awaiting a fresh export say so on their face.",
+          "A note on method: I'm the only user, so the research is instrumentation. Every number here comes from the project's own dated records — commit history, migrations, eval reports. Figures marked representative are drawn to those records; anything only the production database can answer says so on its face.",
         ]}
         media={
           <AssetFigure
             label="One week of intake vs reading speed"
             aspect={979 / 360}
             naturalWidth={979}
-            caption="Every week, 300–400 relevant sources. Deep reading covers the flat line at the bottom."
-            sub={"// from the pipeline's capture logs — draft render pending a fresh export"}
+            caption="Every week, hundreds of captures. Deep reading covers the flat line at the bottom."
           >
             <CaptureVolumeChart />
           </AssetFigure>
@@ -87,25 +97,17 @@ export default function KnowledgeOs() {
       />
 
       <CaseSection
-        heading="Saving & bookmarking links isn't the same as knowing things."
+        heading="It started as a Telegram bot that saved links."
         lede={[
-          "Capture tools make piles, and piles rot: you can't see what's gone stale, what contradicts what, or what's missing entirely.",
-          "For a designer whose positioning depends on staying current in AI, working from stale knowledge is a professional risk.",
-        ]}
-      />
-
-      <CaseSection
-        heading="Send it a URL. Seconds later, it's knowledge."
-        lede={[
-          "The capture layer is still the same Telegram bot the project started with: send it a URL, and seconds later the source is summarized, scored, and embedded.",
-          "What changed over the four months since is everything after capture.",
+          "First commit February 23; in production on Railway by day two. Send it a URL and it's saved instantly — a background pipeline extracts, summarizes, scores, and embeds it, then messages back the graded save.",
+          "Ingestion turned out to be the easy part, solved in the first week. Everything in this study — trust, agents, retrieval, branching — is what the next four months built on top of it. The capture layer is still that same bot.",
         ]}
         media={
           <AssetFigure
             label="Piles rot; capture compounds"
             aspect={979 / 360}
             naturalWidth={979}
-            caption="Left: where every capture tool ends. Right: capture that compounds — summarized, scored, embedded in seconds. Everything in this study happens after this message."
+            caption="Left: where every capture tool ends. Right: capture that compounds — the bot's real two-step reply: instant ack, then the graded save. Everything in this study happens after this message."
           >
             <CaptureBeforeAfter />
           </AssetFigure>
@@ -115,15 +117,15 @@ export default function KnowledgeOs() {
       <CaseSection
         heading="Every conclusion shows how much to trust it."
         lede={[
-          "Every extraction carries a score with an inline reason and a novelty score against everything already saved — surfaced where you read, not in logs.",
-          "A failed extraction shows up on the row it failed on, with a retry next to it.",
+          "Every source row carries one 0–100 value score — the model's priority rating blended with novelty against its own Space and rank within its topic — and the written reason sits one hover away, where you read, not in logs.",
+          "A failed extraction is never dropped: the row is saved and flagged, with recovery one click away in the app — or a /retry straight from Telegram.",
         ]}
         media={
           <AssetFigure
             label="Trust, surfaced on the row"
             aspect={979 / 300}
             naturalWidth={979}
-            caption="Every AI conclusion ships with its confidence, its reasoning, and its failures — on the row, not in a log."
+            caption="Every AI conclusion ships with its confidence, its reasoning, and its failures — surfaced where I read."
           >
             <TrustRowCrop />
           </AssetFigure>
@@ -133,20 +135,50 @@ export default function KnowledgeOs() {
       <CaseSection
         heading="A corpus that admits what it lacks."
         lede={[
-          "Every source carries a decay state (active, aging, stale), and an on-demand gap-analysis agent reports what the corpus is missing and where attention is shifting.",
-          "The system doesn't just describe what it knows; it flags what it doesn't.",
-          "And when a genuine gap turns up, the one sanctioned path to the open internet is the research tool that goes and fills it — AI-suggested topics, new sources, back into the corpus.",
+          "Every source carries a decay state (active, aging, stale) — aging trips automatically as newer saves supersede old ones; stale takes a model review that docks the score.",
+          "An on-demand gap-analysis agent reads the whole corpus and reports where coverage is thin against what the scoring says matters. Its first run — five weeks in, at 627 sources — caught my own blind spot: five security subtopics scored at the corpus maximum, eight saved links between them. The scoring said it mattered; my reading hadn't noticed.",
+          "And when a genuine gap turns up, the one sanctioned path to the open internet is the research tool that goes and fills it — suggested topics, capped runs, every new source through the same scored pipeline, with per-run rollback.",
         ]}
         media={
-          <AssetFigure
-            label="The corpus reports its blind spots"
-            aspect={979 / 360}
-            naturalWidth={979}
-            caption="On demand, the corpus reports its own blind spots and where attention is shifting."
-            sub={"// report contents representative — a real gap-analysis run appears in the closing section"}
-          >
-            <GapReportDecay />
-          </AssetFigure>
+          <div className={styles.narrowFigure}>
+            <AssetFigure
+              label="The gap the agent caught"
+              aspect={640 / 300}
+              naturalWidth={640}
+              caption="The first gap the agents caught was mine — a real run, dated in the repo."
+            >
+              <GapCatchCard />
+            </AssetFigure>
+          </div>
+        }
+      />
+
+      <CaseSection
+        heading="A substrate, not a library."
+        lede={[
+          "The corpus isn't the product — it's food for twelve specialist agents: connection discovery, contradiction detection, gap analysis, synthesis, research, a reading-queue prioritizer that never calls a model at all.",
+          "Each one is boring on its own; the interesting behavior is how they compose. Agents write signals — machine observations reviewed like proposals, never auto-applied — and by mid-April, at about 1,000 sources, they'd written ~960 of them. Roughly one per source.",
+          "They all started life on weekly crons. At ~$8 a week of model spend for a single user, I turned scheduling off — every agent now runs on demand, and the only cron left is a ten-cent digest.",
+        ]}
+        media={
+          <>
+            <AssetFigure
+              label="The whole machine"
+              aspect={979 / 440}
+              naturalWidth={979}
+              caption="One URL in, grounded answers out — capture, pipeline, corpus, agents, surfaces. The orange loop is the only path to the open web."
+            >
+              <SystemMap />
+            </AssetFigure>
+            <AssetFigure
+              label="The agent fleet"
+              aspect={979 / 360}
+              naturalWidth={979}
+              caption="Twelve boring agents, one interesting system — and the cost arc that made every one of them manual."
+            >
+              <AgentFleet />
+            </AssetFigure>
+          </>
         }
       />
 
@@ -155,6 +187,7 @@ export default function KnowledgeOs() {
         lede={[
           "The daily interface is a conversation with the corpus.",
           "A question gets embedded; the system over-fetches 20 to 40 candidates from the vector store — recall is cheap, and the reranker is the better judge of relevance — then the top ten go to the model with one standing rule: ground every claim in a named saved source, and say so when the corpus doesn't cover it.",
+          "That architecture wasn't day one. Chat shipped in week four as plain cosine top-k; the over-fetch and rerank came three months of daily use later, when one number doing three jobs stopped scaling.",
         ]}
         media={
           <>
@@ -171,7 +204,7 @@ export default function KnowledgeOs() {
                 label="The refusal"
                 aspect={480 / 240}
                 naturalWidth={480}
-                caption="When the library is silent, the system says so — then offers to go fill the shelf."
+                caption="When the library is silent, the system says so. The tool that fills the shelf sits one click away in the same chat — it suggests topics from the conversation, pulls new sources, and reports back into the thread."
               >
                 <RefusalCrop />
               </AssetFigure>
@@ -184,7 +217,7 @@ export default function KnowledgeOs() {
         heading="Conversations are a graph, not a scroll."
         lede={[
           "Editing a question or regenerating an answer never overwrites anything: a sibling branch appears, with a version pager to walk the alternatives and branch-from-here on any message.",
-          "Plus the navigation a 200-message chat needs: an outline rail with AI-generated topic labels, bookmarks, folders, and an auto-sort that proposes a filing plan from your own question history.",
+          "Plus the navigation a long chat needs: an outline rail with AI-generated topic labels, bookmarks, folders, and an auto-sort that proposes a filing plan — preview first, nothing moves until approved. And when two branches end up citing the same sources, the system notices and offers to merge them into one grounded synthesis.",
         ]}
         media={
           <AssetFigure
@@ -198,54 +231,60 @@ export default function KnowledgeOs() {
         }
       />
 
-      {/* CLOSER — Platform One's closer layout (PlatformOne.tsx:243-303):
-          standard section split, copy left with a bolded retro line last, two
-          drafting-grid stat cards right. Was a CenteredSection with a stacked
-          growth timeline + gap card; those two figures move below, so the
-          closer reads at the same altitude as P1's and ChatVET's. */}
       <CaseSection
-        heading="Production-deployed and compounding"
+        heading="The trust story had to be earned twice."
         lede={[
-          "Knowledge Hub is live and in daily use: a corpus past 4,000 sources, growing 300–400 a week, with a chat interface grounded in it and agents that run on demand.",
-          "By mid-May — when the corpus stood at 1,900 sources — the agents had generated 3,400+ signals: machine-written observations (contradictions, cross-links, emerging gaps), nearly two per source. The first gap they caught was one my own reading had missed entirely: five security subtopics I'd rated maximum priority, with eight links between them my reading never surfaced.",
+          "In June, an audit caught a schema change that had silently broken chat retrieval — for a stretch, every question drew zero context from the corpus. The grounding rule is why nobody got lied to: the system said the corpus didn't cover it instead of improvising.",
+          "The same month, measurement caught the scorer burying good design work — a study I'd call a 9 sat at 0.30, and only 5% of design links ever reached HIGH against a 20% target. The fix started with an eval harness, not a prompt edit: a 50-link gold set, then a rubric rewrite, then re-measurement.",
+          "A fix you can't measure is a fix you'll quietly re-break in three months and never notice.",
+        ]}
+        media={
+          <div className={styles.narrowFigure}>
+            <AssetFigure
+              label="Measure first, then fix"
+              aspect={640 / 300}
+              naturalWidth={640}
+              caption="Recall of high-worth design work, before and after the rubric rewrite — measured on a gold set built before the fix."
+            >
+              <ScoringRecal />
+            </AssetFigure>
+          </div>
+        }
+      />
+
+      {/* CLOSER — Platform One's closer layout: standard section split, copy
+          left with a bolded retro line last, two drafting-grid stat cards
+          right; the evolution timeline hangs below full-width. */}
+      <CaseSection
+        heading="In production since week one — and compounding"
+        lede={[
+          "Knowledge Hub is live: 865 commits and 249 merged PRs between February 23 and early July, a corpus measured at 3,241 sources in mid-June and past 4,000 on that trajectory, a cited chat on top, twelve agents on call.",
           "It's the same rule I hold every AI product to — ground it or say you can't — applied to a system where I'm the only user it can fail.",
           <strong key="retro">
             A year ago I could have designed this in Figma — getting any of it
-            into production would have been a dream. Built AI-natively, it
-            shipped in four months, solo, and it&rsquo;s still shipping.
+            into production would have been a dream. Built AI-natively, it was
+            live in week one, solo, and it hasn&rsquo;t slowed since.
           </strong>,
         ]}
         media={
           <StatCards>
-            <StatCard label="Sources in the corpus" value="4,000+" />
-            <StatCard label="Agent signals generated" value="3,400+" />
+            <StatCard label="Sources measured — Jun 16" value="3,241" />
+            <StatCard label="Commits · merged PRs" value="865 · 249" />
           </StatCards>
         }
       />
 
       <section className={`content ${styles.closerFigures}`}>
         <AssetFigure
-          label="Four months, zero to compounding"
+          label="Four and a half months, zero to compounding"
           aspect={979 / 300}
           naturalWidth={979}
-          caption="Four months from first Telegram message to a compounding system. The slope hasn't flattened."
+          caption="Four and a half months from first commit — every solid point is dated in the repo; the dashed tail is the trajectory."
         >
-          <GrowthTimeline />
+          <SystemEvolution />
         </AssetFigure>
-        <div className={styles.narrowFigure}>
-          <AssetFigure
-            label="The gap the agents caught"
-            aspect={640 / 300}
-            naturalWidth={640}
-            caption="The first gap the agents caught was mine."
-          >
-            <GapCatchCard />
-          </AssetFigure>
-        </div>
       </section>
 
-      {/* Figma's UP NEXT block was un-updated (stale ChatVET copy); named
-          for the actual destination so link text matches. */}
       <UpNext
         title="Platform One AI Assistant & Chat Bot"
         desc="Designing an AI assistant projected to cut support tickets by roughly 40%"
