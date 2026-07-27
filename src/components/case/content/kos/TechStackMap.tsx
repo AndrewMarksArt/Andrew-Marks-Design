@@ -1,9 +1,9 @@
 export default function TechStackMap() {
   return (
     <svg
-      viewBox="0 0 979 560"
+      viewBox="0 0 979 490"
       role="img"
-      aria-label="The Knowledge OS tool stack in six layers — capture (Telegram bot, web app, Safe Browsing gate), a database-routed extraction registry (yt-dlp with Deno for YouTube, self-hosted cobalt on Fly for TikTok and X media, fxtwitter, Cosmos, LinkedIn OG, design portfolios, Supadata falling back to Deepgram, and Jina as the universal fallback every chain ends at), Claude Haiku for volume work and Sonnet for judgment, Voyage embeddings and reranking over pgvector, Supabase plus Railway and Fly for storage and shipping, and Exa, Obsidian, and Telegram at the edges. A dated column lists the swaps: public cobalt grew a Turnstile wall, YouTube's bot wall broke cobalt, two managed builders dropped system deps, and rerank was added when one number stopped scaling."
+      aria-label="The stack, told as four dated swaps under one invariant. The invariant plate reads: a failed tool degrades a save — it never drops one; routing lives in a database table and every chain ends at Jina. Four swap rows show a struck-through old tool, a dated arrow, and its replacement: the public cobalt API grew a Turnstile wall so a self-hosted instance on Fly took over on April 22; YouTube's bot wall closed on cloud IPs so yt-dlp with a Deno solver replaced cobalt's YouTube path on April 27; managed builders silently dropped yt-dlp and ffmpeg so a raw Dockerfile replaced Nixpacks and Railpack on April 27; and plain cosine top-k gave way to Voyage rerank-2.5 on June 20 when one number was doing three jobs. A band beneath lists the rest of the registry."
       style={{
         width: "100%",
         height: "auto",
@@ -11,171 +11,121 @@ export default function TechStackMap() {
         fontFamily: "var(--font-geist-mono), ui-monospace, monospace",
       }}
     >
-      <title>The stack — fourteen tools, built for swapping</title>
+      <title>The stack — four dated swaps, one invariant</title>
+
+      <defs>
+        <marker
+          id="kosstack-arrow"
+          viewBox="0 0 8 8"
+          markerWidth={8}
+          markerHeight={8}
+          markerUnits="userSpaceOnUse"
+          refX={7}
+          refY={4}
+          orient="auto"
+        >
+          <path d="M0,0 L7,4 L0,8 Z" fill="#000000" />
+        </marker>
+      </defs>
 
       {/* Figure header */}
       <text x={16} y={30} fontSize={13} fontWeight={400} fill="#5E5757">
-        {"// THE STACK — A REGISTRY OF FOURTEEN TOOLS, BUILT FOR SWAPPING"}
+        {"// THE STACK — BUILT FOR SWAPPING"}
       </text>
 
-      {/* Divider between the stack and the swaps rail */}
-      <line x1={668} y1={56} x2={668} y2={508} stroke="rgba(0,0,0,0.25)" strokeWidth={1} />
-
-      {/* ---- L1 CAPTURE ---- */}
-      <text x={16} y={62} fontSize={11} fontWeight={400} fill="#5E5757">
-        {"CAPTURE"}
+      {/* THE accent: the invariant plate */}
+      <rect x={16} y={48} width={640} height={50} fill="#EC4E09" fillOpacity={0.1} stroke="#EC4E09" strokeWidth={1.5} />
+      <text x={336} y={68} textAnchor="middle" fontSize={12} fontWeight={500} fill="#A43B0D">
+        {"A FAILED TOOL DEGRADES A SAVE — IT NEVER DROPS ONE"}
       </text>
-      <rect x={16} y={70} width={124} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={78} y={86} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
-        {"TELEGRAM BOT API"}
-      </text>
-      <rect x={152} y={70} width={116} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={210} y={86} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
-        {"NEXT.JS WEB APP"}
-      </text>
-      <rect x={280} y={70} width={176} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={368} y={86} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
-        {"SAFE BROWSING — URL GATE"}
+      <text x={336} y={86} textAnchor="middle" fontSize={11} fontWeight={400} fill="#A43B0D">
+        {"ROUTING LIVES IN A DATABASE TABLE · EVERY CHAIN ENDS AT JINA.AI"}
       </text>
 
-      {/* ---- L2 EXTRACT — the registry ---- */}
-      <text x={16} y={120} fontSize={11} fontWeight={400} fill="#5E5757">
-        {"EXTRACT — DB-ROUTED FALLBACK CHAINS"}
+      {/* ---- Swap row 1: cobalt goes self-hosted ---- */}
+      <rect x={16} y={140} width={180} height={26} rx={2} fill="#EDEDED" stroke="rgba(0,0,0,0.25)" strokeWidth={1} />
+      <text x={106} y={157} textAnchor="middle" fontSize={11} fontWeight={400} fill="#5E5757">
+        {"PUBLIC COBALT API"}
       </text>
-      <rect x={16} y={130} width={170} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={101} y={146} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
-        {"YT-DLP + DENO — YOUTUBE"}
+      <line x1={16} y1={153} x2={196} y2={153} stroke="#EC4E09" strokeWidth={1.5} />
+      <text x={252} y={145} textAnchor="middle" fontSize={11} fontWeight={500} fill="#A43B0D">
+        {"APR 22"}
       </text>
-      <rect x={198} y={130} width={182} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={289} y={146} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
-        {"COBALT @ FLY — TIKTOK · X"}
+      <line x1={204} y1={153} x2={300} y2={153} stroke="#000000" strokeWidth={1} markerEnd="url(#kosstack-arrow)" />
+      <rect x={306} y={140} width={200} height={26} rx={2} fill="#FFFFFF" stroke="#000000" strokeWidth={1} />
+      <text x={406} y={157} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
+        {"SELF-HOSTED @ FLY.IO"}
       </text>
-      <rect x={392} y={130} width={102} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={443} y={146} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
-        {"FXTWITTER — X"}
-      </text>
-      <rect x={16} y={162} width={58} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={45} y={178} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
-        {"COSMOS"}
-      </text>
-      <rect x={86} y={162} width={90} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={131} y={178} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
-        {"LINKEDIN OG"}
-      </text>
-      <rect x={188} y={162} width={130} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={253} y={178} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
-        {"DESIGN PORTFOLIOS"}
-      </text>
-      <rect x={330} y={162} width={142} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={401} y={178} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
-        {"SUPADATA → DEEPGRAM"}
-      </text>
-      {/* THE accent — the invariant that makes swapping safe */}
-      <rect x={16} y={194} width={376} height={24} rx={2} fill="#EC4E09" fillOpacity={0.1} stroke="#EC4E09" strokeWidth={1.5} />
-      <text x={204} y={210} textAnchor="middle" fontSize={11} fontWeight={500} fill="#A43B0D">
-        {"JINA.AI — THE UNIVERSAL FALLBACK, EVERY CHAIN ENDS HERE"}
+      <text x={530} y={157} fontSize={11} fontWeight={400} fill="#5E5757">
+        {"THE PUBLIC API GREW A TURNSTILE WALL"}
       </text>
 
-      {/* ---- L3 UNDERSTAND ---- */}
-      <text x={16} y={248} fontSize={11} fontWeight={400} fill="#5E5757">
-        {"UNDERSTAND"}
+      {/* ---- Swap row 2: YouTube leaves cobalt ---- */}
+      <rect x={16} y={202} width={180} height={26} rx={2} fill="#EDEDED" stroke="rgba(0,0,0,0.25)" strokeWidth={1} />
+      <text x={106} y={219} textAnchor="middle" fontSize={11} fontWeight={400} fill="#5E5757">
+        {"COBALT — YOUTUBE PATH"}
       </text>
-      <rect x={16} y={258} width={356} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={194} y={274} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
-        {"CLAUDE HAIKU — VOLUME: SUMMARIZE · CLASSIFY · SCORE"}
+      <line x1={16} y1={215} x2={196} y2={215} stroke="#EC4E09" strokeWidth={1.5} />
+      <text x={252} y={207} textAnchor="middle" fontSize={11} fontWeight={500} fill="#A43B0D">
+        {"APR 27"}
       </text>
-      <rect x={16} y={290} width={356} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={194} y={306} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
-        {"CLAUDE SONNET — JUDGMENT: SYNTHESIS · AGENTS · CHAT"}
+      <line x1={204} y1={215} x2={300} y2={215} stroke="#000000" strokeWidth={1} markerEnd="url(#kosstack-arrow)" />
+      <rect x={306} y={202} width={200} height={26} rx={2} fill="#FFFFFF" stroke="#000000" strokeWidth={1} />
+      <text x={406} y={219} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
+        {"YT-DLP + DENO SOLVER"}
+      </text>
+      <text x={530} y={219} fontSize={11} fontWeight={400} fill="#5E5757">
+        {"YOUTUBE'S BOT WALL CLOSED ON CLOUD IPS"}
       </text>
 
-      {/* ---- L4 EMBED + RETRIEVE ---- */}
-      <text x={16} y={344} fontSize={11} fontWeight={400} fill="#5E5757">
-        {"EMBED + RETRIEVE"}
+      {/* ---- Swap row 3: builders drop deps ---- */}
+      <rect x={16} y={264} width={180} height={26} rx={2} fill="#EDEDED" stroke="rgba(0,0,0,0.25)" strokeWidth={1} />
+      <text x={106} y={281} textAnchor="middle" fontSize={11} fontWeight={400} fill="#5E5757">
+        {"NIXPACKS / RAILPACK"}
       </text>
-      <rect x={16} y={354} width={156} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={94} y={370} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
-        {"VOYAGE-3 — EMBEDDINGS"}
+      <line x1={16} y1={277} x2={196} y2={277} stroke="#EC4E09" strokeWidth={1.5} />
+      <text x={252} y={269} textAnchor="middle" fontSize={11} fontWeight={500} fill="#A43B0D">
+        {"APR 27"}
       </text>
-      <rect x={184} y={354} width={130} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={249} y={370} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
+      <line x1={204} y1={277} x2={300} y2={277} stroke="#000000" strokeWidth={1} markerEnd="url(#kosstack-arrow)" />
+      <rect x={306} y={264} width={200} height={26} rx={2} fill="#FFFFFF" stroke="#000000" strokeWidth={1} />
+      <text x={406} y={281} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
+        {"RAW DOCKERFILE"}
+      </text>
+      <text x={530} y={281} fontSize={11} fontWeight={400} fill="#5E5757">
+        {"BUILDERS DROPPED YT-DLP + FFMPEG, SILENTLY"}
+      </text>
+
+      {/* ---- Swap row 4: retrieval grows a reranker ---- */}
+      <rect x={16} y={326} width={180} height={26} rx={2} fill="#EDEDED" stroke="rgba(0,0,0,0.25)" strokeWidth={1} />
+      <text x={106} y={343} textAnchor="middle" fontSize={11} fontWeight={400} fill="#5E5757">
+        {"PLAIN COSINE TOP-K"}
+      </text>
+      <line x1={16} y1={339} x2={196} y2={339} stroke="#EC4E09" strokeWidth={1.5} />
+      <text x={252} y={331} textAnchor="middle" fontSize={11} fontWeight={500} fill="#A43B0D">
+        {"JUN 20"}
+      </text>
+      <line x1={204} y1={339} x2={300} y2={339} stroke="#000000" strokeWidth={1} markerEnd="url(#kosstack-arrow)" />
+      <rect x={306} y={326} width={200} height={26} rx={2} fill="#FFFFFF" stroke="#000000" strokeWidth={1} />
+      <text x={406} y={343} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
         {"VOYAGE RERANK-2.5"}
       </text>
-      <rect x={326} y={354} width={130} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={391} y={370} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
-        {"PGVECTOR — COSINE"}
+      <text x={530} y={343} fontSize={11} fontWeight={400} fill="#5E5757">
+        {"ONE NUMBER WAS DOING THREE JOBS"}
       </text>
 
-      {/* ---- L5 STORE + SHIP ---- */}
-      <text x={16} y={408} fontSize={11} fontWeight={400} fill="#5E5757">
-        {"STORE + SHIP"}
+      {/* ---- The rest of the registry, demoted to a band ---- */}
+      <rect x={16} y={388} width={947} height={48} fill="#EDEDED" stroke="rgba(0,0,0,0.25)" strokeWidth={1} />
+      <text x={32} y={408} fontSize={11} fontWeight={400} fill="#5E5757">
+        {"THE REST OF THE REGISTRY — TELEGRAM · SAFE BROWSING · FXTWITTER · COSMOS · LINKEDIN OG"}
       </text>
-      <rect x={16} y={418} width={256} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={144} y={434} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
-        {"SUPABASE — POSTGRES · CRON · STORAGE"}
-      </text>
-      <rect x={284} y={418} width={176} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={372} y={434} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
-        {"RAILWAY — RAW DOCKERFILE"}
-      </text>
-      <rect x={472} y={418} width={116} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={530} y={434} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
-        {"FLY.IO — COBALT"}
-      </text>
-
-      {/* ---- L6 IN + OUT ---- */}
-      <text x={16} y={472} fontSize={11} fontWeight={400} fill="#5E5757">
-        {"IN + OUT"}
-      </text>
-      <rect x={16} y={482} width={182} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={107} y={498} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
-        {"EXA — THE ONE SEARCH PATH"}
-      </text>
-      <rect x={210} y={482} width={142} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={281} y={498} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
-        {"OBSIDIAN — SYNC OUT"}
-      </text>
-      <rect x={364} y={482} width={156} height={24} rx={2} fill="#FFFFFF" stroke="rgba(0,0,0,0.375)" strokeWidth={1} />
-      <text x={442} y={498} textAnchor="middle" fontSize={11} fontWeight={400} fill="#231A09">
-        {"TELEGRAM — DIGEST OUT"}
-      </text>
-
-      {/* ---- Right rail: the swaps, dated ---- */}
-      <text x={680} y={62} fontSize={11} fontWeight={400} fill="#5E5757">
-        {"THE SWAPS, DATED"}
-      </text>
-      <text x={680} y={134} fontSize={11}>
-        <tspan fontWeight={500} fill="#A43B0D">{"APR 22 — "}</tspan>
-        <tspan fontWeight={400} fill="#5E5757">{"PUBLIC COBALT GREW A"}</tspan>
-      </text>
-      <text x={680} y={148} fontSize={11} fontWeight={400} fill="#5E5757">
-        {"TURNSTILE WALL → SELF-HOSTED ON FLY"}
-      </text>
-      <text x={680} y={176} fontSize={11}>
-        <tspan fontWeight={500} fill="#A43B0D">{"APR 27 — "}</tspan>
-        <tspan fontWeight={400} fill="#5E5757">{"YOUTUBE'S BOT WALL BROKE"}</tspan>
-      </text>
-      <text x={680} y={190} fontSize={11} fontWeight={400} fill="#5E5757">
-        {"COBALT → YT-DLP + A DENO SOLVER"}
-      </text>
-      <text x={680} y={354} fontSize={11}>
-        <tspan fontWeight={500} fill="#A43B0D">{"JUN 20 — "}</tspan>
-        <tspan fontWeight={400} fill="#5E5757">{"RERANK-2.5 ADDED WHEN ONE"}</tspan>
-      </text>
-      <text x={680} y={368} fontSize={11} fontWeight={400} fill="#5E5757">
-        {"NUMBER STOPPED DOING THREE JOBS"}
-      </text>
-      <text x={680} y={418} fontSize={11}>
-        <tspan fontWeight={500} fill="#A43B0D">{"APR 27 — "}</tspan>
-        <tspan fontWeight={400} fill="#5E5757">{"TWO BUILDERS DROPPED SYSTEM"}</tspan>
-      </text>
-      <text x={680} y={432} fontSize={11} fontWeight={400} fill="#5E5757">
-        {"DEPS SILENTLY → RAW DOCKERFILE"}
+      <text x={32} y={426} fontSize={11} fontWeight={400} fill="#5E5757">
+        {"DESIGN PORTFOLIOS · SUPADATA → DEEPGRAM · HAIKU + SONNET · VOYAGE · PGVECTOR · SUPABASE · RAILWAY · EXA · OBSIDIAN"}
       </text>
 
       {/* Footnote */}
-      <text x={16} y={544} fontSize={11} fontWeight={400} fill="#A43B0D">
-        {"// ROUTING LIVES IN A DATABASE TABLE — TOOLS SWAP BY ROW, HOT-RELOADED, NO REDEPLOY"}
+      <text x={16} y={470} fontSize={11} fontWeight={400} fill="#A43B0D">
+        {"// TOOLS SWAP BY DATABASE ROW — HOT-RELOADED, NO REDEPLOY"}
       </text>
     </svg>
   );

@@ -13,7 +13,6 @@ import TechStackMap from "./kos/TechStackMap";
 import TrustRowCrop from "./kos/TrustRowCrop";
 import GapCatchCard from "./kos/GapCatchCard";
 import SystemMap from "./kos/SystemMap";
-import AgentFleet from "./kos/AgentFleet";
 import RagArchitecture from "./kos/RagArchitecture";
 import RefusalCrop from "./kos/RefusalCrop";
 import BranchGraphFigure from "./kos/BranchGraphFigure";
@@ -116,25 +115,6 @@ export default function KnowledgeOs() {
       />
 
       <CaseSection
-        heading="Built for a web that fights back."
-        lede={[
-          "Almost none of the pipeline's external tools are the ones it started with. Extraction is adversarial — platforms wall off content, public APIs grow challenge screens, managed builders quietly drop your system dependencies. Surviving that took an architecture decision: routing lives in a database table, not in code.",
-          "Every platform gets a chain of extractors that ends at the same universal fallback, so a failed tool degrades a save — it never drops one. When YouTube's bot wall broke the media downloader, yt-dlp swapped in behind one registry row. When the public cobalt API added a Turnstile wall, a self-hosted instance on Fly took over. When two managed builders silently dropped yt-dlp and ffmpeg from the deploy, the build moved to a raw Dockerfile.",
-          "The AI layer tiers the same way the tools do: Haiku where volume lives, Sonnet where judgment lives, Voyage for embedding and reranking, Exa as the one sanctioned search. And every tool call is logged with its duration and cost — the stack is instrumented like the corpus.",
-        ]}
-        media={
-          <AssetFigure
-            label="The full stack, and why it's swappable"
-            aspect={979 / 560}
-            naturalWidth={979}
-            caption="Fourteen registry tools across six layers, with the swaps dated on the right. The registry is why a platform fighting back never dropped a link."
-          >
-            <TechStackMap />
-          </AssetFigure>
-        }
-      />
-
-      <CaseSection
         heading="Every conclusion shows how much to trust it."
         lede={[
           "Every source row carries one 0–100 value score — the model's priority rating blended with novelty against its own Space and rank within its topic — and the written reason sits one hover away, where you read, not in logs.",
@@ -181,24 +161,17 @@ export default function KnowledgeOs() {
           "They all started life on weekly crons. At ~$8 a week of model spend for a single user, I turned scheduling off — every agent now runs on demand, and the only cron left is a ten-cent digest.",
         ]}
         media={
-          <>
-            <AssetFigure
-              label="The whole machine"
-              aspect={979 / 440}
-              naturalWidth={979}
-              caption="One URL in, grounded answers out — capture, pipeline, corpus, agents, surfaces. The orange loop is the only path to the open web."
-            >
-              <SystemMap />
-            </AssetFigure>
-            <AssetFigure
-              label="The agent fleet"
-              aspect={979 / 360}
-              naturalWidth={979}
-              caption="Twelve boring agents, one interesting system — and the cost arc that made every one of them manual."
-            >
-              <AgentFleet />
-            </AssetFigure>
-          </>
+          /* Rescore-panel pass: AgentFleet retired (one of three sibling chip
+             diagrams; SystemMap's agent band + the lede carry the roster and
+             the cost arc). Recoverable in git. */
+          <AssetFigure
+            label="The whole machine"
+            aspect={979 / 440}
+            naturalWidth={979}
+            caption="One URL in, grounded answers out — capture, pipeline, corpus, agents, surfaces. The orange loop is the only path to the open web."
+          >
+            <SystemMap />
+          </AssetFigure>
         }
       />
 
@@ -208,8 +181,13 @@ export default function KnowledgeOs() {
           "The daily interface is a conversation with the corpus.",
           "A question gets embedded; the system over-fetches 20 to 40 candidates from the vector store — recall is cheap, and the reranker is the better judge of relevance — then the top ten go to the model with one standing rule: ground every claim in a named saved source, and say so when the corpus doesn't cover it.",
           "That architecture wasn't day one. Chat shipped in week four as plain cosine top-k; the over-fetch and rerank came three months of daily use later, when one number doing three jobs stopped scaling.",
+          "And nothing is ever overwritten. The first version truncated the thread on edit — a reload could interleave stale and new messages — so a conversation graph replaced it: sibling branches, a version pager, branch-from-here on any message. The librarian layer (an outline rail with AI topic labels, bookmarks, an auto-sort that only ever proposes — preview, approve, undo) keeps hundred-message chats navigable.",
         ]}
         media={
+          /* Rescore-panel pass: the standalone branching section folded in
+             here — one paragraph + the branch figure; the graph earns a
+             rejected-alternative beat (the truncate-on-edit bug is dated in
+             the repo's own migration notes). */
           <>
             <AssetFigure
               label="The machine, drawn"
@@ -229,24 +207,38 @@ export default function KnowledgeOs() {
                 <RefusalCrop />
               </AssetFigure>
             </div>
+            <AssetFigure
+              label="A conversation, branched"
+              aspect={979 / 360}
+              naturalWidth={979}
+              caption="Edit or regenerate and nothing is lost — a sibling branch appears, a pager walks the alternatives."
+            >
+              <BranchGraphFigure />
+            </AssetFigure>
           </>
         }
       />
 
+      {/* Delta-panel pass (4 judges, unanimous keep-move-and-tighten): moved
+          here from position 3 — pairs with "earned twice" as two
+          reality-attacked-the-system beats, and restores trust rows +
+          gap-catch to the front half. Lede re-led with the user-facing
+          invariant; the model-tiering paragraph cut (the figure and later
+          sections already carry it). */}
       <CaseSection
-        heading="Conversations are a graph, not a scroll."
+        heading="Built for a web that fights back."
         lede={[
-          "Editing a question or regenerating an answer never overwrites anything: a sibling branch appears, with a version pager to walk the alternatives and branch-from-here on any message.",
-          "Plus the navigation a long chat needs: an outline rail with AI-generated topic labels, bookmarks, folders, and an auto-sort that proposes a filing plan — preview first, nothing moves until approved. And when two branches end up citing the same sources, the system notices and offers to merge them into one grounded synthesis.",
+          "None of the trust work above matters if capture dies — and extraction is adversarial: platforms wall off content, public APIs grow challenge screens, managed builders quietly drop your system dependencies. So the pipeline keeps one promise above all: a failed tool degrades a save — it never drops one. The design decision that keeps it: routing lives in a database table, not in code, with every platform's extractor chain ending at the same universal fallback.",
+          "The receipts are dated. When YouTube's bot wall broke the media downloader, yt-dlp swapped in behind one registry row. When the public cobalt API added a Turnstile wall, a self-hosted instance on Fly took over. When two managed builders silently dropped yt-dlp and ffmpeg from the deploy, the build moved to a raw Dockerfile. Almost none of the pipeline's tools are the ones it started with — and every tool call is logged with its duration and cost.",
         ]}
         media={
           <AssetFigure
-            label="A conversation, branched"
-            aspect={979 / 360}
+            label="The stack, told as its swaps"
+            aspect={979 / 490}
             naturalWidth={979}
-            caption="Edit or regenerate and nothing is lost — a sibling branch appears. The librarian layer keeps hundred-message chats navigable."
+            caption="Four dated swaps under one invariant — the rest of the registry rides in the band. This is what a stack designed for change looks like in practice."
           >
-            <BranchGraphFigure />
+            <TechStackMap />
           </AssetFigure>
         }
       />
@@ -287,9 +279,13 @@ export default function KnowledgeOs() {
           </strong>,
         ]}
         media={
+          /* Rescore-panel pass: the effort card (865 · 249) demoted — those
+             numbers already live in the lede; the second card now carries a
+             measured OUTCOME (the eval-first fix, reprised from S9 as the
+             closing stat the first panel asked to promote). */
           <StatCards>
             <StatCard label="Sources measured — Jun 16" value="3,241" />
-            <StatCard label="Commits · merged PRs" value="865 · 249" />
+            <StatCard label="High-worth recall — eval-first fix" value="8→63%" />
           </StatCards>
         }
       />
