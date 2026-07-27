@@ -18,34 +18,32 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+/* Judge-panel pass (research 005): pitch-first descriptions (the
+   electric-sheep line now trails instead of leading search results and
+   link previews), canonical URL, summary_large_image card (the og:image
+   itself is src/app/opengraph-image.png), keywords dropped (ignored by
+   every major engine since 2009). */
 export const metadata: Metadata = {
   metadataBase: new URL("https://andrewmarks.net"),
   title: "Andrew Marks — UX & Product Designer",
   description:
-    "Research & design for users wrangling electric sheep. Building agentic workflows & complex AI systems for humans, agents, & everything in between.",
-  keywords: [
-    "Andrew Marks",
-    "UX Designer",
-    "Product Designer",
-    "AI UX",
-    "Portfolio",
-    "Design",
-  ],
+    "Product design for AI systems — enterprise DoD platforms, clinical copilots, and agentic workflows. Research & design for users wrangling electric sheep.",
   authors: [{ name: "Andrew Marks" }],
+  alternates: { canonical: "./" },
   openGraph: {
     title: "Andrew Marks — UX & Product Designer",
     description:
-      "Research & design for users wrangling electric sheep. UX for DoD, GovTech, and AI ecosystems.",
+      "Product design for AI systems — enterprise DoD platforms, clinical copilots, and agentic workflows. Research & design for users wrangling electric sheep.",
     url: "https://andrewmarks.net",
     siteName: "Andrew Marks Design",
     locale: "en_US",
     type: "website",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Andrew Marks — UX & Product Designer",
     description:
-      "Research & design for users wrangling electric sheep. UX for DoD, GovTech, and AI ecosystems.",
+      "Product design for AI systems — enterprise DoD platforms, clinical copilots, and agentic workflows. Research & design for users wrangling electric sheep.",
   },
 };
 

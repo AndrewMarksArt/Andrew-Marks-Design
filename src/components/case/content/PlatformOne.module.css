@@ -98,6 +98,17 @@
   }
 }
 
+/* Method note under the stat cards (judge-panel pass): the projection's
+   provenance, in the figure-footnote voice. */
+.statNote {
+  margin: 12px 0 0;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: clamp(11px, 0.8102vw, 12px);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--accent-deep);
+}
+
 /* --------------------------------------------------------------------------
    Security-event vignette — the study's agitation peak, promoted from the
    third text column into the full-width slot (case-study analysis 003):

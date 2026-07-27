@@ -17,6 +17,23 @@ import TicketTaxonomyChart from "./p1/TicketTaxonomyChart";
  * template; wireframe media renders as labeled placeholders per the
  * annotations (hero split-screen, role/timeframe/team strip, image
  * carousel).
+ *
+ * 2026-07-27 judge-panel pass (6-lens panel, mean ~7.4; synthesis in
+ * .claude/research/005-portfolio-full-picture.md): hero figure label
+ * reconciled to staging; answer-trust section added ("Every answer
+ * shows where it came from" — claims only what the shipped captures
+ * show: inline citations, did-this-help, the 2/4-turn human path) and
+ * the real-product chats figure moved into it; S5 heading retitled to
+ * its actual contents; closer de-circularized (the 40% is named as the
+ * sample-derived ceiling, the ~1 FTE gets its routing connective) with
+ * a method note under the stat cards; vignette gets a setup line.
+ *
+ * ⚠ PENDING FROM ANDREW: (1) the one measured number the panel asked
+ * for — replay the 60 "answer existed" sampled tickets through the
+ * staging assistant and report the real answer rate (turns the
+ * projection into a tested claim); (2) the tight citations detail crop
+ * for the trust section; (3) the "two postures" capture must show the
+ * developer posture doing developer work, not account-access basics.
  */
 
 /** The CST lead's own words — the human cost of the flood, in the light
@@ -75,7 +92,7 @@ export default function PlatformOne() {
         ]}
         media={
           <ZoomableFigure
-            label="The assistant, live on Platform One's site"
+            label="The assistant, in staging on Platform One's site"
             aspect={1408 / 932}
             naturalWidth={1408}
             unframed
@@ -150,6 +167,7 @@ export default function PlatformOne() {
           "A new Contact Us CTA gave stuck users a lifeline, and tickets exploded. A Customer Success team built for sales and relationships became full-time human routers: fielding password resets, forwarding emails between product teams, and working a CRM that couldn't talk to Jira.",
           "The responses were full of PII, so automated analysis was off the table. I pulled random samples — about 150 responses — and coded them by hand: nearly half were simple help-desk asks or information already on the site, and most of the rest belonged to other teams entirely.",
           "The Customer Success lead put 40–60% of her day into triaging the flood; her three teammates each gave another 10–20%. Roughly a full role, spent on tickets the team was never meant to own.",
+          "And not every buried answer was routine. One came due mid-incident.",
         ]}
         media={<SecurityVignette />}
       >
@@ -200,21 +218,34 @@ export default function PlatformOne() {
                 className={local.shotImg}
               />
             </ZoomableFigure>
-            {/* Figma 2026-07-21: the chats plate carries its own frame —
-                rendered unframed, no caption */}
-            <ZoomableFigure
-              label="The escalation path, in the real product"
-              aspect={1488 / 985}
-              naturalWidth={1488}
-              unframed
-            >
-              <img
-                src="/case-studies/platform-one/p1-example-chats.webp"
-                alt="Three real assistant screens in sequence: an Iron Bank answer with cited source and did-this-solve-your-issue buttons; a follow-up offering summaries, walkthrough steps, or key commands with Talk to Support; and a rate-your-experience closer."
-                className={local.shotImg}
-              />
-            </ZoomableFigure>
           </>
+        }
+      />
+
+      <CaseSection
+        heading="Every answer shows where it came from."
+        lede={[
+          "The standing rule in every exchange: answers carry their source inline, so a user — or an auditor — can see where a claim came from before acting on it. On a DoD platform, an unsourced answer isn't a shortcut; it's a liability.",
+          "And when the assistant can't resolve something, the design never lets it improvise its way out: the human path appears at turn two and takes over by turn four. Every exchange ends by asking whether it actually solved the problem.",
+        ]}
+        media={
+          /* Figma 2026-07-21: the chats plate carries its own frame —
+             rendered unframed, no caption. Moved here from the escalation
+             section (judge-panel pass): these are the pixels that show the
+             cited source + did-this-help loop the copy now claims. The
+             tight citations detail crop remains the wanted upgrade. */
+          <ZoomableFigure
+            label="Cited answers and the feedback loop, in the real product"
+            aspect={1488 / 985}
+            naturalWidth={1488}
+            unframed
+          >
+            <img
+              src="/case-studies/platform-one/p1-example-chats.webp"
+              alt="Three real assistant screens in sequence: an Iron Bank answer with cited source and did-this-solve-your-issue buttons; a follow-up offering summaries, walkthrough steps, or key commands with Talk to Support; and a rate-your-experience closer."
+              className={local.shotImg}
+            />
+          </ZoomableFigure>
         }
       />
 
@@ -241,9 +272,7 @@ export default function PlatformOne() {
       />
 
       <CaseSection
-        heading={
-          "Designing to ship with one developer & unexpected security constraints."
-        }
+        heading={"Designing to ship with one developer."}
         lede={[
           "With a single primary developer, I designed to Vuetify's defaults wherever possible, spending customization only where it bought real user value.",
           "When a partner-provided chat widget was chosen as the interim launch vehicle for speed, I recommended against it, documented the UX gaps, and partnered with engineering to re-skin it to our brand while the custom experience is built.",
@@ -271,9 +300,9 @@ export default function PlatformOne() {
           drafting-style stat cards right (pre-rendered in Figma). The
           third tile and the projections footnote left the design. */}
       <CaseSection
-        heading="Projected impact and the honest road to launch"
+        heading="Projected impact — and what's left to prove"
         lede={[
-          "The assistant is in staging, projected to cut support tickets by roughly 40% — the share of sampled tickets it answers outright — and to return a full role's worth of Customer Success capacity to the work that team was built for.",
+          "The assistant is in staging. The projection: roughly 40% fewer support tickets — that's the share of the hand-coded sample whose answers already lived on the site, the ceiling the assistant is built to claim. The full role of Customer Success capacity comes back two ways: tickets answered before they're filed, and the misrouted rest — over a third of the sample — routed to the right team by design instead of by hand.",
           "And the next time a leader needs proof the platform is secure by design, the answer is one question away.",
           "Launch is phased — behind SSO first while the public site completes its Certificate to Field (DoD security authorization) — with the custom front-end replacing the interim widget on the roadmap.",
           <strong key="retro">
@@ -282,17 +311,22 @@ export default function PlatformOne() {
           </strong>,
         ]}
         media={
-          <div className={local.statCards}>
-            <img
-              src="/case-studies/platform-one/p1-stat-ticket-cut.webp"
-              alt="Stat card: projected ticket cut, minus 40 percent."
-              className={local.statCard}
-            />
-            <img
-              src="/case-studies/platform-one/p1-stat-fte.webp"
-              alt="Stat card: CST capacity returned, about one full-time role."
-              className={local.statCard}
-            />
+          <div>
+            <div className={local.statCards}>
+              <img
+                src="/case-studies/platform-one/p1-stat-ticket-cut.webp"
+                alt="Stat card: projected ticket cut, minus 40 percent."
+                className={local.statCard}
+              />
+              <img
+                src="/case-studies/platform-one/p1-stat-fte.webp"
+                alt="Stat card: CST capacity returned, about one full-time role."
+                className={local.statCard}
+              />
+            </div>
+            <p className={local.statNote}>
+              {"// PROJECTION FROM THE HAND-CODED 150-TICKET SAMPLE — NOT YET A MEASUREMENT"}
+            </p>
           </div>
         }
       />

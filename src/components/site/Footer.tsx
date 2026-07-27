@@ -100,6 +100,16 @@ export default function Footer() {
         <FlagMark className={styles.flag} />
         <GlobeMark className={styles.globe} />
         <p className={styles.legal}>
+          {/* Judge-panel pass (research 005): the site pitched and never
+              asked — the footer now carries the contact + availability
+              lines in the terminal voice. */}
+          {"// CONTACT: "}
+          <a href="mailto:andrew.colin.marks@gmail.com">
+            {"ANDREW.COLIN.MARKS@GMAIL.COM"}
+          </a>
+          <br />
+          {"// OPEN TO SENIOR AI-NATIVE PRODUCT DESIGN ROLES"}
+          <br />
           {"// [C] 2026"}
           <br />
           {"// USER: ANDREW MARKS"}

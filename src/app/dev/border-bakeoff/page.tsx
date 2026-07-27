@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { notFound } from "next/navigation";
 import styles from "./bakeoff.module.css";
 
 /**
@@ -34,6 +35,9 @@ function MarchDieline() {
 }
 
 export default function BorderBakeoff() {
+  // Judge-panel pass (research 005): dev scaffolding stays out of the
+  // production site; the page remains reachable in `next dev`.
+  if (process.env.NODE_ENV === "production") notFound();
   return (
     <main className={styles.page}>
       <p className={styles.title}>{"// DEV: BORDER_BAKEOFF — research spike 001"}</p>

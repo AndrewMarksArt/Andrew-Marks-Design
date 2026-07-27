@@ -39,12 +39,20 @@ export default function CaseStudyStatus() {
             <span className={styles.slashes}>{"//"}</span>
             <span>{" 03 CASE STUDIES LIVE"}</span>
           </p>
+          {/* Judge-panel pass (research 005): the duplicate "3 studies live"
+              line and the under-construction "appendices in progress" notice
+              left prime real estate; the strip now frames the studies and
+              names the site's through-line. */}
           <p className={styles.statusRow}>
             <span className={styles.statusLabel}>{"STATUS: "}</span>
-            <span className={styles.statusValue}>...3 studies live</span>
+            <span className={styles.statusValue}>
+              ...3 AI assistants: DoD enterprise · clinical · personal
+            </span>
           </p>
           <p className={styles.statusRow}>
-            <span className={styles.statusValue}>...Deeper technical appendices in progress</span>
+            <span className={styles.statusValue}>
+              ...One rule throughout: ground it, or say you can&rsquo;t
+            </span>
           </p>
         </div>
       </div>

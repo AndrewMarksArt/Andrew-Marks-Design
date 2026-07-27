@@ -93,6 +93,19 @@
 
 /* --- numbered link (Geist SemiBold 20, lh 0.95, uppercase) ----------------- */
 
+/* Email mailto inside the About cell's copy (judge-panel pass) — plain
+   in-copy link; underline always on so the one contact channel is visible. */
+.emailLink {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.emailLink:hover,
+.emailLink:focus-visible {
+  color: var(--accent);
+}
+
 .link {
   display: block;
   width: fit-content;

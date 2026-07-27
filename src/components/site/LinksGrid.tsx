@@ -201,6 +201,15 @@ export function LinksGrid() {
             background to simplify complex data into high-performance UX
             research and designs allowing AI systems to scale.
           </p>
+          {/* Judge-panel pass (research 005): the shell had no direct contact
+              channel anywhere — the cell label stays inert per Andrew's
+              ruling; the email is a link inside the copy. */}
+          <p className={styles.desc}>
+            <strong>Reach me directly:</strong>{" "}
+            <a className={styles.emailLink} href="mailto:andrew.colin.marks@gmail.com">
+              andrew.colin.marks@gmail.com
+            </a>
+          </p>
         </div>
       </div>
     </section>
