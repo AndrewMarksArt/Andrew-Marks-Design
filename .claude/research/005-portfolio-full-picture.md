@@ -13,8 +13,8 @@ is this file plus the task-checkpoint entries of those dates.
 |---|---|---|---|
 | Site shell | **~7.4** | 7–8 | Distinctive, authored, technically excellent — pitches and never asks |
 | Platform One | **~7.4** | 7–7.5 | Strongest study, should lead — sells a forecast, ducks answer-trust |
-| Knowledge OS | ~6.8 → rising | 6.5–7.5 | Scored pre-fixes; second-tier pass applied; real screenshots pending |
-| ChatVET | **~6.6** | 6–7.5 | Real shipped product; one figure contradicts its own fact-check ledger |
+| Knowledge OS | **7.5** (re-scored 07-27) | 7.5 flat ×6 | After all fixes + stack section, placeholders assumed real — now ties/leads P1; remaining gap is design-vs-engineering balance |
+| ChatVET | **~7.3** (re-scored 07-27) | 6.5–7.7 | Real captures landed (+2 unanimous — "a good study became a finished one"); ceiling remains the stall figure vs its own ledger |
 | **Portfolio overall** | **~7.2** | | One focused pass away from 8+ |
 
 ## The four cross-cutting patterns (both audits found the same shapes)
