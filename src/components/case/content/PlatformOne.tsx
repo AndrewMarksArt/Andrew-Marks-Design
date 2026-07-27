@@ -351,7 +351,7 @@ export default function PlatformOne() {
 
       <UpNext
         title="ChatVET — an AI Copilot for Veterinary Medicine"
-        desc="Designing an AI copilot that saves veterinarians about 15 minutes per case (self-reported)"
+        desc="Designing an AI copilot vets say saves them about 15 minutes per case"
         href="/case-studies/chat-vet"
       />
     </>

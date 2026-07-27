@@ -1,7 +1,6 @@
 import {
   CaseHero,
   CaseSection,
-  PlaceholderBox,
   StatsStrip,
   UpNext,
 } from "../CaseSections";
@@ -30,11 +29,12 @@ import styles from "./ChatVet.module.css";
  * Figma or a product capture. Do not redraw any of them as SVG
  * components; the drawn stand-ins were deleted at ea6b220.
  *
- * TWO CAPTURES STILL MISSING (rendered as labelled placeholders so the
- * page doubles as the shot list): the generated/printed discharge
- * document — the payoff of beat 5, currently the one thing the story
- * promises and never shows — and the lab interpreter, named as one of
- * the three pilot tools but visible only as a menu item.
+ * THE TWO MISSING CAPTURES LANDED 2026-07-27 (Andrew's exports, Figma
+ * node 7010:8397): the lab interpreter (upload-confirm + analyzed
+ * results) and the printed discharge document. All three show the same
+ * case — Ruger, a 7-year-old Labrador with a renal panel — so the labs
+ * in beat 3 and the handout in beat 5 are one story, and the captions
+ * say so. No placeholders remain.
  *
  * ⚠ PROVENANCE — the stall diagram's figures contradict
  * .claude/research/003-chatvet-stat-provenance.md on four counts (the
@@ -78,7 +78,7 @@ export default function ChatVet() {
     <>
       <CaseHero
         eyebrow="CHATVET · AI COPILOT FOR VETERINARY MEDICINE"
-        title="Shipping an AI copilot that saves veterinarians about 15 minutes per case"
+        title="Shipping an AI copilot vets say saves them about 15 minutes per case"
         intro={[
           "Veterinarians are out of time. Research, protocol hunting, note-writing and client communication stack up on every case.",
           "The answers exist in trusted references like the Merck Veterinary Manual. Reaching them mid-case is the problem.",
@@ -235,11 +235,31 @@ export default function ChatVet() {
                   className={styles.shotImg}
                 />
               </AssetFigure>
-              <PlaceholderBox
-                aspect="2880 / 1622"
-                label="// LAB_INTERPRETER — capture pending"
-              />
+              <AssetFigure
+                label="Lab interpreter — the upload, checked · CASE: RUGER"
+                aspect={4096 / 2368}
+                naturalWidth={4096}
+                caption="It reads the report before it interprets: patient details extracted from the PDF, and the one low-confidence value — weight, the dosing input — flagged for a human to verify first."
+              >
+                <img
+                  src="/case-studies/chat-vet/cv-lab-upload-confirm.webp"
+                  alt="The Lab Interpreter dialog after uploading a two-page CBC and chemistry panel PDF: six of seven details read from the report header with a prompt to verify them; patient fields filled for Ruger, a seven-year-old male Labrador Retriever; the weight field, 24.5 kilograms, carries a VERIFY tag reading low confidence import, needs to be verified; an optional clinical-context box sits above Cancel and Interpret results buttons."
+                  className={styles.shotImg}
+                />
+              </AssetFigure>
             </div>
+            <AssetFigure
+              label="Lab interpreter — the read · CASE: RUGER"
+              aspect={4096 / 2113}
+              naturalWidth={4096}
+              caption="Six of twenty-four analytes flagged, read as a cluster instead of a list — and the one value that would settle the differential is named as missing from the panel."
+            >
+              <img
+                src="/case-studies/chat-vet/cv-lab-results.webp"
+                alt="Lab Interpreter results: a narrative read stating six of twenty-four analytes fall outside reference range and cluster rather than scatter — azotemia with hyperphosphatemia and a mild non-regenerative anemia pointing toward reduced renal function — noting that urine specific gravity would separate a renal cause from dehydration and is not in this panel. Below, a flagged-values table shows creatinine, BUN and phosphorus high and hematocrit, RBC and potassium low, each with a reference-range position bar, above a follow-up composer carrying a Verified Veterinary User badge."
+                className={styles.shotImg}
+              />
+            </AssetFigure>
             <AssetFigure
               label="Where the answers come from"
               aspect={2880 / 1542}
@@ -320,10 +340,18 @@ export default function ChatVet() {
                 />
               </AssetFigure>
             </div>
-            <PlaceholderBox
-              aspect="2880 / 1780"
-              label="// DISCHARGE_DOCUMENT — the printed client handout, capture pending"
-            />
+            <AssetFigure
+              label="The printed handout · CASE: RUGER, END TO END"
+              aspect={4096 / 2116}
+              naturalWidth={4096}
+              caption="The payoff, printed: what we found in plain language, morning-and-evening doses, call-us versus go-to-emergency lists, and the recheck date — generated from the same case as the labs above, ready before the client reaches the door."
+            >
+              <img
+                src="/case-studies/chat-vet/cv-discharge-printout.webp"
+                alt="A print dialog showing Going-home instructions for Ruger, a seven-year-old Labrador Retriever, one page, saving as PDF. What we found explains chronic kidney disease in plain language; a medicines table lists aluminum hydroxide and maropitant with morning, evening and how-long columns; food-and-water rules cover a gradual kidney-diet switch; watch-him-at-home boxes split call-us-if-you-notice from go-to-emergency-right-away; and a recheck on 10 Aug 2026 sits above clinic and after-hours numbers, a veterinarian signature line, and a note to keep the page somewhere visible, like the fridge."
+                className={styles.shotImg}
+              />
+            </AssetFigure>
           </>
         }
       />

@@ -43,7 +43,7 @@ const CASES: CaseStudy[] = [
     href: "/case-studies/chat-vet",
     desc: (
       <>
-        An AI copilot that <strong>saves veterinarians about 15 minutes per case (self-reported)</strong>
+        An AI copilot that <strong>vets say saves them about 15 minutes per case</strong>
         , answering from Merck Veterinary Manual instead of the open web.
       </>
     ),
