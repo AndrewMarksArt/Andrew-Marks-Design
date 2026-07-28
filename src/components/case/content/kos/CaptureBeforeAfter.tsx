@@ -90,7 +90,7 @@ export default function CaptureBeforeAfter() {
       {/* Reply bubble 1 — the instant ack */}
       <rect x={516} y={164} width={190} height={28} rx={2} fill="#FFFFFF" stroke="#000000" strokeWidth={1} />
       <text x={528} y={182} fontSize={11} fontWeight={400} fill="#231A09">
-        {"Saved ✓ — processing…"}
+        {"Saved ✓ — processing..."}
       </text>
 
       {/* Between-note — the background pipeline */}

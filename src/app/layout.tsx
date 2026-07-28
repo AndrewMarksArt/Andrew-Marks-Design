@@ -25,15 +25,15 @@ export const viewport: Viewport = {
    every major engine since 2009). */
 export const metadata: Metadata = {
   metadataBase: new URL("https://andrewmarks.net"),
-  title: "Andrew Marks — UX & Product Designer",
+  title: "Andrew Marks · UX & Product Designer",
   description:
-    "Product design for AI systems — enterprise DoD platforms, clinical copilots, and agentic workflows. Research & design for users wrangling electric sheep.",
+    "Product design for AI systems: enterprise DoD platforms, clinical copilots, and agentic workflows. Research & design for users wrangling electric sheep.",
   authors: [{ name: "Andrew Marks" }],
   alternates: { canonical: "./" },
   openGraph: {
-    title: "Andrew Marks — UX & Product Designer",
+    title: "Andrew Marks · UX & Product Designer",
     description:
-      "Product design for AI systems — enterprise DoD platforms, clinical copilots, and agentic workflows. Research & design for users wrangling electric sheep.",
+      "Product design for AI systems: enterprise DoD platforms, clinical copilots, and agentic workflows. Research & design for users wrangling electric sheep.",
     url: "https://andrewmarks.net",
     siteName: "Andrew Marks Design",
     locale: "en_US",
@@ -41,9 +41,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Andrew Marks — UX & Product Designer",
+    title: "Andrew Marks · UX & Product Designer",
     description:
-      "Product design for AI systems — enterprise DoD platforms, clinical copilots, and agentic workflows. Research & design for users wrangling electric sheep.",
+      "Product design for AI systems: enterprise DoD platforms, clinical copilots, and agentic workflows. Research & design for users wrangling electric sheep.",
   },
 };
 

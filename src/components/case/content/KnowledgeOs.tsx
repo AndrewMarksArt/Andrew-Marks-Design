@@ -235,7 +235,7 @@ export default function KnowledgeOs() {
       />
 
       <CaseSection
-        heading="Chat that answers from the library, not the internet."
+        heading="Chat that answers only from the library."
         lede={[
           "The daily interface is a conversation with the corpus.",
           "A question gets embedded; the system over-fetches 20 to 40 candidates from the vector store (recall is cheap, and the reranker is the better judge of relevance), then the top ten go to the model with one standing rule: ground every claim in a named saved source, and say so when the corpus doesn't cover it.",
@@ -316,7 +316,7 @@ export default function KnowledgeOs() {
             label="The stack, told as its swaps"
             aspect={979 / 490}
             naturalWidth={979}
-            caption="Four dated swaps under one invariant. The rest of the registry rides in the band. This is what a stack designed for change looks like in practice."
+            caption="Four dated swaps under one invariant. The rest of the registry rides in the band."
           >
             <TechStackMap />
           </AssetFigure>
