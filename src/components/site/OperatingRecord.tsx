@@ -71,7 +71,7 @@ const EYEBROW = "ORG-LEVEL WORK";
 const TITLE = "Research infrastructure, tooling access, and cross-team delivery";
 
 const SUBHEAD =
-  "I help lead user research on the UX/UI team in my value stream, and support multiple of the org's product teams. Alongside the product work in the case studies, a significant part of my job has been building the conditions that let research happen at all. None of it came with authority to mandate anything, so all of it ran on evaluation, evidence, and working relationships.";
+  "I help lead user research on the UX/UI team in my value stream, and support more than one of the org's product teams. Alongside the product work in the case studies, a significant part of my job has been building the conditions that let research happen at all. None of it came with authority to mandate anything, so all of it ran on evaluation, evidence, and working relationships.";
 
 const BEATS: Beat[] = [
   {
@@ -118,7 +118,7 @@ const BEATS: Beat[] = [
       "Studies field in roughly two weeks, down from four to five.",
       "Response rates on the two most recent research initiatives run 10 to 15 percent, against 1 to 3 percent at best before the pipeline.",
       "The gain comes from targeting: users who were invisible to us before, and the most active users at the organizations whose feedback matters most.",
-      "On a recent merge of two front-end applications, interviews surfaced needs the design had missed (power-user filters and collapsible sections) and the feature changed before it shipped. That work is recent, so I am not claiming a downstream metric yet.",
+      "On a recent merge of two front-end applications, interviews surfaced needs the design had missed (power-user filters and collapsible sections) and the feature changed before it shipped. That work is recent, so I'm not claiming a downstream metric yet.",
     ],
   },
   {
@@ -133,12 +133,12 @@ const BEATS: Beat[] = [
     isPhrase: true,
     calloutUnit: "From fieldwork to findings. Six researchers work from the prompts.",
     headline: "I wrote the prompts and workflows six researchers now work from.",
-    lede: "I built the research tooling to be operated by people other than me, which meant the operating knowledge had to live outside my head.",
+    lede: "I built the research tooling so people other than me could run it, which meant the operating knowledge had to live outside my head.",
     chunks: [
       "Wrote the custom system prompts our researchers work from. Three researchers on my team use them, plus three from other teams on collaborations.",
       "Synthesis now runs in hours. Getting findings reviewed and presented takes a week or two, against the three to four months it took before. Measured across three collaborations and four campaigns.",
       "Trained the team on the prompts and on efficient use of the model access, and leveled up teammates with the org context their initiatives depend on.",
-      "Documented the advanced data lake workflows in our research repo. Sourcing still routes through me, since I hold the only researcher access.",
+      "Documented the advanced data-lake workflows in our research repo. Sourcing still routes through me, since I hold the only researcher access.",
       "Working now to extend that access to other researchers and to PMs and POs on other teams, so they can pull sourcing for the feedback their own work needs.",
     ],
   },

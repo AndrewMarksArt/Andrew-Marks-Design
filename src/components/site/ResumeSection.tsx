@@ -28,7 +28,7 @@ const ENTRIES: ResumeEntry[] = [
   {
     company: "Northrop Grumman",
     role: "UI/UX Engineer, Payload & Ground Systems",
-    meta: "07/’21 – 8/’23",
+    meta: "07/’21 – 08/’23",
     body: "Led UI development for payload and ground systems, integrating real-time telemetry and mission-critical data, and built an onboarding site that cut new-hire ramp from 10 to 7 days.",
   },
   {

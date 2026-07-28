@@ -166,7 +166,7 @@ export default function ChatVet() {
              read as an alibi. */
           "I was consulting on this, and most of the team was part-time: ten hours a week at most.",
           "The dev team could not take that on.",
-          "So I cut the scope to the one piece that did not need a records migration to be useful: the assistant. That is what shipped.",
+          "So I cut the scope to the one piece that didn't need a records migration to be useful: the assistant. That is what shipped.",
           "We built it on design systems I already had, and kept every pattern as simple as it could be.",
         ]}
         media={
@@ -252,7 +252,7 @@ export default function ChatVet() {
               label="Lab interpreter: the read · CASE: RUGER"
               aspect={4096 / 2113}
               naturalWidth={4096}
-              caption="Six of twenty-four analytes flagged, read as a cluster instead of a list, and the one value that would settle the differential is named as missing from the panel."
+              caption="Six of twenty-four analytes flagged and read as a cluster instead of a list. It also names the one value that would settle the differential as missing from the panel."
             >
               <img
                 src="/case-studies/chat-vet/cv-lab-results.webp"
@@ -283,8 +283,8 @@ export default function ChatVet() {
       <CaseSection
         heading="Vets shouldn't have to be prompt engineers."
         lede={[
-          "In the pilot we watched vets write prompts that did not work, and get different answers to the same clinical question.",
-          "So I designed a template library, organised by clinical job: SOAP notes, discharge instructions, differentials, client emails.",
+          "In the pilot we watched vets write prompts that didn't work, and get different answers to the same clinical question.",
+          "So I designed a template library, organized by clinical job: SOAP notes, discharge instructions, differentials, client emails.",
           "Vets replace the highlighted details and hit enter. A few fields instead of a paragraph.",
           "It saves time, and it makes the output consistent: the same question returns the same shape of answer, whoever asks it.",
         ]}
@@ -310,7 +310,7 @@ export default function ChatVet() {
         lede={[
           "I designed the print output, and reworked the discharge generator around the chat context.",
           "It reads the consultation back, asks which of the medications discussed should go home, and fills the client's document from the conversation that already happened.",
-          "The owner gets something they can follow. The staff spend no extra time after the visit producing it.",
+          "The owner gets something they can follow. The staff spend no extra time producing it after the visit.",
         ]}
         media={
           <>
@@ -365,7 +365,7 @@ export default function ChatVet() {
       <CaseSection
         heading="Vets kept using it, and brought it into their own practices."
         lede={[
-          "The web app went live with 500 monthly users globally, multiple clinics piloting the business tier ahead of paid rollout, and growth running bottom-up rather than through a sales motion.",
+          "The web app is live: 500 monthly users worldwide, clinics piloting the business tier ahead of paid rollout, and growth coming bottom-up with no sales push behind it.",
           "Users self-report saving about 15 minutes per case. Nobody measured it.",
           /* Inoculation, not blame — and the last sentence is what stops
              "wound down" reading as a falling-out. */

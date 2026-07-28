@@ -110,7 +110,7 @@ export default function KnowledgeOs() {
         heading="The field moves faster than reading speed."
         lede={[
           "A hundred-plus relevant sources arrive in a quiet week; the spring peak topped five hundred. A person can deeply read a fraction of that, and skimming drops the things that matter most: connections and contradictions between sources, the topics nobody's covering yet.",
-          "Capture tools don't solve it. They make piles, and piles rot: you can't see what's gone stale, what contradicts what, or what's missing entirely. For a designer whose positioning depends on staying current in AI, that's a professional risk.",
+          "Capture tools don't solve it. They make piles, and piles rot: you can't see what's gone stale, what contradicts what, or what's missing entirely. My positioning depends on staying current in AI, so that's a professional risk.",
           "The system reads everything so I can deeply read the right ten.",
           "A note on method: I'm the only user, so the research is instrumentation. Every number here comes from the project's own dated records: commit history, migrations, eval reports, and the product's own analytics, shown as captured.",
         ]}
@@ -194,7 +194,7 @@ export default function KnowledgeOs() {
             >
               <img
                 src="/case-studies/knowledge-os/kos-gap-signal.webp"
-                alt="A gap signal detail in Insights, 93 percent confidence, June 24 2026: Agentic Coding, Agent Authorization and Payment Systems. The corpus has eight-plus thin subtopics covering agent payment authorization, each with only one link but priority scores of 0.82 to 0.92. Below: why it matters, the top link in the area, two suggested searches, and buttons reading Ask AI about this gap, Research this, and Draft about this."
+                alt="A gap signal detail in Insights, 93 percent confidence, June 24, 2026: Agentic Coding, Agent Authorization and Payment Systems. The corpus has eight-plus thin subtopics covering agent payment authorization, each with only one link but priority scores of 0.82 to 0.92. Below: why it matters, the top link in the area, two suggested searches, and buttons reading Ask AI about this gap, Research this, and Draft about this."
                 className={styles.shotImg}
               />
             </AssetFigure>
@@ -215,7 +215,7 @@ export default function KnowledgeOs() {
       <CaseSection
         heading="A substrate, not a library."
         lede={[
-          "The corpus isn't the product. It's food for twelve specialist agents: connection discovery, contradiction detection, gap analysis, synthesis, research, a reading-queue prioritizer that never calls a model at all.",
+          "The corpus feeds twelve specialist agents: connection discovery, contradiction detection, gap analysis, synthesis, research, a reading-queue prioritizer that never calls a model at all.",
           "Each one is boring on its own; the interesting behavior is how they compose. Agents write signals (machine observations reviewed like proposals, never auto-applied), and by mid-April, at about 1,000 sources, they'd written ~960 of them. Roughly one per source.",
           "They all started life on weekly crons. At ~$8 a week of model spend for a single user, I turned scheduling off: every agent now runs on demand, and the only cron left is a ten-cent digest.",
         ]}
@@ -308,7 +308,7 @@ export default function KnowledgeOs() {
       <CaseSection
         heading="Built for a web that fights back."
         lede={[
-          "None of the trust work above matters if capture dies, and extraction is adversarial: platforms wall off content, public APIs grow challenge screens, managed builders drop your system dependencies without warning. So the pipeline keeps one promise above all: a failed tool degrades a save. It never drops one. The design decision that keeps it: routing lives in a database table, not in code, with every platform's extractor chain ending at the same universal fallback.",
+          "None of the trust work above matters if capture dies, and extraction is adversarial: platforms wall off content, public APIs grow challenge screens, managed builders drop your system dependencies without warning. So the pipeline keeps one promise above all: a failed tool degrades a save. It never drops one. One design decision keeps it: routing lives in a database table, not in code, with every platform's extractor chain ending at the same universal fallback.",
           "The receipts are dated. When YouTube's bot wall broke the media downloader, yt-dlp swapped in behind one registry row. When the public cobalt API added a Turnstile wall, a self-hosted instance on Fly took over. When two managed builders silently dropped yt-dlp and ffmpeg from the deploy, the build moved to a raw Dockerfile. Almost none of the pipeline's tools are the ones it started with, and every tool call is logged with its duration and cost.",
         ]}
         media={

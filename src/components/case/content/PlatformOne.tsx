@@ -195,7 +195,7 @@ export default function PlatformOne() {
         }
         lede={[
           "Most of those tickets should never have existed: in the sample audit, nearly half were answers already on the site. The assistant answers at the point of confusion, surfacing sources and suggesting follow-ups.",
-          "Why an assistant instead of just fixing the navigation? Deeper IA work was underway, but on a much longer timeline, and earlier band-aid fixes had made things worse. The assistant was the bridge that could ship in months, and the wedge that unlocked budget and infrastructure for the platform's next AI projects.",
+          "Why an assistant instead of just fixing the navigation? Deeper IA work was underway, but on a much longer timeline, and earlier band-aid fixes had made things worse. The assistant could ship in months, and it unlocked the budget and infrastructure for the platform's next AI projects.",
           "After two turns without a resolution, a soft CTA offers the help desk or Customer Success, routed by question type. After turn four the CTA becomes a hard one, so no conversation loops.",
           "The routing burden moved from people to design.",
         ]}
@@ -274,8 +274,8 @@ export default function PlatformOne() {
       <CaseSection
         heading={"Designing to ship with one developer."}
         lede={[
-          "With a single primary developer, I designed to Vuetify's defaults wherever possible, spending customization only where it bought real user value.",
-          "When a partner-provided chat widget was chosen as the interim launch vehicle for speed, I recommended against it, documented the UX gaps, and partnered with engineering to re-skin it to our brand while the custom experience is built.",
+          "With a single primary developer, I designed to Vuetify's defaults wherever possible, customizing only where it bought real user value.",
+          "When the team picked a partner's chat widget to launch faster, I recommended against it, documented the UX gaps, and worked with engineering to re-skin it to our brand until the custom experience ships.",
         ]}
         media={
           /* Figma revision 2026-07-21: the real design-system board, rendered

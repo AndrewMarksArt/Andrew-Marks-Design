@@ -123,8 +123,8 @@ export function LinksGrid() {
           </a>
           <ArrowOutIcon className={styles.icon} />
           <p className={styles.desc}>
-            <strong>Product Designer engineering intuitive UX solutions</strong>{" "}
-            for complex DoD, GovTech, and AI ecosystems.
+            <strong>Product Designer engineering intuitive UX</strong>{" "}
+            for complex DoD, GovTech, and AI systems.
           </p>
         </div>
 
@@ -159,7 +159,7 @@ export function LinksGrid() {
           <span className={styles.hatch} aria-hidden="true" />
           <p className={styles.desc}>
             <strong>Connect with me on LinkedIn</strong> /in/andrewmarksart/ as
-            I build-in-public projects on AI agents & the future of UX.
+            I build projects in public on AI agents & the future of UX.
           </p>
         </div>
 
@@ -196,10 +196,10 @@ export function LinksGrid() {
               second bold span made 55% of the paragraph bold, inverting
               emphasis) */}
           <p className={styles.desc}>
-            <strong>Focused on the architecture of human-AI collaboration</strong>
-            , from secure DoD systems to rapid AI prototyping, I use my
-            background to simplify complex data into high-performance UX
-            research and designs allowing AI systems to scale.
+            <strong>Focused on how humans and AI work together.</strong> From
+            secure DoD systems to rapid AI prototyping, I use my background
+            to turn complex data into UX research and design that lets AI
+            systems scale.
           </p>
           {/* Judge-panel pass (research 005): the shell had no direct contact
               channel anywhere — the cell label stays inert per Andrew's

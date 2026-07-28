@@ -44,7 +44,7 @@ const CASES: CaseStudy[] = [
     desc: (
       <>
         An AI copilot that <strong>vets say saves them about 15 minutes per case</strong>
-        , answering from Merck Veterinary Manual instead of the open web.
+        , answering from the Merck Veterinary Manual instead of the open web.
       </>
     ),
   },
