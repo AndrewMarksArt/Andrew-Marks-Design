@@ -54,8 +54,8 @@ const CASES: CaseStudy[] = [
     href: "/case-studies/knowledge-os",
     desc: (
       <>
-        A <strong>multi-agent system that reads 300–400 sources a week</strong>{" "}
-        into a 4,000+ source living corpus. Built solo, in production.
+        A <strong>multi-agent system that reads a hundred-plus sources a week</strong>{" "}
+        into a 4,300+ source living corpus. Built solo, in production.
       </>
     ),
   },
