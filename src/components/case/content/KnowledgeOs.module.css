@@ -3,11 +3,18 @@
    (The Figma-era quadRow was collapsed into one wide telemetry chart per
    the case-study audit's layout bend.) */
 
-/* Narrow centered figure (refusal crop, gap-catch evidence card — small
-   and stark, per the shot list). */
+/* Narrow centered figure (gap-catch evidence card — small and stark, per
+   the shot list). */
 .narrowFigure {
   max-width: 640px;
   width: 100%;
+}
+
+/* Real product captures (placement pass 2026-07-27). */
+.shotImg {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 /* Closer evidence stack (growth timeline + evidence card), replaces the

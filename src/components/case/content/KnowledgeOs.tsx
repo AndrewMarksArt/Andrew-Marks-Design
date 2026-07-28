@@ -6,16 +6,13 @@ import {
 } from "../CaseSections";
 import { AssetFigure, StatCard, StatCards } from "../CaseFigures";
 import BrandRow from "../../site/BrandRow";
+import ZoomableFigure from "../FigureLightbox";
 import styles from "./KnowledgeOs.module.css";
-import CaptureVolumeChart from "./kos/CaptureVolumeChart";
 import CaptureBeforeAfter from "./kos/CaptureBeforeAfter";
 import TechStackMap from "./kos/TechStackMap";
-import TrustRowCrop from "./kos/TrustRowCrop";
 import GapCatchCard from "./kos/GapCatchCard";
 import SystemMap from "./kos/SystemMap";
 import RagArchitecture from "./kos/RagArchitecture";
-import RefusalCrop from "./kos/RefusalCrop";
-import BranchGraphFigure from "./kos/BranchGraphFigure";
 import ScoringRecal from "./kos/ScoringRecal";
 import SystemEvolution from "./kos/SystemEvolution";
 
@@ -37,10 +34,30 @@ import SystemEvolution from "./kos/SystemEvolution";
  * capped to the closer heading; RagArchitecture's corpus band no
  * longer repeats the 3,241 count (SystemMap owns it).
  *
- * ⚠ STILL PENDING FROM ANDREW: real product screenshots (every
- * judge's #1 fix — hero, trust row, refusal, branch pager), fresh DB
- * export (corpus total, weekly volume, signals total), one
- * deep-reading-capacity number, "in daily use" as of now.
+ * PLACEMENT PASS 2026-07-27: six real captures landed (Andrew's
+ * exports, Figma section 7024:1851) — hero (cited answer + Sources
+ * rail), Analytics (4,339 total · 93% extraction · real 12-week pace —
+ * retires CaptureVolumeChart AND supplies the fresh corpus/volume
+ * numbers), trust row with the hover reason open (retires
+ * TrustRowCrop), a live Jun 24 gap signal (pairs with the dated
+ * GapCatchCard), the research panel (retires RefusalCrop), and the
+ * branch/converge capture with a mid-answer gap admission (retires
+ * BranchGraphFigure). All numbers refreshed to 4,339 / Jul 27;
+ * SystemEvolution's tail is now measured, not extrapolated. Retired
+ * components deleted — recoverable in git.
+ *
+ * GIF LANDED 2026-07-27: kos-ask-answer-fast.gif (14s @2x, cut from
+ * Andrew's recording 86s–114s) — ask → searching → grounded answer
+ * with match-% cards, placed under RagArchitecture as the P1-pattern
+ * demo loop. His recording's analytics frame shows 4,415/173-this-week
+ * — the corpus has already outgrown the 4,339 screenshot.
+ *
+ * ⚠ STILL PENDING FROM ANDREW: a true corpus-empty refusal capture,
+ * the ◀ n/m ▶ version-pager close-up or branch-flip GIF (5 seconds,
+ * would be tiny and killer), the Telegram two-step capture
+ * (CaptureBeforeAfter's right panel is the last drawn stand-in),
+ * signals total, one deep-reading-capacity number, and the grounding
+ * spot-check.
  */
 export default function KnowledgeOs() {
   return (
@@ -50,10 +67,23 @@ export default function KnowledgeOs() {
         title="Designing a personal AI that reads hundreds of sources a week, so I don't have to."
         intro={[
           "In AI, new work outpaces anyone's reading speed. Knowledge Hub is a personal knowledge OS — built solo, deployed in its first week, grown in production ever since.",
-          "A capture pipeline ingests hundreds of sources a week into a corpus measured at 3,241 by mid-June; a chat interface answers from that corpus with citations instead of confidence.",
+          "A capture pipeline ingests a hundred-plus sources a week into a corpus that stood at 4,339 in late July; a chat interface answers from that corpus with citations instead of confidence.",
           "I designed, researched, and built every layer — the trust decisions below are mine end to end.",
         ]}
-        placeholderLabel="// hero render in progress — the system diagrams below are current"
+        media={
+          <ZoomableFigure
+            label="The daily interface — a cited answer"
+            aspect={3800 / 2030}
+            naturalWidth={3800}
+            unframed
+          >
+            <img
+              src="/case-studies/knowledge-os/kos-hero-chat.webp"
+              alt="The Knowledge Hub chat answering 'How do I manage context and memory effectively in a production agent system?' — a practical framework grounded in saved resources, with source titles bolded inline, the Sources rail open listing 23 saved links, folders in the left sidebar, and a footer reading: answers are generated from your saved links; results depend on what you've saved."
+              className={styles.shotImg}
+            />
+          </ZoomableFigure>
+        }
       />
 
       <StatsStrip
@@ -79,19 +109,25 @@ export default function KnowledgeOs() {
       <CaseSection
         heading="The field moves faster than reading speed."
         lede={[
-          "Hundreds of relevant sources arrive every week — the corpus grew at roughly 260 a week through spring, per its own dated snapshots. A person can deeply read a fraction of that, and skimming drops the things that matter most: connections and contradictions between sources, the topics nobody's covering yet.",
+          "A hundred-plus relevant sources arrive in a quiet week; the spring peak topped five hundred. A person can deeply read a fraction of that, and skimming drops the things that matter most: connections and contradictions between sources, the topics nobody's covering yet.",
           "Capture tools don't solve it — they make piles, and piles rot: you can't see what's gone stale, what contradicts what, or what's missing entirely. For a designer whose positioning depends on staying current in AI, that's a professional risk.",
           "The system reads everything so I can deeply read the right ten.",
-          "A note on method: I'm the only user, so the research is instrumentation. Every number here comes from the project's own dated records — commit history, migrations, eval reports. Figures marked representative are drawn to those records; anything only the production database can answer says so on its face.",
+          "A note on method: I'm the only user, so the research is instrumentation. Every number here comes from the project's own dated records — commit history, migrations, eval reports, and the product's own analytics, shown as captured.",
         ]}
         media={
+          /* Placement pass 2026-07-27: the drawn representative bars retired —
+             this is the Analytics page as it stood on Jul 27, numbers and all. */
           <AssetFigure
-            label="One week of intake vs reading speed"
-            aspect={979 / 360}
-            naturalWidth={979}
-            caption="Every week, hundreds of captures. Deep reading covers the flat line at the bottom."
+            label="The intake, measured — Analytics, Jul 27"
+            aspect={3817 / 2050}
+            naturalWidth={3817}
+            caption="The system's own telemetry: 4,339 sources, 93% extraction success, and twelve weeks of real intake. Deep reading covers a sliver of any of these bars."
           >
-            <CaptureVolumeChart />
+            <img
+              src="/case-studies/knowledge-os/kos-analytics.webp"
+              alt="The Analytics page: stat strip reading total links 4,339, extraction success 93 percent, this week 101; an Ingestion Pace bar chart of links saved per week for the last twelve weeks, peaking near five hundred in late May; Topic Coverage with Agentic Coding at 1,937 links and Design at 1,324; and a Score Distribution by priority bucket."
+              className={styles.shotImg}
+            />
           </AssetFigure>
         }
       />
@@ -121,13 +157,19 @@ export default function KnowledgeOs() {
           "A failed extraction is never dropped: the row is saved and flagged, with recovery one click away in the app — or a /retry straight from Telegram.",
         ]}
         media={
+          /* Placement pass 2026-07-27: the drawn row retired — the real table
+             with the hover breakdown open. */
           <AssetFigure
-            label="Trust, surfaced on the row"
-            aspect={979 / 300}
-            naturalWidth={979}
-            caption="Every AI conclusion ships with its confidence, its reasoning, and its failures — surfaced where I read."
+            label="Trust, surfaced on the row — live"
+            aspect={3820 / 2055}
+            naturalWidth={3820}
+            caption="The real table, hover open: the model's written reason, the priority it set, novelty against the Space. Trust lives on the row because that's where reading happens — not a dashboard away."
           >
-            <TrustRowCrop />
+            <img
+              src="/case-studies/knowledge-os/kos-trust-row.webp"
+              alt="The Knowledge table with a row's score tooltip open, reading: solid strategic insight on design practice shift with AI, clear framing of new deliverable standards, but primarily conceptual argument rather than craft demonstration — value score 69, priority 72 described as Claude's quality rating, novelty 29 described as fresh versus corpus. Around it, rows carry source chips, category chips, score dots, and a REVIEW badge on a flagged row."
+              className={styles.shotImg}
+            />
           </AssetFigure>
         }
       />
@@ -140,16 +182,33 @@ export default function KnowledgeOs() {
           "And when a genuine gap turns up, the one sanctioned path to the open internet is the research tool that goes and fills it — suggested topics, capped runs, every new source through the same scored pipeline, with per-run rollback.",
         ]}
         media={
-          <div className={styles.narrowFigure}>
+          /* Placement pass 2026-07-27: the live twin joins the dated record —
+             the same blind-spot pattern, still firing fifteen months of saves
+             later. Then-and-now is the argument. */
+          <>
             <AssetFigure
-              label="The gap the agent caught"
-              aspect={640 / 300}
-              naturalWidth={640}
-              caption="The first gap the agents caught was mine — a real run, dated in the repo."
+              label="A gap report, live — Jun 24"
+              aspect={3822 / 2047}
+              naturalWidth={3822}
+              caption="Still catching them: eight thin subtopics the pipeline scored 0.82–0.92, one link each — with the three actions that close the loop: ask, research, draft."
             >
-              <GapCatchCard />
+              <img
+                src="/case-studies/knowledge-os/kos-gap-signal.webp"
+                alt="A gap signal detail in Insights, 93 percent confidence, June 24 2026: Agentic Coding, Agent Authorization and Payment Systems — the corpus has eight-plus thin subtopics covering agent payment authorization, each with only one link but priority scores of 0.82 to 0.92. Below: why it matters, the top link in the area, two suggested searches, and buttons reading Ask AI about this gap, Research this, and Draft about this."
+                className={styles.shotImg}
+              />
             </AssetFigure>
-          </div>
+            <div className={styles.narrowFigure}>
+              <AssetFigure
+                label="The first catch — Mar 30"
+                aspect={640 / 300}
+                naturalWidth={640}
+                caption="The first gap the agents caught was mine — a real run, dated in the repo."
+              >
+                <GapCatchCard />
+              </AssetFigure>
+            </div>
+          </>
         }
       />
 
@@ -197,23 +256,44 @@ export default function KnowledgeOs() {
             >
               <RagArchitecture />
             </AssetFigure>
-            <div className={styles.narrowFigure}>
-              <AssetFigure
-                label="The refusal"
-                aspect={480 / 240}
-                naturalWidth={480}
-                caption="When the library is silent, the system says so. The tool that fills the shelf sits one click away in the same chat — it suggests topics from the conversation, pulls new sources, and reports back into the thread."
-              >
-                <RefusalCrop />
-              </AssetFigure>
-            </div>
+            {/* Placement pass 2026-07-27: the machine above, running — the
+                P1-pattern demo loop. 2x speed, cut from Andrew's recording. */}
             <AssetFigure
-              label="A conversation, branched"
-              aspect={979 / 360}
-              naturalWidth={979}
-              caption="Edit or regenerate and nothing is lost — a sibling branch appears, a pager walks the alternatives."
+              label="The machine, running — 2×"
+              aspect={3806 / 2034}
+              naturalWidth={1000}
+              caption="Ask, search the library, and a grounded answer streams in with its sources attached — the architecture above, at work."
             >
-              <BranchGraphFigure />
+              <img
+                src="/case-studies/knowledge-os/kos-ask-answer-fast.gif"
+                alt="Screen recording at double speed: a question is typed into the chat home over the corpus folders, the composer sends, a Searching-your-library state appears, and a structured answer streams in — themes, bolded source names, Referenced Resources cards with match percentages, and follow-up suggestion chips."
+                className={styles.shotImg}
+                loading="lazy"
+              />
+            </AssetFigure>
+            <AssetFigure
+              label="The shelf-filler, one click away"
+              aspect={3815 / 2037}
+              naturalWidth={3815}
+              caption="When the corpus can't cover a question, the same chat fixes it: the research panel suggests topics from the conversation, runs capped searches, and reports back into the thread."
+            >
+              <img
+                src="/case-studies/knowledge-os/kos-research-panel.webp"
+                alt="The Research Topics panel open over a chat: a sources toggle set to diverse, a Suggest-from-conversation button, five suggested topics about graph engineering each with its own Research button, and a Research-all-5 action — above the composer and the answers-are-generated-from-your-saved-links footer."
+                className={styles.shotImg}
+              />
+            </AssetFigure>
+            <AssetFigure
+              label="A conversation, branched — live"
+              aspect={3802 / 2042}
+              naturalWidth={3802}
+              caption="Nothing is overwritten — and when two branches converge on the same three sources, the system offers one grounded synthesis. The answer above does the honest thing too: it names what the saved links don't cover."
+            >
+              <img
+                src="/case-studies/knowledge-os/kos-branch-converge.webp"
+                alt="A real chat where the answer opens with One Critical Gap — your saved links do not cover how to handle sellers who do not accept USDC or crypto payments — above a Resources list and Referenced Resources cards with match percentages. At the bottom, a bar reads: two branches converge on 3 shared sources, with a Synthesize button. The outline rail on the right shows Bookmarks and section labels."
+                className={styles.shotImg}
+              />
             </AssetFigure>
           </>
         }
@@ -270,7 +350,7 @@ export default function KnowledgeOs() {
       <CaseSection
         heading="In production since week one — and compounding"
         lede={[
-          "Knowledge Hub is live: 865 commits and 249 merged PRs between February 23 and early July, a corpus measured at 3,241 sources in mid-June and past 4,000 on that trajectory, a cited chat on top, twelve agents on call.",
+          "Knowledge Hub is live: 865 commits and 249 merged PRs between February 23 and early July, a corpus measured at 4,339 sources in late July and still growing, a cited chat on top, twelve agents on call.",
           "It's the same rule I hold every AI product to — ground it or say you can't — applied to a system where I'm the only user it can fail.",
           <strong key="retro">
             A year ago I could have designed this in Figma — getting any of it
@@ -284,7 +364,7 @@ export default function KnowledgeOs() {
              measured OUTCOME (the eval-first fix, reprised from S9 as the
              closing stat the first panel asked to promote). */
           <StatCards>
-            <StatCard label="Sources measured — Jun 16" value="3,241" />
+            <StatCard label="Sources measured — Jul 27" value="4,339" />
             <StatCard label="High-worth recall — eval-first fix" value="8→63%" />
           </StatCards>
         }
@@ -292,10 +372,10 @@ export default function KnowledgeOs() {
 
       <section className={`content ${styles.closerFigures}`}>
         <AssetFigure
-          label="Four and a half months, zero to compounding"
+          label="Five months, zero to compounding"
           aspect={979 / 300}
           naturalWidth={979}
-          caption="Four and a half months from first commit — every solid point is dated in the repo; the dashed tail is the trajectory."
+          caption="Five months from first commit, every point measured — repo records through June, the product's own analytics for July 27."
         >
           <SystemEvolution />
         </AssetFigure>

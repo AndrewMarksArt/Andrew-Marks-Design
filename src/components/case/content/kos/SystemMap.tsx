@@ -3,7 +3,7 @@ export default function SystemMap() {
     <svg
       viewBox="0 0 979 440"
       role="img"
-      aria-label="Full-system map of Knowledge OS: URLs enter from Telegram, the web app, or research runs; pass a security gate, an eleven-tool extraction registry, Haiku summarize-and-score, and Voyage embedding into the corpus; twelve manual agents read the corpus and write signals back; surfaces include cited chat, the brief, gallery, Obsidian, and a read-only guest view. An orange loop marks the research agent as the only path to the open web."
+      aria-label="Full-system map of Knowledge OS: URLs enter from Telegram, the web app, or research runs; pass a security gate, an eleven-tool extraction registry, Haiku summarize-and-score, and Voyage embedding into the corpus; twelve manual agents read the corpus — 4,339 sources measured July 27 — and write signals back; surfaces include cited chat, the brief, gallery, Obsidian, and a read-only guest view. An orange loop marks the research agent as the only path to the open web."
       style={{
         width: "100%",
         height: "auto",
@@ -143,7 +143,7 @@ export default function SystemMap() {
         strokeWidth={1}
       />
       <text x={520} y={220} textAnchor="middle" fontSize={13} fontWeight={400} fill="#231A09">
-        {"THE CORPUS — 3,241 SOURCES MEASURED JUN 16 · STILL GROWING"}
+        {"THE CORPUS — 4,339 SOURCES MEASURED JUL 27 · STILL GROWING"}
       </text>
       <text x={520} y={238} textAnchor="middle" fontSize={11} fontWeight={400} fill="#5E5757">
         {"SUPABASE + PGVECTOR · EVERY SAVE EMBEDDED · SPACE-SCOPED NOVELTY"}

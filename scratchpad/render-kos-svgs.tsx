@@ -4,21 +4,16 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { writeFileSync, mkdirSync } from "fs";
 import { createElement } from "react";
 
-import CaptureVolumeChart from "../src/components/case/content/kos/CaptureVolumeChart";
 import CaptureBeforeAfter from "../src/components/case/content/kos/CaptureBeforeAfter";
-import TrustRowCrop from "../src/components/case/content/kos/TrustRowCrop";
 import SystemMap from "../src/components/case/content/kos/SystemMap";
 import TechStackMap from "../src/components/case/content/kos/TechStackMap";
 import RagArchitecture from "../src/components/case/content/kos/RagArchitecture";
-import RefusalCrop from "../src/components/case/content/kos/RefusalCrop";
-import BranchGraphFigure from "../src/components/case/content/kos/BranchGraphFigure";
 import ScoringRecal from "../src/components/case/content/kos/ScoringRecal";
 import SystemEvolution from "../src/components/case/content/kos/SystemEvolution";
 import GapCatchCard from "../src/components/case/content/kos/GapCatchCard";
 
 const comps: Record<string, React.ComponentType> = {
-  CaptureVolumeChart, CaptureBeforeAfter, TrustRowCrop,
-  SystemMap, TechStackMap, RagArchitecture, RefusalCrop, BranchGraphFigure,
+  CaptureBeforeAfter,  SystemMap, TechStackMap, RagArchitecture,
   ScoringRecal, SystemEvolution, GapCatchCard,
 };
 
@@ -38,4 +33,5 @@ for (const [name, C] of Object.entries(comps)) {
   writeFileSync(`scratchpad/kos-svg/${name}.svg`, svg);
   console.log(name, svg.length);
 }
+
 
