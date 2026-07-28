@@ -6,7 +6,7 @@ export default function TicketTaxonomyChart() {
       aria-label="Horizontal bar chart of 150 hand-coded contact-us tickets: 40 percent had an answer on the site or in the docs, 37 percent belonged to another team, 9 percent were true customer-success work, 8 percent were simple help-desk resets, and 6 percent were unclear or other."
       style={{ width: "100%", height: "auto", display: "block", fontFamily: "var(--font-geist-mono), ui-monospace, monospace" }}
     >
-      <title>Ticket taxonomy — hand-coded contact-us sample</title>
+      <title>Ticket taxonomy: hand-coded contact-us sample</title>
 
       {/* Figure header (Figma revision 2026-07-21: terminal-prompt idiom) */}
       <text x={16} y={30} fontSize={16.5} fontWeight={400} fill="#5E5E5E">{">_ Random sample of 150 contact us responses analyzed"}

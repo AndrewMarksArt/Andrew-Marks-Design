@@ -3,7 +3,7 @@ export default function PhasedLaunchTimeline() {
     <svg
       viewBox="0 0 979 140"
       role="img"
-      aria-label="Phased launch timeline: five undated stops on one line — staging is complete and marked today; behind SSO, certificate to field, public launch, and a custom front-end that replaces the interim widget remain ahead on a dashed future line."
+      aria-label="Phased launch timeline: five undated stops on one line. Staging is complete and marked today; behind SSO, certificate to field, public launch, and a custom front-end that replaces the interim widget remain ahead on a dashed future line."
       style={{ width: "100%", height: "auto", display: "block", fontFamily: "var(--font-geist-mono), ui-monospace, monospace" }}
     >
       <title>Phased launch sequence</title>

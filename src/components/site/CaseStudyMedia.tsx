@@ -82,7 +82,7 @@ export default function CaseStudyMedia({
       className={styles.mediaLink}
       data-peek={peeked || undefined}
       onClick={handleClick}
-      aria-label={`${title} — view case study`}
+      aria-label={`${title}, view case study`}
       style={
         beam
           ? ({

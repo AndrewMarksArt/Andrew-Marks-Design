@@ -3,7 +3,7 @@ export default function GapCatchCard() {
     <svg
       viewBox="0 0 640 300"
       role="img"
-      aria-label="The gap report card from the agent's first run on March 30, at 627 sources: five security subtopics — agent, API, server, data safety, safety architecture — drawn as nodes ringed in orange, all sitting at the corpus-maximum 0.85 priority, with only eight saved links of coverage between them drawn as sparse dots. The scoring said it mattered; the reading hadn't noticed."
+      aria-label="The gap report card from the agent's first run on March 30, at 627 sources: five security subtopics (agent, API, server, data safety, safety architecture) drawn as nodes ringed in orange, all sitting at the corpus-maximum 0.85 priority, with only eight saved links of coverage between them drawn as sparse dots. The scoring said it mattered; the reading hadn't noticed."
       style={{
         width: "100%",
         height: "auto",
@@ -11,7 +11,7 @@ export default function GapCatchCard() {
         fontFamily: "var(--font-geist-mono), ui-monospace, monospace",
       }}
     >
-      <title>The gap the agent caught first — max priority, near-zero coverage</title>
+      <title>The gap the agent caught first: max priority, near-zero coverage</title>
 
       {/* ---- Card plate ---- */}
       <rect x={110} y={24} width={420} height={252} fill="#FFFFFF" stroke="#000000" strokeWidth={1} />

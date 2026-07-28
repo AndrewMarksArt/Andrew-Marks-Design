@@ -3,7 +3,7 @@ export default function VuetifySpendMap() {
     <svg
       viewBox="0 0 480 322"
       role="img"
-      aria-label="Wireframe of the assistant screen tinted into two classes: gray regions are stock Vuetify components covering roughly eighty percent of the interface (a draft split, final tally pending), and three orange regions mark the custom builds — the citations row, the follow-up chips row, and the escalation call to action."
+      aria-label="Wireframe of the assistant screen tinted into two classes: gray regions are stock Vuetify components covering roughly eighty percent of the interface (a draft split, final tally pending), and three orange regions mark the custom builds: the citations row, the follow-up chips row, and the escalation call to action."
       style={{
         width: "100%",
         height: "auto",
@@ -11,7 +11,7 @@ export default function VuetifySpendMap() {
         fontFamily: "var(--font-geist-mono), ui-monospace, monospace",
       }}
     >
-      <title>Component spend map — stock vs custom regions</title>
+      <title>Component spend map: stock vs custom regions</title>
 
       {/* Figure header */}
       <text x={16} y={28} fontSize={13} fontWeight={400} fill="#5E5757">

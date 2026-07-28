@@ -3,7 +3,7 @@ export default function ScoringRecal() {
     <svg
       viewBox="0 0 640 300"
       role="img"
-      aria-label="Before-and-after bars from the June scoring recalibration: with the original global rubric only about eight percent of high-worth design saves were scored HIGH; after the craft-aware rubric rewrite, about sixty-three percent — measured on a fifty-link gold set built before the fix."
+      aria-label="Before-and-after bars from the June scoring recalibration: with the original global rubric only about eight percent of high-worth design saves were scored HIGH; after the craft-aware rubric rewrite, about sixty-three percent, measured on a fifty-link gold set built before the fix."
       style={{
         width: "100%",
         height: "auto",
@@ -11,7 +11,7 @@ export default function ScoringRecal() {
         fontFamily: "var(--font-geist-mono), ui-monospace, monospace",
       }}
     >
-      <title>Measure first, then fix — the scoring recalibration</title>
+      <title>Measure first, then fix: the scoring recalibration</title>
 
       {/* Figure header */}
       <text x={16} y={30} fontSize={13} fontWeight={400} fill="#5E5757">

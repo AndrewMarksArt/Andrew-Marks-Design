@@ -20,7 +20,7 @@ export default function CitedAnswerCloseup() {
       {/* Assistant answer block — left, with cited sources */}
       <rect x={16} y={100} width={368} height={80} fill="#FFFFFF" stroke="#000000" strokeWidth={1} />
       <text x={28} y={124} fontSize={13} fontWeight={400} fill="#231A09" style={{ fontFamily: "var(--font-geist), sans-serif" }}>
-        Containers go through the hardening pipeline &mdash;
+        Containers go through the hardening pipeline:
       </text>
       <text x={28} y={143} fontSize={13} fontWeight={400} fill="#231A09" style={{ fontFamily: "var(--font-geist), sans-serif" }}>
         scan, remediate, approve. Each step is documented,

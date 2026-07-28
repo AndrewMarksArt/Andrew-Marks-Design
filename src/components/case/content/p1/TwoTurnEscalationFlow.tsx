@@ -3,7 +3,7 @@ export default function TwoTurnEscalationFlow() {
     <svg
       viewBox="0 0 979 300"
       role="img"
-      aria-label="Flow diagram of the escalation rule: a user question gets a sourced answer with inline citations, then a resolved check that either ends in self-service or, after two turns, opens a soft call to action to the help desk or customer success — with a hard cap by turn six so no conversation loops."
+      aria-label="Flow diagram of the escalation rule: a user question gets a sourced answer with inline citations, then a resolved check that either ends in self-service or, after two turns, opens a soft call to action to the help desk or customer success, with a hard cap by turn six so no conversation loops."
       style={{ width: "100%", height: "auto", display: "block", fontFamily: "var(--font-geist-mono), ui-monospace, monospace" }}
     >
       <title>Two-turn escalation flow</title>

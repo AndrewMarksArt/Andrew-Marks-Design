@@ -114,7 +114,7 @@ export default function ChatVet() {
             label: "TEAM:",
             value: "Startup founders · engineering · me · Mostly part-time, ~10 hrs/week",
           },
-          { label: "TIMEFRAME:", value: "Months, not years (dates pending)" },
+          { label: "TIMEFRAME:", value: "Months (dates pending)" },
           {
             /* Deliberately NOT a link, and the domain is deliberately absent.
                The founder has continued building since the engagement wound
@@ -148,7 +148,7 @@ export default function ChatVet() {
           >
             <img
               src="/case-studies/chat-vet/cv-stall-flow.webp"
-              alt="Average vet visit flow and where cases stall. Six phases run left to right — check-in and intake, exam, diagnosis, treatment plan, client debrief, and a sixth phase after the client leaves. Four stall cards hang above the phases they interrupt: protocol search, 5 minutes in room and 30 plus minutes if questions get deferred, with up to 60 percent not pursued at all; dose calculation, 80 percent of medication errors are miscalculations and this was the number-one question users were asking; client communication, up to 75 percent of what the doctor says is lost immediately, and written instructions lift the correct treatment rate but are time consuming; history re-entered, 10 minutes per patient after the visit against up to 2 hours of desk work per hour of face time. A dashed line runs from check-in to the treatment plan noting that weight captured there is the only input to dose calculation, and that not capturing it causes delays."
+              alt="Average vet visit flow and where cases stall. Six phases run left to right: check-in and intake, exam, diagnosis, treatment plan, client debrief, and a sixth phase after the client leaves. Four stall cards hang above the phases they interrupt: protocol search, 5 minutes in room and 30 plus minutes if questions get deferred, with up to 60 percent not pursued at all; dose calculation, 80 percent of medication errors are miscalculations and this was the number-one question users were asking; client communication, up to 75 percent of what the doctor says is lost immediately, and written instructions lift the correct treatment rate but are time consuming; history re-entered, 10 minutes per patient after the visit against up to 2 hours of desk work per hour of face time. A dashed line runs from check-in to the treatment plan noting that weight captured there is the only input to dose calculation, and that not capturing it causes delays."
               className={styles.shotImg}
             />
           </AssetFigure>
@@ -164,9 +164,9 @@ export default function ChatVet() {
              team could not take that on" reads as a consequence rather than a
              verdict — and the disclosure never sits after it, where it would
              read as an alibi. */
-          "I was consulting on this, and most of the team was part-time — ten hours a week at most.",
+          "I was consulting on this, and most of the team was part-time: ten hours a week at most.",
           "The dev team could not take that on.",
-          "So I cut the scope to the one piece that did not need a records migration to be useful — the assistant — and that is what shipped.",
+          "So I cut the scope to the one piece that did not need a records migration to be useful: the assistant. That is what shipped.",
           "We built it on design systems I already had, and kept every pattern as simple as it could be.",
         ]}
         media={
@@ -179,7 +179,7 @@ export default function ChatVet() {
             >
               <img
                 src="/case-studies/chat-vet/cv-ehr-paw-ai.webp"
-                alt="Paw AI EHR design: a patient dashboard for a German Shepherd with profile, medications, conditions, recent medical history and alerts, and the Paw AI assistant in the main panel composing a case question — signalment, symptoms, tests run, and the questions to ask — above a row of previous assistant chats."
+                alt="Paw AI EHR design: a patient dashboard for a German Shepherd with profile, medications, conditions, recent medical history and alerts, and the Paw AI assistant in the main panel composing a case question (signalment, symptoms, tests run, and the questions to ask) above a row of previous assistant chats."
                 className={styles.shotImg}
               />
             </AssetFigure>
@@ -227,7 +227,7 @@ export default function ChatVet() {
                 label="Medication dose calculator"
                 aspect={2880 / 1622}
                 naturalWidth={2880}
-                caption="Species and weight first — the intake number the calculation depends on — then medication and indication."
+                caption="Species and weight first (the intake number the calculation depends on), then medication and indication."
               >
                 <img
                   src="/case-studies/chat-vet/cv-dose-calculator.webp"
@@ -236,10 +236,10 @@ export default function ChatVet() {
                 />
               </AssetFigure>
               <AssetFigure
-                label="Lab interpreter — the upload, checked · CASE: RUGER"
+                label="Lab interpreter: the upload, checked · CASE: RUGER"
                 aspect={4096 / 2368}
                 naturalWidth={4096}
-                caption="It reads the report before it interprets: patient details extracted from the PDF, and the one low-confidence value — weight, the dosing input — flagged for a human to verify first."
+                caption="It reads the report before it interprets: patient details extracted from the PDF, and the one low-confidence value (weight, the dosing input) flagged for a human to verify first."
               >
                 <img
                   src="/case-studies/chat-vet/cv-lab-upload-confirm.webp"
@@ -249,14 +249,14 @@ export default function ChatVet() {
               </AssetFigure>
             </div>
             <AssetFigure
-              label="Lab interpreter — the read · CASE: RUGER"
+              label="Lab interpreter: the read · CASE: RUGER"
               aspect={4096 / 2113}
               naturalWidth={4096}
-              caption="Six of twenty-four analytes flagged, read as a cluster instead of a list — and the one value that would settle the differential is named as missing from the panel."
+              caption="Six of twenty-four analytes flagged, read as a cluster instead of a list, and the one value that would settle the differential is named as missing from the panel."
             >
               <img
                 src="/case-studies/chat-vet/cv-lab-results.webp"
-                alt="Lab Interpreter results: a narrative read stating six of twenty-four analytes fall outside reference range and cluster rather than scatter — azotemia with hyperphosphatemia and a mild non-regenerative anemia pointing toward reduced renal function — noting that urine specific gravity would separate a renal cause from dehydration and is not in this panel. Below, a flagged-values table shows creatinine, BUN and phosphorus high and hematocrit, RBC and potassium low, each with a reference-range position bar, above a follow-up composer carrying a Verified Veterinary User badge."
+                alt="Lab Interpreter results: a narrative read stating six of twenty-four analytes fall outside reference range and cluster rather than scatter (azotemia with hyperphosphatemia and a mild non-regenerative anemia pointing toward reduced renal function), noting that urine specific gravity would separate a renal cause from dehydration and is not in this panel. Below, a flagged-values table shows creatinine, BUN and phosphorus high and hematocrit, RBC and potassium low, each with a reference-range position bar, above a follow-up composer carrying a Verified Veterinary User badge."
                 className={styles.shotImg}
               />
             </AssetFigure>
@@ -264,11 +264,11 @@ export default function ChatVet() {
               label="Where the answers come from"
               aspect={2880 / 1542}
               naturalWidth={2880}
-              caption="The corpus named in the product, above the sourcing strip — what lets a vet audit an answer before trusting it."
+              caption="The corpus named in the product, above the sourcing strip: what lets a vet audit an answer before trusting it."
             >
               <img
                 src="/case-studies/chat-vet/cv-msd-partnership2.webp"
-                alt="ChatVET announcement banner reading 'chatVET now Powered by MSD Veterinary Manual', above a sourcing strip captioned 'data sourced from leading veterinary journals and companies' with logos for the Journal of Veterinary Internal Medicine, VPN Plus, Cornell University, WSAVA, Plumb's, AAHA, Banfield Pet Hospital and the Merck Veterinary Manual — the first and last clipped at the edges of the capture."
+                alt="ChatVET announcement banner reading 'chatVET now Powered by MSD Veterinary Manual', above a sourcing strip captioned 'data sourced from leading veterinary journals and companies' with logos for the Journal of Veterinary Internal Medicine, VPN Plus, Cornell University, WSAVA, Plumb's, AAHA, Banfield Pet Hospital and the Merck Veterinary Manual (the first and last clipped at the edges of the capture)."
                 className={styles.shotImg}
               />
             </AssetFigure>
@@ -286,14 +286,14 @@ export default function ChatVet() {
           "In the pilot we watched vets write prompts that did not work, and get different answers to the same clinical question.",
           "So I designed a template library, organised by clinical job: SOAP notes, discharge instructions, differentials, client emails.",
           "Vets replace the highlighted details and hit enter. A few fields instead of a paragraph.",
-          "It saves time, and it makes the output consistent — the same question returns the same shape of answer, whoever asks it.",
+          "It saves time, and it makes the output consistent: the same question returns the same shape of answer, whoever asks it.",
         ]}
         media={
           <AssetFigure
             label="The VetMed prompt library"
             aspect={2880 / 1780}
             naturalWidth={2880}
-            caption="Templates built from the questions vets were already asking, grouped by clinical job and tagged for their reader — clinician or client."
+            caption="Templates built from the questions vets were already asking, grouped by clinical job and tagged for their reader: clinician or client."
           >
             <img
               src="/case-studies/chat-vet/cv-prompt-library.webp"
@@ -319,7 +319,7 @@ export default function ChatVet() {
                 label="Discharge generator, step one"
                 aspect={2880 / 1503}
                 naturalWidth={2880}
-                caption="It reads the consultation back: several medications came up — which should go home with the client?"
+                caption="It reads the consultation back: several medications came up. Which should go home with the client?"
               >
                 <img
                   src="/case-studies/chat-vet/cv-discharge-step1.webp"
@@ -331,7 +331,7 @@ export default function ChatVet() {
                 label="Discharge generator, step two"
                 aspect={2880 / 1488}
                 naturalWidth={2880}
-                caption="Patient, condition, medications and the restrictions an owner has to follow — most of it already filled from the chat."
+                caption="Patient, condition, medications and the restrictions an owner has to follow, most of it already filled from the chat."
               >
                 <img
                   src="/case-studies/chat-vet/cv-discharge-step2.webp"
@@ -344,7 +344,7 @@ export default function ChatVet() {
               label="The printed handout · CASE: RUGER, END TO END"
               aspect={4096 / 2116}
               naturalWidth={4096}
-              caption="The payoff, printed: what we found in plain language, morning-and-evening doses, call-us versus go-to-emergency lists, and the recheck date — generated from the same case as the labs above, ready before the client reaches the door."
+              caption="The payoff, printed: what we found in plain language, morning-and-evening doses, call-us versus go-to-emergency lists, and the recheck date. Generated from the same case as the labs above, ready before the client reaches the door."
             >
               <img
                 src="/case-studies/chat-vet/cv-discharge-printout.webp"
@@ -366,14 +366,14 @@ export default function ChatVet() {
         heading="Vets kept using it, and brought it into their own practices."
         lede={[
           "The web app went live with 500 monthly users globally, multiple clinics piloting the business tier ahead of paid rollout, and growth running bottom-up rather than through a sales motion.",
-          "Users self-report saving about 15 minutes per case. That is their estimate, not a measurement.",
+          "Users self-report saving about 15 minutes per case. Nobody measured it.",
           /* Inoculation, not blame — and the last sentence is what stops
              "wound down" reading as a falling-out. */
           "The screens in this study are the version I designed and shipped. The product has continued to change since my engagement wound down. I still work with the founder on investor and marketing material.",
           <strong key="retro">
             If I ran this again, I&rsquo;d instrument the discharge flow before
-            shipping it. The one number that would prove the thesis — whether
-            those handouts change anything after the client leaves — is the one
+            shipping it. The one number that would prove the thesis (whether
+            those handouts change anything after the client leaves) is the one
             we never captured.
           </strong>,
         ]}

@@ -39,7 +39,7 @@ const CASES: CaseStudy[] = [
   },
   {
     num: "2",
-    title: "ChatVET — an AI Copilot for Veterinary Medicine",
+    title: "ChatVET: an AI Copilot for Veterinary Medicine",
     href: "/case-studies/chat-vet",
     desc: (
       <>
@@ -55,7 +55,7 @@ const CASES: CaseStudy[] = [
     desc: (
       <>
         A <strong>multi-agent system that reads 300–400 sources a week</strong>{" "}
-        into a 4,000+ source living corpus — built solo, in production.
+        into a 4,000+ source living corpus. Built solo, in production.
       </>
     ),
   },

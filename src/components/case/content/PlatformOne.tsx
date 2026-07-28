@@ -73,7 +73,7 @@ function SecurityVignette() {
         {/* Figma revision 2026-07-21 (source typos "could find" / "need"
             corrected to "couldn't find" / "needed"). */}
         A senior Air Force leader needed proof the platform already defended
-        against the threat by design. The answer was in the docs — but when it
+        against the threat by design. The answer was in the docs, but when it
         mattered, he couldn&rsquo;t find it fast enough.
       </figcaption>
     </figure>
@@ -84,11 +84,11 @@ export default function PlatformOne() {
   return (
     <>
       <CaseHero
-        eyebrow="U.S. Air Force — Platform One"
+        eyebrow="U.S. Air Force · Platform One"
         title="Designing an AI assistant projected to cut support tickets by roughly 40%"
         intro={[
           "Platform One is the Air Force's $500M flagship software factory, supporting more than 60 Air Force and Joint programs valued at $650 billion.",
-          "But after a rushed rebrand, users couldn't find the answers they needed on its website. Sometimes they couldn't even find how to ask for help. Emergency fixes piled on top of each other — and while they helped in some ways, in others they made things worse.",
+          "But after a rushed rebrand, users couldn't find the answers they needed on its website. Sometimes they couldn't even find how to ask for help. Emergency fixes piled on top of each other, and while they helped in some ways, in others they made things worse.",
         ]}
         media={
           <ZoomableFigure
@@ -154,7 +154,7 @@ export default function PlatformOne() {
           >
             <img
               src="/case-studies/platform-one/p1-simplified-flow.webp"
-              alt="Flow diagram of two example questions — how much does Party Bus cost, and how does Iron Bank secure containers. From the p1.dso.mil home page users reach P1 solutions, then /party-bus (high level, no pricing or technical information) or /iron-bank (catalog and images behind SSO login), loop back, and most end up at the Contact Us form. A note marks where most answers actually live: three to four clicks deep and mostly hidden behind login, with broken links and no hierarchy on solutions pages."
+              alt="Flow diagram of two example questions: how much does Party Bus cost, and how does Iron Bank secure containers. From the p1.dso.mil home page users reach P1 solutions, then /party-bus (high level, no pricing or technical information) or /iron-bank (catalog and images behind SSO login), loop back, and most end up at the Contact Us form. A note marks where most answers actually live: three to four clicks deep and mostly hidden behind login, with broken links and no hierarchy on solutions pages."
               className={local.shotImg}
             />
           </ZoomableFigure>
@@ -165,7 +165,7 @@ export default function PlatformOne() {
         heading={'Our "stop the bleeding" fix worked. It also flooded the wrong team.'}
         lede={[
           "A new Contact Us CTA gave stuck users a lifeline, and tickets exploded. A Customer Success team built for sales and relationships became full-time human routers: fielding password resets, forwarding emails between product teams, and working a CRM that couldn't talk to Jira.",
-          "The responses were full of PII, so automated analysis was off the table. I pulled random samples — about 150 responses — and coded them by hand: nearly half were simple help-desk asks or information already on the site, and most of the rest belonged to other teams entirely.",
+          "The responses were full of PII, so automated analysis was off the table. I pulled random samples (about 150 responses) and coded them by hand: nearly half were simple help-desk asks or information already on the site, and most of the rest belonged to other teams entirely.",
           "The Customer Success lead put 40–60% of her day into triaging the flood; her three teammates each gave another 10–20%. Roughly a full role, spent on tickets the team was never meant to own.",
           "And not every buried answer was routine. One came due mid-incident.",
         ]}
@@ -177,7 +177,7 @@ export default function PlatformOne() {
             section having any imagery. */}
         <CstQuote />
         <AssetFigure
-          label="Ticket taxonomy — hand-coded sample"
+          label="Ticket taxonomy: hand-coded sample"
           aspect={979 / 360}
           naturalWidth={979}
         >
@@ -194,8 +194,8 @@ export default function PlatformOne() {
           </>
         }
         lede={[
-          "Most of those tickets should never have existed — in the sample audit, nearly half were answers already on the site. The assistant answers at the point of confusion, surfacing sources and suggesting follow-ups.",
-          "Why an assistant instead of just fixing the navigation? Deeper IA work was underway — but on a much longer timeline, and earlier band-aid fixes had made things worse. The assistant was the bridge that could ship in months, and the wedge that unlocked budget and infrastructure for the platform's next AI projects.",
+          "Most of those tickets should never have existed: in the sample audit, nearly half were answers already on the site. The assistant answers at the point of confusion, surfacing sources and suggesting follow-ups.",
+          "Why an assistant instead of just fixing the navigation? Deeper IA work was underway, but on a much longer timeline, and earlier band-aid fixes had made things worse. The assistant was the bridge that could ship in months, and the wedge that unlocked budget and infrastructure for the platform's next AI projects.",
           "After two turns without a resolution, a soft CTA offers the help desk or Customer Success, routed by question type. After turn four the CTA becomes a hard one, so no conversation loops.",
           "The routing burden moved from people to design.",
         ]}
@@ -208,7 +208,7 @@ export default function PlatformOne() {
                 flow replaces the drawn version. Self-captioned header, so no
                 figcaption; framed since the plate is white-on-white. */}
             <ZoomableFigure
-              label="Escalation flow — self-service with a human path"
+              label="Escalation flow: self-service with a human path"
               aspect={1346 / 973}
               naturalWidth={1346}
             >
@@ -225,7 +225,7 @@ export default function PlatformOne() {
       <CaseSection
         heading="Every answer shows where it came from."
         lede={[
-          "The standing rule in every exchange: answers carry their source inline, so a user — or an auditor — can see where a claim came from before acting on it. On a DoD platform, an unsourced answer isn't a shortcut; it's a liability.",
+          "The standing rule in every exchange: answers carry their source inline, so a user (or an auditor) can see where a claim came from before acting on it. On a DoD platform, an unsourced answer is a liability.",
           "And when the assistant can't resolve something, the design never lets it improvise its way out: the human path appears at turn two and takes over by turn four. Every exchange ends by asking whether it actually solved the problem.",
         ]}
         media={
@@ -300,11 +300,11 @@ export default function PlatformOne() {
           drafting-style stat cards right (pre-rendered in Figma). The
           third tile and the projections footnote left the design. */}
       <CaseSection
-        heading="Projected impact — and what's left to prove"
+        heading="Projected impact, and what's left to prove"
         lede={[
-          "The assistant is in staging. The projection: roughly 40% fewer support tickets — that's the share of the hand-coded sample whose answers already lived on the site, the ceiling the assistant is built to claim. The full role of Customer Success capacity comes back two ways: tickets answered before they're filed, and the misrouted rest — over a third of the sample — routed to the right team by design instead of by hand.",
+          "The assistant is in staging. The projection: roughly 40% fewer support tickets. That's the share of the hand-coded sample whose answers already lived on the site, the ceiling the assistant is built to claim. The full role of Customer Success capacity comes back two ways: tickets answered before they're filed, and the misrouted rest (over a third of the sample) routed to the right team by design instead of by hand.",
           "And the next time a leader needs proof the platform is secure by design, the answer is one question away.",
-          "Launch is phased — behind SSO first while the public site completes its Certificate to Field (DoD security authorization) — with the custom front-end replacing the interim widget on the roadmap.",
+          "Launch is phased: behind SSO first while the public site completes its Certificate to Field (DoD security authorization), with the custom front-end replacing the interim widget on the roadmap.",
           <strong key="retro">
             If I ran this again, I&rsquo;d bring security into launch planning
             from day one; the SSO constraint reshaped our rollout late.
@@ -350,7 +350,7 @@ export default function PlatformOne() {
       </section>
 
       <UpNext
-        title="ChatVET — an AI Copilot for Veterinary Medicine"
+        title="ChatVET: an AI Copilot for Veterinary Medicine"
         desc="Designing an AI copilot vets say saves them about 15 minutes per case"
         href="/case-studies/chat-vet"
       />

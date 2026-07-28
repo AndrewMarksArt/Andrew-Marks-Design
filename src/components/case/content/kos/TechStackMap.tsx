@@ -3,7 +3,7 @@ export default function TechStackMap() {
     <svg
       viewBox="0 0 979 490"
       role="img"
-      aria-label="The stack, told as four dated swaps under one invariant. The invariant plate reads: a failed tool degrades a save — it never drops one; routing lives in a database table and every chain ends at Jina. Four swap rows show a struck-through old tool, a dated arrow, and its replacement: the public cobalt API grew a Turnstile wall so a self-hosted instance on Fly took over on April 22; YouTube's bot wall closed on cloud IPs so yt-dlp with a Deno solver replaced cobalt's YouTube path on April 27; managed builders silently dropped yt-dlp and ffmpeg so a raw Dockerfile replaced Nixpacks and Railpack on April 27; and plain cosine top-k gave way to Voyage rerank-2.5 on June 20 when one number was doing three jobs. A band beneath lists the rest of the registry."
+      aria-label="The stack, told as four dated swaps under one invariant. The invariant plate reads: a failed tool degrades a save; it never drops one. Routing lives in a database table and every chain ends at Jina. Four swap rows show a struck-through old tool, a dated arrow, and its replacement: the public cobalt API grew a Turnstile wall so a self-hosted instance on Fly took over on April 22; YouTube's bot wall closed on cloud IPs so yt-dlp with a Deno solver replaced cobalt's YouTube path on April 27; managed builders silently dropped yt-dlp and ffmpeg so a raw Dockerfile replaced Nixpacks and Railpack on April 27; and plain cosine top-k gave way to Voyage rerank-2.5 on June 20 when one number was doing three jobs. A band beneath lists the rest of the registry."
       style={{
         width: "100%",
         height: "auto",
@@ -11,7 +11,7 @@ export default function TechStackMap() {
         fontFamily: "var(--font-geist-mono), ui-monospace, monospace",
       }}
     >
-      <title>The stack — four dated swaps, one invariant</title>
+      <title>The stack: four dated swaps, one invariant</title>
 
       <defs>
         <marker

@@ -84,7 +84,7 @@ export default function Hero() {
 
   return (
     <section className={styles.hero}>
-      <h1 className="visually-hidden">Andrew Marks — UX &amp; Product Designer</h1>
+      <h1 className="visually-hidden">Andrew Marks, UX &amp; Product Designer</h1>
 
       {/* Masked robot band: plus lattice behind, cursor-following gaze
           portrait in front (placeholder site's system, transparent atlas).

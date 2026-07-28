@@ -146,7 +146,7 @@ export default function ZoomableFigure({
               data-fig-region
               tabIndex={0}
               role="group"
-              aria-label={`${label} — scrollable figure`}
+              aria-label={`${label}, scrollable figure`}
             >
               <div className={styles.figSize}>{children}</div>
             </div>

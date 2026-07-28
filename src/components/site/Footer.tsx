@@ -72,7 +72,7 @@ export default function Footer() {
       {/* "Andrew Marks" wordmark: 1576x160, 30px below band top, full content
           width — links home (standard wordmark affordance; matters on the
           case-study pages) */}
-      <Link href="/" aria-label="Andrew Marks Design — home">
+      <Link href="/" aria-label="Andrew Marks Design, home">
         <Image
           className={styles.wordmarkMain}
           src="/footer/andrew-marks-wordmark.svg"

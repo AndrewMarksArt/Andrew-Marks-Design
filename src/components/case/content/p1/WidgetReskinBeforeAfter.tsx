@@ -6,7 +6,7 @@ export default function WidgetReskinBeforeAfter() {
       aria-label="Two chat-widget mockups compare the vendor's as-delivered styling with the on-brand re-skin, above a gap-audit excerpt listing no citations, no escalation path, and off-brand UI alongside their mitigations."
       style={{ width: "100%", height: "auto", display: "block", fontFamily: "var(--font-geist-mono), ui-monospace, monospace" }}
     >
-      <title>Interim widget — gap audit and re-skin</title>
+      <title>Interim widget: gap audit and re-skin</title>
 
       {/* figure header */}
       <text x={16} y={27} fontSize={13} fontWeight={400} fill="#5E5757">

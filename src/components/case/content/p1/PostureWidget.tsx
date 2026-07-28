@@ -6,7 +6,7 @@ export default function PostureWidget() {
       aria-label="Posture A: a quiet wireframe web page with a compact Ask P1 answer widget open in its bottom-right corner, showing the question WHERE'S THE HARDENED REGISTRY? with an abstract answer, a docs source chip, and a follow-up chip."
       style={{ width: "100%", height: "auto", display: "block", fontFamily: "var(--font-geist-mono), ui-monospace, monospace" }}
     >
-      <title>Posture A — general visitor widget</title>
+      <title>Posture A: general visitor widget</title>
 
       {/* figure header */}
       <text x={16} y={27} fontSize={13} fontWeight={400} fill="#5E5757">

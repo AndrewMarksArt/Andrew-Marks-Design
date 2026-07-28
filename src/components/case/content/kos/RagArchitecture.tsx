@@ -11,7 +11,7 @@ export default function RagArchitecture() {
         fontFamily: "var(--font-geist-mono), ui-monospace, monospace",
       }}
     >
-      <title>The machine, drawn — Knowledge OS one-page architecture</title>
+      <title>The machine, drawn: Knowledge OS one-page architecture</title>
 
       <defs>
         <marker

@@ -6,7 +6,7 @@ export default function SystemEvolution() {
       aria-label="Corpus growth from the first commit on February 23 through late July, every point measured: 627 sources on March 30, about 1,000 sources and 960 agent signals on April 14, 1,214 on April 23, 3,241 on June 16, and 4,339 read from the product's own analytics on July 27. Milestone flags mark the capture bot deploying in week one, chat with RAG in March, the gap agent, agents going manual in May, and rerank retrieval plus branching in late June."
       style={{ width: "100%", height: "auto", display: "block", fontFamily: "var(--font-geist-mono), ui-monospace, monospace" }}
     >
-      <title>Five months, zero to compounding — measured corpus growth with milestones</title>
+      <title>Five months, zero to compounding: measured corpus growth with milestones</title>
 
       {/* Figure header */}
       <text x={16} y={30} fontSize={13} fontWeight={400} fill="#5E5757">

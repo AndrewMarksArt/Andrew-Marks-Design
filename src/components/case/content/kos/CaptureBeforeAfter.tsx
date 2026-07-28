@@ -3,7 +3,7 @@ export default function CaptureBeforeAfter() {
     <svg
       viewBox="0 0 979 360"
       role="img"
-      aria-label="Before and after: a graveyard of bookmarks fading as they age, versus the capture chat's real two-step reply — a shared link is acknowledged in seconds with Saved, processing, then the background pipeline reports back the graded save with its space, topic, and score."
+      aria-label="Before and after: a graveyard of bookmarks fading as they age, versus the capture chat's real two-step reply. A shared link is acknowledged in seconds with Saved, processing, then the background pipeline reports back the graded save with its space, topic, and score."
       style={{
         width: "100%",
         height: "auto",
@@ -11,7 +11,7 @@ export default function CaptureBeforeAfter() {
         fontFamily: "var(--font-geist-mono), ui-monospace, monospace",
       }}
     >
-      <title>Piles rot — capture compounds</title>
+      <title>Piles rot, capture compounds</title>
 
       {/* Figure header */}
       <text x={20} y={31} fontSize={13} fontWeight={400} fill="#5E5757">

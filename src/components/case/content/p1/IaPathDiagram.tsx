@@ -10,7 +10,7 @@ export default function IaPathDiagram() {
     <svg
       viewBox="0 0 960 600"
       role="img"
-      aria-label="Two questions traced on the live site. Getting on Party Bus: the page claims it cuts costs by up to 80 percent yet shows no pricing numbers, leaving Request a Quote. Iron Bank security: the repository link hits a login wall, leaving Talk to an Expert. Both paths end at the same intake form — six differently labeled links site-wide, one destination. The public answers, a Party Bus onboarding guide never linked from its product page and an Iron Bank overview that itself says publicly accessible, sit just off-path."
+      aria-label="Two questions traced on the live site. Getting on Party Bus: the page claims it cuts costs by up to 80 percent yet shows no pricing numbers, leaving Request a Quote. Iron Bank security: the repository link hits a login wall, leaving Talk to an Expert. Both paths end at the same intake form: six differently labeled links site-wide, one destination. The public answers, a Party Bus onboarding guide never linked from its product page and an Iron Bank overview that itself says publicly accessible, sit just off-path."
       style={{
         width: "100%",
         height: "auto",
@@ -19,7 +19,7 @@ export default function IaPathDiagram() {
       }}
     >
       <title>
-        Two questions, traced on the live site — both end at the same intake
+        Two questions, traced on the live site: both end at the same intake
         form
       </title>
 

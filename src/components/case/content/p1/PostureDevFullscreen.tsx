@@ -3,10 +3,10 @@ export default function PostureDevFullscreen() {
     <svg
       viewBox="0 0 480 322"
       role="img"
-      aria-label="Posture B: the same assistant expanded into a full-screen developer workspace — a history sidebar, the question WHERE'S THE HARDENED REGISTRY? answered with a dark docker code block, a rail of three source chips, and an EXPANDED mode tag on the top bar."
+      aria-label="Posture B: the same assistant expanded into a full-screen developer workspace: a history sidebar, the question WHERE'S THE HARDENED REGISTRY? answered with a dark docker code block, a rail of three source chips, and an EXPANDED mode tag on the top bar."
       style={{ width: "100%", height: "auto", display: "block", fontFamily: "var(--font-geist-mono), ui-monospace, monospace" }}
     >
-      <title>Posture B — developer full-screen</title>
+      <title>Posture B: developer full-screen</title>
 
       {/* figure header */}
       <text x={16} y={27} fontSize={13} fontWeight={400} fill="#5E5757">
