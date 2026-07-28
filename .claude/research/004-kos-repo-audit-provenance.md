@@ -98,3 +98,17 @@ Corpus anchors: 627 (Mar 30) → ~1,000 + ~960 signals (Apr 14) → 1,214 (Apr 2
 - One deep-reading-capacity number (figure said 15–20/wk; body says "the right ten"; April doc says "maybe 5")
 - "In daily use" as of now — no evidence after Jul 7 (wipe intervened Jul 16)
 - Whether to mention the unmerged R2 storage branch (Supabase 8GB pressure)
+
+## Addendum — Andrew's confirmations, 2026-07-28 (voice-pass session)
+
+- **Provenance precedence rule (Andrew, verbatim intent): when a prose claim and a
+  product capture disagree, default to the capture — it's more accurate.**
+- Spring weekly peak: the analytics capture (kos-analytics.webp alt, Jul 27) shows the
+  Ingestion Pace bars **peaking near five hundred in late May**, not over it. The S1 lede's
+  "topped five hundred" was corrected to "came close to five hundred" per the rule above.
+- Site-shell facts confirmed the same day (recorded here for durability, not KOS-specific):
+  Andrew currently supports **3–4, sometimes up to 5** product teams (OperatingRecord
+  "several" is honest); he holds two master's degrees — **M.S. in Information Systems
+  (and) Technology** (data-science emphasis) and **M.A. in Art Business**. Resume copy
+  says "Information Systems Technology"; his chat phrasing included "and" — exact official
+  degree name unverified, only the M.A. abbreviation style was fixed.

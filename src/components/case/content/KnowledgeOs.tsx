@@ -109,7 +109,7 @@ export default function KnowledgeOs() {
       <CaseSection
         heading="The field moves faster than reading speed."
         lede={[
-          "A hundred-plus relevant sources arrive in a quiet week; the spring peak topped five hundred. A person can deeply read a fraction of that, and skimming drops the things that matter most: connections and contradictions between sources, the topics nobody's covering yet.",
+          "A hundred-plus relevant sources arrive in a quiet week; the spring peak came close to five hundred. A person can deeply read a fraction of that, and skimming drops the things that matter most: connections and contradictions between sources, the topics nobody's covering yet.",
           "Capture tools don't solve it. They make piles, and piles rot: you can't see what's gone stale, what contradicts what, or what's missing entirely. My positioning depends on staying current in AI, so that's a professional risk.",
           "The system reads everything so I can deeply read the right ten.",
           "A note on method: I'm the only user, so the research is instrumentation. Every number here comes from the project's own dated records: commit history, migrations, eval reports, and the product's own analytics, shown as captured.",

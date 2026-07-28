@@ -35,7 +35,7 @@ const ENTRIES: ResumeEntry[] = [
     company: "Master’s Degree",
     role: "Information Systems Technology",
     meta: "Claremont Graduate University",
-    body: "M.S. in Information Systems Technology with an emphasis in data science, plus an MA in Art Business adding a creative and business dimension.",
+    body: "M.S. in Information Systems Technology with an emphasis in data science, plus an M.A. in Art Business adding a creative and business dimension.",
   },
 ];
 

@@ -71,7 +71,7 @@ const EYEBROW = "ORG-LEVEL WORK";
 const TITLE = "Research infrastructure, tooling access, and cross-team delivery";
 
 const SUBHEAD =
-  "I help lead user research on the UX/UI team in my value stream, and support more than one of the org's product teams. Alongside the product work in the case studies, a significant part of my job has been building the conditions that let research happen at all. None of it came with authority to mandate anything, so all of it ran on evaluation, evidence, and working relationships.";
+  "I help lead user research on the UX/UI team in my value stream, and support several of the org's product teams. Alongside the product work in the case studies, a significant part of my job has been building the conditions that let research happen at all. None of it came with authority to mandate anything, so all of it ran on evaluation, evidence, and working relationships.";
 
 const BEATS: Beat[] = [
   {
