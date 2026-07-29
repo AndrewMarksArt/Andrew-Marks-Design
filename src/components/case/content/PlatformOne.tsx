@@ -90,12 +90,30 @@ function SecurityVignette() {
   );
 }
 
+/** The developer-disagreement, staged into the skim path (rescore pass
+ *  2026-07-29, fix #5): the page's clearest evidence-over-opinion moment
+ *  in the light quote-strip treatment — narration, not attributed
+ *  dialogue. */
+function DecisionCallout() {
+  return (
+    <figure className={local.quoteStrip}>
+      <blockquote className={local.quoteText}>
+        Our developer wanted a coding assistant. Instead of arguing, I went
+        back to the tickets.
+      </blockquote>
+      <figcaption className={local.quoteAttribution}>
+        {"// THE CALL: BOTH MODES WERE JUSTIFIED, SO I DESIGNED BOTH"}
+      </figcaption>
+    </figure>
+  );
+}
+
 export default function PlatformOne() {
   return (
     <>
       <CaseHero
         eyebrow="U.S. Air Force · Platform One"
-        title="Designing an AI assistant projected to cut support tickets by roughly 40%"
+        title="Designing an AI assistant projected to cut support tickets by 40%"
         intro={[
           "Platform One is the Air Force's flagship software factory, supporting more than 60 Air Force and Joint programs.",
           "But after a rushed rebrand, users couldn't find the answers they needed on its website. Sometimes they couldn't even find how to ask for help. Emergency fixes piled on top of each other, and while they helped in some ways, in others they made things worse.",
@@ -189,11 +207,11 @@ export default function PlatformOne() {
       </CaseSection>
 
       <CaseSection
-        heading="Designed to be self-service by default, with an easy path to a human when needed."
+        heading="Answer at the point of confusion. Hand off to a human by turn four."
         lede={[
           "Most of those tickets should never have existed: in the sample audit, nearly half were answers already on the site. The assistant answers at the point of confusion, surfacing sources and suggesting follow-ups.",
           "Why an assistant instead of just fixing the navigation? Deeper IA work was underway, but on a much longer timeline, and earlier band-aid fixes had made things worse. The assistant could ship in months, and it unlocked the budget and infrastructure for the platform's next AI projects.",
-          "After two turns without a resolution, a soft CTA offers the help desk or Customer Success, routed by question type. After turn four the CTA becomes a hard one, so no conversation loops.",
+          "After two turns without a resolution, a soft CTA offers the help desk or Customer Success, routed by question type. After turn four the CTA becomes a hard one, so no conversation loops. The thresholds are a starting point; every did-this-help answer is data for tuning them.",
           "The routing burden moved from an overworked team to a system.",
         ]}
         media={
@@ -258,14 +276,17 @@ export default function PlatformOne() {
           /* Figma revision 2026-07-21: the pair of stills became Andrew's
              looping GIF — the expand/collapse motion IS the story. Rendered
              bare per the design (no plate, no border). */
-          <figure className={local.demoFigure}>
-            <img
-              src="/case-studies/platform-one/p1-assistant-demo-fast.gif"
-              alt="Screen recording on a loop: the assistant launcher on Platform One's homepage opens into the compact widget, then expands to the full-view workspace and back."
-              className={local.shotImg}
-              loading="lazy"
-            />
-          </figure>
+          <>
+            <figure className={local.demoFigure}>
+              <img
+                src="/case-studies/platform-one/p1-assistant-demo-fast.gif"
+                alt="Screen recording on a loop: the assistant launcher on Platform One's homepage opens into the compact widget, then expands to the full-view workspace and back."
+                className={local.shotImg}
+                loading="lazy"
+              />
+            </figure>
+            <DecisionCallout />
+          </>
         }
       />
 
@@ -273,8 +294,8 @@ export default function PlatformOne() {
         heading={"One developer meant designing to what he could actually build."}
         lede={[
           "With a single primary developer, I designed to Vuetify's defaults wherever they held and customized only where the default cost users something concrete.",
-          "When the team chose a partner's chat widget to launch sooner, I documented the UX gaps and worked with the developer to re-skin and customize it as much as we could. Not bringing in our security team earlier made it impossible to launch with the custom-built assistant.",
-          "Once we clear the security hurdles, our design and assistant will replace the current widget.",
+          "When the team chose a partner's chat widget to launch sooner, I documented the UX gaps and worked with the developer to re-skin and customize it as much as we could. The miss was ours: we brought security in too late for the custom assistant to clear review before launch.",
+          "Today the assistant sits in staging. Once we clear the security hurdles, our design and assistant replace the widget.",
         ]}
         media={
           /* Figma revision 2026-07-21: the real design-system board, rendered

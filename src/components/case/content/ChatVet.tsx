@@ -42,9 +42,12 @@ import styles from "./ChatVet.module.css";
  * errors", the 10-min documentation figure). Andrew has been told; the
  * decision is his. Read the ledger before defending any number here.
  *
- * ⚠ PENDING FACTS (do not invent): timeframe/dates, survey n, the pilot
- * clinic's name or a concrete anonymisation, testimonial attribution,
- * and the denominator behind "the most-asked question".
+ * ⚠ PENDING FACTS (do not invent): full timeframe/dates (Andrew's 7/29
+ * copy dates the role shift to June), the pilot clinics' names or a
+ * concrete anonymisation, and the denominator behind "the most-asked
+ * question". ANSWERED by his 7/29 rewrite (Figma 7079:2007): research
+ * n = five DVMs/techs; pilot = one clinic expanded to three; 500 =
+ * registered users signed in over the past month.
  *
  * ⚠ DO NOT RE-ADD THE LIVE LINK without asking. As of 2026-07-26 the
  * engagement has wound down, the founder has shipped his own changes, and
@@ -82,9 +85,9 @@ export default function ChatVet() {
         eyebrow="CHATVET · AI COPILOT FOR VETERINARY MEDICINE"
         title="Shipping an AI copilot vets say saves them about 15 minutes per case"
         intro={[
-          "Veterinarians are out of time. Research, protocol hunting, note-writing and client communication stack up on every case.",
-          "The answers exist in trusted references like the Merck Veterinary Manual. Reaching them mid-case is the problem.",
-          "ChatVET is an AI copilot, powered by the Merck Veterinary Manual and leading journals, that puts those answers seconds away.",
+          "Veterinarians are out of time. Research, protocol hunting, note-writing, and client communication stack up on every case.",
+          "The references vets trust, like the Merck Veterinary Manual, were never built to be searched with a patient on the table and a client waiting.",
+          "ChatVET is an AI copilot powered by the Merck Veterinary Manual and leading journals, built to return those answers in seconds.",
         ]}
         media={
           <ZoomableFigure
@@ -135,11 +138,11 @@ export default function ChatVet() {
 
       {/* ---------- 1 · PROBLEM ---------- */}
       <CaseSection
-        heading="One appointment, four stalls. The biggest one happens after the client leaves."
+        heading="The biggest stall in a veterinary appointment happens after the client leaves."
         lede={[
-          "I led the research: interviews and case walkthroughs with practicing DVMs and techs.",
-          "We mapped where an average visit actually stalls. Four places: searching protocols, calculating doses, explaining the plan to the client, and re-entering the history once the room is empty.",
-          "The last one sits outside the appointment entirely. It is also the largest.",
+          "I helped lead market research: interviews and case walkthroughs with five practicing DVMs and techs.",
+          "We mapped where a visit stalls and found four points: searching protocols, calculating doses, explaining the plan to the client, and re-entering the history once the room is empty.",
+          "That last one falls outside the appointment entirely, and it was the largest of the four.",
         ]}
         media={
           <AssetFigure
@@ -159,17 +162,11 @@ export default function ChatVet() {
 
       {/* ---------- 2 · AGITATE — the constraint ---------- */}
       <CaseSection
-        heading="We designed the whole record system. We could only build a slice of it."
+        heading="We designed the whole records system. We could build one piece of it."
         lede={[
-          "The first plan was a full EHR replacement, mocked up on an older design system: patient workspace, medical history, medications, and an assistant.",
-          /* Capacity BEFORE the limit: the reader gets the premise, so "the dev
-             team could not take that on" reads as a consequence rather than a
-             verdict — and the disclosure never sits after it, where it would
-             read as an alibi. */
-          "I was consulting on this, and most of the team was part-time: ten hours a week at most.",
-          "The dev team could not take that on.",
-          "So I cut the scope to the one piece that didn't need a records migration to be useful: the assistant. That is what shipped.",
-          "We built it on design systems I already had, and kept every pattern as simple as it could be.",
+          "The first plan was a full EHR replacement: patient workspace, medical history, medications, and an assistant, all mocked up on the design system I had built for the product.",
+          "The team was part-time, ten hours a week at most, and the dev team could not take on a build that size.",
+          "I recommended to the founder that we cut to the one piece that did not need a records migration to be useful: the assistant. It ran on the same design system, and we kept the patterns simple enough for the team to maintain at that capacity.",
         ]}
         media={
           <div className={caseStyles.mediaPair}>
@@ -205,12 +202,12 @@ export default function ChatVet() {
 
       {/* ---------- 3 · SOLUTION — the pilot names the tools ---------- */}
       <CaseSection
-        heading="A pilot in a working clinic told us which tools to build."
+        heading="The pilot set the roadmap: dose calculator, discharge generator, lab interpreter."
         lede={[
-          "We ran ChatVET inside a real veterinary practice; I logged what people actually asked for.",
+          "We ran ChatVET in one working clinic and expanded to three. We logged what vets asked for.",
           "Three tools came back in demand: a medication dose calculator, a discharge generator, and a lab interpreter. Dosing was the most-asked question by a wide margin.",
           "All three open from a new chat or from the middle of one, so the case already on screen carries into them.",
-          "Answers come from the Merck Veterinary Manual and leading journals, not the open web. That is what made vets willing to keep using it.",
+          "Answers are restricted to the Merck Veterinary Manual and leading journals.",
         ]}
         media={
           <>
@@ -290,12 +287,11 @@ export default function ChatVet() {
 
       {/* ---------- 4 · SOLUTION — prompting is not the vet's job ---------- */}
       <CaseSection
-        heading="Vets shouldn't have to be prompt engineers."
+        heading="A template library replaced prompt-writing with a few fields."
         lede={[
-          "In the pilot we watched vets write prompts that didn't work, and get different answers to the same clinical question.",
-          "So I designed a template library, organized by clinical job: SOAP notes, discharge instructions, differentials, client emails.",
-          "Vets replace the highlighted details and hit enter. A few fields instead of a paragraph.",
-          "It saves time, and it makes the output consistent: the same question returns the same shape of answer, whoever asks it.",
+          "In the pilot, vets wrote prompts that returned inconsistent results, and the same clinical question came back differently depending on how it was asked.",
+          "I designed a template library organized by clinical job: SOAP notes, discharge instructions, differentials, and client emails. Vets replace the highlighted details and press enter.",
+          "Consistency mattered as much as the time saved. The same question returns the same shape of answer regardless of who asks it.",
         ]}
         media={
           <AssetFigure
@@ -316,11 +312,10 @@ export default function ChatVet() {
 
       {/* ---------- 5 · SOLUTION — the payoff, for the owner ---------- */}
       <CaseSection
-        heading="The pet owner leaves with instructions. The vet doesn't stay late writing them."
+        heading="The discharge generator writes the client handout from the consultation that already happened."
         lede={[
-          "I designed the print output, and reworked the discharge generator around the chat context.",
-          "It reads the consultation back, asks which of the medications discussed should go home, and fills the client's document from the conversation that already happened.",
-          "The owner gets something they can follow. The staff spend no extra time producing it after the visit.",
+          "I designed the print output and reworked the discharge generator around the chat context.",
+          "It reads the consultation back, asks which of the medications discussed should go home with the client, and fills the handout from there. The owner leaves with instructions they can follow, and nobody stays late writing them.",
         ]}
         media={
           <>
@@ -376,18 +371,15 @@ export default function ChatVet() {
           not a documented case; that headline, paragraph and graphic are gone
           and should not come back. */}
       <CaseSection
-        heading="Vets kept using it, and brought it into their own practices."
+        heading="500 vets logged in last month, with no sales effort behind it."
         lede={[
-          "The web app is live: 500 monthly users worldwide, clinics piloting the business tier ahead of paid rollout, and growth coming bottom-up with no sales push behind it.",
-          "Users self-report saving about 15 minutes per case. Nobody measured it.",
-          /* Inoculation, not blame — and the last sentence is what stops
-             "wound down" reading as a falling-out. */
-          "The screens in this study are the version I designed and shipped. The product has continued to change since my engagement wound down. I still work with the founder on investor and marketing material.",
+          "The web app is live. 500 registered users signed in over the past month, worldwide, and clinics are piloting the business tier ahead of a paid rollout. Growth has been bottom-up.",
+          "Vets in the pilot reported saving about 15 minutes per case. That was never instrumented, so it is what they told us and nothing more.",
+          "The screens in this study are the version I designed and shipped. My role shifted in June from design to investor and marketing material, and the product has kept changing since.",
           <strong key="retro">
-            If I ran this again, I&rsquo;d instrument the discharge flow before
-            shipping it. The one number that would prove the thesis (whether
-            those handouts change anything after the client leaves) is the one
-            we never captured.
+            If I ran this again, I would instrument the discharge flow before
+            shipping it. We never set up a way to find out whether those
+            handouts changed anything after the client left.
           </strong>,
         ]}
         media={
