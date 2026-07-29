@@ -96,3 +96,39 @@ MEDIUM: stock Next 404 (+ double `<title>` on it); case pages inherit root OG wh
 (share-preview shows home); robots.txt + sitemap.xml absent.
 LOW: two-tap touch cards with no affordance/aria state; `keywords` meta; `/dev/border-bakeoff`
 in prod; no skip link; no canonical; 61×61 PNG-as-ico favicon, no apple-touch-icon.
+
+## P1 rescore — 2026-07-29, after Andrew's full copy rewrite (Figma 7076:1963)
+
+Six-lens panel, same calibration (5=average, 7=good, 8=strong). **Mean 7.6 (was ~7.4).**
+
+| Lens | Score | One-line reason |
+|---|---|---|
+| director-skim | 7.8 | Headings alone carry the arc; honesty reads senior; but every skimmed number is a projection, hero double-hedges |
+| design-craft | 7.4 | Drafting-sheet system disciplined end to end; the two core flow diagrams read default-FigJam; mid-page voids; citation crop illegible |
+| technical-credibility | 7.7 | Escalation + CtF/SSO vocabulary insider-real; assistant behavior never measured; abstention asserted, not tested |
+| narrative-copy | 7.9 | Top-decile arc + evidence discipline; interim-widget paragraph knots causality agentless; climax lands on a projection |
+| differentiation | 7.4 | Vignette + hand-coded-150-tickets memorable; best senior signals buried in paragraph-3 body copy |
+| portfolio-fit | 7.4 | Clears the senior AI-native screen; rigor stops at the demand side; what's live today never shown |
+
+**Why it moved:** only what a rewrite can reach moved (copy 7.9, skim 7.8). Evidence base and
+figures unchanged → three lenses pinned at 7.4. One regression: the S5 interim-widget lede went
+agentless at the ownership moment ("Not bringing in our security team earlier made it
+impossible…").
+
+**Ranked fixes (deduped across judges):**
+1. **Run the staging replay, publish one measured number** — replay the ~60 answerable sampled
+   tickets; report correct-and-cited / miscited / refused / wrong in the closer; replace the
+   ~1 FTE card with the measured rate, keep the 40% ceiling beside it. 5/6 judges ranked this
+   first; est. +0.5–1.0 across three lenses. (Long-flagged pending item.)
+2. **Close the claim-capture gap** — legible citation+did-this-help crop; a refusal-state crop
+   with the enforcement mechanism named; developer posture shown doing developer work.
+3. **Redraw the two flow diagrams in the house language** (grid-paper plate, system palette,
+   mono labels); fix the 'Veutify' typo and naming inconsistency while at it.
+4. **Own the interim-widget story** — first-person sequential causality; small
+   as-delivered vs re-skinned before/after; one clause stating the re-skinned widget is live
+   behind SSO today while the custom assistant is in staging pending CtF.
+5. **Pull buried senior signals into the skim path** — developer-disagreement as a typeset
+   callout; S3 heading recast to the actual contract; one sentence on how 2/4-turn thresholds
+   were chosen; drop "roughly" from the hero title.
+
+**To 8+:** fixes 1+2 alone cross it per panel math; 3+4 close "strong template" → "designed page."
