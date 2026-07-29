@@ -116,7 +116,7 @@ export default function PlatformOne() {
         eyebrow="U.S. Air Force · Platform One"
         title="Designing an AI assistant projected to cut support tickets by 40%"
         intro={[
-          "Platform One is the Air Force's flagship software factory, supporting more than 60 Air Force and Joint programs.",
+          "Platform One is the Air Force's flagship software factory, serving secure software delivery to over 250 defense development teams worldwide.",
           "But after a rushed rebrand, users couldn't find the answers they needed on its website. Sometimes they couldn't even find how to ask for help. Emergency fixes piled on top of each other, and while they helped in some ways, in others they made things worse.",
         ]}
         media={
