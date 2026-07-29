@@ -9,10 +9,9 @@ import { createElement } from "react";
 import CaptureBeforeAfter from "../src/components/case/content/kos/CaptureBeforeAfter";
 import TechStackMap from "../src/components/case/content/kos/TechStackMap";
 import ScoringRecal from "../src/components/case/content/kos/ScoringRecal";
-import SystemEvolution from "../src/components/case/content/kos/SystemEvolution";
 
 const comps: Record<string, React.ComponentType> = {
-  CaptureBeforeAfter, TechStackMap, ScoringRecal, SystemEvolution,
+  CaptureBeforeAfter, TechStackMap, ScoringRecal,
 };
 
 mkdirSync("scratchpad/kos-svg", { recursive: true });

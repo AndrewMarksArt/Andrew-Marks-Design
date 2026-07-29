@@ -11,7 +11,6 @@ import styles from "./KnowledgeOs.module.css";
 import CaptureBeforeAfter from "./kos/CaptureBeforeAfter";
 import TechStackMap from "./kos/TechStackMap";
 import ScoringRecal from "./kos/ScoringRecal";
-import SystemEvolution from "./kos/SystemEvolution";
 
 /**
  * Knowledge OS case-study content — repo-audit revision (2026-07-26) +
@@ -75,9 +74,9 @@ export default function KnowledgeOs() {
         eyebrow="KNOWLEDGE HUB · PERSONAL KNOWLEDGE OS"
         title="Designing a personal AI that reads hundreds of sources a week, so I don't have to."
         intro={[
-          "In AI, new work outpaces anyone's reading speed. Knowledge Hub is a personal knowledge OS: built solo, deployed in its first week, grown in production ever since.",
-          "A capture pipeline ingests a hundred-plus sources a week into a corpus that stood at 4,339 in late July; a chat interface answers from that corpus with citations instead of confidence.",
-          "I designed, researched, and built every layer. The trust decisions below are mine end to end.",
+          "New work in AI outpaces anyone's reading speed. Knowledge Hub is a personal knowledge OS. I built it solo, put it in production on day two, and have run it there ever since.",
+          "A capture pipeline ingests 100 or more sources in a quiet week, with peaks near 500, into a corpus that stood at 4,339 in late July. A chat interface answers from that corpus and cites the saved source behind every claim.",
+          "I designed, researched, and built every layer, and the trust decisions below are mine end to end.",
         ]}
         media={
           <ZoomableFigure
@@ -121,10 +120,10 @@ export default function KnowledgeOs() {
       <CaseSection
         heading="The field moves faster than reading speed."
         lede={[
-          "A hundred-plus relevant sources arrive in a quiet week; the spring peak came close to five hundred. A person can deeply read a fraction of that, and skimming drops the things that matter most: connections and contradictions between sources, the topics nobody's covering yet.",
-          "Capture tools don't solve it. They make piles, and piles rot: you can't see what's gone stale, what contradicts what, or what's missing entirely. My positioning depends on staying current in AI, so that's a professional risk.",
-          "The system reads everything so I can deeply read the right ten.",
-          "A note on method: I'm the only user, so the research is instrumentation. Every number here comes from the project's own dated records: commit history, migrations, eval reports, and the product's own analytics, shown as captured.",
+          "In a quiet week, 100 or more relevant sources arrive. The spring peak came close to 500. Nobody reads a meaningful fraction of that, and skimming loses the part that matters most: the connections and contradictions between sources, and the topics nobody has covered yet.",
+          "Capture tools do not fix this. They make piles, and piles rot. You cannot see what has gone stale, what contradicts what, or what is missing. My positioning depends on staying current in AI, so a rotting pile is a professional risk.",
+          "The system reads everything, so the handful I read closely is chosen rather than whatever happened to surface.",
+          "A note on method. I am the only person who can write to the system, so the evidence here comes from instrumentation rather than from users. Every number comes from the project's own dated records: commit history, migrations, eval reports, and the product's analytics, shown as captured.",
         ]}
         media={
           /* Placement pass 2026-07-27: the drawn representative bars retired —
@@ -148,8 +147,8 @@ export default function KnowledgeOs() {
       <CaseSection
         heading="It started as a Telegram bot that saved links."
         lede={[
-          "First commit February 23; in production on Railway by day two. Send it a URL and it's saved instantly: a background pipeline extracts, summarizes, scores, and embeds it, then messages back the graded save.",
-          "Ingestion turned out to be the easy part, solved in the first week. Everything in this study (trust, agents, retrieval, branching) is what the next four months built on top of it. The capture layer is still that same bot.",
+          "First commit on February 23, in production on Railway by day two. Send it a URL and it saves instantly, then a background pipeline extracts, summarizes, scores, and embeds the source before messaging back the graded save.",
+          "Ingestion turned out to be the easy part, solved in the first week. The trust, agents, retrieval, and branching work in this study is what the next four months built on top of it. The capture layer is still that same bot.",
         ]}
         media={
           <AssetFigure
@@ -164,10 +163,10 @@ export default function KnowledgeOs() {
       />
 
       <CaseSection
-        heading="Every conclusion shows how much to trust it."
+        heading="Every source carries a priority score you can interrogate."
         lede={[
-          "Every source row carries one 0–100 value score (the model's priority rating blended with novelty against its own Space and rank within its topic), and the written reason sits one hover away, where you read, not in logs.",
-          "A failed extraction is never dropped: the row is saved and flagged, with recovery one click away in the app, or a /retry straight from Telegram.",
+          "Each source row shows one value score from 0 to 100. It blends the model's priority rating with novelty against its own Space and the source's rank within its topic. The written reason sits one hover away, in the interface where you read rather than in a log.",
+          "A failed extraction is never dropped. The row saves and flags itself, with recovery one click away in the app or a /retry from Telegram.",
         ]}
         media={
           /* Placement pass 2026-07-27: the drawn row retired — the real table
@@ -189,11 +188,11 @@ export default function KnowledgeOs() {
       />
 
       <CaseSection
-        heading="A corpus that admits what it lacks."
+        heading="A gap-analysis agent reads the corpus and reports what is missing."
         lede={[
-          "Every source carries a decay state (active, aging, stale): aging trips automatically as newer saves supersede old ones; stale takes a model review that docks the score.",
-          "An on-demand gap-analysis agent reads the whole corpus and reports where coverage is thin against what the scoring says matters. Its first run (five weeks in, at 627 sources) caught my own blind spot: five security subtopics scored at the corpus maximum, eight saved links between them. The scoring said it mattered; my reading hadn't noticed.",
-          "And when a genuine gap turns up, the one sanctioned path to the open internet is the research tool that goes and fills it: suggested topics, capped runs, every new source through the same scored pipeline, with per-run rollback.",
+          "Every source carries a decay state of active, aging, or stale. Aging trips automatically as newer saves supersede older ones. Stale requires a model review that docks the score.",
+          "The gap-analysis agent runs on demand, reading the whole corpus and reporting where coverage is thin against what the scoring says matters. Its first run, 5 weeks in at 627 sources, caught a blind spot. Five security subtopics were scoring at the corpus maximum with 8 saved links between them. The scoring had flagged the area as important and my reading had not kept up.",
+          "When a gap is confirmed, the research agent is the only sanctioned path to the open internet. It proposes topics, runs capped searches, sends every new source through the same scored pipeline, and supports per-run rollback. Against that security gap it pulled 45 sources.",
         ]}
         media={
           /* Placement pass 2026-07-27: the live twin joins the dated record —
@@ -218,11 +217,11 @@ export default function KnowledgeOs() {
       />
 
       <CaseSection
-        heading="A substrate, not a library."
+        heading="Twelve specialist agents compose into behavior none of them has alone."
         lede={[
-          "The corpus feeds twelve specialist agents: connection discovery, contradiction detection, gap analysis, synthesis, research, a reading-queue prioritizer that never calls a model at all.",
-          "Each one is boring on its own; the interesting behavior is how they compose. Agents write signals (machine observations reviewed like proposals, never auto-applied), and by mid-April, at about 1,000 sources, they'd written ~960 of them. Roughly one per source.",
-          "They all started life on weekly crons. At ~$8 a week of model spend for a single user, I turned scheduling off: every agent now runs on demand, and the only cron left is a ten-cent digest.",
+          "The corpus feeds 12 specialist agents, including connection discovery, contradiction detection, gap analysis, synthesis, research, and a reading-queue prioritizer that never calls a model at all.",
+          "Each one is simple in isolation. What makes them useful is composition. Agents write signals, which are machine observations reviewed like proposals and never applied automatically. By mid-April, at about 1,000 sources, they had written about 960 signals, roughly one per source.",
+          "All 12 started on weekly crons. At about $8 a week in model spend for a single user, I turned scheduling off. Every agent now runs on demand, and the only cron left is a 10-cent digest.",
         ]}
         media={
           /* Andrew's Figma revision 2026-07-29: his drawn system overview
@@ -243,12 +242,12 @@ export default function KnowledgeOs() {
       />
 
       <CaseSection
-        heading="Chat that answers only from the library."
+        heading="Chat answers only from the corpus, and says when the corpus falls short."
         lede={[
           "The daily interface is a conversation with the corpus.",
-          "A question gets embedded; the system over-fetches 20 to 40 candidates from the vector store (recall is cheap, and the reranker is the better judge of relevance), then the top ten go to the model with one standing rule: ground every claim in a named saved source, and say so when the corpus doesn't cover it.",
-          "That architecture wasn't day one. Chat shipped in week four as plain cosine top-k; the over-fetch and rerank came three months of daily use later, when one number doing three jobs stopped scaling.",
-          "And nothing is ever overwritten. The first version truncated the thread on edit (a reload could interleave stale and new messages), so a conversation graph replaced it: sibling branches, a version pager, branch-from-here on any message. The librarian layer (an outline rail with AI topic labels, bookmarks, an auto-sort that only ever proposes: preview, approve, undo) keeps hundred-message chats navigable.",
+          "A question gets embedded, and the system over-fetches 20 to 40 candidates from the vector store, since recall is cheap and the reranker judges relevance better than raw distance does. The top 10 go to the model under one standing rule. Every claim cites a named saved source, and when the corpus does not cover a question, the model says so.",
+          "That architecture was not there on day one. Chat shipped in week 4 as plain cosine top-k, and the over-fetch and rerank came three months later, after daily use showed a single similarity score could not carry retrieval alone.",
+          "Nothing in a conversation is ever overwritten. The first version truncated the thread on edit, and a reload could interleave stale and new messages. A conversation graph replaced it, with sibling branches, a version pager, and branch-from-here on any message. An outline rail with AI topic labels, bookmarks, and an auto-sort that only proposes (preview, approve, undo) keeps 100-message chats navigable.",
         ]}
         media={
           /* Rescore-panel pass: the standalone branching section folded in
@@ -321,10 +320,10 @@ export default function KnowledgeOs() {
           invariant; the model-tiering paragraph cut (the figure and later
           sections already carry it). */}
       <CaseSection
-        heading="Built for a web that fights back."
+        heading="Extractor routing lives in a database table, so tools swap without a deploy."
         lede={[
-          "None of the trust work above matters if capture dies, and extraction is adversarial: platforms wall off content, public APIs grow challenge screens, managed builders drop your system dependencies without warning. So the pipeline keeps one promise above all: a failed tool degrades a save. It never drops one. One design decision keeps it: routing lives in a database table, not in code, with every platform's extractor chain ending at the same universal fallback.",
-          "The receipts are dated. When YouTube's bot wall broke the media downloader, yt-dlp swapped in behind one registry row. When the public cobalt API added a Turnstile wall, a self-hosted instance on Fly took over. When two managed builders silently dropped yt-dlp and ffmpeg from the deploy, the build moved to a raw Dockerfile. Almost none of the pipeline's tools are the ones it started with, and every tool call is logged with its duration and cost.",
+          "Extraction is adversarial. Platforms wall off content, public APIs add challenge screens, and managed builders drop system dependencies without warning. When a tool fails, the save still lands, flagged and incomplete, and every platform's extractor chain ends at the same universal fallback.",
+          "That routing table is why each swap was a single row change. Over five months a YouTube bot wall, a Turnstile challenge on the public cobalt API, and two managed builders dropping yt-dlp and ffmpeg from the deploy each forced a replacement. Almost none of the pipeline's tools are the ones it started with, and every tool call is logged with its duration and cost.",
         ]}
         media={
           <AssetFigure
@@ -339,11 +338,11 @@ export default function KnowledgeOs() {
       />
 
       <CaseSection
-        heading="The trust story had to be earned twice."
+        heading="Two failures in June, both caught by measurement rather than by noticing."
         lede={[
-          "In June, an audit caught a schema change that had silently broken chat retrieval: for a stretch, every question drew zero context from the corpus. The grounding rule is why nobody got lied to: the system said the corpus didn't cover it instead of improvising.",
-          "The same month, measurement caught the scorer burying good design work: a study I'd call a 9 sat at 0.30, and only 5% of design links ever reached HIGH against a 20% target. The fix started with an eval harness, not a prompt edit: a 50-link gold set, then a rubric rewrite, then re-measurement.",
-          "A fix you can't measure is a fix you'll re-break in three months and never notice.",
+          "An audit caught a schema change that had silently broken chat retrieval. For a stretch of time, every question drew zero context from the corpus. The grounding rule is why nobody got a wrong answer: with no sources to cite, the system said the corpus did not cover the question instead of improvising.",
+          "The same month, measurement caught the scorer burying good design work. A study I would rate a 9 sat at 0.30, and only 5% of design links ever reached HIGH against a 20% target. The fix started with an eval harness rather than a prompt edit. A 50-link gold set, then a rubric rewrite, then re-measurement. Design links now clear 40%, and the floor moved up with the ceiling.",
+          "Both failures ran for weeks without being visible in normal use. The instrumentation is what surfaced them.",
         ]}
         media={
           <div className={styles.narrowFigure}>
@@ -363,14 +362,15 @@ export default function KnowledgeOs() {
           left with a bolded retro line last, two drafting-grid stat cards
           right; the evolution timeline hangs below full-width. */}
       <CaseSection
-        heading="In production since week one, and compounding"
+        heading="In production since day two, still compounding five months later."
         lede={[
-          "Knowledge Hub is live: 865 commits and 249 merged PRs between February 23 and early July, a corpus measured at 4,339 sources in late July and still growing, a cited chat on top, twelve agents on call.",
-          "It's the same rule I hold every AI product to (ground it or say you can't), applied to a system where I'm the only user it can fail.",
-          <strong key="retro">
-            A year ago I could have designed this in Figma. Getting any of it
-            into production would have been a dream. Built AI-natively, it was
-            live in week one, solo, and it hasn&rsquo;t slowed since.
+          "Knowledge Hub is live: 865 commits and 249 merged PRs between February 23 and early July, a corpus measured at 4,339 sources in late July and still growing, cited chat on top, and 12 agents on call.",
+          "What changed for me is the part I did not build a metric for. Before, I bookmarked things and forgot them. Now I review far more than I did, I can retrieve something weeks after saving it, and the chat is where I start when I take on a new project or an unfamiliar topic. The system reads everything so the things I read closely are chosen rather than whatever surfaced that day.",
+          "There is a guest view. Friends, coworkers, and anyone else can read the corpus and browse example chats, without writing to it or running agents. Designing a read-only surface for people who did not build the system was its own problem, and it is the reason the interface had to make sense to someone other than me.",
+          <strong key="rule">
+            Every AI product I design follows the same rule: ground the answer
+            or say you cannot. Knowledge Hub is where I hold myself to it, on a
+            system where I am the only person it can fail.
           </strong>,
         ]}
         media={
@@ -395,19 +395,25 @@ export default function KnowledgeOs() {
       />
 
       <section className={`content ${styles.closerFigures}`}>
+        {/* Andrew's Figma revision 2026-07-29: his redrawn timeline replaces
+            the SVG SystemEvolution (deleted, git-recoverable). The export is
+            self-captioned, so no caption prop. */}
         <AssetFigure
           label="Five months, zero to compounding"
-          aspect={979 / 300}
-          naturalWidth={979}
-          caption="Five months from first commit, every point measured: repo records through June, the product's own analytics for July 27."
+          aspect={3936 / 1305}
+          naturalWidth={3936}
         >
-          <SystemEvolution />
+          <img
+            src="/case-studies/knowledge-os/kos-evolution-timeline.webp"
+            alt="Corpus growth chart from February to late July: a curve from zero at the first commit through 627 at the gap agent's first run on March 30, about 1,000 sources and 960 signals on April 14, 3,241 on June 16, to 4,339 measured July 27, with milestone flags for the capture bot deploying February 23, chat with RAG on March 17, agents going manual May 7, and rerank plus branching June 20 to 23. A footer reads: every point measured and dated, repo docs through June, the product's own analytics for July 27."
+            className={styles.shotImg}
+          />
         </AssetFigure>
       </section>
 
       <UpNext
         title="Platform One AI Assistant & Chat Bot"
-        desc="Designing an AI assistant projected to cut support tickets by roughly 40%"
+        desc="Designing an AI assistant projected to cut support tickets by 40%"
         href="/case-studies/platform-one"
       />
     </>

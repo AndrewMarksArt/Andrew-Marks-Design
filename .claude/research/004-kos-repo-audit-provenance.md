@@ -112,3 +112,14 @@ Corpus anchors: 627 (Mar 30) → ~1,000 + ~960 signals (Apr 14) → 1,214 (Apr 2
   (and) Technology** (data-science emphasis) and **M.A. in Art Business**. Resume copy
   says "Information Systems Technology"; his chat phrasing included "and" — exact official
   degree name unverified, only the M.A. abbreviation style was fixed.
+
+## Addendum 2 — Andrew's 2026-07-29 copy rewrite (Figma 7081:2061), new numbers he supplied
+
+- **"Against that security gap it pulled 45 sources"** (research agent, gap section) — his
+  number, not in the repo audit; verify against run logs if ever challenged.
+- **"Design links now clear 40%"** (vs the 20% target; baseline 5.0%)** — a NEW metric
+  alongside the gold-set recall story (8%→63% stays on the ScoringRecal figure). His number.
+- Hero + closer now say **"production on day two"** (accurate per baa7d59); the stats strip
+  still says "Deployed in week one" — flagged to Andrew for consistency, not changed.
+- Closer now tells the **guest view** story (fail-secure read-only, repo-verified Jun 4 ✓)
+  and a qualitative what-changed paragraph explicitly framed as un-metriced (honest).
