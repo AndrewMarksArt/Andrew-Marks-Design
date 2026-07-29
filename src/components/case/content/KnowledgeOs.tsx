@@ -10,9 +10,6 @@ import ZoomableFigure from "../FigureLightbox";
 import styles from "./KnowledgeOs.module.css";
 import CaptureBeforeAfter from "./kos/CaptureBeforeAfter";
 import TechStackMap from "./kos/TechStackMap";
-import GapCatchCard from "./kos/GapCatchCard";
-import SystemMap from "./kos/SystemMap";
-import RagArchitecture from "./kos/RagArchitecture";
 import ScoringRecal from "./kos/ScoringRecal";
 import SystemEvolution from "./kos/SystemEvolution";
 
@@ -51,6 +48,15 @@ import SystemEvolution from "./kos/SystemEvolution";
  * with match-% cards, placed under RagArchitecture as the P1-pattern
  * demo loop. His recording's analytics frame shows 4,415/173-this-week
  * — the corpus has already outgrown the 4,339 screenshot.
+ *
+ * ANDREW'S FIGMA REVISION 2026-07-29 (Updated Layouts page, frame
+ * 7042:2694): GapCatchCard cut from the gap section; SystemMap and
+ * RagArchitecture replaced by his drawn diagrams (exported as
+ * kos-system-overview.webp / kos-ask-flow.webp — components deleted,
+ * git-recoverable); capture-figure caption rewritten (his words);
+ * closer cards now Sources added & scored 4,339 + Avg new sources per
+ * week ~300, with his method note under them. His diagram band says
+ * "over 4,250" and "Per-Topi" (typo) — fix in Figma + re-export.
  *
  * ⚠ STILL PENDING FROM ANDREW: a true corpus-empty refusal capture,
  * the ◀ n/m ▶ version-pager close-up or branch-flip GIF (5 seconds,
@@ -143,7 +149,7 @@ export default function KnowledgeOs() {
             label="Piles rot; capture compounds"
             aspect={979 / 360}
             naturalWidth={979}
-            caption="Left: where every capture tool ends. Right: capture that compounds. The bot's real two-step reply: instant ack, then the graded save. Everything in this study happens after this message."
+            caption="Telegram is the main ingest pipeline: the bot must acknowledge the link, then return the status to the user. This lets the user see a quick score and classification and catch errors early."
           >
             <CaptureBeforeAfter />
           </AssetFigure>
@@ -198,16 +204,6 @@ export default function KnowledgeOs() {
                 className={styles.shotImg}
               />
             </AssetFigure>
-            <div className={styles.narrowFigure}>
-              <AssetFigure
-                label="The first catch · Mar 30"
-                aspect={640 / 300}
-                naturalWidth={640}
-                caption="The first gap the agents caught was mine: a real run, dated in the repo."
-              >
-                <GapCatchCard />
-              </AssetFigure>
-            </div>
           </>
         }
       />
@@ -220,16 +216,19 @@ export default function KnowledgeOs() {
           "They all started life on weekly crons. At ~$8 a week of model spend for a single user, I turned scheduling off: every agent now runs on demand, and the only cron left is a ten-cent digest.",
         ]}
         media={
-          /* Rescore-panel pass: AgentFleet retired (one of three sibling chip
-             diagrams; SystemMap's agent band + the lede carry the roster and
-             the cost arc). Recoverable in git. */
+          /* Andrew's Figma revision 2026-07-29: his drawn system overview
+             replaces the SVG SystemMap (deleted, git-recoverable). */
           <AssetFigure
             label="The whole machine"
-            aspect={979 / 440}
-            naturalWidth={979}
-            caption="One URL in, grounded answers out: capture, pipeline, corpus, agents, surfaces. The orange loop is the only path to the open web."
+            aspect={2232 / 1002}
+            naturalWidth={2232}
+            caption="One URL in, grounded answers out: capture, pipeline, corpus, agents, surfaces. The research loop is the only path to the open web."
           >
-            <SystemMap />
+            <img
+              src="/case-studies/knowledge-os/kos-system-overview.webp"
+              alt="High-level view of the whole system: Telegram URLs and web or gallery adds pass a security gate into extract (a tool registry with 11-plus tools), summarize and score (Haiku plus per-topic rubrics), and embed (Voyage plus novelty); failures are saved, retried, and never dropped. Everything lands in the personal knowledge corpus, over 4,250 sources measured 7/27 and growing by about 300 per week, on Supabase and pgvector. Twelve on-demand agents (connections, contradictions, gaps, synthesis) write signals back and can trigger research runs on Exa, and it surfaces in the AI chat, every answer sourced and cited from the corpus."
+              className={styles.shotImg}
+            />
           </AssetFigure>
         }
       />
@@ -250,11 +249,15 @@ export default function KnowledgeOs() {
           <>
             <AssetFigure
               label="The machine, drawn"
-              aspect={979 / 380}
-              naturalWidth={979}
+              aspect={2232 / 867}
+              naturalWidth={2232}
               caption="Over-fetch wide, rerank hard, ground every claim in a named source, or say the corpus doesn't cover it."
             >
-              <RagArchitecture />
+              <img
+                src="/case-studies/knowledge-os/kos-ask-flow.webp"
+                alt="Flow of how the Ask AI chat sources and answers user questions: a question is embedded, the system over-fetches 20 to 40 sources from the corpus, re-ranks them, and sends the top 10 to the model, where every claim is sourced, ending in a cited answer. The corpus band beneath notes every source embedded and scored, with gap analysis and decay review helping rank results."
+                className={styles.shotImg}
+              />
             </AssetFigure>
             {/* Placement pass 2026-07-27: the machine above, running — the
                 P1-pattern demo loop. 2x speed, cut from Andrew's recording. */}
@@ -359,14 +362,17 @@ export default function KnowledgeOs() {
           </strong>,
         ]}
         media={
-          /* Rescore-panel pass: the effort card (865 · 249) demoted — those
-             numbers already live in the lede; the second card now carries a
-             measured OUTCOME (the eval-first fix, reprised from S9 as the
-             closing stat the first panel asked to promote). */
-          <StatCards>
-            <StatCard label="Sources measured · Jul 27" value="4,339" />
-            <StatCard label="High-worth recall · eval-first fix" value="8→63%" />
-          </StatCards>
+          /* Andrew's Figma revision 2026-07-29: his card pair — the corpus
+             total and the weekly rate — with his method note beneath. */
+          <div>
+            <StatCards>
+              <StatCard label="Sources added & scored" value="4,339" />
+              <StatCard label="Avg new sources per week" value="~300" />
+            </StatCards>
+            <p className={styles.statNote}>
+              {"// LINKS SAVED AND ADDED TO THE CORPUS AS OF 7/27 + AVG NUMBER OF NEW SOURCES PER WEEK"}
+            </p>
+          </div>
         }
       />
 

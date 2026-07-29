@@ -67,7 +67,9 @@ function VetTestimonial() {
         think.&rdquo;
       </blockquote>
       <figcaption className={styles.quoteAttribution}>
-        {"// DVM PILOT USER · VETERINARY CLINIC — attribution pending permission"}
+        {/* Andrew's Figma revision 2026-07-29: pending-permission tag
+            dropped from the attribution line. */}
+        {"// DVM PILOT USER IN VETERINARY CLINIC"}
       </figcaption>
     </figure>
   );
@@ -264,7 +266,7 @@ export default function ChatVet() {
               label="Where the answers come from"
               aspect={2880 / 1542}
               naturalWidth={2880}
-              caption="The corpus named in the product, above the sourcing strip: what lets a vet audit an answer before trusting it."
+              caption="Partnership announcement taken from the chatvet.ai website"
             >
               <img
                 src="/case-studies/chat-vet/cv-msd-partnership2.webp"
@@ -378,10 +380,17 @@ export default function ChatVet() {
           </strong>,
         ]}
         media={
-          <StatCards>
-            <StatCard label="Monthly users" value="500" />
-            <StatCard label="Self-reported, per case" value="~15 min" />
-          </StatCards>
+          /* Andrew's Figma revision 2026-07-29: card 2 relabeled, and his
+             method note carries the self-reported hedge. */
+          <div>
+            <StatCards>
+              <StatCard label="Monthly users" value="500" />
+              <StatCard label="Time saved per case" value="15 mins" />
+            </StatCards>
+            <p className={styles.statNote}>
+              {"// ACTIVE USERS CURRENTLY ON THE PLATFORM, TIME SAVED SELF-REPORTED FROM PILOT USERS."}
+            </p>
+          </div>
         }
       />
 

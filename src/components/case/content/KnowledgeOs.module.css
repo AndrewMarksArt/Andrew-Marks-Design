@@ -41,3 +41,14 @@
   gap: 32px;
   padding-top: 48px;
 }
+
+/* Method note under the closer stat cards (Andrew's Figma revision
+   2026-07-29) — same footnote voice as Platform One's .statNote. */
+.statNote {
+  margin: 12px 0 0;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: clamp(11px, 0.8102vw, 12px);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--accent-deep);
+}

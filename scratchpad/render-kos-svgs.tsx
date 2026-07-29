@@ -4,17 +4,15 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { writeFileSync, mkdirSync } from "fs";
 import { createElement } from "react";
 
+/* 2026-07-29: SystemMap, RagArchitecture, GapCatchCard dropped — Andrew
+   replaced them with his own Figma diagrams; components deleted from kos/. */
 import CaptureBeforeAfter from "../src/components/case/content/kos/CaptureBeforeAfter";
-import SystemMap from "../src/components/case/content/kos/SystemMap";
 import TechStackMap from "../src/components/case/content/kos/TechStackMap";
-import RagArchitecture from "../src/components/case/content/kos/RagArchitecture";
 import ScoringRecal from "../src/components/case/content/kos/ScoringRecal";
 import SystemEvolution from "../src/components/case/content/kos/SystemEvolution";
-import GapCatchCard from "../src/components/case/content/kos/GapCatchCard";
 
 const comps: Record<string, React.ComponentType> = {
-  CaptureBeforeAfter,  SystemMap, TechStackMap, RagArchitecture,
-  ScoringRecal, SystemEvolution, GapCatchCard,
+  CaptureBeforeAfter, TechStackMap, ScoringRecal, SystemEvolution,
 };
 
 mkdirSync("scratchpad/kos-svg", { recursive: true });
