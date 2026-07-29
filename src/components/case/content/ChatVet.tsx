@@ -42,12 +42,12 @@ import styles from "./ChatVet.module.css";
  * errors", the 10-min documentation figure). Andrew has been told; the
  * decision is his. Read the ledger before defending any number here.
  *
- * ⚠ PENDING FACTS (do not invent): full timeframe/dates (Andrew's 7/29
- * copy dates the role shift to June), the pilot clinics' names or a
+ * ⚠ PENDING FACTS (do not invent): the pilot clinics' names or a
  * concrete anonymisation, and the denominator behind "the most-asked
- * question". ANSWERED by his 7/29 rewrite (Figma 7079:2007): research
- * n = five DVMs/techs; pilot = one clinic expanded to three; 500 =
- * registered users signed in over the past month.
+ * question". ANSWERED: dates = Feb 2025 – Jun 2026, consulting since
+ * (Andrew, 7/29); research n = five DVMs/techs; pilot = one clinic
+ * expanded to three; 500 = registered users signed in over the past
+ * month (kept in three phrasings on the page per Andrew's leave-it).
  *
  * ⚠ DO NOT RE-ADD THE LIVE LINK without asking. As of 2026-07-26 the
  * engagement has wound down, the founder has shipped his own changes, and
@@ -119,7 +119,13 @@ export default function ChatVet() {
             label: "TEAM:",
             value: "Startup founders · engineering · me · Mostly part-time, ~10 hrs/week",
           },
-          { label: "TIMEFRAME:", value: "Months (dates pending)" },
+          {
+            /* Andrew, 2026-07-29: design engagement Feb 2025 – Jun 2026;
+               role shifted June 2026 to consulting (less design). The
+               closer's role-shift lede carries the story. */
+            label: "TIMEFRAME:",
+            value: "Feb 2025 – Jun 2026 · Consulting since",
+          },
           {
             /* Deliberately NOT a link, and the domain is deliberately absent.
                The founder has continued building since the engagement wound

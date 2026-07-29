@@ -123,3 +123,7 @@ Corpus anchors: 627 (Mar 30) → ~1,000 + ~960 signals (Apr 14) → 1,214 (Apr 2
   still says "Deployed in week one" — flagged to Andrew for consistency, not changed.
 - Closer now tells the **guest view** story (fail-secure read-only, repo-verified Jun 4 ✓)
   and a qualitative what-changed paragraph explicitly framed as un-metriced (honest).
+- **~300/week card, Andrew's 7/29 ruling: KEEP.** His rationale: recent weekly intake dropped
+  while he built this portfolio, lowering the lifetime average (~197/wk); ~300 is the rate
+  when he's operating normally and will resume post-launch. Defensible as "typical operating
+  week"; the card stays as exported.
