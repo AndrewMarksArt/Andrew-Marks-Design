@@ -32,27 +32,17 @@ export default function CaseStudyStatus() {
         </h2>
 
         <div className={styles.terminal}>
-          {/* Decorative boot-log flourish: the status rows below carry the
-              information, and #EC4E09 at this size fails AA for announced
-              text — formally decoration (UX audit item 5). */}
+          {/* Decorative boot-log flourish (aria-hidden: #EC4E09 at this size
+              fails AA for announced text — UX audit item 5). Andrew's Figma
+              revision 2026-07-29 (home frame 7041:144): INITIALIZING restored,
+              the two through-line rows collapsed to his single status row. */}
           <p className={styles.initLine} aria-hidden="true">
             <span className={styles.slashes}>{"//"}</span>
-            <span>{" 03 CASE STUDIES LIVE"}</span>
+            <span>{" INITIALIZING..."}</span>
           </p>
-          {/* Judge-panel pass (research 005): the duplicate "3 studies live"
-              line and the under-construction "appendices in progress" notice
-              left prime real estate; the strip now frames the studies and
-              names the site's through-line. */}
           <p className={styles.statusRow}>
             <span className={styles.statusLabel}>{"STATUS: "}</span>
-            <span className={styles.statusValue}>
-              ...3 AI assistants: DoD enterprise · clinical · personal
-            </span>
-          </p>
-          <p className={styles.statusRow}>
-            <span className={styles.statusValue}>
-              ...One rule throughout: ground it, or say you can&rsquo;t
-            </span>
+            <span className={styles.statusValue}>...3 High level complete</span>
           </p>
         </div>
       </div>

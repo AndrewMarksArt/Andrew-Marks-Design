@@ -110,11 +110,9 @@ export default function Footer() {
           <br />
           {"// OPEN TO SENIOR AI-NATIVE PRODUCT DESIGN ROLES"}
           <br />
+          {/* 2026-07-29 (Andrew): USER + ALL_RIGHTS_RESERVED_INIT retired —
+              the contact and open-to lines above carry the block now. */}
           {"// [C] 2026"}
-          <br />
-          {"// USER: ANDREW MARKS"}
-          <br />
-          {"// ALL_RIGHTS_RESERVED_INIT"}
         </p>
       </div>
     </footer>

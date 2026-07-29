@@ -287,6 +287,13 @@ a.link:focus-visible ~ .icon path:nth-of-type(3) {
   text-align: left;
 }
 
+/* 2026-07-29 (Andrew): the Reach-me-directly line hangs with the About copy,
+   not 108px below it. Three-class specificity so this wins over the
+   breakpoint margin-top overrides at every width. */
+.cellAbout .desc + .desc {
+  margin-top: 12px;
+}
+
 @media (min-width: 1440px) {
   .cellAbout .desc {
     text-align: justify;
