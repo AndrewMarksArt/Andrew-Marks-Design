@@ -167,3 +167,36 @@ Six-lens panel, same calibration. **Mean 7.48 (was ~7.3). Range collapsed 6.5–
 **To 8+:** fixes 1–2 ≈ 7.6–7.7 alone; 3–4 carry it across. Surface the Ruger case in the
 beat-3/beat-5 ledes (not just figure tags). Structural ceiling: a 9 needs a measured impact
 number that doesn't exist — the retro already owns that honestly.
+
+## KOS rescore — 2026-07-29, after Andrew's copy rewrite + his diagrams (Figma 7081:2061)
+
+Six-lens panel, same calibration. **Mean 7.85 (was 7.5-flat) — the portfolio's highest study.
+Narrative-copy 8.4 is the best single-lens score across all three studies.**
+
+| Lens | Score | One-line reason |
+|---|---|---|
+| director-skim | 7.7 | Headline/strip/headings all land in 30s; both closer cards are input metrics; ~300/wk invites 5-second arithmetic |
+| design-craft | 7.5 | Pinned by the two default-styled Figma flow diagrams (Per-Topi typo, 4,250-vs-4,339) + chat section's 4-figure stack |
+| technical-credibility | 7.9 | RAG evolution + extractor war stories + gold-set eval hygiene read as lived engineering; ~300/wk irreconcilable; weeks-invisible outage vs daily use |
+| narrative-copy | 8.4 | Claims-as-headings genuinely carries it, every claim cashed, voice plainly his |
+| differentiation | 7.9 | Single-user-as-stance + measurement-caught failures memorable; guest view + $8/wk crons-off buried in body copy |
+| portfolio-fit | 7.7 | Exactly the senior AI-native signal set; diagram contradicts the page's own number; closer restates scale not outcome |
+
+**Ranked fixes:**
+1. **Reconcile the closer cards, land one outcome number** — ~300/wk is disprovable (lifetime
+   ≈197/wk from the study's own dated points): true figure or honest window label; pair/replace
+   with a QUALITY result (5%→40% or 93%-extraction·every-answer-cited). Andrew re-export + copy.
+2. **Redraw the two flow diagrams in the house language** — fix "Per-Topi" and "over 4,250";
+   sheet palette like the stack map/timeline. Andrew (Figma). Same pattern as P1 #3, CV #3.
+3. **Bridge 8%→63% (gold-set recall) and 5%→40% (HIGH share) in one caption clause**; name the
+   scales; give the eval story skim weight. Copy/code only.
+4. **Break the chat section's 4-figure stack** — research-panel capture moves up to the gap
+   section; tight crop of branch-converge; interleave paragraphs. Copy/code only.
+5. **Copy-integrity pass** — (a) outage duration vs daily-use contradiction (Andrew's fact, or
+   reframe as refuse-degradation-masked-the-outage — the sharper insight); (b) cash the
+   composition heading with the Mar 30 chain; (c) thesis repeat → deliberate bookend or cut;
+   (d) promote $8/wk + guest view; (e) strip "week one" → "day two"; Telegram caption voice slip.
+
+**To 8+:** fixes 1+2 alone likely cross 8.0 (narrative already 8.4). Ceiling ~8.3 without a
+measured behavioral outcome in the closer (grounding spot-check, retrieval-after-weeks) — the
+long-pending items. Portfolio state after three rescores: KOS 7.85 · P1 7.6 · CV 7.48.
