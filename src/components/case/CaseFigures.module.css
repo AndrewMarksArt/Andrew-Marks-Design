@@ -155,3 +155,20 @@
     max-width: 360px;
   }
 }
+
+/* Figma-exported card image (Andrew's frames, 2026-07-29): the export
+   already carries plate, grid and border — this only handles the row
+   geometry, mirroring P1's .statCard. */
+.statCardImg {
+  width: calc(50% - 12px);
+  min-width: 0;
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 639px) {
+  .statCardImg {
+    width: 100%;
+    max-width: 364px;
+  }
+}

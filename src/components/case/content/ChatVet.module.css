@@ -58,7 +58,9 @@
     linear-gradient(to right, rgba(0, 0, 0, 0.08) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
   background-size: 50px 50px;
-  border: 2px solid var(--accent);
+  /* 2026-07-29 (Andrew): the accent border read as a link/active state —
+     thin grey hairline instead, matching the figure frames. */
+  border: 1px solid var(--rule-soft);
 }
 
 .quoteText {

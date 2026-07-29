@@ -4,7 +4,7 @@ import {
   CaseSection,
   UpNext,
 } from "../CaseSections";
-import { AssetFigure, StatCard, StatCards } from "../CaseFigures";
+import { AssetFigure, StatCardImg, StatCards } from "../CaseFigures";
 import BrandRow from "../../site/BrandRow";
 import ZoomableFigure from "../FigureLightbox";
 import styles from "./KnowledgeOs.module.css";
@@ -55,7 +55,10 @@ import SystemEvolution from "./kos/SystemEvolution";
  * kos-system-overview.webp / kos-ask-flow.webp — components deleted,
  * git-recoverable); capture-figure caption rewritten (his words);
  * closer cards now Sources added & scored 4,339 + Avg new sources per
- * week ~300, with his method note under them. His diagram band says
+ * week ~300, with his method note under them (cards now ship as his
+ * Figma exports, kos-stat-*.webp); hero swapped to his Today's digest
+ * capture (7024:1834); screenshots render unframed per his rule,
+ * borders stay on charts/diagrams. His diagram band says
  * "over 4,250" and "Per-Topi" (typo) — fix in Figma + re-export.
  *
  * ⚠ STILL PENDING FROM ANDREW: a true corpus-empty refusal capture,
@@ -78,14 +81,14 @@ export default function KnowledgeOs() {
         ]}
         media={
           <ZoomableFigure
-            label="The daily interface: a cited answer"
-            aspect={3800 / 2030}
-            naturalWidth={3800}
+            label="Today's digest · Jul 27"
+            aspect={3820 / 2050}
+            naturalWidth={3820}
             unframed
           >
             <img
-              src="/case-studies/knowledge-os/kos-hero-chat.webp"
-              alt="The Knowledge Hub chat answering 'How do I manage context and memory effectively in a production agent system?' with a practical framework grounded in saved resources; source titles bolded inline, the Sources rail open listing 23 saved links, folders in the left sidebar, and a footer reading: answers are generated from your saved links; results depend on what you've saved."
+              src="/case-studies/knowledge-os/kos-hero-digest.webp"
+              alt="The Brief page for Monday, July 27: a Today's digest card counting 22 links across Agentic Coding, Business, Design, Game Design and Research, each topic with its link count, top source and score. Below it, four drafts await approval with their own scores. The sidebar lists Brief, Insights, Agents, Pipeline, Inbox, Knowledge, Gallery, Curated, Analytics, Drafts, Optimize and Ask AI."
               className={styles.shotImg}
             />
           </ZoomableFigure>
@@ -125,6 +128,7 @@ export default function KnowledgeOs() {
              this is the Analytics page as it stood on Jul 27, numbers and all. */
           <AssetFigure
             label="The intake, measured · Analytics, Jul 27"
+            unframed
             aspect={3817 / 2050}
             naturalWidth={3817}
             caption="The system's own telemetry: 4,339 sources, 93% extraction success, and twelve weeks of real intake. Deep reading covers a sliver of any of these bars."
@@ -167,6 +171,7 @@ export default function KnowledgeOs() {
              with the hover breakdown open. */
           <AssetFigure
             label="Trust, surfaced on the row · live"
+            unframed
             aspect={3820 / 2055}
             naturalWidth={3820}
             caption="The real table, hover open: the model's written reason, the priority it set, novelty against the Space. Trust lives on the row because that's where reading happens, not a dashboard away."
@@ -194,6 +199,7 @@ export default function KnowledgeOs() {
           <>
             <AssetFigure
               label="A gap report, live · Jun 24"
+              unframed
               aspect={3822 / 2047}
               naturalWidth={3822}
               caption="Still catching them: eight thin subtopics the pipeline scored 0.82–0.92, one link each, with the three actions that close the loop: ask, research, draft."
@@ -263,6 +269,7 @@ export default function KnowledgeOs() {
                 P1-pattern demo loop. 2x speed, cut from Andrew's recording. */}
             <AssetFigure
               label="The machine, running · 2×"
+              unframed
               aspect={3806 / 2034}
               naturalWidth={1000}
               caption="Ask, search the library, and a grounded answer streams in with its sources attached: the architecture above, at work."
@@ -276,6 +283,7 @@ export default function KnowledgeOs() {
             </AssetFigure>
             <AssetFigure
               label="The shelf-filler, one click away"
+              unframed
               aspect={3815 / 2037}
               naturalWidth={3815}
               caption="When the corpus can't cover a question, the same chat fixes it: the research panel suggests topics from the conversation, runs capped searches, and reports back into the thread."
@@ -288,6 +296,7 @@ export default function KnowledgeOs() {
             </AssetFigure>
             <AssetFigure
               label="A conversation, branched · live"
+              unframed
               aspect={3802 / 2042}
               naturalWidth={3802}
               caption="Nothing is overwritten, and when two branches converge on the same three sources, the system offers one grounded synthesis. The answer above does the honest thing too: it names what the saved links don't cover."
@@ -366,8 +375,14 @@ export default function KnowledgeOs() {
              total and the weekly rate — with his method note beneath. */
           <div>
             <StatCards>
-              <StatCard label="Sources added & scored" value="4,339" />
-              <StatCard label="Avg new sources per week" value="~300" />
+              <StatCardImg
+                src="/case-studies/knowledge-os/kos-stat-sources.webp"
+                alt="Stat card: sources added and scored, 4,339."
+              />
+              <StatCardImg
+                src="/case-studies/knowledge-os/kos-stat-weekly.webp"
+                alt="Stat card: average new sources per week, about 300."
+              />
             </StatCards>
             <p className={styles.statNote}>
               {"// LINKS SAVED AND ADDED TO THE CORPUS AS OF 7/27 + AVG NUMBER OF NEW SOURCES PER WEEK"}

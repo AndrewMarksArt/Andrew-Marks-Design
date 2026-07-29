@@ -4,7 +4,7 @@ import {
   StatsStrip,
   UpNext,
 } from "../CaseSections";
-import { AssetFigure, StatCard, StatCards } from "../CaseFigures";
+import { AssetFigure, StatCardImg, StatCards } from "../CaseFigures";
 import BrandRow from "../../site/BrandRow";
 import ZoomableFigure from "../FigureLightbox";
 import caseStyles from "../case.module.css";
@@ -175,6 +175,7 @@ export default function ChatVet() {
           <div className={caseStyles.mediaPair}>
             <AssetFigure
               label="The Paw AI EHR we designed"
+              unframed
               aspect={3194 / 2538}
               naturalWidth={3194}
               caption="The full EHR from discovery: patient profile and medications down the left, history and alerts across the top, and the assistant holding the main panel."
@@ -187,6 +188,7 @@ export default function ChatVet() {
             </AssetFigure>
             <AssetFigure
               label="The assistant view we kept"
+              unframed
               aspect={3194 / 2538}
               naturalWidth={3194}
               caption="The view built for use during an appointment, pulling past notes, lab results and uploads into the conversation. This is the slice that became the product."
@@ -214,6 +216,7 @@ export default function ChatVet() {
           <>
             <AssetFigure
               label="Three tools, one click from the chat"
+            unframed
               aspect={2880 / 1633}
               naturalWidth={2880}
               caption="Dose calculator, lab interpreter and discharge generator, opened from the chat so nothing has to be re-typed."
@@ -227,6 +230,7 @@ export default function ChatVet() {
             <div className={caseStyles.mediaPair}>
               <AssetFigure
                 label="Medication dose calculator"
+                unframed
                 aspect={2880 / 1622}
                 naturalWidth={2880}
                 caption="Species and weight first (the intake number the calculation depends on), then medication and indication."
@@ -239,6 +243,7 @@ export default function ChatVet() {
               </AssetFigure>
               <AssetFigure
                 label="Lab interpreter: the upload, checked · CASE: RUGER"
+                unframed
                 aspect={4096 / 2368}
                 naturalWidth={4096}
                 caption="It reads the report before it interprets: patient details extracted from the PDF, and the one low-confidence value (weight, the dosing input) flagged for a human to verify first."
@@ -252,6 +257,7 @@ export default function ChatVet() {
             </div>
             <AssetFigure
               label="Lab interpreter: the read · CASE: RUGER"
+              unframed
               aspect={4096 / 2113}
               naturalWidth={4096}
               caption="Six of twenty-four analytes flagged and read as a cluster instead of a list. It also names the one value that would settle the differential as missing from the panel."
@@ -264,6 +270,7 @@ export default function ChatVet() {
             </AssetFigure>
             <AssetFigure
               label="Where the answers come from"
+              unframed
               aspect={2880 / 1542}
               naturalWidth={2880}
               caption="Partnership announcement taken from the chatvet.ai website"
@@ -293,6 +300,7 @@ export default function ChatVet() {
         media={
           <AssetFigure
             label="The VetMed prompt library"
+            unframed
             aspect={2880 / 1780}
             naturalWidth={2880}
             caption="Templates built from the questions vets were already asking, grouped by clinical job and tagged for their reader: clinician or client."
@@ -319,6 +327,7 @@ export default function ChatVet() {
             <div className={caseStyles.mediaPair}>
               <AssetFigure
                 label="Discharge generator, step one"
+                unframed
                 aspect={2880 / 1503}
                 naturalWidth={2880}
                 caption="It reads the consultation back: several medications came up. Which should go home with the client?"
@@ -331,6 +340,7 @@ export default function ChatVet() {
               </AssetFigure>
               <AssetFigure
                 label="Discharge generator, step two"
+                unframed
                 aspect={2880 / 1488}
                 naturalWidth={2880}
                 caption="Patient, condition, medications and the restrictions an owner has to follow, most of it already filled from the chat."
@@ -344,6 +354,7 @@ export default function ChatVet() {
             </div>
             <AssetFigure
               label="The printed handout · CASE: RUGER, END TO END"
+              unframed
               aspect={4096 / 2116}
               naturalWidth={4096}
               caption="The payoff, printed: what we found in plain language, morning-and-evening doses, call-us versus go-to-emergency lists, and the recheck date. Generated from the same case as the labs above, ready before the client reaches the door."
@@ -384,8 +395,14 @@ export default function ChatVet() {
              method note carries the self-reported hedge. */
           <div>
             <StatCards>
-              <StatCard label="Monthly users" value="500" />
-              <StatCard label="Time saved per case" value="15 mins" />
+              <StatCardImg
+                src="/case-studies/chat-vet/cv-stat-users.webp"
+                alt="Stat card: monthly users, 500."
+              />
+              <StatCardImg
+                src="/case-studies/chat-vet/cv-stat-time.webp"
+                alt="Stat card: time saved per case, 15 minutes."
+              />
             </StatCards>
             <p className={styles.statNote}>
               {"// ACTIVE USERS CURRENTLY ON THE PLATFORM, TIME SAVED SELF-REPORTED FROM PILOT USERS."}

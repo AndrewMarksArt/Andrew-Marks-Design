@@ -18,6 +18,7 @@ export function AssetFigure({
   label,
   aspect,
   naturalWidth,
+  unframed = false,
 }: {
   children: ReactNode;
   caption?: string;
@@ -25,6 +26,9 @@ export function AssetFigure({
   label: string;
   aspect: number;
   naturalWidth: number;
+  /** product screenshots render bare (Andrew's rule, 2026-07-29);
+   *  charts and flow diagrams keep the plate */
+  unframed?: boolean;
 }) {
   return (
     <figure className={styles.figure}>
@@ -33,6 +37,7 @@ export function AssetFigure({
         aspect={aspect}
         naturalWidth={naturalWidth}
         caption={caption}
+        unframed={unframed}
       >
         {children}
       </ZoomableFigure>
@@ -88,6 +93,13 @@ export function StatCard({ label, value }: { label: string; value: string }) {
       </span>
     </div>
   );
+}
+
+/** Figma-exported stat card (Andrew's card frames, 2026-07-29) — the
+ *  image form the drawn StatCard was built to be swapped for. The export
+ *  carries its own plate, grid and border. */
+export function StatCardImg({ src, alt }: { src: string; alt: string }) {
+  return <img className={styles.statCardImg} src={src} alt={alt} />;
 }
 
 /** The closer's two-card row (P1 `.statCards`). */
