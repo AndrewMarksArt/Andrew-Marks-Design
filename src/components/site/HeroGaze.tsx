@@ -162,13 +162,14 @@ export default function HeroGaze({ className }: { className?: string }) {
     };
     const onDecoded = () => {
       decoded = true;
-      if (!drawGate) {
-        if (typeof window.requestIdleCallback === "function") {
-          window.requestIdleCallback(warmTexture);
-        } else {
-          setTimeout(warmTexture, 200);
-        }
-      }
+      // 2026-07-29 (film regression, caught by Andrew): NO pre-text
+      // warming while the film gate is closed. The idle-warm assumed the
+      // slow HD decode always resolved during film downtime — the SD
+      // sheet decodes fast enough to land the ~85MB texture upload right
+      // on the mark's spin (beats A-B froze; plus appeared late, unspun).
+      // The upload now rides start() at the film's stationary text beat,
+      // exactly where the 2026-07-16 design put the gated swap. Plain
+      // loads (gate already open) start immediately, as before.
       tryStart();
     };
     atlas
