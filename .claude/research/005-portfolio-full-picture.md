@@ -132,3 +132,38 @@ impossible…").
    were chosen; drop "roughly" from the hero title.
 
 **To 8+:** fixes 1+2 alone cross it per panel math; 3+4 close "strong template" → "designed page."
+
+## ChatVET rescore — 2026-07-29, after Andrew's copy rewrite (Figma 7079:2007)
+
+Six-lens panel, same calibration. **Mean 7.48 (was ~7.3). Range collapsed 6.5–7.7 → 7.4–7.5**
+— the floor rose ~0.9; the ceiling is pinned by self-inflicted, mostly cheap defects.
+
+| Lens | Score | One-line reason |
+|---|---|---|
+| director-skim | 7.5 | Headings rebuild the whole argument; "(dates pending)" placeholder ships in the most-scanned strip; 500 appears in three shapes |
+| design-craft | 7.4 | System holds end to end; four figures mostly dark modal scrim; ENLARGE collides with the capture's Logout; diagram typo |
+| technical-credibility | 7.5 | The medicine survives DVM-level inspection (real IDEXX intervals, USG discriminator, handout closes the loop); corpus-restriction claim has no mechanism/citation UI; stall diagram contradicts a later screenshot |
+| narrative-copy | 7.5 | Five-beat arc from headings alone, airtight hedging; the page's own numbers wobble |
+| differentiation | 7.5 | Scope cut + Ruger through-line + "never instrumented, nothing more" are what's remembered; through-line only legible on a full read |
+| portfolio-fit | 7.5 | Exactly what AI-native screeners want; only hard outcome is a usage count |
+
+**Ranked fixes (owner noted):**
+1. **Kill "(dates pending)"** — Andrew confirms engagement start month (end bounded by June 2026
+   role shift); one-line TIMEFRAME edit. Unanimous 6/6. (Was Tier-0 item 3 on 07-27 roadmap.)
+2. **Reconcile the 500 into one verbatim claim** — Andrew confirms the denominator (verified
+   vets vs registered users); align strip / closer heading ("500 vets") / lede / card note
+   ("ACTIVE USERS" is materially looser). 5/6 judges.
+3. **Re-export the stall diagram clean** (cv-stall-flow2.webp): fix "Minutses" typo, remove
+   stray Figma handles, cite-or-demote the four ledger-refuted stats (003), fix the
+   weight-only-input line the dose-calc screenshot contradicts, house palette. 5/6 judges —
+   removes every outright error on the page.
+4. **Make the grounding claim mechanical or downgrade it honestly** — Andrew supplies how
+   corpus restriction worked (retrieval scope, refusal-on-no-hit) + whether any capture shows
+   citations; rewrite the B3 line to name mechanism + failure mode; bridge Merck/MSD in one
+   clause. The guaranteed interview question.
+5. **First-viewport legibility** — hero H1 restructure, ENLARGE offset, re-crop the four
+   scrim-dominated modal captures tight to their dialogs, hero crop below the top bar.
+
+**To 8+:** fixes 1–2 ≈ 7.6–7.7 alone; 3–4 carry it across. Surface the Ruger case in the
+beat-3/beat-5 ledes (not just figure tags). Structural ceiling: a 9 needs a measured impact
+number that doesn't exist — the retro already owns that honestly.
