@@ -145,15 +145,21 @@ export default function ChatVet() {
           "That last one falls outside the appointment entirely, and it was the largest of the four.",
         ]}
         media={
+          /* Andrew's Figma revision 2026-07-29 (node 7081:2146, rescore fix
+             3): typo and stray handles gone, and a sourcing footnote now
+             separates walkthrough observations from published benchmarks.
+             Self-captioned (title, subtitle, footnote baked in), so no
+             caption prop — which also retires the weight-only-input line
+             the dose-calculator capture contradicted. Original kept as
+             cv-stall-flow.webp. */
           <AssetFigure
             label="Average vet visit flow and where cases stall"
-            aspect={2232 / 783}
-            naturalWidth={2232}
-            caption="Six phases of a visit, with the four stalls hung above the phase each one interrupts. Weight captured at check-in is the only input to the dose calculation downstream."
+            aspect={6384 / 2054}
+            naturalWidth={6384}
           >
             <img
-              src="/case-studies/chat-vet/cv-stall-flow.webp"
-              alt="Average vet visit flow and where cases stall. Six phases run left to right: check-in and intake, exam, diagnosis, treatment plan, client debrief, and a sixth phase after the client leaves. Four stall cards hang above the phases they interrupt: protocol search, 5 minutes in room and 30 plus minutes if questions get deferred, with up to 60 percent not pursued at all; dose calculation, 80 percent of medication errors are miscalculations and this was the number-one question users were asking; client communication, up to 75 percent of what the doctor says is lost immediately, and written instructions lift the correct treatment rate but are time consuming; history re-entered, 10 minutes per patient after the visit against up to 2 hours of desk work per hour of face time. A dashed line runs from check-in to the treatment plan noting that weight captured there is the only input to dose calculation, and that not capturing it causes delays."
+              src="/case-studies/chat-vet/cv-stall-flow2.webp"
+              alt="Average vet visit flow and where cases stall: one appointment, 4 stalls, the biggest after the client leaves. Six phases run left to right: check-in and intake, exam, diagnosis, treatment plan, client debrief, and after the client leaves. Four stall cards hang above the phases they interrupt: protocol search, 5 minutes in room, 30-plus if questions get deferred, and up to 60 percent never pursued; dose calculation, cited in 80 percent of medication errors as miscalculations and the number-one question users asked; client communication, up to 75 percent of what the doctor says lost immediately, with written instructions lifting the correct-treatment rate but costing time; and history re-entered, 10 minutes per patient after the visit, up to 2 hours of desk work per hour of face time. A footnote reads: stalls identified in case walkthroughs, minutes from published benchmarks, veterinary sources for dose error and client recall."
               className={styles.shotImg}
             />
           </AssetFigure>
