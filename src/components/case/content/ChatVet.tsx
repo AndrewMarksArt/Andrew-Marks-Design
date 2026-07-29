@@ -124,7 +124,7 @@ export default function ChatVet() {
                role shifted June 2026 to consulting (less design). The
                closer's role-shift lede carries the story. */
             label: "TIMEFRAME:",
-            value: "Feb 2025 – Jun 2026 · Consulting since",
+            value: "Feb 2025 – Jun 2026 · Now consulting",
           },
           {
             /* Deliberately NOT a link, and the domain is deliberately absent.

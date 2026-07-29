@@ -126,7 +126,11 @@
 
 .statusValue {
   flex: 1;
-  text-align: right;
+  /* 2026-07-29: right-alignment served the old two-row column; with
+     Andrew's single short row it read as a broken mid-animation gap
+     (launch audit). Value now follows the label directly, matching his
+     mock's adjacency. */
+  text-align: left;
 }
 
 /* --- Responsive ----------------------------------------------------------
