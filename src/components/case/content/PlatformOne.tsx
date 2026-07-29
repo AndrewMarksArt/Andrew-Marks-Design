@@ -28,6 +28,16 @@ import TicketTaxonomyChart from "./p1/TicketTaxonomyChart";
  * sample-derived ceiling, the ~1 FTE gets its routing connective) with
  * a method note under the stat cards; vignette gets a setup line.
  *
+ * ANDREW'S COPY REWRITE 2026-07-29 (Figma section 7076:1963, "text
+ * update"): every section's heading + ledes replaced with his wording.
+ * Notable calls of his: $500M / $650B dropped from the hero; the CS
+ * lead's 40–60% triage stat summarized to "close to a full role";
+ * S5 reframed (no "recommended against it"; the security-timing miss
+ * owns the interim-widget outcome); posture section now tells the
+ * developer-disagreement story. The vignette setup lede ("one came
+ * due mid-incident") kept — his rewrite didn't cover it and the
+ * vignette needs its hook.
+ *
  * ⚠ PENDING FROM ANDREW: (1) the one measured number the panel asked
  * for — replay the 60 "answer existed" sampled tickets through the
  * staging assistant and report the real answer rate (turns the
@@ -87,7 +97,7 @@ export default function PlatformOne() {
         eyebrow="U.S. Air Force · Platform One"
         title="Designing an AI assistant projected to cut support tickets by roughly 40%"
         intro={[
-          "Platform One is the Air Force's $500M flagship software factory, supporting more than 60 Air Force and Joint programs valued at $650 billion.",
+          "Platform One is the Air Force's flagship software factory, supporting more than 60 Air Force and Joint programs.",
           "But after a rushed rebrand, users couldn't find the answers they needed on its website. Sometimes they couldn't even find how to ask for help. Emergency fixes piled on top of each other, and while they helped in some ways, in others they made things worse.",
         ]}
         media={
@@ -129,18 +139,11 @@ export default function PlatformOne() {
       <BrandRow />
 
       <CaseSection
-        heading={
-          <>
-            {"The answers existed."}
-            <br />
-            {"Users just couldn't find them."}
-          </>
-        }
+        heading="Every answer users needed was already on the site, buried in the docs."
         lede={[
-          "The documentation, the product information, the answers: all of it was there.",
-          "The rebrand had buried it.",
-          "And when users gave up searching, there was nowhere to turn. The site didn’t even have a Contact Us form.",
-          "Adding one was the first fix, and users needed it. But it crushed the Customer Success team, taking their time away from where it was needed most.",
+          "The rebrand shipped fast. High-level marketing copy replaced much of the detail users relied on, and the answers that survived ended up in the documentation, where most visitors never thought to look.",
+          "Users who gave up searching had nowhere to go, because the site had no Contact Us form.",
+          "Adding one was the first fix, and it was the right call. It also stuck a team built for sales and customer relationships with basic help-desk tickets.",
         ]}
         media={
           /* Figma revision 2026-07-22 (node 6871:3238): Andrew's simplified
@@ -164,9 +167,9 @@ export default function PlatformOne() {
       <CaseSection
         heading={'Our "stop the bleeding" fix worked. It also flooded the wrong team.'}
         lede={[
-          "A new Contact Us CTA gave stuck users a lifeline, and tickets exploded. A Customer Success team built for sales and relationships became full-time human routers: fielding password resets, forwarding emails between product teams, and working a CRM that couldn't talk to Jira.",
+          "The Contact Us form gave stuck users a path, and ticket volume climbed immediately. A Customer Success team built for sales and relationships became full-time routers: password resets, emails forwarded between product teams, and a CRM that could not talk to Jira.",
           "The responses were full of PII, so automated analysis was off the table. I pulled random samples (about 150 responses) and coded them by hand: nearly half were simple help-desk asks or information already on the site, and most of the rest belonged to other teams entirely.",
-          "The Customer Success lead put 40–60% of her day into triaging the flood; her three teammates each gave another 10–20%. Roughly a full role, spent on tickets the team was never meant to own.",
+          "Triage was consuming close to a full role's worth of capacity across the four-person team, on tickets none of them were meant to own.",
           "And not every buried answer was routine. One came due mid-incident.",
         ]}
         media={<SecurityVignette />}
@@ -186,18 +189,12 @@ export default function PlatformOne() {
       </CaseSection>
 
       <CaseSection
-        heading={
-          <>
-            {"Self-service by default."}
-            <br />
-            {"A human path by design."}
-          </>
-        }
+        heading="Designed to be self-service by default, with an easy path to a human when needed."
         lede={[
           "Most of those tickets should never have existed: in the sample audit, nearly half were answers already on the site. The assistant answers at the point of confusion, surfacing sources and suggesting follow-ups.",
           "Why an assistant instead of just fixing the navigation? Deeper IA work was underway, but on a much longer timeline, and earlier band-aid fixes had made things worse. The assistant could ship in months, and it unlocked the budget and infrastructure for the platform's next AI projects.",
           "After two turns without a resolution, a soft CTA offers the help desk or Customer Success, routed by question type. After turn four the CTA becomes a hard one, so no conversation loops.",
-          "The routing burden moved from people to design.",
+          "The routing burden moved from an overworked team to a system.",
         ]}
         media={
           /* Systems claim -> full-width diagram leads; the craft close-up
@@ -225,8 +222,9 @@ export default function PlatformOne() {
       <CaseSection
         heading="Every answer shows where it came from."
         lede={[
-          "The standing rule in every exchange: answers carry their source inline, so a user (or an auditor) can see where a claim came from before acting on it. On a DoD platform, an unsourced answer is a liability.",
-          "And when the assistant can't resolve something, the design never lets it improvise its way out: the human path appears at turn two and takes over by turn four. Every exchange ends by asking whether it actually solved the problem.",
+          "Sources appear inline with the answer, so a user or an auditor can see what a claim rests on before acting on it. On a DoD platform, an unsourced answer is a liability.",
+          "The rule holds when there is nothing to cite. If the assistant has no source for a question, it says so instead of filling the gap, and the handoff path takes over.",
+          "Every exchange closes by asking the user whether the answer solved their problem.",
         ]}
         media={
           /* Figma 2026-07-21: the chats plate carries its own frame —
@@ -250,11 +248,11 @@ export default function PlatformOne() {
       />
 
       <CaseSection
-        heading="One assistant, two postures."
+        heading="The same assistant works two ways, depending on what you need."
         lede={[
-          "General visitors get a lightweight answer widget.",
-          "Developers working in the docs can expand it into a full-screen technical assistant for debugging and deeper questions.",
-          "One system, tuned to two very different jobs.",
+          "General visitors get a lightweight widget on the page they are already reading, with the routing rules above intact.",
+          "Developers working in the documentation can expand it to full screen. Different system prompt, code handling, and no handoff prompts, because a debugging session runs long by design and a CTA to Customer Success at turn four would interrupt work rather than unblock it.",
+          "The widget was my call. Our developer wanted a coding assistant instead, and he was working without visibility into the ticket and routing problem the widget was built to solve. Rather than argue the tradeoff, I went back to the tickets: bug reports, technical questions, and deep support requests were coming in, less often than the general help asks but consistently. Both modes were justified, so I designed both.",
         ]}
         media={
           /* Figma revision 2026-07-21: the pair of stills became Andrew's
@@ -272,10 +270,11 @@ export default function PlatformOne() {
       />
 
       <CaseSection
-        heading={"Designing to ship with one developer."}
+        heading={"One developer meant designing to what he could actually build."}
         lede={[
-          "With a single primary developer, I designed to Vuetify's defaults wherever possible, customizing only where it bought real user value.",
-          "When the team picked a partner's chat widget to launch faster, I recommended against it, documented the UX gaps, and worked with engineering to re-skin it to our brand until the custom experience ships.",
+          "With a single primary developer, I designed to Vuetify's defaults wherever they held and customized only where the default cost users something concrete.",
+          "When the team chose a partner's chat widget to launch sooner, I documented the UX gaps and worked with the developer to re-skin and customize it as much as we could. Not bringing in our security team earlier made it impossible to launch with the custom-built assistant.",
+          "Once we clear the security hurdles, our design and assistant will replace the current widget.",
         ]}
         media={
           /* Figma revision 2026-07-21: the real design-system board, rendered
@@ -302,12 +301,12 @@ export default function PlatformOne() {
       <CaseSection
         heading="Projected impact, and what's left to prove"
         lede={[
-          "The assistant is in staging. The projection: roughly 40% fewer support tickets. That's the share of the hand-coded sample whose answers already lived on the site, the ceiling the assistant is built to claim. The full role of Customer Success capacity comes back two ways: tickets answered before they're filed, and the misrouted rest (over a third of the sample) routed to the right team by design instead of by hand.",
+          "The assistant is in staging. The 40% is the share of the hand-coded sample whose answers already lived on the site. It is a ceiling, and the assistant is built to claim as much of it as it can reach. Customer Success capacity comes back two ways: tickets answered before anyone files them, and the misrouted remainder reaching the right team through routing rather than a person forwarding email.",
           "And the next time a leader needs proof the platform is secure by design, the answer is one question away.",
-          "Launch is phased: behind SSO first while the public site completes its Certificate to Field (DoD security authorization), with the custom front-end replacing the interim widget on the roadmap.",
+          "Launch is phased. The assistant goes behind SSO first while the public site completes its Certificate to Field, the DoD security authorization, and the custom front-end replaces the interim widget on the roadmap.",
           <strong key="retro">
-            If I ran this again, I&rsquo;d bring security into launch planning
-            from day one; the SSO constraint reshaped our rollout late.
+            If I ran this again, I would bring security into launch planning
+            from day one. The SSO constraint reshaped our rollout late.
           </strong>,
         ]}
         media={

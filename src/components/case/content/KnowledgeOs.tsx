@@ -379,7 +379,7 @@ export default function KnowledgeOs() {
           <div>
             <StatCards>
               <StatCardImg
-                src="/case-studies/knowledge-os/kos-stat-sources.webp"
+                src="/case-studies/knowledge-os/kos-stat-sources2.webp"
                 alt="Stat card: sources added and scored, 4,339."
               />
               <StatCardImg
