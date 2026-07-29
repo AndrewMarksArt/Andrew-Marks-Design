@@ -111,8 +111,9 @@
   display: grid;
   align-content: center;
   background: var(--plate);
-  border: 1px solid var(--rule-soft);
-  /* Figma 2026-07-21: the shot fills the frame, no inset */
+  /* 2026-07-29 (Andrew): no border stroke on hero shots — they sit bare,
+     like the in-page screenshots. */
+  border: none;
   padding: 0;
 }
 
