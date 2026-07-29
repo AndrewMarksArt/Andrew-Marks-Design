@@ -82,12 +82,15 @@ export default function KnowledgeOs() {
         media={
           <ZoomableFigure
             label="Today's digest · Jul 27"
-            aspect={3820 / 2050}
-            naturalWidth={3820}
+            aspect={2232 / 1185}
+            naturalWidth={2232}
             unframed
           >
+            {/* digest2 = Andrew's Figma crop (node 7042:2704): trims the
+                capture's own page margins and the ragged half-row at the
+                bottom so the shot sits flush in the hero plate. */}
             <img
-              src="/case-studies/knowledge-os/kos-hero-digest.webp"
+              src="/case-studies/knowledge-os/kos-hero-digest2.webp"
               alt="The Brief page for Monday, July 27: a Today's digest card counting 22 links across Agentic Coding, Business, Design, Game Design and Research, each topic with its link count, top source and score. Below it, four drafts await approval with their own scores. The sidebar lists Brief, Insights, Agents, Pipeline, Inbox, Knowledge, Gallery, Curated, Analytics, Drafts, Optimize and Ask AI."
               className={styles.shotImg}
             />

@@ -400,7 +400,7 @@ export default function ChatVet() {
                 alt="Stat card: monthly users, 500."
               />
               <StatCardImg
-                src="/case-studies/chat-vet/cv-stat-time.webp"
+                src="/case-studies/chat-vet/cv-stat-time2.webp"
                 alt="Stat card: time saved per case, 15 minutes."
               />
             </StatCards>

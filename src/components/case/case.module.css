@@ -219,6 +219,12 @@
   margin: 0 36px;
   background: var(--plate);
   border: 1px solid var(--accent);
+  /* 2026-07-29 (Andrew): the corner dot patches are 242px tall; with the
+     44px padding-block above and below, the plate must be at least 154px
+     or the patches bleed past the wrap into the hero above (KOS's short
+     two-line cells did exactly that). 154 = 242 - 2 * 44, which is also
+     the height the taller ChatVET/P1 strips render at naturally. */
+  min-height: 154px;
 }
 
 /* 8px pins centered on the plate corners (Figma: corner - 4px) */
