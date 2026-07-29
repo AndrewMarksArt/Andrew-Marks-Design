@@ -42,7 +42,7 @@ export default function CaseStudyStatus() {
           </p>
           <p className={styles.statusRow}>
             <span className={styles.statusLabel}>{"STATUS: "}</span>
-            <span className={styles.statusValue}>...3 High level complete</span>
+            <span className={styles.statusValue}>...3 high level</span>
           </p>
         </div>
       </div>

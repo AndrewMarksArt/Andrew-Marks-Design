@@ -101,18 +101,17 @@ export default function Footer() {
         <GlobeMark className={styles.globe} />
         <p className={styles.legal}>
           {/* Judge-panel pass (research 005): the site pitched and never
-              asked — the footer now carries the contact + availability
-              lines in the terminal voice. */}
+              asked — the footer carries the contact + availability lines in
+              the terminal voice. 2026-07-29 (Andrew): USER +
+              ALL_RIGHTS_RESERVED_INIT retired; [C] 2026 leads the block. */}
+          {"// [C] 2026"}
+          <br />
           {"// CONTACT: "}
           <a href="mailto:andrew.colin.marks@gmail.com">
             {"ANDREW.COLIN.MARKS@GMAIL.COM"}
           </a>
           <br />
           {"// OPEN TO SENIOR AI-NATIVE PRODUCT DESIGN ROLES"}
-          <br />
-          {/* 2026-07-29 (Andrew): USER + ALL_RIGHTS_RESERVED_INIT retired —
-              the contact and open-to lines above carry the block now. */}
-          {"// [C] 2026"}
         </p>
       </div>
     </footer>
