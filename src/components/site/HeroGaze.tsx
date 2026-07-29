@@ -22,12 +22,13 @@ import { useEffect, useRef } from "react";
  * Tracking constants are verbatim from the live page.
  */
 
-const ATLAS_SRC = "/hero/robot-atlas-live2-hd.webp";
+const ATLAS_HD_SRC = "/hero/robot-atlas-live2-hd.webp";
+const ATLAS_SD_SRC = "/hero/robot-atlas-live2.webp";
 const COLS = 9;
 const ROWS = 9;
 const TOTAL = COLS * ROWS;
-const FRAME_W = 1024;
-const FRAME_H = 1024;
+const FRAME_HD = 1024;
+const FRAME_SD = 512;
 
 export default function HeroGaze({ className }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -42,11 +43,20 @@ export default function HeroGaze({ className }: { className?: string }) {
     // the page is laid out (hidden, not display:none) under the boot
     // film, so the rect is measurable here.
     const dpr = window.devicePixelRatio || 1;
-    const cssSize = canvas.getBoundingClientRect().width || FRAME_W;
-    const buf = Math.min(FRAME_W, Math.max(64, Math.round(cssSize * dpr)));
+    const cssSize = canvas.getBoundingClientRect().width || FRAME_HD;
+    const buf = Math.min(FRAME_HD, Math.max(64, Math.round(cssSize * dpr)));
     canvas.width = buf;
     canvas.height = buf;
     ctx.imageSmoothingQuality = "high";
+
+    /* Perf pass 2026-07-29 (Andrew: sluggish page, freeze on tab return).
+       The HD sheet is a 9216px image — roughly a 340MB decoded texture —
+       and tab switches evict it from the GPU, so the next drawImage
+       re-uploaded the whole thing on the main thread's watch. Buffers at
+       or below 512px are pixel-identical from the original 512-cell
+       sheet at a quarter of the texture, so HD is reserved for buffers
+       that can actually resolve it. */
+    const frame = buf > FRAME_SD ? FRAME_HD : FRAME_SD;
 
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -64,16 +74,49 @@ export default function HeroGaze({ className }: { className?: string }) {
       ctx.clearRect(0, 0, buf, buf);
       ctx.drawImage(
         atlas,
-        col * FRAME_W + 1, row * FRAME_H + 1, FRAME_W - 2, FRAME_H - 2,
+        col * frame + 1, row * frame + 1, frame - 2, frame - 2,
         0, 0, buf, buf,
       );
     };
 
     const atlas = new Image();
-    atlas.src = ATLAS_SRC;
+    atlas.src = frame === FRAME_HD ? ATLAS_HD_SRC : ATLAS_SD_SRC;
 
     let t0 = 0;
     let started = false;
+
+    /* Perf pass 2026-07-29: the loop used to run for the life of the
+       page — every rAF, hero on-screen or not, tab visible or not, and
+       the idle drift forced a giant-atlas drawImage every second or so.
+       It now runs only while the canvas is (near) the viewport in a
+       visible tab; everything below the hero scrolls free of it. */
+    let running = false;
+    let inView = true;
+    let pageShown = typeof document !== "undefined" ? !document.hidden : true;
+
+    function tick(now: number) {
+      if (!alive || !running) return;
+      smooth += (mouse - smooth) * 0.35;
+      const drift = Math.sin((now - t0) / 3000) * 0.015;
+      const val = Math.max(0, Math.min(1, smooth + drift));
+      const idx = Math.round(val * (TOTAL - 1));
+      if (idx !== lastIdx) {
+        lastIdx = idx;
+        draw(idx);
+      }
+      animationFrameId = requestAnimationFrame(tick);
+    }
+    const resumeLoop = () => {
+      if (running || !started || reduced || !inView || !pageShown || !alive)
+        return;
+      running = true;
+      animationFrameId = requestAnimationFrame(tick);
+    };
+    const pauseLoop = () => {
+      running = false;
+      cancelAnimationFrame(animationFrameId);
+    };
+
     const start = () => {
       if (started || !alive) return;
       started = true;
@@ -86,20 +129,7 @@ export default function HeroGaze({ className }: { className?: string }) {
       canvas.style.background = "none";
       if (reduced) return;
       t0 = performance.now();
-
-      function tick(now: number) {
-        if (!alive) return;
-        smooth += (mouse - smooth) * 0.35;
-        const drift = Math.sin((now - t0) / 3000) * 0.015;
-        const val = Math.max(0, Math.min(1, smooth + drift));
-        const idx = Math.round(val * (TOTAL - 1));
-        if (idx !== lastIdx) {
-          lastIdx = idx;
-          draw(idx);
-        }
-        animationFrameId = requestAnimationFrame(tick);
-      }
-      animationFrameId = requestAnimationFrame(tick);
+      resumeLoop();
     };
     // decode() rasterizes the 9216px sheet off the main thread, but the
     // ~340MB GPU texture upload happens at the FIRST drawImage — at
@@ -125,7 +155,7 @@ export default function HeroGaze({ className }: { className?: string }) {
       tryStart();
     };
     const warmTexture = () => {
-      if (started || !alive) return;
+      if (!alive) return;
       const oc = document.createElement("canvas");
       oc.width = oc.height = 1;
       oc.getContext("2d")?.drawImage(atlas, 0, 0, 1, 1, 0, 0, 1, 1);
@@ -148,6 +178,36 @@ export default function HeroGaze({ className }: { className?: string }) {
         atlas.onload = onDecoded;
         if (atlas.complete) onDecoded();
       });
+
+    // Perf pass 2026-07-29: pause off-screen and in hidden tabs; on
+    // return from another tab, re-warm the (likely evicted) texture at
+    // idle so the first visible draw doesn't stall the main thread.
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        inView = entry.isIntersecting;
+        if (inView) resumeLoop();
+        else pauseLoop();
+      },
+      { rootMargin: "160px" },
+    );
+    io.observe(canvas);
+    const onVisibility = () => {
+      pageShown = !document.hidden;
+      if (!pageShown) {
+        pauseLoop();
+        return;
+      }
+      const rewarm = () => {
+        warmTexture();
+        resumeLoop();
+      };
+      if (typeof window.requestIdleCallback === "function") {
+        window.requestIdleCallback(rewarm, { timeout: 300 });
+      } else {
+        setTimeout(rewarm, 50);
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
 
     const handleMouseMove = (e: MouseEvent) => {
       mouse = e.clientX / window.innerWidth;
@@ -198,8 +258,11 @@ export default function HeroGaze({ className }: { className?: string }) {
 
     return () => {
       alive = false;
+      running = false;
       clearTimeout(followTimer);
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      io.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
       window.removeEventListener("am:film-text", onFilmText);
       window.removeEventListener("am:film-skip", onFilmSkip);
       window.removeEventListener("mousemove", handleMouseMove);

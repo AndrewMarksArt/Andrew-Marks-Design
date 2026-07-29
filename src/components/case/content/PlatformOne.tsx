@@ -9,6 +9,7 @@ import BrandRow from "../../site/BrandRow";
 import ZoomableFigure from "../FigureLightbox";
 import styles from "../case.module.css";
 import local from "./PlatformOne.module.css";
+import P1Gate from "./P1Gate";
 import TicketTaxonomyChart from "./p1/TicketTaxonomyChart";
 
 /**
@@ -154,6 +155,11 @@ export default function PlatformOne() {
         ]}
       />
 
+      {/* Andrew, 2026-07-29 (locked-state example, Figma 7086:2148): hero
+          and stats strip stay readable; everything below is behind the
+          password gate (soft screen-door, not security). UpNext stays
+          outside so a locked-out visitor can continue the portfolio. */}
+      <P1Gate>
       <BrandRow />
 
       <CaseSection
@@ -368,6 +374,8 @@ export default function PlatformOne() {
           />
         </ZoomableFigure>
       </section>
+
+      </P1Gate>
 
       <UpNext
         title="ChatVET: an AI Copilot for Veterinary Medicine"

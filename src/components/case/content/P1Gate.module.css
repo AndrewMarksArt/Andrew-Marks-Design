@@ -1,0 +1,155 @@
+/* ==========================================================================
+   Platform One password gate (Andrew's spec + Figma 7086:3494 / 7086:2148,
+   2026-07-29). The locked region blurs behind a veil; the password plate
+   rides fixed in the viewport center while any of the region is on screen.
+   Unlock fades plate + veil on the site's Apple ease.
+   ========================================================================== */
+
+.gate {
+  position: relative;
+}
+
+/* The study underneath: present for layout, inert to people and tools,
+   and blurred directly — a backdrop-filter veil looked cheaper but
+   silently fails to render in some compositors (caught in QA: the copy
+   read straight through it). The content filter degrades nowhere, and
+   it transitions out on the same Apple ease at unlock. */
+.lockedContent {
+  pointer-events: none;
+  user-select: none;
+  filter: blur(18px) saturate(0.92);
+  transition: filter 640ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+/* The veil now carries only the cream wash over the blur (and its fade). */
+.veil {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: rgba(247, 245, 240, 0.4);
+  transition: opacity 640ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+.plateWrap {
+  position: fixed;
+  inset: 0;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  pointer-events: none;
+  transition: opacity 640ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+/* The plate (Andrew's password window, Figma 7086:3494): a dark 40px
+   tile grid with hairline seams, scattered orange hatch tiles, one
+   orange mono prompt, and a white pill input. Enter submits. */
+.plate {
+  pointer-events: auto;
+  position: relative;
+  overflow: hidden;
+  width: min(92vw, 640px);
+  margin: 0;
+  padding: 56px clamp(24px, 6vw, 64px) 60px;
+  background-color: #1e1e1e;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 40px 40px;
+  border: 1px solid #373737;
+  box-shadow: 0 16px 56px rgba(0, 0, 0, 0.35);
+}
+
+/* Orange hatch tiles on the grid (the design's masked 45° line groups) */
+.hatch {
+  position: absolute;
+  width: 39px;
+  height: 39px;
+  background: repeating-linear-gradient(
+    45deg,
+    #f67e3d 0,
+    #f67e3d 2px,
+    transparent 2px,
+    transparent 9px
+  );
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.hatchTl {
+  top: 1px;
+  left: 81px;
+}
+
+.hatchTr {
+  top: 41px;
+  right: 41px;
+}
+
+.hatchBr {
+  bottom: 1px;
+  right: 121px;
+}
+
+.platePrompt {
+  display: block;
+  margin: 0 0 10px;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+}
+
+.plateInput {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 40px;
+  padding: 0 18px;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 14px;
+  color: #1e1e1e;
+  background: #ffffff;
+  border: 1px solid #ffffff;
+  border-radius: 999px;
+  outline: none;
+}
+
+.plateInput:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.plateInputError {
+  border-color: var(--accent-deep);
+  box-shadow: 0 0 0 1px var(--accent-deep);
+}
+
+.plateError {
+  margin: 10px 0 0;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11.5px;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: #f67e3d;
+}
+
+/* --- unlock: plate and blur leave on the Apple ease ---------------------- */
+
+.leaving .lockedContent {
+  filter: blur(0) saturate(1);
+}
+
+.leaving .veil {
+  opacity: 0;
+}
+
+.leaving .plateWrap {
+  opacity: 0;
+}
+
+.leaving .plate {
+  transform: translateY(6px) scale(0.985);
+  transition: transform 640ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
