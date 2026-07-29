@@ -27,8 +27,8 @@ import styles from "./P1Gate.module.css";
 
 const PASSWORD = "P1_P@ss";
 const STORAGE_KEY = "am-p1-unlocked";
-/** fade duration — matches the site's Apple-ease exits */
-const LEAVE_MS = 640;
+/** unlock fade duration — the gentler pass Andrew asked for (2026-07-29) */
+const LEAVE_MS = 820;
 
 export default function P1Gate({ children }: { children: ReactNode }) {
   const [unlocked, setUnlocked] = useState(false);
@@ -109,12 +109,18 @@ export default function P1Gate({ children }: { children: ReactNode }) {
       </div>
       <div className={styles.veil} aria-hidden="true" />
 
-      {dialogOn && (
-        <div
-          className={styles.plateWrap}
-          role="dialog"
-          aria-label="This case study is password protected"
-        >
+      {/* Always mounted while locked so the plate can ease in and out
+          (visibility gates focusability when hidden). */}
+      <div
+        className={
+          dialogOn && !leaving
+            ? `${styles.plateWrap} ${styles.plateWrapOn}`
+            : styles.plateWrap
+        }
+        role="dialog"
+        aria-label="This case study is password protected"
+        aria-hidden={!dialogOn || undefined}
+      >
           {/* Andrew's password window (Figma 7086:3494): dark 40px tile
               grid, orange hatch tiles, one orange mono prompt, a white
               pill input — no button, Enter submits (single-input forms
@@ -147,8 +153,7 @@ export default function P1Gate({ children }: { children: ReactNode }) {
               </p>
             )}
           </form>
-        </div>
-      )}
+      </div>
     </div>
   );
 }
