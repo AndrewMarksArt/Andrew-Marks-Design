@@ -58,6 +58,10 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geist.variable} ${geistMono.variable}`}
+      // globals.css smooth-scrolls anchor jumps; this attribute tells the
+      // App Router to scroll route changes INSTANTLY instead of gliding
+      // (the case studies were visibly scrolling to the top on load).
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
       {/* TODO(Andrew): Adobe Fonts kit for Neue Haas Grotesk Display Pro
