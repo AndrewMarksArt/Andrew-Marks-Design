@@ -212,6 +212,23 @@ export default function KnowledgeOs() {
                 className={styles.shotImg}
               />
             </AssetFigure>
+            {/* Rescore pass 2026-07-29 (panel fix 4): moved up from the chat
+                section — the research panel is this section's argument (the
+                one sanctioned egress), and the move breaks the chat section's
+                four-figure stack. */}
+            <AssetFigure
+              label="The shelf-filler, one click away"
+              unframed
+              aspect={3815 / 2037}
+              naturalWidth={3815}
+              caption="When the corpus can't cover a question, the same chat fixes it: the research panel suggests topics from the conversation, runs capped searches, and reports back into the thread."
+            >
+              <img
+                src="/case-studies/knowledge-os/kos-research-panel.webp"
+                alt="The Research Topics panel open over a chat: a sources toggle set to diverse, a Suggest-from-conversation button, five suggested topics about graph engineering each with its own Research button, and a Research-all-5 action, above the composer and the answers-are-generated-from-your-saved-links footer."
+                className={styles.shotImg}
+              />
+            </AssetFigure>
           </>
         }
       />
@@ -283,29 +300,20 @@ export default function KnowledgeOs() {
                 loading="lazy"
               />
             </AssetFigure>
-            <AssetFigure
-              label="The shelf-filler, one click away"
-              unframed
-              aspect={3815 / 2037}
-              naturalWidth={3815}
-              caption="When the corpus can't cover a question, the same chat fixes it: the research panel suggests topics from the conversation, runs capped searches, and reports back into the thread."
-            >
-              <img
-                src="/case-studies/knowledge-os/kos-research-panel.webp"
-                alt="The Research Topics panel open over a chat: a sources toggle set to diverse, a Suggest-from-conversation button, five suggested topics about graph engineering each with its own Research button, and a Research-all-5 action, above the composer and the answers-are-generated-from-your-saved-links footer."
-                className={styles.shotImg}
-              />
-            </AssetFigure>
+            {/* Rescore pass 2026-07-29 (panel fix 4): tight crop of the same
+                capture (kos-branch-converge-crop, original kept) — the gap
+                admission and the converge bar, legible at scan scale. The
+                research panel moved up to the gap-analysis section. */}
             <AssetFigure
               label="A conversation, branched · live"
               unframed
-              aspect={3802 / 2042}
-              naturalWidth={3802}
+              aspect={1986 / 1625}
+              naturalWidth={1986}
               caption="Nothing is overwritten, and when two branches converge on the same three sources, the system offers one grounded synthesis. The answer above does the honest thing too: it names what the saved links don't cover."
             >
               <img
-                src="/case-studies/knowledge-os/kos-branch-converge.webp"
-                alt="A real chat where the answer opens with One Critical Gap ('your saved links do not cover how to handle sellers who do not accept USDC or crypto payments'), above a Resources list and Referenced Resources cards with match percentages. At the bottom, a bar reads: two branches converge on 3 shared sources, with a Synthesize button. The outline rail on the right shows Bookmarks and section labels."
+                src="/case-studies/knowledge-os/kos-branch-converge-crop.webp"
+                alt="A real answer opening with One Critical Gap ('your saved links do not cover how to handle sellers who do not accept USDC or crypto payments'), above a Resources list and six Referenced Resources cards with match percentages. At the bottom, a bar reads: two branches converge on 3 shared sources, with a Synthesize button."
                 className={styles.shotImg}
               />
             </AssetFigure>
@@ -341,20 +349,22 @@ export default function KnowledgeOs() {
         heading="Two failures in June, both caught by measurement rather than by noticing."
         lede={[
           "An audit caught a schema change that had silently broken chat retrieval. For a stretch of time, every question drew zero context from the corpus. The grounding rule is why nobody got a wrong answer: with no sources to cite, the system said the corpus did not cover the question instead of improvising.",
-          "The same month, measurement caught the scorer burying good design work. A study I would rate a 9 sat at 0.30, and only 5% of design links ever reached HIGH against a 20% target. The fix started with an eval harness rather than a prompt edit. A 50-link gold set, then a rubric rewrite, then re-measurement. Design links now clear 40%, and the floor moved up with the ceiling.",
+          "The same month, measurement caught the scorer burying good design work. A study I would rate a 9 sat at 0.30 on the 0-to-1 value scale, and only 5% of design links ever reached HIGH against a 20% target. The fix started with an eval harness rather than a prompt edit. A 50-link gold set, then a rubric rewrite, then re-measurement. Design links now clear 40%, and the floor moved up with the ceiling.",
           "Both failures ran for weeks without being visible in normal use. The instrumentation is what surfaced them.",
         ]}
         media={
-          <div className={styles.narrowFigure}>
-            <AssetFigure
-              label="Measure first, then fix"
-              aspect={640 / 300}
-              naturalWidth={640}
-              caption="Recall of high-worth design work, before and after the rubric rewrite, measured on a gold set built before the fix."
-            >
-              <ScoringRecal />
-            </AssetFigure>
-          </div>
+          /* Rescore pass 2026-07-29 (panel fix 3): the study's most senior
+             artifact leaves the narrow slot for full width, and the caption
+             bridges the figure's gold-set recall to the copy's HIGH-share so
+             both numbers read as one fix measured two ways. */
+          <AssetFigure
+            label="Measure first, then fix"
+            aspect={640 / 300}
+            naturalWidth={640}
+            caption="Recall of high-worth design work on the 50-link gold set, before and after the rubric rewrite: about 8% to about 63%. The 5% to 40% in the copy is the share of all design links reaching HIGH, the same fix measured two ways."
+          >
+            <ScoringRecal />
+          </AssetFigure>
         }
       />
 
