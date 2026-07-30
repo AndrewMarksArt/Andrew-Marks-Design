@@ -172,6 +172,15 @@ export default function P1LockedGate() {
               {"// ACCESS_DENIED: CHECK THE PASSWORD AND TRY AGAIN"}
             </p>
           )}
+          {/* Enter submits, but a pasted-with-the-mouse password needs a
+              visible way in too (Andrew, 2026-07-31). */}
+          <button
+            type="submit"
+            className={styles.plateSubmit}
+            disabled={pending || leaving}
+          >
+            {pending || leaving ? "CHECKING..." : "UNLOCK"}
+          </button>
           <p className={styles.plateRequest}>
             {"Don't have the password? "}
             <a

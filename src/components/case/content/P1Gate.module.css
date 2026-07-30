@@ -216,6 +216,40 @@
   height: auto;
 }
 
+/* Submit button (Andrew, 2026-07-31): Enter still works, but the mouse
+   path gets a visible way in. Input radius, orange slab, mono caps. */
+.plateSubmit {
+  display: block;
+  margin: 12px 0 0;
+  margin-left: auto;
+  height: 40px;
+  padding: 0 32px;
+  border: none;
+  border-radius: 10px;
+  background: #f67e3d;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #1e1e1e;
+  cursor: pointer;
+  transition: background-color 160ms ease;
+}
+
+.plateSubmit:hover:not(:disabled) {
+  background: var(--accent);
+}
+
+.plateSubmit:focus-visible {
+  outline: 1px solid var(--cream, #f7f5f0);
+  outline-offset: 2px;
+}
+
+.plateSubmit:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
 /* Request path under the input: the wall gets a door handle. */
 .plateRequest {
   margin: 18px 0 0;
