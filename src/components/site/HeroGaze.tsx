@@ -158,10 +158,13 @@ export default function HeroGaze({ className }: { className?: string }) {
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    // 2026-07-29 (Andrew): no cursor on touch devices — the robot looks
-    // around on its own instead. Two beating sines give a natural,
-    // non-repeating-feeling sweep through the same atlas frames.
-    const autonomous = window.matchMedia("(hover: none)").matches;
+    // 2026-07-30 (Andrew): the autonomous looking-around gaze (2026-07-29)
+    // was choppy on real phones. Touch devices now show the static resting
+    // pose instead — Hero.module.css swaps the canvas background to
+    // /hero/robot-static.webp at (hover: none), pixel-matched to the
+    // inline placeholder beneath it — and skip the atlas, the worker and
+    // the rAF loop entirely: 42KB instead of a 1.6MB sheet.
+    if (window.matchMedia("(hover: none)").matches) return;
 
     let mouse = 0.5;
     let smooth = 0.5;
@@ -181,10 +184,11 @@ export default function HeroGaze({ className }: { className?: string }) {
     let drawnTier = 0;
     let sliceFailures = 0;
     // Byte-budgeted LRU (~128MB ceiling): all 81 frames fit at buf<=645
-    // (mobile/autonomous — cheaper than the old resident SD sheet, zero
-    // churn on the beating-sine sweep); 32 entries at buf=1024. Unlike
-    // the old monolith, ImageBitmaps are page-owned and NOT browser-
-    // evictable, so the cap is load-bearing, not polish.
+    // (small windows — cheaper than the old resident SD sheet); 32
+    // entries at buf=1024. Unlike the old monolith, ImageBitmaps are
+    // page-owned and NOT browser-evictable, so the cap is load-bearing,
+    // not polish. (Touch devices never reach this pipeline — they show
+    // the static pose, see the hover:none return above.)
     const MAX_BITMAPS = Math.max(
       8,
       Math.min(TOTAL, Math.floor((128 << 20) / (buf * buf * 4))),
@@ -282,9 +286,6 @@ export default function HeroGaze({ className }: { className?: string }) {
 
     function tick(now: number) {
       if (!alive || !running) return;
-      if (autonomous) {
-        mouse = 0.5 + 0.4 * Math.sin(now / 2300) * Math.sin(now / 6100 + 1.2);
-      }
       smooth += (mouse - smooth) * 0.35;
       const drift = Math.sin((now - t0) / 3000) * 0.015;
       const val = Math.max(0, Math.min(1, smooth + drift));
@@ -590,7 +591,6 @@ export default function HeroGaze({ className }: { className?: string }) {
     const HD_AFTER_FILM_SKIP_MS = 1200;
     let followTimer: ReturnType<typeof setTimeout> | undefined;
     const startFollowing = () => {
-      if (autonomous) return; // touch: the tick drives the gaze itself
       window.addEventListener("mousemove", handleMouseMove, { passive: true });
       window.addEventListener("touchmove", handleTouchMove, { passive: true });
     };

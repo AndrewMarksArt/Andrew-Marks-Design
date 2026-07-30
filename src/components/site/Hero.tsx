@@ -76,6 +76,41 @@ function PlusLattice() {
   );
 }
 
+/** Phones (≤639, see Hero.module.css): the same 99-mark cluster in a
+ *  SQUARE viewBox centered on it. The cluster's bounding box is ~792x793
+ *  by construction (11 rows x 9 marks on the rhombic steps), so a square
+ *  crop shows the whole pattern undistorted — the height-fitted desktop
+ *  viewBox read as squished-from-the-sides on phones (Andrew,
+ *  2026-07-30). Own defs id: sprite refs into a display:none svg are
+ *  unreliable in older engines. */
+function PlusLatticeMobile() {
+  return (
+    <svg
+      className={styles.latticeMobile}
+      viewBox="803 59 823 823"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <defs>
+        <path
+          id="hero-x-mark-m"
+          d="M-13.1765 0H13.1765M0 -13.1765V13.1765"
+          stroke="var(--accent-deep)"
+          strokeWidth="2"
+          strokeOpacity="0.83"
+        />
+      </defs>
+      {latticePoints().map((p) => (
+        <use
+          key={p.key}
+          href="#hero-x-mark-m"
+          transform={`translate(${p.x} ${p.y}) rotate(-45.67)`}
+        />
+      ))}
+    </svg>
+  );
+}
+
 export default function Hero() {
   // 2026-07-29: the HD-atlas preload is gone. HeroGaze manages its own
   // loading — plain loads fetch their real tier immediately; film loads
@@ -96,6 +131,7 @@ export default function Hero() {
           the text ladder has finished (gated inside HeroGaze). */}
       <div className={styles.band} aria-hidden="true">
         <PlusLattice />
+        <PlusLatticeMobile />
         <HeroGaze className={styles.robot} />
       </div>
 
