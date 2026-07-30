@@ -129,6 +129,11 @@ export default function P1Gate({ children }: { children: ReactNode }) {
             <span className={`${styles.hatch} ${styles.hatchTl}`} aria-hidden="true" />
             <span className={`${styles.hatch} ${styles.hatchTr}`} aria-hidden="true" />
             <span className={`${styles.hatch} ${styles.hatchBr}`} aria-hidden="true" />
+            {/* Reviewer catch (2026-07-31): an unexplained wall reads as
+                a dead end — say WHY it's gated and how to get in. */}
+            <p className={styles.plateNote}>
+              {"// THIS STUDY DETAILS WORK ON AN ACTIVE DoW PLATFORM · FULL VERSION SHARED ON REQUEST"}
+            </p>
             <label className={styles.platePrompt} htmlFor="p1-gate-password">
               Enter Password to see full case study:
             </label>
@@ -149,9 +154,18 @@ export default function P1Gate({ children }: { children: ReactNode }) {
             />
             {error && (
               <p id="p1-gate-error" className={styles.plateError}>
-                {"// ACCESS_DENIED — CHECK THE PASSWORD AND TRY AGAIN"}
+                {"// ACCESS_DENIED: CHECK THE PASSWORD AND TRY AGAIN"}
               </p>
             )}
+            <p className={styles.plateRequest}>
+              {"Don't have the password? "}
+              <a
+                className={styles.plateRequestLink}
+                href="mailto:andrew.colin.marks@gmail.com?subject=Platform%20One%20case%20study%20access"
+              >
+                Request access
+              </a>
+            </p>
           </form>
       </div>
     </div>

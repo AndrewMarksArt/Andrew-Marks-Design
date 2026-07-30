@@ -114,6 +114,21 @@
   right: 121px;
 }
 
+/* Why-line above the prompt (reviewer catch 2026-07-31): the gate names
+   its reason instead of reading as a dead end. Secondary voice — muted
+   mono caps over the dark plate, the prompt keeps the orange. */
+.plateNote {
+  margin: 0 0 18px;
+  /* keep the first line clear of the top-right hatch tile */
+  padding-right: 72px;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11.5px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.55;
+  color: rgba(247, 245, 240, 0.62);
+}
+
 .platePrompt {
   display: block;
   margin: 0 0 10px;
@@ -160,6 +175,26 @@
   font-weight: 300;
   letter-spacing: -0.02em;
   color: #f67e3d;
+}
+
+/* Request path under the input: the wall gets a door handle. */
+.plateRequest {
+  margin: 18px 0 0;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: rgba(247, 245, 240, 0.62);
+}
+
+.plateRequestLink {
+  color: #f67e3d;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.plateRequestLink:hover {
+  color: var(--accent);
 }
 
 /* --- unlock: plate and blur leave together, gently, on the Apple ease ---- */
