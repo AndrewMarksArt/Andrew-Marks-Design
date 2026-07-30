@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import Link from "next/link";
 import { PlusMark } from "./motifs";
+import MobileNav from "./MobileNav";
 import styles from "./MetaBar.module.css";
 
 /**
@@ -85,6 +86,9 @@ export function MetaBar({ current = "home" }: { current?: MetaBarCurrent }) {
             </Fragment>
           ))}
         </p>
+        {/* Phone nav (Andrew, 2026-07-29): the .navLine hides below 640px
+            and this hamburger + right drawer carries the links instead. */}
+        <MobileNav current={current} links={CASE_LINKS} />
       </nav>
       {/* y=56 rule, full-bleed, pinned by plus marks centered on the
           plate-edge verticals (root marks at (44,44)/(1652,44)) */}

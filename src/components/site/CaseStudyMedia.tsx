@@ -2,12 +2,14 @@
 
 import {
   useCallback,
+  useRef,
   useState,
   type CSSProperties,
   type MouseEvent,
 } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import styles from "./CaseStudies.module.css";
 
 /**
@@ -61,19 +63,32 @@ export default function CaseStudyMedia({
   beam?: { hueEnd: string; glowEnd: string; maxO?: number; bright?: number };
 }) {
   const [peeked, setPeeked] = useState(false);
+  const router = useRouter();
+  const navTimer = useRef<number | null>(null);
 
-  // Touch devices get Andrew's two-beat spec: first tap plays the peek,
-  // second tap navigates. Pointer devices navigate on click (hover already
-  // played the animation).
+  // Touch spec revised (Andrew, 2026-07-29): one tap. The peek plays,
+  // then the case study opens on its own — no second tap required. An
+  // impatient second tap clears the timer and lets the Link navigate
+  // immediately. Pointer devices navigate on click (hover already played
+  // the animation).
   const handleClick = useCallback(
     (e: MouseEvent<HTMLAnchorElement>) => {
       const touchOnly = window.matchMedia("(hover: none)").matches;
-      if (touchOnly && !peeked) {
-        e.preventDefault();
-        setPeeked(true);
+      if (!touchOnly) return;
+      if (peeked) {
+        if (navTimer.current !== null) {
+          window.clearTimeout(navTimer.current);
+          navTimer.current = null;
+        }
+        return;
       }
+      e.preventDefault();
+      setPeeked(true);
+      navTimer.current = window.setTimeout(() => {
+        router.push(href);
+      }, 850);
     },
-    [peeked]
+    [peeked, href, router]
   );
 
   return (

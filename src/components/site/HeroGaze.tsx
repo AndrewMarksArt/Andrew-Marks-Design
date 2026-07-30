@@ -61,6 +61,10 @@ export default function HeroGaze({ className }: { className?: string }) {
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
+    // 2026-07-29 (Andrew): no cursor on touch devices — the robot looks
+    // around on its own instead. Two beating sines give a natural,
+    // non-repeating-feeling sweep through the same atlas frames.
+    const autonomous = window.matchMedia("(hover: none)").matches;
 
     let mouse = 0.5;
     let smooth = 0.5;
@@ -96,6 +100,9 @@ export default function HeroGaze({ className }: { className?: string }) {
 
     function tick(now: number) {
       if (!alive || !running) return;
+      if (autonomous) {
+        mouse = 0.5 + 0.4 * Math.sin(now / 2300) * Math.sin(now / 6100 + 1.2);
+      }
       smooth += (mouse - smooth) * 0.35;
       const drift = Math.sin((now - t0) / 3000) * 0.015;
       const val = Math.max(0, Math.min(1, smooth + drift));
@@ -229,6 +236,7 @@ export default function HeroGaze({ className }: { className?: string }) {
     const FOLLOW_AFTER_FILM_TEXT_MS = 1400;
     let followTimer: ReturnType<typeof setTimeout> | undefined;
     const startFollowing = () => {
+      if (autonomous) return; // touch: the tick drives the gaze itself
       window.addEventListener("mousemove", handleMouseMove, { passive: true });
       window.addEventListener("touchmove", handleTouchMove, { passive: true });
     };

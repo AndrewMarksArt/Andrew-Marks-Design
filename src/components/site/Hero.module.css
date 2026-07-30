@@ -255,14 +255,32 @@
 
   .wordDesigner {
     margin-top: 16px;
+    /* 2026-07-29 (Andrew): both lockups hit the container width on phones,
+       which rendered the longer UX & PRODUCT with SMALLER letters than
+       DESIGNER. Locking DESIGNER to the lockups' natural width ratio
+       (530.221 / 734.152) keeps the cap heights identical at any width. */
+    width: 72.22%;
   }
 
   .tagline {
     margin-top: 24px;
   }
 
+  /* 2026-07-29 (Andrew): the robot was small and off to the side on
+     phones. The band grows taller (mask off — the notched silhouette is
+     invisible detail at this size and would clip the larger portrait)
+     and the robot centers at 70% width. */
   .band {
     margin-top: 32px;
+    aspect-ratio: 1592 / 1200;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .robot {
+    left: 50%;
+    width: 70%;
+    transform: translateX(-50%);
   }
 }
 

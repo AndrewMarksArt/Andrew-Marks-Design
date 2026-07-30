@@ -86,9 +86,24 @@
     display: none; /* would overhang the 12px gutters (h-scroll) */
   }
 
+  /* 2026-07-29 (Andrew): the band wrapped to two oversized lines on
+     phones — everything shrinks instead so swatches + mark share one. */
   .band {
-    flex-wrap: wrap; /* swatches + mark wrap rather than squeeze */
-    row-gap: 16px;
+    flex-wrap: nowrap;
+    gap: 16px;
+  }
+
+  .swatches {
+    gap: 6px;
+  }
+
+  .swatch {
+    width: 22px;
+    height: 22px;
+  }
+
+  .mark {
+    max-width: 44%;
   }
 }
 
