@@ -226,14 +226,16 @@
    unfocusable via delayed visibility.
    ========================================================================== */
 
+/* 2026-07-29 (Andrew): first cut was too tall for the slim phone bar —
+   28px keeps the bar at its ~36px budget. */
 .menuBtn {
   display: none;
   flex-direction: column;
   justify-content: center;
-  gap: 5px;
-  width: 40px;
-  height: 36px;
-  padding: 8px;
+  gap: 4px;
+  width: 34px;
+  height: 28px;
+  padding: 6px 7px;
   background: none;
   border: 1px solid var(--rule-soft);
   border-radius: 0;
@@ -349,5 +351,8 @@
 
   .menuBtn {
     display: flex;
+    /* match the id line's 8px bottom rhythm so both center on the same
+       midline above the rule */
+    margin-bottom: 8px;
   }
 }

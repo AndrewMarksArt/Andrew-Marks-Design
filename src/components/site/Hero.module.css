@@ -282,6 +282,21 @@
     width: 70%;
     transform: translateX(-50%);
   }
+
+  /* 2026-07-29 (Andrew): stretching the lattice into the taller mobile
+     band squished the x-marks. The svg becomes a fixed-aspect box (box
+     aspect = viewBox aspect, so preserveAspectRatio never distorts)
+     sized to the band's height, shifted so the mark cluster (right of
+     the viewBox center by design) sits behind the centered robot. */
+  .lattice {
+    inset: auto;
+    top: 0;
+    left: 50%;
+    height: 100%;
+    width: auto;
+    aspect-ratio: 1592 / 709.5;
+    transform: translateX(-76%);
+  }
 }
 
 /* --- boot film: the text ladder holds until the film's text beat (the
