@@ -88,7 +88,7 @@ export default function KnowledgeOs() {
             {/* digest2 = Andrew's Figma crop (node 7042:2704): trims the
                 capture's own page margins and the ragged half-row at the
                 bottom so the shot sits flush in the hero plate. */}
-            <img
+            <img loading="lazy"
               src="/case-studies/knowledge-os/kos-hero-digest2.webp"
               alt="The Brief page for Monday, July 27: a Today's digest card counting 22 links across Agentic Coding, Business, Design, Game Design and Research, each topic with its link count, top source and score. Below it, four drafts await approval with their own scores. The sidebar lists Brief, Insights, Agents, Pipeline, Inbox, Knowledge, Gallery, Curated, Analytics, Drafts, Optimize and Ask AI."
               className={styles.shotImg}
@@ -135,7 +135,7 @@ export default function KnowledgeOs() {
             naturalWidth={3817}
             caption="The system's own telemetry: 4,339 sources, 93% extraction success, and twelve weeks of real intake. Deep reading covers a sliver of any of these bars."
           >
-            <img
+            <img loading="lazy"
               src="/case-studies/knowledge-os/kos-analytics.webp"
               alt="The Analytics page: stat strip reading total links 4,339, extraction success 93 percent, this week 101; an Ingestion Pace bar chart of links saved per week for the last twelve weeks, peaking near five hundred in late May; Topic Coverage with Agentic Coding at 1,937 links and Design at 1,324; and a Score Distribution by priority bucket."
               className={styles.shotImg}
@@ -178,7 +178,7 @@ export default function KnowledgeOs() {
             naturalWidth={3820}
             caption="The real table, hover open: the model's written reason, the priority it set, novelty against the Space. Trust lives on the row because that's where reading happens, not a dashboard away."
           >
-            <img
+            <img loading="lazy"
               src="/case-studies/knowledge-os/kos-trust-row.webp"
               alt="The Knowledge table with a row's score tooltip open, reading: solid strategic insight on design practice shift with AI, clear framing of new deliverable standards, but primarily conceptual argument rather than craft demonstration. Value score 69, priority 72 described as Claude's quality rating, novelty 29 described as fresh versus corpus. Around it, rows carry source chips, category chips, score dots, and a REVIEW badge on a flagged row."
               className={styles.shotImg}
@@ -206,7 +206,7 @@ export default function KnowledgeOs() {
               naturalWidth={3822}
               caption="Still catching them: eight thin subtopics the pipeline scored 0.82–0.92, one link each, with the three actions that close the loop: ask, research, draft."
             >
-              <img
+              <img loading="lazy"
                 src="/case-studies/knowledge-os/kos-gap-signal.webp"
                 alt="A gap signal detail in Insights, 93 percent confidence, June 24, 2026: Agentic Coding, Agent Authorization and Payment Systems. The corpus has eight-plus thin subtopics covering agent payment authorization, each with only one link but priority scores of 0.82 to 0.92. Below: why it matters, the top link in the area, two suggested searches, and buttons reading Ask AI about this gap, Research this, and Draft about this."
                 className={styles.shotImg}
@@ -223,7 +223,7 @@ export default function KnowledgeOs() {
               naturalWidth={3815}
               caption="When the corpus can't cover a question, the same chat fixes it: the research panel suggests topics from the conversation, runs capped searches, and reports back into the thread."
             >
-              <img
+              <img loading="lazy"
                 src="/case-studies/knowledge-os/kos-research-panel.webp"
                 alt="The Research Topics panel open over a chat: a sources toggle set to diverse, a Suggest-from-conversation button, five suggested topics about graph engineering each with its own Research button, and a Research-all-5 action, above the composer and the answers-are-generated-from-your-saved-links footer."
                 className={styles.shotImg}
@@ -249,7 +249,7 @@ export default function KnowledgeOs() {
             naturalWidth={2232}
             caption="One URL in, grounded answers out: capture, pipeline, corpus, agents, surfaces. The research loop is the only path to the open web."
           >
-            <img
+            <img loading="lazy"
               src="/case-studies/knowledge-os/kos-system-overview.webp"
               alt="High-level view of the whole system: Telegram URLs and web or gallery adds pass a security gate into extract (a tool registry with 11-plus tools), summarize and score (Haiku plus per-topic rubrics), and embed (Voyage plus novelty); failures are saved, retried, and never dropped. Everything lands in the personal knowledge corpus, over 4,250 sources measured 7/27 and growing by about 300 per week, on Supabase and pgvector. Twelve on-demand agents (connections, contradictions, gaps, synthesis) write signals back and can trigger research runs on Exa, and it surfaces in the AI chat, every answer sourced and cited from the corpus."
               className={styles.shotImg}
@@ -278,7 +278,7 @@ export default function KnowledgeOs() {
               naturalWidth={2232}
               caption="Over-fetch wide, rerank hard, ground every claim in a named source, or say the corpus doesn't cover it."
             >
-              <img
+              <img loading="lazy"
                 src="/case-studies/knowledge-os/kos-ask-flow.webp"
                 alt="Flow of how the Ask AI chat sources and answers user questions: a question is embedded, the system over-fetches 20 to 40 sources from the corpus, re-ranks them, and sends the top 10 to the model, where every claim is sourced, ending in a cited answer. The corpus band beneath notes every source embedded and scored, with gap analysis and decay review helping rank results."
                 className={styles.shotImg}
@@ -311,7 +311,7 @@ export default function KnowledgeOs() {
               naturalWidth={1986}
               caption="Nothing is overwritten, and when two branches converge on the same three sources, the system offers one grounded synthesis. The answer above does the honest thing too: it names what the saved links don't cover."
             >
-              <img
+              <img loading="lazy"
                 src="/case-studies/knowledge-os/kos-branch-converge-crop.webp"
                 alt="A real answer opening with One Critical Gap ('your saved links do not cover how to handle sellers who do not accept USDC or crypto payments'), above a Resources list and six Referenced Resources cards with match percentages. At the bottom, a bar reads: two branches converge on 3 shared sources, with a Synthesize button."
                 className={styles.shotImg}
@@ -413,7 +413,7 @@ export default function KnowledgeOs() {
           aspect={3936 / 1305}
           naturalWidth={3936}
         >
-          <img
+          <img loading="lazy"
             src="/case-studies/knowledge-os/kos-evolution-timeline.webp"
             alt="Corpus growth chart from February to late July: a curve from zero at the first commit through 627 at the gap agent's first run on March 30, about 1,000 sources and 960 signals on April 14, 3,241 on June 16, to 4,339 measured July 27, with milestone flags for the capture bot deploying February 23, chat with RAG on March 17, agents going manual May 7, and rerank plus branching June 20 to 23. A footer reads: every point measured and dated, repo docs through June, the product's own analytics for July 27."
             className={styles.shotImg}

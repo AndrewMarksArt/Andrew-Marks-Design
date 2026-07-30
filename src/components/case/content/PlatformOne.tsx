@@ -126,7 +126,7 @@ export default function PlatformOne() {
             naturalWidth={1408}
             unframed
           >
-            <img
+            <img loading="lazy"
               src="/case-studies/platform-one/p1-hero-insitu.webp"
               alt="Platform One's homepage with the P1 Assistant widget open in the corner, answering 'I need to access Iron Bank' with steps, a Create-account button, a cited source, and a did-this-help prompt."
               className={local.shotImg}
@@ -179,7 +179,7 @@ export default function PlatformOne() {
             aspect={1076 / 918}
             naturalWidth={1076}
           >
-            <img
+            <img loading="lazy"
               src="/case-studies/platform-one/p1-simplified-flow.webp"
               alt="Flow diagram of two example questions: how much does Party Bus cost, and how does Iron Bank secure containers. From the p1.dso.mil home page users reach P1 solutions, then /party-bus (high level, no pricing or technical information) or /iron-bank (catalog and images behind SSO login), loop back, and most end up at the Contact Us form. A note marks where most answers actually live: three to four clicks deep and mostly hidden behind login, with broken links and no hierarchy on solutions pages."
               className={local.shotImg}
@@ -233,7 +233,7 @@ export default function PlatformOne() {
               aspect={1346 / 973}
               naturalWidth={1346}
             >
-              <img
+              <img loading="lazy"
                 src="/case-studies/platform-one/p1-escalation-flow.webp"
                 alt="Flow diagram of the escalation logic. A user question gets a sourced answer with citations inline and follow-up suggestions. If the question is answered: done, self-service. If not, the user follows up, and after more than two turns a sourced answer arrives with a soft support CTA; after more than four turns a hard support CTA routes by context to the helpdesk or Customer Success. Notes: self-service by default but keeping humans in the loop; soft CTA after 2 turns, hard CTA after turn 4."
                 className={local.shotImg}
@@ -262,7 +262,7 @@ export default function PlatformOne() {
             naturalWidth={1488}
             unframed
           >
-            <img
+            <img loading="lazy"
               src="/case-studies/platform-one/p1-example-chats.webp"
               alt="Three real assistant screens in sequence: an Iron Bank answer with cited source and did-this-solve-your-issue buttons; a follow-up offering summaries, walkthrough steps, or key commands with Talk to Support; and a rate-your-experience closer."
               className={local.shotImg}
@@ -312,7 +312,7 @@ export default function PlatformOne() {
             naturalWidth={1488}
             unframed
           >
-            <img
+            <img loading="lazy"
               src="/case-studies/platform-one/p1-vuetify-overrides-2.webp"
               alt="Dark design-system board titled Vuetify Overridden: teal, grey, and copper color ramps with hex values, beside primary and secondary button variants, inputs, and skeleton loaders built on Vuetify defaults."
               className={local.shotImg}
@@ -339,12 +339,12 @@ export default function PlatformOne() {
         media={
           <div>
             <div className={local.statCards}>
-              <img
+              <img loading="lazy"
                 src="/case-studies/platform-one/p1-stat-ticket-cut.webp"
                 alt="Stat card: projected ticket cut, minus 40 percent."
                 className={local.statCard}
               />
-              <img
+              <img loading="lazy"
                 src="/case-studies/platform-one/p1-stat-fte.webp"
                 alt="Stat card: CST capacity returned, about one full-time role."
                 className={local.statCard}
@@ -367,7 +367,7 @@ export default function PlatformOne() {
           naturalWidth={1312}
           unframed
         >
-          <img
+          <img loading="lazy"
             src="/case-studies/platform-one/p1-launch-sequence.webp"
             alt="Launch sequence timeline, intentionally undated while waiting on Certificate to Field. Staging is done (solid line, filled marker); Behind SSO with the interim widget is the current stop (orange marker); Certificate to Field, Public Launch, and Custom Front-End remain ahead on a dashed line with hollow markers."
             className={local.shotImg}

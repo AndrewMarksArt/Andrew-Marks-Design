@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { preload } from "react-dom";
 import type { CSSProperties } from "react";
 import HeroGaze from "./HeroGaze";
 import BootLine from "./BootLine";
@@ -78,9 +77,13 @@ function PlusLattice() {
 }
 
 export default function Hero() {
-  // Gaze atlas is drawn onto a canvas after JS loads — preload it so the
-  // first frame paints with the hero instead of popping in late.
-  preload("/hero/robot-atlas-live2-hd.webp", { as: "image" });
+  // 2026-07-29: the HD-atlas preload is gone. HeroGaze manages its own
+  // loading — plain loads fetch their real tier immediately; film loads
+  // draw from the SD sheet (decoded at the text beat) and upgrade to HD
+  // only after the typewriter settles, because decoding the 9216px sheet
+  // while the film plays stalled frame presentation on real GPUs
+  // (Andrew's catch). The inline CSS placeholder covers the robot until
+  // the atlas lands, so nothing pops.
 
   return (
     <section className={styles.hero}>

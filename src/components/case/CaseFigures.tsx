@@ -99,7 +99,7 @@ export function StatCard({ label, value }: { label: string; value: string }) {
  *  image form the drawn StatCard was built to be swapped for. The export
  *  carries its own plate, grid and border. */
 export function StatCardImg({ src, alt }: { src: string; alt: string }) {
-  return <img className={styles.statCardImg} src={src} alt={alt} />;
+  return <img loading="lazy" className={styles.statCardImg} src={src} alt={alt} />;
 }
 
 /** The closer's two-card row (P1 `.statCards`). */

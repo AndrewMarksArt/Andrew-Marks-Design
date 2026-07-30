@@ -96,7 +96,7 @@ export default function ChatVet() {
             naturalWidth={2880}
             unframed
           >
-            <img
+            <img loading="lazy"
               src="/case-studies/chat-vet/cv-hero-home.webp"
               alt="ChatVET home for a verified veterinary user: the brand card with a clinical search bar, above VetMed Prompt Templates grouped by clinical job."
               className={styles.shotImg}
@@ -163,7 +163,7 @@ export default function ChatVet() {
             aspect={6384 / 2054}
             naturalWidth={6384}
           >
-            <img
+            <img loading="lazy"
               src="/case-studies/chat-vet/cv-stall-flow2.webp"
               alt="Average vet visit flow and where cases stall: one appointment, 4 stalls, the biggest after the client leaves. Six phases run left to right: check-in and intake, exam, diagnosis, treatment plan, client debrief, and after the client leaves. Four stall cards hang above the phases they interrupt: protocol search, 5 minutes in room, 30-plus if questions get deferred, and up to 60 percent never pursued; dose calculation, cited in 80 percent of medication errors as miscalculations and the number-one question users asked; client communication, up to 75 percent of what the doctor says lost immediately, with written instructions lifting the correct-treatment rate but costing time; and history re-entered, 10 minutes per patient after the visit, up to 2 hours of desk work per hour of face time. A footnote reads: stalls identified in case walkthroughs, minutes from published benchmarks, veterinary sources for dose error and client recall."
               className={styles.shotImg}
@@ -189,7 +189,7 @@ export default function ChatVet() {
               naturalWidth={3194}
               caption="The full EHR from discovery: patient profile and medications down the left, history and alerts across the top, and the assistant holding the main panel."
             >
-              <img
+              <img loading="lazy"
                 src="/case-studies/chat-vet/cv-ehr-paw-ai.webp"
                 alt="Paw AI EHR design: a patient dashboard for a German Shepherd with profile, medications, conditions, recent medical history and alerts, and the Paw AI assistant in the main panel composing a case question (signalment, symptoms, tests run, and the questions to ask) above a row of previous assistant chats."
                 className={styles.shotImg}
@@ -202,7 +202,7 @@ export default function ChatVet() {
               naturalWidth={3194}
               caption="The view built for use during an appointment, pulling past notes, lab results and uploads into the conversation. This is the slice that became the product."
             >
-              <img
+              <img loading="lazy"
                 src="/case-studies/chat-vet/cv-chat-focus.webp"
                 alt="Chat-focused Paw AI design: a new-consultation view centered on the medical assistant chat, with patient information, lab results, and imaging collapsed into side panels."
                 className={styles.shotImg}
@@ -230,7 +230,7 @@ export default function ChatVet() {
               naturalWidth={2880}
               caption="Dose calculator, lab interpreter and discharge generator, opened from the chat so nothing has to be re-typed."
             >
-              <img
+              <img loading="lazy"
                 src="/case-studies/chat-vet/cv-tools-menu.webp"
                 alt="The ChatVET home for a verified veterinary user with the Tools menu open, listing Medication Dose Calc, Lab Interpreter, and Discharge Generator above the VetMed Prompt Templates panel."
                 className={styles.shotImg}
@@ -244,7 +244,7 @@ export default function ChatVet() {
                 naturalWidth={2880}
                 caption="Species and weight first (the intake number the calculation depends on), then medication and indication."
               >
-                <img
+                <img loading="lazy"
                   src="/case-studies/chat-vet/cv-dose-calculator.webp"
                   alt="The Medication Dose Calculator dialog with fields for species, breed, weight, medication, and diagnosis or indication, and a Calculate button."
                   className={styles.shotImg}
@@ -257,7 +257,7 @@ export default function ChatVet() {
                 naturalWidth={4096}
                 caption="It reads the report before it interprets: patient details extracted from the PDF, and the one low-confidence value (weight, the dosing input) flagged for a human to verify first."
               >
-                <img
+                <img loading="lazy"
                   src="/case-studies/chat-vet/cv-lab-upload-confirm.webp"
                   alt="The Lab Interpreter dialog after uploading a two-page CBC and chemistry panel PDF: six of seven details read from the report header with a prompt to verify them; patient fields filled for Ruger, a seven-year-old male Labrador Retriever; the weight field, 24.5 kilograms, carries a VERIFY tag reading low confidence import, needs to be verified; an optional clinical-context box sits above Cancel and Interpret results buttons."
                   className={styles.shotImg}
@@ -271,7 +271,7 @@ export default function ChatVet() {
               naturalWidth={4096}
               caption="Six of twenty-four analytes flagged and read as a cluster instead of a list. It also names the one value that would settle the differential as missing from the panel."
             >
-              <img
+              <img loading="lazy"
                 src="/case-studies/chat-vet/cv-lab-results.webp"
                 alt="Lab Interpreter results: a narrative read stating six of twenty-four analytes fall outside reference range and cluster rather than scatter (azotemia with hyperphosphatemia and a mild non-regenerative anemia pointing toward reduced renal function), noting that urine specific gravity would separate a renal cause from dehydration and is not in this panel. Below, a flagged-values table shows creatinine, BUN and phosphorus high and hematocrit, RBC and potassium low, each with a reference-range position bar, above a follow-up composer carrying a Verified Veterinary User badge."
                 className={styles.shotImg}
@@ -284,7 +284,7 @@ export default function ChatVet() {
               naturalWidth={2880}
               caption="Partnership announcement taken from the chatvet.ai website"
             >
-              <img
+              <img loading="lazy"
                 src="/case-studies/chat-vet/cv-msd-partnership2.webp"
                 alt="ChatVET announcement banner reading 'chatVET now Powered by MSD Veterinary Manual', above a sourcing strip captioned 'data sourced from leading veterinary journals and companies' with logos for the Journal of Veterinary Internal Medicine, VPN Plus, Cornell University, WSAVA, Plumb's, AAHA, Banfield Pet Hospital and the Merck Veterinary Manual (the first and last clipped at the edges of the capture)."
                 className={styles.shotImg}
@@ -313,7 +313,7 @@ export default function ChatVet() {
             naturalWidth={2880}
             caption="Templates built from the questions vets were already asking, grouped by clinical job and tagged for their reader: clinician or client."
           >
-            <img
+            <img loading="lazy"
               src="/case-studies/chat-vet/cv-prompt-library.webp"
               alt="The VetMed prompt library: template group filters for clinical documentation, client communication, diagnostics, practice management, and learning, above eight template cards including SOAP Note Generation, Discharge Instructions, Differential Diagnosis, and Client Email Results, each tagged Clinician or Client."
               className={styles.shotImg}
@@ -339,7 +339,7 @@ export default function ChatVet() {
                 naturalWidth={2880}
                 caption="It reads the consultation back: several medications came up. Which should go home with the client?"
               >
-                <img
+                <img loading="lazy"
                   src="/case-studies/chat-vet/cv-discharge-step1.webp"
                   alt="The Discharge Generator dialog asking which of the medications discussed should be included in the discharge instructions, listing maropitant, capromorelin, and IV crystalloid fluids."
                   className={styles.shotImg}
@@ -352,7 +352,7 @@ export default function ChatVet() {
                 naturalWidth={2880}
                 caption="Patient, condition, medications and the restrictions an owner has to follow, most of it already filled from the chat."
               >
-                <img
+                <img loading="lazy"
                   src="/case-studies/chat-vet/cv-discharge-step2.webp"
                   alt="The Discharge Generator second step with fields for patient name, procedure or condition, medications prescribed, and diet and activity restrictions, above a Generate Instructions button."
                   className={styles.shotImg}
@@ -366,7 +366,7 @@ export default function ChatVet() {
               naturalWidth={4096}
               caption="The payoff, printed: what we found in plain language, morning-and-evening doses, call-us versus go-to-emergency lists, and the recheck date. Generated from the same case as the labs above, ready before the client reaches the door."
             >
-              <img
+              <img loading="lazy"
                 src="/case-studies/chat-vet/cv-discharge-printout.webp"
                 alt="A print dialog showing Going-home instructions for Ruger, a seven-year-old Labrador Retriever, one page, saving as PDF. What we found explains chronic kidney disease in plain language; a medicines table lists aluminum hydroxide and maropitant with morning, evening and how-long columns; food-and-water rules cover a gradual kidney-diet switch; watch-him-at-home boxes split call-us-if-you-notice from go-to-emergency-right-away; and a recheck on 10 Aug 2026 sits above clinic and after-hours numbers, a veterinarian signature line, and a note to keep the page somewhere visible, like the fridge."
                 className={styles.shotImg}
