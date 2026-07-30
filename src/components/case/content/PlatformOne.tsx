@@ -9,7 +9,7 @@ import BrandRow from "../../site/BrandRow";
 import ZoomableFigure from "../FigureLightbox";
 import styles from "../case.module.css";
 import local from "./PlatformOne.module.css";
-import P1Gate from "./P1Gate";
+import P1LockedGate from "./P1LockedGate";
 import TicketTaxonomyChart from "./p1/TicketTaxonomyChart";
 
 /**
@@ -109,57 +109,11 @@ function DecisionCallout() {
   );
 }
 
-export default function PlatformOne() {
+/** The study body behind the gate — rendered ONLY when the unlock
+ *  cookie verifies server-side; a locked response never contains it. */
+function GatedBody() {
   return (
     <>
-      <CaseHero
-        eyebrow="U.S. Air Force · Platform One"
-        title="Designing an AI assistant projected to cut support tickets by 40%"
-        intro={[
-          "Platform One is the Air Force's flagship software factory, serving secure software delivery to over 250 defense development teams worldwide.",
-          "But after a rushed rebrand, users couldn't find the answers they needed on its website. Sometimes they couldn't even find how to ask for help. Emergency fixes piled on top of each other, and while they helped in some ways, in others they made things worse.",
-        ]}
-        media={
-          <ZoomableFigure
-            label="The assistant, in staging on Platform One's site"
-            aspect={1408 / 932}
-            naturalWidth={1408}
-            unframed
-          >
-            <img loading="lazy"
-              src="/case-studies/platform-one/p1-hero-insitu.webp"
-              alt="Platform One's homepage with the P1 Assistant widget open in the corner, answering 'I need to access Iron Bank' with steps, a Create-account button, a cited source, and a did-this-help prompt."
-              className={local.shotImg}
-            />
-          </ZoomableFigure>
-        }
-      />
-
-      <StatsStrip
-        items={[
-          {
-            label: "ROLE:",
-            value: "Product Designer, Interface & Conversational UX",
-          },
-          { label: "TIMEFRAME:", value: "2025 · 6 months" },
-          {
-            label: "TEAM:",
-            value:
-              "1 Designer · 2 Developers · Security approver · Project Manager",
-          },
-          {
-            label: "SCOPE:",
-            value:
-              "Conversational UX flows · Component & state library · Escalation & routing logic flows · Interim widget re-skin · Full app design",
-          },
-        ]}
-      />
-
-      {/* Andrew, 2026-07-29 (locked-state example, Figma 7086:2148): hero
-          and stats strip stay readable; everything below is behind the
-          password gate (soft screen-door, not security). UpNext stays
-          outside so a locked-out visitor can continue the portfolio. */}
-      <P1Gate>
       <BrandRow />
 
       <CaseSection
@@ -375,7 +329,65 @@ export default function PlatformOne() {
         </ZoomableFigure>
       </section>
 
-      </P1Gate>
+    </>
+  );
+}
+
+export default function PlatformOne({ locked = false }: { locked?: boolean }) {
+  return (
+    <>
+      <CaseHero
+        eyebrow="U.S. Air Force · Platform One"
+        title="Designing an AI assistant projected to cut support tickets by 40%"
+        intro={[
+          "Platform One is the Air Force's flagship software factory, serving secure software delivery to over 250 defense development teams worldwide.",
+          "But after a rushed rebrand, users couldn't find the answers they needed on its website. Sometimes they couldn't even find how to ask for help. Emergency fixes piled on top of each other, and while they helped in some ways, in others they made things worse.",
+        ]}
+        media={
+          <ZoomableFigure
+            label="The assistant, in staging on Platform One's site"
+            aspect={1408 / 932}
+            naturalWidth={1408}
+            unframed
+          >
+            <img loading="lazy"
+              src="/case-studies/platform-one/p1-hero-insitu.webp"
+              alt="Platform One's homepage with the P1 Assistant widget open in the corner, answering 'I need to access Iron Bank' with steps, a Create-account button, a cited source, and a did-this-help prompt."
+              className={local.shotImg}
+            />
+          </ZoomableFigure>
+        }
+      />
+
+      <StatsStrip
+        items={[
+          {
+            label: "ROLE:",
+            value: "Product Designer, Interface & Conversational UX",
+          },
+          { label: "TIMEFRAME:", value: "2025 · 6 months" },
+          {
+            label: "TEAM:",
+            value:
+              "1 Designer · 2 Developers · Security approver · Project Manager",
+          },
+          {
+            label: "SCOPE:",
+            value:
+              "Conversational UX flows · Component & state library · Escalation & routing logic flows · Interim widget re-skin · Full app design",
+          },
+        ]}
+      />
+
+      {/* Andrew, 2026-07-29 (locked-state example, Figma 7086:2148): hero
+          and stats strip stay readable; everything below is gated. Since
+          2026-07-31 the gate is SERVER-SIDE: when locked, the study body
+          is never rendered or sent — the response carries only the
+          pre-blurred preview image inside P1LockedGate (the old client
+          gate shipped the full study in the HTML behind a visual blur,
+          readable in View Source and indexable by crawlers). UpNext stays
+          outside so a locked-out visitor can continue the portfolio. */}
+      {locked ? <P1LockedGate /> : <GatedBody />}
 
       <UpNext
         title="ChatVET: an AI Copilot for Veterinary Medicine"

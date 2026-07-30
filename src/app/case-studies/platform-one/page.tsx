@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import CaseShell from "../../../components/case/CaseShell";
 import PlatformOne from "../../../components/case/content/PlatformOne";
+import { isUnlocked } from "./gate";
 
 export const metadata: Metadata = {
   title: "Platform One AI Assistant & Chat Bot · Andrew Marks",
@@ -19,10 +20,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Page() {
+// Reading the unlock cookie makes this route dynamic (server-rendered
+// per request) — the price of the gate actually withholding content.
+// The rest of the site stays static.
+export default async function Page() {
+  const unlocked = await isUnlocked();
   return (
     <CaseShell current="platform-one">
-      <PlatformOne />
+      <PlatformOne locked={!unlocked} />
     </CaseShell>
   );
 }
