@@ -10,9 +10,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Platform One AI Assistant & Chat Bot · Andrew Marks",
     description: "Designing an AI assistant projected to cut support tickets by roughly 40% inside the Air Force’s flagship software factory.",
-    url: "https://andrewmarks.net/case-studies/platform-one",
+    url: "https://www.andrewmarks.design/case-studies/platform-one",
   },
   twitter: {
+    card: "summary_large_image",
     title: "Platform One AI Assistant & Chat Bot · Andrew Marks",
     description: "Designing an AI assistant projected to cut support tickets by roughly 40% inside the Air Force’s flagship software factory.",
   },

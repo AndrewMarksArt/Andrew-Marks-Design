@@ -1,0 +1,1 @@
+ChatVET case study hero: the veterinary AI copilot answering a clinical question with cited sources.

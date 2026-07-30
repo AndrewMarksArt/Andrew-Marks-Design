@@ -11,9 +11,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "ChatVET: an AI Copilot for Veterinary Medicine · Andrew Marks",
     description: "An AI copilot vets report saves them about 15 minutes per case, answering from the MSD Veterinary Manual instead of the open web.",
-    url: "https://andrewmarks.net/case-studies/chat-vet",
+    url: "https://www.andrewmarks.design/case-studies/chat-vet",
   },
   twitter: {
+    card: "summary_large_image",
     title: "ChatVET: an AI Copilot for Veterinary Medicine · Andrew Marks",
     description: "An AI copilot vets report saves them about 15 minutes per case, answering from the MSD Veterinary Manual instead of the open web.",
   },

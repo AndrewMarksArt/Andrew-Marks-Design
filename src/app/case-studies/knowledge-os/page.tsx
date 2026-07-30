@@ -10,9 +10,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "AI Powered Personal Knowledge OS · Andrew Marks",
     description: "A multi-agent system that reads a hundred-plus sources a week into a 4,300+ source living corpus. Built solo, in production since week one.",
-    url: "https://andrewmarks.net/case-studies/knowledge-os",
+    url: "https://www.andrewmarks.design/case-studies/knowledge-os",
   },
   twitter: {
+    card: "summary_large_image",
     title: "AI Powered Personal Knowledge OS · Andrew Marks",
     description: "A multi-agent system that reads a hundred-plus sources a week into a 4,300+ source living corpus. Built solo, in production since week one.",
   },

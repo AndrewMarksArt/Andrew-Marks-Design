@@ -24,7 +24,7 @@ export const viewport: Viewport = {
    itself is src/app/opengraph-image.png), keywords dropped (ignored by
    every major engine since 2009). */
 export const metadata: Metadata = {
-  metadataBase: new URL("https://andrewmarks.net"),
+  metadataBase: new URL("https://www.andrewmarks.design"),
   title: "Andrew Marks · UX & Product Designer",
   description:
     "Product design for AI systems: enterprise DoD platforms, clinical copilots, and agentic workflows. Research & design for users wrangling electric sheep.",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     title: "Andrew Marks · UX & Product Designer",
     description:
       "Product design for AI systems: enterprise DoD platforms, clinical copilots, and agentic workflows. Research & design for users wrangling electric sheep.",
-    url: "https://andrewmarks.net",
+    url: "https://www.andrewmarks.design",
     siteName: "Andrew Marks Design",
     locale: "en_US",
     type: "website",

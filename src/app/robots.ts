@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: "/dev/",
     },
-    sitemap: "https://andrewmarks.net/sitemap.xml",
+    sitemap: "https://www.andrewmarks.design/sitemap.xml",
   };
 }
