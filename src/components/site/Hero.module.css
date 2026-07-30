@@ -287,17 +287,19 @@
   /* 2026-07-29 (Andrew): the robot was small and off to the side on
      phones. The band grows taller (mask off — the notched silhouette is
      invisible detail at this size and would clip the larger portrait)
-     and the robot centers at 70% width. */
+     and the robot centers. 2026-07-30, on-device: bigger still, 70% ->
+     82% — the band grows with it (robot is bottom-anchored and square,
+     so band height must exceed robot width or the head clips). */
   .band {
     margin-top: 32px;
-    aspect-ratio: 1592 / 1200;
+    aspect-ratio: 1592 / 1340;
     -webkit-mask-image: none;
     mask-image: none;
   }
 
   .robot {
     left: 50%;
-    width: 70%;
+    width: 82%;
     transform: translateX(-50%);
   }
 
@@ -314,7 +316,9 @@
     position: absolute;
     top: 0;
     left: 50%;
-    height: 100%;
+    /* under full band height the pattern square outgrew the robot —
+       88% keeps it a halo the larger robot clearly covers */
+    height: 88%;
     width: auto;
     aspect-ratio: 1 / 1;
     transform: translateX(-50%);
