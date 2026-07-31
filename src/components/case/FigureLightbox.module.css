@@ -174,13 +174,13 @@
   color: var(--meta-gray);
 }
 
-/* Phones (2026-07-31, Andrew: "the height is wrong, can't see the
-   image"): the desktop fit-model shrinks figures to the viewport, which
-   on a 390px screen renders wide diagrams as slivers and makes ENLARGE
-   show the image at inline size. Phones return to the component's
-   original pan model instead: the figure renders at its natural
-   (legible) width inside a full-height dialog and the region scrolls
-   both axes — data-pan already flips the DRAG TO PAN hint on. */
+/* Phones (2026-07-31, Andrew's on-device passes): the desktop fit-model
+   made ENLARGE show images at inline size, and opening at natural width
+   showed "so large I can't see anything". The model that works: open at
+   FIT WIDTH (whole image width visible, tall figures scroll vertically),
+   then pinch to zoom toward natural size — the zoom is JS-driven width
+   on .figSize (see FigureLightbox.tsx) so one-finger pan stays native
+   region scrolling with momentum. */
 @media (max-width: 639px) {
   .lightbox[open] {
     width: 100vw;
@@ -193,14 +193,19 @@
     overflow: auto;
     align-items: flex-start;
     justify-content: flex-start;
+    /* native one-finger scroll; two-finger pinch excluded here so the
+       component's zoom handler gets it instead of a browser page-zoom */
+    touch-action: pan-x pan-y;
   }
 
   .figSize {
-    /* flex none: the region is a flex container and default shrink was
-       collapsing this explicit width right back to the viewport */
+    /* flex none: the region is a flex container and default shrink
+       collapses explicit widths right back to the viewport; the zoom
+       handler sets width in px inline, starting from this fit state */
     flex: 0 0 auto;
-    width: var(--fig-natural);
+    width: 100%;
     max-width: none;
+    margin: auto;
   }
 }
 
