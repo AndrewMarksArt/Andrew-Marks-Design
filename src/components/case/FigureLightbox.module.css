@@ -174,11 +174,55 @@
   color: var(--meta-gray);
 }
 
+/* Phones (2026-07-31, Andrew: "the height is wrong, can't see the
+   image"): the desktop fit-model shrinks figures to the viewport, which
+   on a 390px screen renders wide diagrams as slivers and makes ENLARGE
+   show the image at inline size. Phones return to the component's
+   original pan model instead: the figure renders at its natural
+   (legible) width inside a full-height dialog and the region scrolls
+   both axes — data-pan already flips the DRAG TO PAN hint on. */
 @media (max-width: 639px) {
   .lightbox[open] {
     width: 100vw;
+    height: 94svh;
     border-left: 0;
     border-right: 0;
+  }
+
+  .figRegion {
+    overflow: auto;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .figSize {
+    /* flex none: the region is a flex container and default shrink was
+       collapsing this explicit width right back to the viewport */
+    flex: 0 0 auto;
+    width: var(--fig-natural);
+    max-width: none;
+  }
+}
+
+/* Short-and-wide viewports (landscape phones): captions wrap tall at
+   aspect-narrow dialog widths, blowing the 150px chrome estimate — the
+   flex squeeze was CLIPPING figures behind overflow:hidden (measured:
+   up to 63px of image hidden). Cap the media to the real leftover and
+   let the region scroll if the estimate is ever still short. */
+@media (min-width: 640px) and (max-height: 500px) {
+  .figRegion {
+    overflow: auto;
+  }
+
+  .figRegion img,
+  .figRegion svg,
+  .figRegion video {
+    display: block;
+    margin: 0 auto;
+    width: auto !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: calc(94svh - 180px) !important;
   }
 }
 
