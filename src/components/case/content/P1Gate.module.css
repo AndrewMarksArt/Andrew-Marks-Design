@@ -219,9 +219,9 @@
 /* Submit button (Andrew, 2026-07-31): Enter still works, but the mouse
    path gets a visible way in. Input radius, orange slab, mono caps. */
 .plateSubmit {
+  /* left-aligned like every other plate element (Andrew, 2026-07-31) */
   display: block;
   margin: 12px 0 0;
-  margin-left: auto;
   height: 40px;
   padding: 0 32px;
   border: none;
