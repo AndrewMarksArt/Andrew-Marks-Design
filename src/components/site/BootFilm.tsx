@@ -107,10 +107,19 @@ export default function BootFilm() {
     const finishFilm = (viaSkip: boolean) => {
       if (finished) return;
       finished = true;
-      try {
-        sessionStorage.setItem("am-film-seen", "1");
-      } catch {
-        /* private mode */
+      // Once-per-session is a pass the VIEWER spends, not the machine
+      // (Andrew's live catch, 2026-08-02: a health-skip was burning the
+      // pass, so the film never played for sessions that never saw it).
+      // Health verdicts that fire before any real beat — render-delay,
+      // stall — leave the pass intact so the next load retries; input
+      // skips and anything mid-film mark it seen.
+      const v = docEl.getAttribute("data-film-verdict");
+      if (v !== "render-delay" && v !== "stall") {
+        try {
+          sessionStorage.setItem("am-film-seen", "1");
+        } catch {
+          /* private mode */
+        }
       }
       if (viaSkip) {
         anims.forEach((a) => a.finish());
@@ -156,13 +165,6 @@ export default function BootFilm() {
       }
     };
     document.addEventListener("visibilitychange", onHide);
-    // Same hole at load time: a background-tab open (middle-click, "open
-    // in new tab") would play the film unseen on the clock. Land the page.
-    if (document.hidden) {
-      verdict("hidden-load");
-      finishFilm(true);
-      return;
-    }
 
     // A page restored mid-scroll shouldn't play a film pinned to the top.
     // Dispatch the skip event too: listeners gated on the film (HeroGaze's
@@ -445,24 +447,11 @@ export default function BootFilm() {
     //      good frames" wait — budget the badness instead.
     //   3. WATCHDOG — through the reveal sweep, any single >600ms stall
     //      finishes the film instantly.
-    const nav = performance.getEntriesByType("navigation")[0] as
-      | PerformanceNavigationTiming
-      | undefined;
-    const fp = performance
-      .getEntriesByType("paint")
-      .find((p) => p.name === "first-paint");
-    const renderDelay = fp && nav ? fp.startTime - nav.responseEnd : 0;
-    if (renderDelay > 500) {
-      verdict("render-delay");
-      finishFilm(true);
-      return;
-    }
-
     const SAMPLE_MS = 650; //        verdict lands before the spin (760)
     const FRAME_OK_MS = 42; //       a frame within ~24fps counts as delivered
     const STALL_BUDGET_MS = 300; //  tolerates warmup hitches, fails starvation
     const WATCHDOG_STALL_MS = 600;
-    const filmT0 = performance.now();
+    let filmT0 = 0;
     let lastFrameT = 0;
     let stalled = 0;
     let healthRaf = 0;
@@ -493,8 +482,43 @@ export default function BootFilm() {
         now - filmT0 < SAMPLE_MS ? probe : watchdog,
       );
     };
-    startFilm();
-    healthRaf = requestAnimationFrame(probe);
+    const beginFilm = (checkRenderDelay: boolean) => {
+      if (finished) return;
+      if (checkRenderDelay) {
+        const nav = performance.getEntriesByType("navigation")[0] as
+          | PerformanceNavigationTiming
+          | undefined;
+        const fp = performance
+          .getEntriesByType("paint")
+          .find((p) => p.name === "first-paint");
+        const renderDelay = fp && nav ? fp.startTime - nav.responseEnd : 0;
+        if (renderDelay > 500) {
+          verdict("render-delay");
+          finishFilm(true);
+          return;
+        }
+      }
+      filmT0 = performance.now();
+      startFilm();
+      healthRaf = requestAnimationFrame(probe);
+    };
+    // Background-tab opens (middle-click, "open in new tab") used to skip
+    // AND burn the once-per-session pass — the film never played for a
+    // session that never saw it (Andrew's live catch, 2026-08-02). The
+    // page is invisible anyway, so HOLD the film and start it fresh the
+    // first time the visitor actually looks. The render-delay verdict is
+    // skipped on that path: first-paint timing is meaningless for a load
+    // that spent minutes hidden.
+    const onFirstVisible = () => {
+      if (document.hidden || finished) return;
+      document.removeEventListener("visibilitychange", onFirstVisible);
+      beginFilm(false);
+    };
+    if (document.hidden) {
+      document.addEventListener("visibilitychange", onFirstVisible);
+    } else {
+      beginFilm(true);
+    }
 
     return () => {
       // Mid-film this is StrictMode's simulated unmount (dev) — leave the
@@ -506,6 +530,7 @@ export default function BootFilm() {
       timers.forEach(clearTimeout);
       anims.forEach((a) => a.cancel());
       skipEvents.forEach((t) => window.removeEventListener(t, onSkip));
+      document.removeEventListener("visibilitychange", onFirstVisible);
     };
   }, []);
 
