@@ -10,6 +10,34 @@
   width: 100%;
 }
 
+/* Guest-view link (2026-08-03) — same underline treatment as ChatVET's
+   retired .liveLink; .statLine mirrors the strip's own stacked-line span
+   because StatsStrip only auto-stacks plain-string values. */
+.statLine {
+  display: block;
+}
+
+.liveLink {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  transition: color 150ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+.liveLink:hover,
+.liveLink:focus-visible {
+  color: var(--accent-deep);
+}
+
+/* Guest capture under the closer stat cards (Andrew's placement call,
+   2026-08-03) — clears the statNote above it; the figure unit itself
+   ships margin: 0. */
+.closerGuestFig {
+  margin-top: 32px;
+}
+
 /* Real product captures (placement pass 2026-07-27). */
 .shotImg {
   width: 100%;

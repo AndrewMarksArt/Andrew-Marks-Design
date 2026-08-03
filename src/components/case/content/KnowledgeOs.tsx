@@ -109,8 +109,30 @@ export default function KnowledgeOs() {
             value: "RAG + 12 agents · every answer cited",
           },
           {
+            /* Guest-view pass 2026-08-03: the cell carries the live link
+               (ChatVET's retired .liveLink idiom — CV unlinked because its
+               live UI drifted from the shipped screens; this one is mine and
+               current). "single-user" → "single-writer" to match line 126's
+               claim exactly — guests can now read. The "(as of ...)" stamp
+               is retired: the link is the freshness proof. */
             label: "STATUS:",
-            value: "Live, single-user by design (as of July 2026)",
+            value: (
+              <>
+                <span className={styles.statLine}>
+                  Live, single-writer by design
+                </span>
+                <span className={styles.statLine}>
+                  <a
+                    href="https://hub.andrewmarks.design/guest"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.liveLink}
+                  >
+                    Browse the guest view
+                  </a>
+                </span>
+              </>
+            ),
           },
         ]}
       />
@@ -376,7 +398,30 @@ export default function KnowledgeOs() {
         lede={[
           "Knowledge Hub is live: 865 commits and 249 merged PRs between February 23 and early July, a corpus measured at 4,339 sources in late July and still growing, cited chat on top, and 12 agents on call.",
           "What changed for me is the part I did not build a metric for. Before, I bookmarked things and forgot them. Now I review far more than I did, I can retrieve something weeks after saving it, and the chat is where I start when I take on a new project or an unfamiliar topic. The system reads everything so the things I read closely are chosen rather than whatever surfaced that day.",
-          "There is a guest view. Friends, coworkers, and anyone else can read the corpus and browse example chats, without writing to it or running agents. Designing a read-only surface for people who did not build the system was its own problem, and it is the reason the interface had to make sense to someone other than me.",
+          /* Guest-view pass 2026-08-03 (audit finding #16): the paragraph
+             now names what the constraint forced, and the claims are read
+             straight from knowledge-hub's proxy.ts — default-guest gate,
+             owner cookie, edge 403 on /api, guest tree skipping AppShell.
+             Andrew-approved draft, tightened. */
+          <span key="guest">
+            There is a guest view, and{" "}
+            <a
+              href="https://hub.andrewmarks.design/guest"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.liveLink}
+            >
+              you can open it
+            </a>
+            : friends, coworkers, and anyone reading this can browse the
+            corpus, today&apos;s brief, the analytics, and an example chat,
+            without writing to anything or running agents. Designing a
+            read-only surface for people who did not build the system was its
+            own problem. The gate defaults every visitor to guest and
+            recognizes me only by a cookie, so a mistake fails closed. Every
+            action in the app is a POST, so a guest gets a 403 at the edge,
+            not a hidden button.
+          </span>,
           <strong key="rule">
             Every AI product I design follows the same rule: ground the answer
             or say you cannot. Knowledge Hub is where I hold myself to it, on a
@@ -400,6 +445,38 @@ export default function KnowledgeOs() {
             <p className={styles.statNote}>
               {"// LINKS SAVED AND ADDED TO THE CORPUS AS OF 7/27 + AVG NUMBER OF NEW SOURCES PER WEEK"}
             </p>
+            {/* Guest-view pass 2026-08-03 (Andrew's placement call): the live
+                capture sits under his card pair, in the column beside the
+                paragraph that claims it (audit #16 — the study's one
+                design-craft claim finally has pixels). Brief page chosen on
+                purpose: it shows no corpus total, so the capture can never
+                drift against the study's dated numbers the way the 4,250
+                diagram did. */}
+            <div className={styles.closerGuestFig}>
+              <AssetFigure
+                label="The guest view · live"
+                aspect={3200 / 2000}
+                naturalWidth={3200}
+                unframed
+                caption="The guest Brief, August 3: ten links across five topics, the highest-priority unread reading beneath, and the read-only badge by the wordmark."
+                sub={
+                  <a
+                    href="https://hub.andrewmarks.design/guest"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.liveLink}
+                  >
+                    Open it yourself: hub.andrewmarks.design/guest
+                  </a>
+                }
+              >
+                <img loading="lazy"
+                  src="/case-studies/knowledge-os/kos-guest-brief.webp"
+                  alt="The Knowledge Hub guest view, Brief page. The header carries the Knowledge Hub wordmark, a GUEST VIEW · READ ONLY badge, and nav for Brief, Knowledge, Chat, Agents and Analytics. A date stepper reads Aug 3, 2026. Today's digest lists ten links: Agentic Coding 3 links, Design 4, Business 1, Research 1 and Game Design 1, each topic with its top item and score. Below, Top unread reading ranks articles by priority with scores in the high 80s."
+                  className={styles.shotImg}
+                />
+              </AssetFigure>
+            </div>
           </div>
         }
       />
