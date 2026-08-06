@@ -402,6 +402,36 @@ export default function BootFilm() {
         ),
       );
 
+      // The anchor was measured at film start; a late web-font swap can
+      // reflow the page a few px BETWEEN measurement and the reveal, and
+      // the landed crosshair then sits just below the real rules — a
+      // doubled line + plus marks through the whole sweep, vanishing
+      // when the overlay fades (Andrew's catch, 2026-08-06). Re-measure
+      // as the sweep begins and close any residual gap: the CSS
+      // translate longhand composes with the WAAPI transforms so the
+      // nudge never fights the animations, and the beat-D furniture that
+      // has not appeared yet simply re-anchors before its pop.
+      timers.push(
+        setTimeout(() => {
+          if (finished || !realMark) return;
+          const r = realMark.getBoundingClientRect();
+          const dxFix = r.left + r.width / 2 - anchor.x;
+          const dyFix = r.top + r.height / 2 - anchor.y;
+          if (Math.abs(dxFix) < 0.5 && Math.abs(dyFix) < 0.5) return;
+          mark.style.translate = `${dxFix}px ${dyFix}px`;
+          hRule.style.translate = `0px ${dyFix}px`;
+          vRule.style.translate = `${dxFix}px 0px`;
+          const slotNow = heroCanvas.getBoundingClientRect();
+          const plateNow = plateEl.getBoundingClientRect();
+          glHero.style.top = `${slotNow.bottom - 1}px`;
+          glRight.style.left = `${plateNow.right - 1}px`;
+          pmB.style.left = `${plateNow.left}px`;
+          pmB.style.top = `${slotNow.bottom}px`;
+          pmA.style.left = `${plateNow.right}px`;
+          pmA.style.top = `${anchor.y + dyFix}px`;
+        }, T.sweep),
+      );
+
       // ---- handoff + chrome + text (class-driven; CSS does the rest) ----
       timers.push(
         setTimeout(() => {
