@@ -46,8 +46,9 @@ import styles from "./ChatVet.module.css";
  * concrete anonymisation, and the denominator behind "the most-asked
  * question". ANSWERED: dates = Feb 2025 – Jun 2026, consulting since
  * (Andrew, 7/29); research n = five DVMs/techs; pilot = one clinic
- * expanded to three; 500 = registered users signed in over the past
- * month (kept in three phrasings on the page per Andrew's leave-it).
+ * expanded to three; users = 1,100 monthly active users across 20+
+ * countries (Andrew, 8/5 — supersedes the July "500 registered users
+ * signed in over the past month" figure everywhere on the page).
  *
  * ⚠ DO NOT RE-ADD THE LIVE LINK without asking. As of 2026-07-26 the
  * engagement has wound down, the founder has shipped his own changes, and
@@ -135,7 +136,7 @@ export default function ChatVet() {
                verification is gone. Re-link if the surface ever comes back
                into line — .liveLink is still in ChatVet.module.css. */
             label: "STATUS:",
-            value: "Shipped and live · 500 monthly users",
+            value: "Shipped and live · 1,100 monthly active users",
           },
         ]}
       />
@@ -383,9 +384,9 @@ export default function ChatVet() {
           not a documented case; that headline, paragraph and graphic are gone
           and should not come back. */}
       <CaseSection
-        heading="500 vets logged in last month, with no sales effort behind it."
+        heading="1,100 vets log in monthly from more than 20 countries, with no sales effort behind it."
         lede={[
-          "The web app is live. 500 registered users signed in over the past month, worldwide, and clinics are piloting the business tier ahead of a paid rollout. Growth has been bottom-up.",
+          "The web app is live. 1,100 monthly active users sign in from more than 20 countries, and clinics are piloting the business tier ahead of a paid rollout. Growth has been bottom-up.",
           "Vets in the pilot reported saving about 15 minutes per case. That was never instrumented, so it is what they told us and nothing more.",
           "The screens in this study are the version I designed and shipped. My role shifted in June from design to investor and marketing material, and the product has kept changing since.",
           <strong key="retro">
@@ -400,8 +401,8 @@ export default function ChatVet() {
           <div>
             <StatCards>
               <StatCardImg
-                src="/case-studies/chat-vet/cv-stat-users.webp"
-                alt="Stat card: monthly users, 500."
+                src="/case-studies/chat-vet/cv-stat-users2.webp"
+                alt="Stat card: monthly users, 1,100."
               />
               <StatCardImg
                 src="/case-studies/chat-vet/cv-stat-time2.webp"

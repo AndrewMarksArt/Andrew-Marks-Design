@@ -123,3 +123,17 @@ Replaced with the veterinary equivalent (Flegel's own measured numbers) rather t
 - `PainOverlap`'s client row is the vets' account of their clients plus published veterinary
   data. **No pet owners were interviewed.** The figure footnote says so and must keep saying
   so unless that changes.
+
+---
+
+## Addendum 2026-08-05 — MAU updated to 1,100 across 20+ countries
+
+Andrew (in chat, 2026-08-05): "the MAUs is actually 1,100 across 20+
+countries." Source: his product analytics; supersedes the 2026-07-29
+figure "500 registered users signed in over the past month" everywhere
+on the page (stats strip, closer heading, closer lede, stat card).
+Terminology shift is deliberate: MONTHLY ACTIVE USERS, not registered
+users. The countries figure is written as "more than 20 countries" in
+prose. Stat card re-exported from Andrew's Figma card with the new
+number (new filename per versioning rule; cv-stat-users.webp retired in
+place, recoverable in git).
