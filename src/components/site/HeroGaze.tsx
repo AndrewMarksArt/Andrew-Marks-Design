@@ -3,9 +3,11 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Cursor-following robot — direct port of the live temp page's
- * GazePortrait (main:src/components/GazePortrait.tsx), the mechanism and
- * footage that are proven in production on andrewmarks.net.
+ * Cursor-following robot — direct port of the old temp page's
+ * GazePortrait (main:src/components/GazePortrait.tsx), the mechanism
+ * and footage proven on the previous live site. (An earlier comment
+ * claimed that site lived at andrewmarks.net — wrong; Andrew never
+ * owned .net. The old site was on andrewmarks.design.)
  *
  * The atlas is the temp page's /atlas.jpg — 81 frames of the original
  * robot video in a 9x9 sheet, one continuous head sweep with natural

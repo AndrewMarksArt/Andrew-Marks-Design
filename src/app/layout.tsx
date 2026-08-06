@@ -1,6 +1,33 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
+
+/* Person + WebSite structured data (2026-08-06): connects the domain to
+   Andrew as a person for search engines — name, role, and the profiles
+   that corroborate it. Kept to verifiable facts only. */
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://www.andrewmarks.design/#andrew",
+      name: "Andrew Marks",
+      jobTitle: "UX & Product Designer",
+      url: "https://www.andrewmarks.design",
+      sameAs: [
+        "https://www.linkedin.com/in/andrewmarksart/",
+        "https://github.com/AndrewMarksArt",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      name: "Andrew Marks Design",
+      url: "https://www.andrewmarks.design",
+      publisher: { "@id": "https://www.andrewmarks.design/#andrew" },
+    },
+  ],
+};
 
 const geist = Geist({
   subsets: ["latin"],
@@ -83,8 +110,18 @@ export default function RootLayout({
               "try{if(location.pathname==='/'&&(location.search.indexOf('film')>-1||!sessionStorage.getItem('am-film-seen'))&&matchMedia('(prefers-reduced-motion: no-preference)').matches&&innerWidth>=1024){document.documentElement.setAttribute('data-film','')}}catch(e){}",
           }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
+        />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        {/* Vercel Web Analytics (2026-08-06): first-party beacon, no
+            cookies, no consent banner. Renders nothing until the
+            dashboard toggle is on. */}
+        <Analytics />
+      </body>
     </html>
   );
 }
