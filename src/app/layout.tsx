@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 /* Person + WebSite structured data (2026-08-06): connects the domain to
@@ -117,10 +118,11 @@ export default function RootLayout({
       </head>
       <body>
         {children}
-        {/* Vercel Web Analytics (2026-08-06): first-party beacon, no
-            cookies, no consent banner. Renders nothing until the
-            dashboard toggle is on. */}
+        {/* Vercel Web Analytics + Speed Insights (2026-08-06):
+            first-party beacons, no cookies, no consent banner. Each
+            renders nothing until its dashboard toggle is on. */}
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
