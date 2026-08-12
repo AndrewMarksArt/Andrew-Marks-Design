@@ -402,33 +402,58 @@ export default function BootFilm() {
         ),
       );
 
-      // The anchor was measured at film start; a late web-font swap can
-      // reflow the page a few px BETWEEN measurement and the reveal, and
-      // the landed crosshair then sits just below the real rules — a
-      // doubled line + plus marks through the whole sweep, vanishing
-      // when the overlay fades (Andrew's catch, 2026-08-06). Re-measure
-      // as the sweep begins and close any residual gap: the CSS
-      // translate longhand composes with the WAAPI transforms so the
-      // nudge never fights the animations, and the beat-D furniture that
-      // has not appeared yet simply re-anchors before its pop.
+      // The anchor was measured at film start; a late reflow (web-font
+      // swap, deferred layout work) can move the real page a few px
+      // BETWEEN measurement and the reveal, and the landed crosshair then
+      // sits just off the real rules — a doubled line + plus marks
+      // through the whole sweep, vanishing when the overlay fades
+      // (Andrew's catch, 2026-08-06). The correction used to be one-shot
+      // at sweep start, which stranded any reflow landing DURING the
+      // reveal — on a loaded machine (screen recorder, starved iGPU)
+      // layout work slides past sweep start and the double came back
+      // (Andrew's catch, 2026-08-12; reproduced by injecting a 4px shift
+      // at 2400ms). So the nudge now repeats every frame from sweep
+      // start until the overlay is gone: the CSS translate longhand
+      // composes with the WAAPI transforms so it never fights the
+      // animations, the beat-D furniture that has not appeared yet
+      // simply re-anchors before its pop, and writes happen only when
+      // the gap itself moved (>=0.5px) — the steady-state cost is one
+      // getBoundingClientRect per frame in a window the perf audit
+      // already measured as main-thread-quiet.
+      let fixX = 0;
+      let fixY = 0;
+      const reanchor = () => {
+        if (!realMark) return;
+        const r = realMark.getBoundingClientRect();
+        const dxFix = r.left + r.width / 2 - anchor.x;
+        const dyFix = r.top + r.height / 2 - anchor.y;
+        if (Math.abs(dxFix - fixX) < 0.5 && Math.abs(dyFix - fixY) < 0.5)
+          return;
+        fixX = dxFix;
+        fixY = dyFix;
+        mark.style.translate = `${dxFix}px ${dyFix}px`;
+        hRule.style.translate = `0px ${dyFix}px`;
+        vRule.style.translate = `${dxFix}px 0px`;
+        const slotNow = heroCanvas.getBoundingClientRect();
+        const plateNow = plateEl.getBoundingClientRect();
+        glHero.style.top = `${slotNow.bottom - 1}px`;
+        glRight.style.left = `${plateNow.right - 1}px`;
+        pmB.style.left = `${plateNow.left}px`;
+        pmB.style.top = `${slotNow.bottom}px`;
+        pmA.style.left = `${plateNow.right}px`;
+        pmA.style.top = `${anchor.y + dyFix}px`;
+      };
       timers.push(
         setTimeout(() => {
-          if (finished || !realMark) return;
-          const r = realMark.getBoundingClientRect();
-          const dxFix = r.left + r.width / 2 - anchor.x;
-          const dyFix = r.top + r.height / 2 - anchor.y;
-          if (Math.abs(dxFix) < 0.5 && Math.abs(dyFix) < 0.5) return;
-          mark.style.translate = `${dxFix}px ${dyFix}px`;
-          hRule.style.translate = `0px ${dyFix}px`;
-          vRule.style.translate = `${dxFix}px 0px`;
-          const slotNow = heroCanvas.getBoundingClientRect();
-          const plateNow = plateEl.getBoundingClientRect();
-          glHero.style.top = `${slotNow.bottom - 1}px`;
-          glRight.style.left = `${plateNow.right - 1}px`;
-          pmB.style.left = `${plateNow.left}px`;
-          pmB.style.top = `${slotNow.bottom}px`;
-          pmA.style.left = `${plateNow.right}px`;
-          pmA.style.top = `${anchor.y + dyFix}px`;
+          // through the sweep AND the 260ms handoff crossfade — the
+          // doubled line is visible for as long as the overlay is
+          const stopAt = performance.now() + (T.handoff + 300 - T.sweep);
+          const loop = () => {
+            if (finished || performance.now() > stopAt) return;
+            reanchor();
+            requestAnimationFrame(loop);
+          };
+          loop();
         }, T.sweep),
       );
 
