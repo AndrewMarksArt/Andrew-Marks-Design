@@ -97,10 +97,14 @@ export default function RootLayout({
           <link rel="stylesheet" href="https://use.typekit.net/KIT_ID.css" /> */}
       <head>
         {/* Boot-film gate — must run BEFORE first paint. Stamps
-            <html data-film> only for: home page, first visit this session
-            (or ?film override for review), motion-ok, desktop. No stamp =>
-            nothing is ever hidden (no-JS, crawlers, repeat visits,
-            reduced-motion, mobile all render the finished page instantly).
+            <html data-film> for: home page, first visit this session,
+            motion-ok, desktop. No stamp => nothing is ever hidden (no-JS,
+            crawlers, repeat visits, reduced-motion, mobile all render the
+            finished page instantly). finishFilm writes am-film-seen — and
+            its render-delay/stall verdicts deliberately leave the pass
+            unspent, see BootFilm.tsx. The ?film query override that let QA
+            force a replay is retired (Andrew, 2026-08-13); to re-watch,
+            open a new tab or clear sessionStorage.
             suppressHydrationWarning: browser extensions inject their own
             scripts into <head> pre-hydration and React would flag the
             collision (seen live with a location-spoofer extension). */}
@@ -108,7 +112,7 @@ export default function RootLayout({
           suppressHydrationWarning
           dangerouslySetInnerHTML={{
             __html:
-              "try{if(location.pathname==='/'&&(location.search.indexOf('film')>-1||!sessionStorage.getItem('am-film-seen'))&&matchMedia('(prefers-reduced-motion: no-preference)').matches&&innerWidth>=1024){document.documentElement.setAttribute('data-film','')}}catch(e){}",
+              "try{if(location.pathname==='/'&&!sessionStorage.getItem('am-film-seen')&&matchMedia('(prefers-reduced-motion: no-preference)').matches&&innerWidth>=1024){document.documentElement.setAttribute('data-film','')}}catch(e){}",
           }}
         />
         <script
